@@ -1,0 +1,25 @@
+<md-toolbar color="primary">
+  <span>ABCDE : Connexion</span>
+  <span class="example-fill-remaining-space"></span>
+</md-toolbar>
+
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+
+  <div>
+    <md-input-container>
+      <input mdInput placeholder="Nom d'utilisateur" type="text" formControlName="username">
+    </md-input-container>
+  </div>
+
+  <div>
+    <md-input-container>
+      <input mdInput placeholder="Mot de passe" type="password" formControlName="password">
+    </md-input-container>
+  </div>
+
+  <div>
+    <button md-button type="submit">Connexion</button>
+  </div>
+</form>
+
+

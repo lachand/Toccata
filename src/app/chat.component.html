@@ -1,0 +1,17 @@
+<md-toolbar color="primary">
+  <span>ABCDE : Chat</span>
+  <span class="example-fill-remaining-space"></span>
+</md-toolbar>
+
+<script src="../main.ts"></script>
+<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>
+  <md-list>
+    <md-list-item *ngFor="let message of messages">
+      <img md-list-avatar src="{{message.author.avatar}}" alt="">
+      <h3 md-line> {{message.author.name}} </h3>
+      <p md-line>{{message.text}}</p>
+    </md-list-item>
+  </md-list>
+</div>
+
+<app-chat-send></app-chat-send>

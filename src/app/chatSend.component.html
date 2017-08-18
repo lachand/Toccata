@@ -1,0 +1,9 @@
+<form [formGroup]="sendMessage" (ngSubmit)="addMessage()">
+
+  <md-input-container>
+    <input mdInput placeholder="Message" type="text" formControlName="text">
+  </md-input-container>
+
+  <button md-button type="submit"><md-icon>Envoyer</md-icon></button>
+
+</form>
