@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {MessagesService} from './messages.service';
-import {UserService} from './user.service';
+import {MessagesService} from './services/messages.service';
+import {UserService} from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import {UserService} from './user.service';
 
 export class AppComponent {
 
-  constructor(public userService: UserService, public messagesService: MessagesService) {
+  constructor(public userService: UserService) {
   }
 }
 

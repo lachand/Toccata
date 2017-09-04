@@ -1,0 +1,15 @@
+<script src="../../main.ts"></script>
+
+<form (ngSubmit)="createActivity(activityName)">
+  <h3>Nouvelle activité</h3>
+
+  Quel nom pour la nouvelle activité ?
+
+  <md-input-container floatPlaceholder="auto">
+    <input mdInput [(ngModel)]="activityName" type="text" required placeholder="" name="actName">
+  </md-input-container>
+
+  <div>
+    <button md-button type="submit">Créer l'activité</button>
+  </div>
+</form>

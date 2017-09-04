@@ -1,0 +1,31 @@
+<div layout="row" >
+<form [formGroup]="signinForm" (ngSubmit)="signup()">
+
+  <div>
+    <md-input-container>
+      <input mdInput placeholder="Nom d'utilisateur" type="text" formControlName="username">
+    </md-input-container>
+  </div>
+
+  <div>
+    <md-input-container>
+      <input mdInput placeholder="Mot de passe" type="password" formControlName="password">
+    </md-input-container>
+  </div>
+
+  <div>
+    <md-input-container>
+      <input mdInput placeholder="Lien vers l'avatar" type="text" formControlName="avatar">
+    </md-input-container>
+  </div>
+
+  <div>
+    <md-slide-toggle (change)="isTeacher()">Je suis un enseignant</md-slide-toggle>
+  </div>
+
+  <div>
+    <button md-button type="submit">Inscription</button>
+  </div>
+</form>
+</div>
+

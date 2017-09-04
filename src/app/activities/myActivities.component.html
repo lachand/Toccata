@@ -1,0 +1,20 @@
+<div layout="row" >
+<div>
+  <md-nav-list>
+    <md-list-item *ngFor="let activity of activityService.activities_list">
+      <h3 md-line> {{activity.name}} </h3>
+      <div>
+        <md-icon (click)="load_activity(activity._id)">launch</md-icon>
+      </div>
+      <div>
+        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">settings</md-icon>
+      </div>
+      <div>
+        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon>
+      </div>
+    </md-list-item>
+  </md-nav-list>
+
+  <button md-button (click)="newActivity()">Nouvelle activité</button>
+</div>
+</div>

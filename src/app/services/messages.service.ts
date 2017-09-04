@@ -1,6 +1,6 @@
 import PouchDB from 'pouchdb';
-import { Message } from '../models/message.model';
-import {EventEmitter, Output} from "@angular/core";
+import { Message } from '../../models/message.model';
+import {EventEmitter, Output} from '@angular/core';
 
 export class MessagesService {
   messages_db: any;
@@ -19,7 +19,7 @@ export class MessagesService {
       retry: true,
       continuous: true
     };
-    //this.messages_db.sync(this.messages_db_remote, options);
+
   }
   getMessages() {
     if (this.messages) {
@@ -41,8 +41,8 @@ export class MessagesService {
         console.log(error);
       });
     });
-
   }
+
   createMessage(message: Message) {
     this.messages_db.post(message).then((response) => {
       return true;
@@ -51,36 +51,44 @@ export class MessagesService {
       return false;
     });
   }
+
   updateMessage(message: Message) {
 
   }
-  deleteMessage(message: Message) {
 
+  deleteMessage(message: Message) {
+    this.messages_db.remove(message).then((response) => {
+      return true;
+    }).catch(function (err) {
+      console.log(err);
+      return false;
+    });
   }
+
   handleChange(change) {
     let changedDoc = null;
     let changedIndex = null;
     this.messages.forEach((doc, index) => {
-      if (doc._id === change.id){
+      if (doc._id === change.id) {
         changedDoc = doc;
         changedIndex = index;
       }
     });
-    if (change.deleted){
+    if (change.deleted) {
       //delete
       this.messages.splice(changedIndex, 1);
-      this.change.emit(this.messages);
+      this.change.emit({changeType: 'delete', value: changedIndex});
     }
     else {
       //modification
       if (changedDoc) {
         this.messages[changedIndex] = change.doc;
-        this.change.emit(this.messages);
+        this.change.emit({changeType: 'modification', value: change.doc});
       }
       //new
       else {
         this.messages.push(change.doc);
-        this.change.emit(this.messages);
+        this.change.emit({changeType: 'create', value: change.doc});
       }
     }
   }

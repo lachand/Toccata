@@ -1,0 +1,17 @@
+.appContainer {
+  height: 75vh;
+}
+
+.aligned-with-text{
+  position: absolute;
+  margin-top: 10px;
+}
+
+.mat-tab-links {
+  display: table;
+  width: 100%;
+
+  .mat-tab-link {
+    display: table-cell;
+  }
+}

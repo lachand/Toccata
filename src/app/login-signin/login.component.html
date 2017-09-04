@@ -1,8 +1,9 @@
-<md-toolbar color="primary">
-  <span>ABCDE : Connexion</span>
-  <span class="example-fill-remaining-space"></span>
-</md-toolbar>
 
+<div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
+  <div class="flex-card">
+  <md-card>
+
+    <h3>Connexion</h3>
 <form [formGroup]="loginForm" (ngSubmit)="login()">
 
   <div>
@@ -21,5 +22,6 @@
     <button md-button type="submit">Connexion</button>
   </div>
 </form>
-
-
+  </md-card>
+</div>
+</div>

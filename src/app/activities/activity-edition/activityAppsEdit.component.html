@@ -1,0 +1,16 @@
+<script src="../../../main.ts"></script>
+<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<div layout="row" >
+  <form (ngSubmit)="newApp()">
+  <md-list>
+    <md-list-item *ngFor="let app of activityService.apps.apps[activityService.activity_loaded._id]">
+      <h3 md-line> {{app.name}} </h3>
+      <div>
+        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_app(app._id)">close</md-icon>
+      </div>
+    </md-list-item>
+  </md-list>
+
+    <button md-button type="submit">Ajouter une application</button>
+  </form>
+</div>

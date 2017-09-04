@@ -1,0 +1,22 @@
+<script src="../../main.ts"></script>
+<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<div>
+  <nav md-tab-nav-bar>
+    <span *ngFor="let application of activityService.apps.apps[activityService.activity_loaded._id]">
+    <a md-tab-link class="tab"
+       *ngIf="application.status === 'loaded'"
+       [routerLink]="[{ outlets: { 'apps': [application.type, application._id] } }]"
+       routerLinkActive #rla="routerLinkActive"
+       [active]="rla.isActive">
+      {{application.name}}<md-icon class="aligned-with-text" (click)="unloadApp(application._id)">close</md-icon>
+    </a>
+    </span>
+    <a md-tab-link class="hidden-tab" (click)="loadApp()">
+      <md-icon class="aligned-with-text">add</md-icon>
+    </a>
+  </nav>
+</div>
+
+<div class="appContainer" layout="row" >
+    <router-outlet class="hidden-router" name="apps"></router-outlet>
+</div>
