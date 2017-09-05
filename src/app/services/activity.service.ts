@@ -125,9 +125,11 @@ export class ActivityService {
     }
     this.db.get(activityId).then( res => {
       res._deleted = true;
-      this.db.put(res).then( res2 => {
-        this.apps.remove_activity(activityId);
-      });
+      this.db.put(res).then(
+        this.apps.remove_activity(activityId).then(
+          this.user.remove_activity(activityId)
+        )
+      );
     });
   }
 

@@ -111,20 +111,23 @@ export class AppsService {
   }
 
   remove_activity(activityId) {
-    this.apps_db.query('byActivity/by-activity',
-      { startkey: activityId, endkey: activityId}).then(result => {
-      let apps = [];
-      const docs = result.rows.map((row) => {
-        apps.push(row.value);
-      });
-      for (let app in apps) {
-        apps[app].activites.splice(activityId, 1);
-        if (apps[app].activite.length === 0) {
-          apps[app]._deleted = true;
+    return new Promise(resolve => {
+      this.apps_db.query('byActivity/by-activity',
+        {startkey: activityId, endkey: activityId}).then(result => {
+        let apps = [];
+        const docs = result.rows.map((row) => {
+          apps.push(row.value);
+        });
+        for (let app of apps) {
+          app.activites.splice(activityId, 1);
+          console.log(app.activites);
+          if (app.activites.length === 0 || app.activites === null) {
+            app._deleted = true;
+          }
         }
-      }
-      return this.apps_db.bulkDocs(apps);
-  });
+        this.apps_db.bulkDocs(apps).then( res => {resolve(res); } );
+      });
+    });
   }
 
   duplicateAppsFromActivity(inputActivity, outputActivity) {

@@ -215,6 +215,13 @@ export class UserService {
     });
   }
 
+  remove_activity(activityId) {
+    for (let user of this.allUsers){
+      user.activites.splice(user.activites.indexOf(activityId), 1);
+    }
+    this.db.bulkDocs(this.allUsers);
+  }
+
   private handleChangeParticipants(change) {
     let changedDoc = null;
     let changedIndex = null;
