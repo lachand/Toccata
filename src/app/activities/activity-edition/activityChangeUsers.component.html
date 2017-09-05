@@ -1,0 +1,18 @@
+<script src="../../main.ts"></script>
+
+<form (ngSubmit)="changeUsers()">
+  <h3>Utilisateurs de l'application</h3>
+
+  <div *ngFor="let participant of userChecked">
+  <md-slide-toggle class="example-margin"
+                   [(ngModel)]="participant.checked"
+                    name="participant.user.name">
+    {{participant.user.name}}
+  </md-slide-toggle>
+  </div>
+
+  <div>
+    <button md-button type="submit">Effectuer les changement</button>
+    <button md-button md-dialog-close="Close">Fermer</button>
+  </div>
+</form>

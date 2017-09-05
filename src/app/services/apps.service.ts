@@ -127,4 +127,19 @@ export class AppsService {
   });
   }
 
+  duplicateAppsFromActivity(inputActivity, outputActivity) {
+    return new Promise(resolve => {
+    this.apps_db.query('byActivity/by-activity',
+      { startkey: inputActivity, endkey: inputActivity}).then(result => {
+        let apps = [];
+        const docs = result.rows.map((row) => {
+          apps.push(row.value);
+        });
+        for (let app of apps) {
+          app.activites.push(outputActivity);
+        }
+      this.apps_db.bulkDocs(apps).then( res => { resolve(res); } );
+    });
+   });
+  }
 }

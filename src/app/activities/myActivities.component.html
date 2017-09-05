@@ -10,6 +10,9 @@
         <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">settings</md-icon>
       </div>
       <div>
+        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="duplicate_activity(activity._id)">content_copy</md-icon>
+      </div>
+      <div>
         <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon>
       </div>
     </md-list-item>

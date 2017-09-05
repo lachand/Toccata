@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {User} from '../../models/user.model';
 import PouchDB from 'pouchdb';
 
@@ -13,6 +13,10 @@ export class UserService {
   avatar: any;
   fonction: any;
   participants: any;
+  allUsers: Array<any>;
+
+  @Output()
+  change = new EventEmitter();
 
   constructor() {
     this.loggedIn = false;
@@ -23,6 +27,7 @@ export class UserService {
       retry: true,
       continuous: true
     };
+    this.getAllusers();
   }
 
   login(username, password) {
@@ -170,6 +175,28 @@ export class UserService {
     });
   }
 
+  getAllusers() {
+    return new Promise(resolve => {
+      this.db.allDocs({
+        include_docs: true,
+        attachments: true
+      }).then(result => {
+        this.allUsers = [];
+        const docs = result.rows.map((row) => {
+          if (row.id !== '_design/byActivity') {
+            this.allUsers.push(row.doc);
+          }
+        });
+        resolve(this.allUsers);
+      });
+      this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+        this.handleChangeAllUsers(change);
+      });
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   getParticipants(activityId) {
     return new Promise(resolve => {
       this.db.query('byActivity/by-activity',
@@ -181,10 +208,73 @@ export class UserService {
         resolve(this.participants);
       });
       this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
-        //this.handleChange(change);
+        this.handleChangeParticipants(change);
       });
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  private handleChangeParticipants(change) {
+    let changedDoc = null;
+    let changedIndex = null;
+    if (!change.deleted) {
+        this.participants.forEach((doc, index) => {
+          if (doc._id === change.doc._id) {
+            changedDoc = doc;
+            changedIndex = index;
+          }
+        });
+        if (changedDoc) {
+          // = delete des participants de l'activité chargée
+          this.participants.splice(changedIndex, 1);
+          this.change.emit({changeType: 'delete', value: changedIndex});
+        } else {
+          this.participants.push(change.doc);
+          this.change.emit({changeType: 'create', value: change.doc});
+        }
+    } else {
+        this.participants.splice(changedIndex, 1);
+        this.change.emit({changeType: 'delete', value: changedIndex});
+    }
+  }
+
+  private handleChangeAllUsers(change) {
+    let changedDoc = null;
+    let changedIndex = null;
+    if (!change.deleted) {
+      this.allUsers.forEach((doc, index) => {
+        if (doc._id === change.doc._id) {
+          changedDoc = doc;
+          changedIndex = index;
+        }
+      });
+      if (changedDoc) {
+        this.allUsers[changedIndex] = change.doc;
+        this.change.emit({changeType: 'modification', value: change.doc});
+      } else {
+        this.allUsers.push(change.doc);
+        this.change.emit({changeType: 'create', value: change.doc});
+      }
+    } else {
+      this.allUsers.splice(changedIndex, 1);
+      this.change.emit({changeType: 'delete', value: changedIndex});
+    }
+  }
+
+  duplicateUsersFromActivity(inputActivity, outputActivity) {
+    return new Promise(resolve => {
+      this.db.query('byActivity/by-activity',
+        { startkey: inputActivity, endkey: inputActivity}).then(result => {
+        let users = [];
+        const docs = result.rows.map((row) => {
+          users.push(row.value);
+        });
+        for (let user of users) {
+          user.activites.push(outputActivity);
+        }
+        this.db.bulkDocs(users).then( res => { resolve(res); } );
+      });
     });
   }
 

@@ -22,8 +22,13 @@ export class NewActivityComponent {
       'name': activityName,
       'participants': [this.user.id]}).then(res => {
         console.log(res['id']);
-        this.activityService.load_activity(res['id']).then( result => {
-          this.router.navigate(['activity_edit']);
+        this.activityService.user.db.get(this.user.id).then( res2 => {
+          res2.activites.push(res['id']);
+          this.activityService.user.db.put(res2).then( res3 => {
+            this.activityService.load_activity(res['id']).then( result => {
+              this.router.navigate(['activity_edit']);
+            });
+          });
         });
     });
     this.dialogRef.close();

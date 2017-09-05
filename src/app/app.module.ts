@@ -30,6 +30,8 @@ import {NewActivityComponent} from './activities/newActivity.component';
 import {ActivityParticipantsEditComponent} from './activities/activity-edition/activityParticipantsEdit.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MenuComponent} from './menu/menu.component';
+import {ActivityChangeUsersComponent} from './activities/activity-edition/activityChangeUsers.component';
+import {ActivityNameEditComponent} from './activities/activity-edition/activityNameEdit.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -45,6 +47,8 @@ import {MenuComponent} from './menu/menu.component';
     ActivityAppsEditComponent,
     ActivityParticipantsEditComponent,
     ActivityNewAppComponent,
+    ActivityChangeUsersComponent,
+    ActivityNameEditComponent,
     NewActivityComponent,
     MenuComponent,
     NgxAutoScroll],
@@ -59,7 +63,7 @@ import {MenuComponent} from './menu/menu.component';
     FlexLayoutModule,
     RouterModule.forRoot(routes)
   ],
-  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent],
+  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent, ActivityChangeUsersComponent],
   providers: [UserService, ActivityService, RessourcesService, MessagesService, LoggedInGuard, AppsService],
   bootstrap: [AppComponent]
 })

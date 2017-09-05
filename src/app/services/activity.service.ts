@@ -42,7 +42,6 @@ export class ActivityService {
         const docs = result.rows.map((row) => {
           this.activities_list.push(row.value);
         });
-        console.log(this.activities_list);
         resolve(this.activities_list);
       });
       this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
@@ -128,6 +127,20 @@ export class ActivityService {
       res._deleted = true;
       this.db.put(res).then( res2 => {
         this.apps.remove_activity(activityId);
+      });
+    });
+  }
+
+  duplicate(activityId) {
+    this.db.get(activityId).then( res => {
+      const newActivity = {
+        'name': 'Copie de ' + res.name,
+        'participants': res.participants
+      }
+      this.db.post(newActivity).then( resActivity => {
+        this.apps.duplicateAppsFromActivity(activityId, resActivity.id).then(
+          this.user.duplicateUsersFromActivity(activityId, resActivity.id)
+        );
       });
     });
   }

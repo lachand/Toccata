@@ -39,4 +39,8 @@ export class MyActivitiesComponent {
   delete_activity(activityId) {
     this.activityService.delete_activity(activityId);
   }
+
+  duplicate_activity(activityId) {
+    this.activityService.duplicate(activityId);
+}
 }
