@@ -1,5 +1,6 @@
 import PouchDB from 'pouchdb';
 import {EventEmitter, Output} from '@angular/core';
+import * as config from 'variables';
 
 export class AppsService {
   apps_db: any;
@@ -10,13 +11,22 @@ export class AppsService {
   change = new EventEmitter();
 
   constructor() {
-    this.apps_db = new PouchDB('http://127.0.0.1:5984/applications');
-    this.apps_db_remote = 'http://127.0.0.1:5984/applications';
+    this.apps_db = new PouchDB('applications');
+    this.apps_db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/applications');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
+    this.apps_db.sync(this.apps_db_remote, options).on('change', function (change) {
+      this.handleChange(change);
+    }).on('paused', function (info) {
+      // replication was paused, usually because of a lost connection
+    }).on('active', function (info) {
+      // replication was resumed
+    }).on('error', function (err) {
+      // totally unhandled error (shouldn't happen)
+    });
     this.apps = {};
 
   }

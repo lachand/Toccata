@@ -1,4 +1,5 @@
 import PouchDB from 'pouchdb';
+import * as config from 'variables';
 import { Message } from '../../models/message.model';
 import {EventEmitter, Output} from '@angular/core';
 
@@ -12,8 +13,8 @@ export class MessagesService {
 
   constructor() {
     //this.messages_db = new PouchDB('messages');
-    this.messages_db = new PouchDB('http://127.0.0.1:5984/messages');
-    this.messages_db_remote = 'http://127.0.0.1:5984/messages';
+    this.messages_db = new PouchDB(config.HOST + ':' + config.PORT + '/messages');
+    this.messages_db_remote = config.HOST + ':' + config.PORT + '/messages';
     const options = {
       live: true,
       retry: true,

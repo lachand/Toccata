@@ -1,23 +1,33 @@
 import PouchDB from 'pouchdb';
+import * as config from 'variables';
 import {EventEmitter, Output} from '@angular/core';
 
 export class RessourcesService {
   ressources_db: any;
   ressources_db_remote: any;
   ressources: any;
+  temp_changes: Array<any>;
 
   @Output()
   change = new EventEmitter();
 
   constructor() {
     //this.messages_db = new PouchDB('messages');
-    this.ressources_db = new PouchDB('http://127.0.0.1:5984/ressources');
-    this.ressources_db_remote = 'http://127.0.0.1:5984/ressources';
+    this.temp_changes = [];
+    this.ressources_db = new PouchDB('ressources');
+    this.ressources_db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/ressources');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
+    this.ressources_db.sync(this.ressources_db_remote, options).on('change', function (change) {
+      this.handleChange(change);
+    }).on('paused', function (info) {
+    }).on('active', function (info) {
+    }).on('error', function (err) {
+      // totally unhandled error (shouldn't happen)
+    });
     this.ressources = {};
 
   }
@@ -45,7 +55,6 @@ export class RessourcesService {
 
   createRessource(ressource) {
     this.ressources_db.post(ressource).then((response) => {
-      console.log(response);
       return true;
     }).catch(function (err) {
       console.log(err);
@@ -71,7 +80,6 @@ export class RessourcesService {
           if (doc._id === change.doc._id) {
             changedDoc = doc;
             changedIndex = index;
-            console.log('test ', changedIndex);
           }
         });
         if (changedDoc) {

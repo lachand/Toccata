@@ -61,7 +61,7 @@ import {ActivityNameEditComponent} from './activities/activity-edition/activityN
     MdIconModule,
     MaterialModule,
     FlexLayoutModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent, ActivityChangeUsersComponent],
   providers: [UserService, ActivityService, RessourcesService, MessagesService, LoggedInGuard, AppsService],

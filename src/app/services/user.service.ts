@@ -1,6 +1,8 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {User} from '../../models/user.model';
+import * as config from 'variables';
 import PouchDB from 'pouchdb';
+import {ActivityService} from './activity.service';
 
 @Injectable()
 export class UserService {
@@ -20,17 +22,18 @@ export class UserService {
 
   constructor() {
     this.loggedIn = false;
-    this.db = new PouchDB('http://127.0.0.1:5984/users');
-    this.db_remote = 'http://127.0.0.1:5984/users';
+    this.db = new PouchDB(config.HOST + ':' + config.PORT + '/users');
+    this.db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/users');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
+    this.db.sync(this.db_remote, options);
     this.getAllusers();
   }
 
-  login(username, password) {
+  public login(username, password) {
     return new Promise((resolve, reject) => {
       this.db.login(username, password, function (err, response) {
         if (err) {
@@ -60,11 +63,11 @@ export class UserService {
           this.avatar = res['avatar'];
           this.fonction = res['fonction'];
           resolve(this.loggedIn);
+          });
           }
         );
         }
       );
-    });
   }
 
   getName(userId) {

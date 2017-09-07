@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {UserService} from './user.service';
 
+import * as config from '../../variables';
 import PouchDB from 'pouchdb';
 import Pouchfind from 'pouchdb-find';
 import {AppsService} from './apps.service';
@@ -11,26 +12,34 @@ export class ActivityService {
   db: any;
   db_remote: any;
   activity_loaded: any;
-  activities_list: any;
+  activities_list: Array<any>;
   user: any;
   apps: AppsService;
   @Output() changes = new EventEmitter();
 
   constructor(userService: UserService, appsService: AppsService) {
-    this.db = new PouchDB('http://127.0.0.1:5984/activites');
-    this.db_remote = 'http://127.0.0.1:5984/activites';
+    this.db = new PouchDB('activites');
+    this.db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/activites');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
+    this.db.sync(this.db_remote, options).on('change', function (change) {
+      this.handleChange(change);
+    }).on('paused', function (info) {
+      // replication was paused, usually because of a lost connection
+    }).on('active', function (info) {
+      // replication was resumed
+    }).on('error', function (err) {
+      // totally unhandled error (shouldn't happen)
+    });
     this.user = userService;
     this.apps = appsService;
-    this.getActivities();
     this.activity_loaded = null;
   }
 
-  private getActivities() {
+  public getActivities() {
     const name = this.user.id;
     if (this.activities_list) {
       return Promise.resolve(this.activities_list);
@@ -39,13 +48,10 @@ export class ActivityService {
       this.db.query('byParticipant/by-participant',
         { startkey: name, endkey: name}).then(result => {
         this.activities_list = [];
-        const docs = result.rows.map((row) => {
+        result.rows.map((row) => {
           this.activities_list.push(row.value);
         });
         resolve(this.activities_list);
-      });
-      this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
-        this.handleChange(change);
       });
     }).catch((error) => {
       console.log(error);
@@ -109,8 +115,10 @@ export class ActivityService {
           this.activities_list[changedIndex] = change.doc;
           this.changes.emit({changeType: 'modification', value: change.doc});
         } else {
-          this.activities_list.push(change.doc);
-          this.changes.emit({changeType: 'create', value: change.doc});
+          if (change.doc.participants.indexOf(this.user.name) !== -1) {
+            this.activities_list.push(change.doc);
+            this.changes.emit({changeType: 'create', value: change.doc});
+          }
         }
     } else {
       console.log(change);
