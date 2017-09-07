@@ -33,7 +33,7 @@ export class RessourcesService {
   }
   getRessources(app) {
     const name = app.id;
-    if (this.ressources[name]) {
+    if (this.ressources[name] && this.ressources[name].length > 0) {
       return Promise.resolve(this.ressources[name]);
     }
     return new Promise(resolve => {

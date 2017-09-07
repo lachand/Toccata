@@ -290,6 +290,11 @@ export class UserService {
 
   logout() {
     this.loggedIn = false;
+    this.name = null;
+    this.id = null;
+    this.avatar = null;
+    this.fonction = null;
+    this.participants = null;
   }
 
   isLoggedIn() {

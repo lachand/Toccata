@@ -41,7 +41,7 @@ export class ActivityService {
 
   public getActivities() {
     const name = this.user.id;
-    if (this.activities_list) {
+    if (this.activities_list && this.activities_list.length > 0) {
       return Promise.resolve(this.activities_list);
     }
     return new Promise(resolve => {
@@ -153,5 +153,12 @@ export class ActivityService {
         );
       });
     });
+  }
+
+  logout() {
+    this.activity_loaded = null;
+    this.activities_list = [];
+    this.apps.logout();
+    this.user.logout();
   }
 }

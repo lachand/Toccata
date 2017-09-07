@@ -33,7 +33,7 @@ export class AppsService {
 
   public getApps(activityId) {
     const name = activityId;
-    if (this.apps[name]) {
+    if (this.apps[name] && this.apps[name].length > 0) {
       return Promise.resolve(this.apps[name]);
     }
     return new Promise(resolve => {
@@ -154,5 +154,9 @@ export class AppsService {
       this.apps_db.bulkDocs(apps).then( res => { resolve(res); } );
     });
    });
+  }
+
+  logout() {
+    this.apps = [];
   }
 }

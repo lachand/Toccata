@@ -14,4 +14,8 @@ export class MenuComponent {
   constructor(private userService: UserService, private router: Router,
               private activityService: ActivityService) {
   }
+
+  logout() {
+    this.activityService.logout();
+  }
 }
