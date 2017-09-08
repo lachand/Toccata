@@ -13,6 +13,7 @@ export class ActivityService {
   db_remote: any;
   activity_loaded: any;
   activities_list: Array<any>;
+  activity_loaded_child: any;
   user: any;
   apps: AppsService;
   @Output() changes = new EventEmitter();
@@ -37,6 +38,7 @@ export class ActivityService {
     this.user = userService;
     this.apps = appsService;
     this.activity_loaded = null;
+    this.activity_loaded_child = [];
   }
 
   public getActivities() {
@@ -72,7 +74,14 @@ export class ActivityService {
         this.activity_loaded = result;
         this.apps.getApps(result._id).then(res => {
           this.user.getParticipants(result._id).then( res2 => {
-            resolve(this.activity_loaded);
+            this.db.query('byParent/by-parent',
+              { startkey: result._id, endkey: result._id}).then(activityChilds => {
+              activityChilds.rows.map((row) => {
+                this.activity_loaded_child.push(row.value);
+                resolve(this.activity_loaded);
+              });
+            });
+
           }).catch(console.log.bind(console));
         }).catch(console.log.bind(console));
         this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {

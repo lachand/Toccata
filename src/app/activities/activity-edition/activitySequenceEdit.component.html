@@ -1,0 +1,15 @@
+<script src="../../../main.ts"></script>
+<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
+  <div *ngFor="let activity of activityService.activity_loaded_child" fxFlex="45%" class="flex-card">
+    <md-card>
+      <md-card-header>
+        <h3 md-line>{{activity.name}}</h3>
+      </md-card-header>
+      <p>
+        {{activity.description}}
+      </p>
+    </md-card>
+  </div>
+
+</div>

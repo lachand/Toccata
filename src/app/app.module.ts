@@ -31,6 +31,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MenuComponent} from './menu/menu.component';
 import {ActivityChangeUsersComponent} from './activities/activity-edition/activityChangeUsers.component';
 import {ActivityNameEditComponent} from './activities/activity-edition/activityNameEdit.component';
+import {ActivitySequenceEditComponent} from './activities/activity-edition/activitySequenceEdit.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -48,6 +49,7 @@ import {ActivityNameEditComponent} from './activities/activity-edition/activityN
     ActivityNewAppComponent,
     ActivityChangeUsersComponent,
     ActivityNameEditComponent,
+    ActivitySequenceEditComponent,
     NewActivityComponent,
     MenuComponent,
     NgxAutoScroll],

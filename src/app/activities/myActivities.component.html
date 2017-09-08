@@ -2,19 +2,15 @@
 <div>
   <md-nav-list>
     <md-list-item *ngFor="let activity of activityService.activities_list">
-      <h3 md-line> {{activity.name}} </h3>
-      <div>
-        <md-icon (click)="load_activity(activity._id)">launch</md-icon>
-      </div>
-      <div>
-        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">settings</md-icon>
-      </div>
-      <div>
-        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="duplicate_activity(activity._id)">content_copy</md-icon>
-      </div>
-      <div>
-        <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon>
-      </div>
+          <h3 md-line> {{activity.name}} </h3>
+          <md-icon (click)="load_activity(activity._id)">launch</md-icon>
+          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">settings</md-icon>
+          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="duplicate_activity(activity._id)">content_copy</md-icon>
+          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon>
+          <md-icon (click)="show = !show">info</md-icon>
+      <p md-line *ngIf="show">
+          {{activity.description}}
+      </p>
     </md-list-item>
   </md-nav-list>
 

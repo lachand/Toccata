@@ -2,26 +2,79 @@
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <app-activity-name-edit></app-activity-name-edit>
 
-<div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
+<div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
 
-  <div fxFlex="45%" class="flex-card">
-    <md-card>
-        <md-card-header>
-          <h3>Applications</h3>
-        </md-card-header>
-      <app-activity-apps-edit></app-activity-apps-edit>
-    </md-card>
-  </div>
-
-  <div fxFlex="45%" class="flex-card">
+  <div fxFlex="90%" class="flex-card">
     <md-card>
       <md-card-header>
-        <h3>Participants</h3>
+        <h3 md-line>Description</h3>
+        <md-icon class="aligned-with-h3"
+                 (click)="showDescription = !showDescription"
+                  *ngIf="!showDescription">expand_more
+        </md-icon>
+        <md-icon class="aligned-with-h3"
+                 (click)="showDescription = !showDescription"
+                 *ngIf="showDescription">expand_less
+        </md-icon>
       </md-card-header>
-      <app-activity-participants-edit></app-activity-participants-edit>
+      <p *ngIf="showDescription">
+        {{activityService.activity_loaded.description}}
+      </p>
     </md-card>
   </div>
 
+  <div fxFlex="90%" class="flex-card">
+    <md-card>
+        <md-card-header>
+          <h3 md-line>Applications</h3>
+          <md-icon class="aligned-with-h3"
+                   (click)="showApps = !showApps"
+                   *ngIf="!showApps">expand_more
+          </md-icon>
+          <md-icon class="aligned-with-h3"
+                   (click)="showApps = !showApps"
+                   *ngIf="showApps">expand_less
+          </md-icon>
+        </md-card-header>
+      <app-activity-apps-edit *ngIf="showApps"></app-activity-apps-edit>
+    </md-card>
+  </div>
+
+  <div fxFlex="90%" class="flex-card">
+    <md-card>
+      <md-card-header>
+        <h3 md-line>Participants</h3>
+        <md-icon class="aligned-with-h3"
+                 (click)="showParticipants = !showParticipants"
+                 *ngIf="!showParticipants">expand_more
+        </md-icon>
+        <md-icon class="aligned-with-h3"
+                 (click)="showParticipants = !showParticipants"
+                 *ngIf="showParticipants">expand_less
+        </md-icon>
+      </md-card-header>
+      <app-activity-participants-edit *ngIf="showParticipants"></app-activity-participants-edit>
+    </md-card>
+  </div>
+
+  <div fxFlex="90%" class="flex-card">
+    <md-card>
+      <md-card-header>
+        <h3 md-line>Séquence</h3>
+        <md-icon class="aligned-with-h3"
+                 (click)="showSequence = !showSequence"
+                 *ngIf="!showSequence">expand_more
+        </md-icon>
+        <md-icon class="aligned-with-h3"
+                 (click)="showSequence = !showSequence"
+                 *ngIf="showSequence">expand_less
+        </md-icon>
+      </md-card-header>
+      <app-activity-sequence-edit></app-activity-sequence-edit>
+    </md-card>
+  </div>
+
+  <!--
   <div fxFlex="45%" class="flex-card">
     <md-card>
       <md-card-header>
@@ -29,5 +82,6 @@
       </md-card-header>
     </md-card>
   </div>
+  -->
 
 </div>
