@@ -7,7 +7,6 @@ import PouchDB from 'pouchdb';
 PouchDB.plugin(require('pouchdb-authentication'));
 
 import { UserService } from '../services/user.service';
-import { MessagesService } from '../services/messages.service';
 import {ActivityService} from 'app/services/activity.service';
 
 @Component({
@@ -20,9 +19,9 @@ export class LoginComponent implements OnInit {
   db: any;
   user: any;
   constructor(private userService: UserService, private router: Router,
-              private formBuilder: FormBuilder, messagesService: MessagesService,
+              private formBuilder: FormBuilder,
               private activityService: ActivityService) {
-    this.db = messagesService.messages_db;
+    this.db = userService.db;
     this.user = userService;
   }
 

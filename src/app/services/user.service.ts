@@ -2,7 +2,6 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {User} from '../../models/user.model';
 import * as config from 'variables';
 import PouchDB from 'pouchdb';
-import {ActivityService} from './activity.service';
 
 @Injectable()
 export class UserService {
@@ -65,7 +64,7 @@ export class UserService {
           resolve(this.loggedIn);
           });
           }
-        );
+        ).catch(console.log.bind(console));
         }
       );
   }
@@ -84,79 +83,7 @@ export class UserService {
         }}).then( (res) => {
           resolve(res['name']);
         }
-      );
-    });
-  }
-
-  getUsername() {
-    return new Promise((resolve, reject) => {
-    this.db.getUser(this.name, function (err, response) {
-      if (err) {
-        if (err.name === 'not_found') {
-          console.log('user not found');
-          reject(err);
-        } else {
-          console.log(err);
-          reject(err);
-        }
-      }}).then( (res) => {
-        resolve(res['name']);
-      }
-    );
-  });
-  }
-
-  getAvatar() {
-    return new Promise((resolve, reject) => {
-      this.db.getUser(this.name, function (err, response) {
-        if (err) {
-          if (err.name === 'not_found') {
-            console.log('user not found');
-            reject(err);
-          } else {
-            console.log(err);
-            reject(err);
-          }
-         }}).then( (res) => {
-      resolve(res['avatar']);
-}
-);
-});
-}
-
-  getFonction() {
-    return new Promise((resolve, reject) => {
-      this.db.getUser(this.name, function (err, response) {
-        if (err) {
-          if (err.name === 'not_found') {
-            console.log('user not found');
-            reject(err);
-          } else {
-            console.log(err);
-            reject(err);
-          }
-        }}).then( (res) => {
-          resolve(res['fonction']);
-        }
-      );
-    });
-  }
-
-  getId() {
-    return new Promise((resolve, reject) => {
-      this.db.getUser(this.name, function (err, response) {
-        if (err) {
-          if (err.name === 'not_found') {
-            console.log('user not found');
-            reject(err);
-          } else {
-            console.log(err);
-            reject(err);
-          }
-        }}).then( (res) => {
-          resolve(res['_id']);
-        }
-      );
+      ).catch(console.log.bind(console));
     });
   }
 
@@ -174,7 +101,7 @@ export class UserService {
         }}).then( (res) => {
           resolve(res['activites']);
         }
-      );
+      ).catch(console.log.bind(console));
     });
   }
 
@@ -191,7 +118,7 @@ export class UserService {
           }
         });
         resolve(this.allUsers);
-      });
+      }).catch(console.log.bind(console));
       this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
         this.handleChangeAllUsers(change);
       });
@@ -209,7 +136,7 @@ export class UserService {
           this.participants.push(row.value);
         });
         resolve(this.participants);
-      });
+      }).catch(console.log.bind(console));
       this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
         this.handleChangeParticipants(change);
       });
@@ -219,6 +146,8 @@ export class UserService {
   }
 
   remove_activity(activityId) {
+    console.log(this);
+    console.log(this.allUsers);
     for (let user of this.allUsers){
       user.activites.splice(user.activites.indexOf(activityId), 1);
     }
@@ -284,7 +213,7 @@ export class UserService {
           user.activites.push(outputActivity);
         }
         this.db.bulkDocs(users).then( res => { resolve(res); } );
-      });
+      }).catch(console.log.bind(console));
     });
   }
 

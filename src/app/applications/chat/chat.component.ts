@@ -10,20 +10,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 
 export class ChatComponent {
-  activity: ActivityService;
-  ressourcesServices: any;
   messages: any;
-  user: UserService;
-  userName: any;
-  userFonction: any;
 
   @Input() chatId;
 
-  constructor(activityService: ActivityService, ressourcesServices: RessourcesService,
-              userService: UserService, private router: Router, private route: ActivatedRoute, ) {
-    this.activity = activityService;
-    this.ressourcesServices = ressourcesServices;
-    this.user = userService;
+  constructor(private ressourcesServices: RessourcesService,
+              private user: UserService,
+              private route: ActivatedRoute) {
     this.route.params.subscribe( result => {
       this.chatId = result.id;
       this.changeChat();
@@ -48,20 +41,16 @@ export class ChatComponent {
   }
 
   canEdit(message) {
-    this.user.getUsername().then( res => {
-      this.userName = res;
-      if ((this.userName === message.author.name) || (this.userFonction === 'Enseignant')) {
+      if ((this.user.name === message.author.name) || (this.user.fonction === 'Enseignant')) {
         message.editable = true;
         return true;
       }
       message.editable = false;
       return false;
-    });
   }
 
   deleteMessage(message) {
     console.log('Fausse suppression');
-    //this.ressourcesServices.deleteRessource(message);
   }
 
 }

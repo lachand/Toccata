@@ -11,7 +11,6 @@ import { routes } from './app.routes';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './applications/chat/chat.component';
 import { ChatSendComponent } from './applications/chat/chatSend.component';
-import { MessagesService } from './services/messages.service';
 import { UserService } from './services/user.service';
 import { LoginComponent } from './login-signin/login.component';
 import {LoggedInGuard} from './verifications/logged-in.guards';
@@ -64,7 +63,7 @@ import {ActivityNameEditComponent} from './activities/activity-edition/activityN
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent, ActivityChangeUsersComponent],
-  providers: [UserService, ActivityService, RessourcesService, MessagesService, LoggedInGuard, AppsService],
+  providers: [UserService, ActivityService, RessourcesService, LoggedInGuard, AppsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

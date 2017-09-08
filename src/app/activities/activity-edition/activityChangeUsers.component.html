@@ -5,8 +5,9 @@
 
   <div *ngFor="let participant of userChecked">
   <md-slide-toggle class="example-margin"
-                   [(ngModel)]="participant.checked"
-                    name="participant.user.name">
+                   [checked]="participant.checked"
+                    [name]="participant.user.name"
+                    (change)="changeValue($event)">
     {{participant.user.name}}
   </md-slide-toggle>
   </div>

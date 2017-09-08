@@ -52,7 +52,10 @@ export class ActivityService {
           this.activities_list.push(row.value);
         });
         resolve(this.activities_list);
-      });
+        this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+          this.handleChange(change);
+        });
+      }).catch(console.log.bind(console));
     }).catch((error) => {
       console.log(error);
     });
@@ -70,18 +73,15 @@ export class ActivityService {
         this.apps.getApps(result._id).then(res => {
           this.user.getParticipants(result._id).then( res2 => {
             resolve(this.activity_loaded);
-          });
-        });
+          }).catch(console.log.bind(console));
+        }).catch(console.log.bind(console));
         this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
           if (change.id === this.activity_loaded._id) {
             this.activity_loaded = change.doc;
-            console.log(this.activity_loaded);
             this.changes.emit(change);
           }
         });
-      }).catch((error) => {
-        console.log(error);
-      });
+      }).catch(console.log.bind(console));
     });
   }
 
@@ -101,7 +101,6 @@ export class ActivityService {
   }
 
   private handleChange(change) {
-    console.log("change : ", change);
     if (!change.deleted) {
         let changedDoc = null;
         let changedIndex = null;
@@ -112,8 +111,12 @@ export class ActivityService {
           }
         });
         if (changedDoc) {
-          this.activities_list[changedIndex] = change.doc;
-          this.changes.emit({changeType: 'modification', value: change.doc});
+          if (change.doc.participants.indexOf(this.user.name) !== -1){
+            this.activities_list.splice(changedIndex, 1);
+          } else {
+            this.activities_list[changedIndex] = change.doc;
+            this.changes.emit({changeType: 'modification', value: change.doc});
+          }
         } else {
           if (change.doc.participants.indexOf(this.user.name) !== -1) {
             this.activities_list.push(change.doc);
@@ -128,17 +131,15 @@ export class ActivityService {
   }
 
   public delete_activity(activityId: any) {
-    if (this.activity_loaded === activityId) {
-      this.activity_loaded = null;
-    }
+    console.log(this, this.user);
     this.db.get(activityId).then( res => {
       res._deleted = true;
-      this.db.put(res).then(
-        this.apps.remove_activity(activityId).then(
-          this.user.remove_activity(activityId)
-        )
-      );
-    });
+      this.user.remove_activity(activityId);
+      this.apps.remove_activity(activityId).then( res2 => {
+        this.db.put(res);
+      }
+      ).catch(console.log.bind(console));
+    }).catch(console.log.bind(console));
   }
 
   duplicate(activityId) {
@@ -150,9 +151,9 @@ export class ActivityService {
       this.db.post(newActivity).then( resActivity => {
         this.apps.duplicateAppsFromActivity(activityId, resActivity.id).then(
           this.user.duplicateUsersFromActivity(activityId, resActivity.id)
-        );
-      });
-    });
+        ).catch(console.log.bind(console));
+      }).catch(console.log.bind(console));
+    }).catch(console.log.bind(console));
   }
 
   logout() {

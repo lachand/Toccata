@@ -44,7 +44,7 @@ export class RessourcesService {
             this.ressources[name].push(row.value);
           });
         resolve(this.ressources[name]);
-      });
+      }).catch(console.log.bind(console));
       this.ressources_db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
         this.handleChange(change);
       });
@@ -93,7 +93,7 @@ export class RessourcesService {
       } else {
       this.ressources_db.get(change.doc._id).then( res => {
         console.log(res);
-      });
+      }).catch(console.log.bind(console));
       console.log('toto : ', change);
     }
   }

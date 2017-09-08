@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {MdDialogRef} from '@angular/material';
@@ -9,6 +9,7 @@ import {MdDialogRef} from '@angular/material';
 })
 
 export class ActivityChangeUsersComponent {
+
   dialogRef: MdDialogRef<ActivityChangeUsersComponent>;
   userChecked: Array<any>;
   userCheckedInitially: Array<any>;
@@ -31,26 +32,30 @@ export class ActivityChangeUsersComponent {
   changeUsers() {
     this.usersToChange = [];
     for (let i = 0; i < this.userChecked.length; i++) {
-      console.log(this.userChecked[i].checked);
-      console.log(this.userCheckedInitially[i].checked);
       if (this.userChecked[i].checked !== this.userCheckedInitially[i].checked) {
         let user = this.userChecked[i].user;
         if (this.userChecked[i].checked) {
           user.activites.push(this.activityService.activity_loaded._id);
-          //this.activityService.activity_loaded.participants.push(user._id);
+          this.activityService.activity_loaded.participants.push(user._id);
         } else {
+          this.activityService.activity_loaded.participants.splice(this.activityService.activity_loaded.participants.indexOf(user._id),1);
           user.activites.splice(user.activites.indexOf(this.activityService.activity_loaded._id), 1);
-          //this.activityService.activity_loaded.participants.splice(this.activityService.activity_loaded.participants.indexOf(user._id, 1));
         }
         this.usersToChange.push(user);
       }
     }
-    console.log(this.usersToChange);
     this.activityService.user.db.bulkDocs(this.usersToChange).then( res2 => {
-      console.log(res2);
+      this.activityService.db.put(this.activityService.activity_loaded).then( res3 => {
+        this.dialogRef.close();
+      });
     });
-    //this.activityService.db.put(this.activityService.activity_loaded).then(res => {
+  }
 
-    //});
+  changeValue(event) {
+    for (const user of this.userChecked) {
+      if (user.user.name === event.source.name) {
+        user.checked = !user.checked;
+      }
+    }
   }
 }

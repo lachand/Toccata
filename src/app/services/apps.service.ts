@@ -44,7 +44,7 @@ export class AppsService {
             this.apps[name].push(row.value);
           });
         resolve(this.apps[name]);
-      });
+      }).catch(console.log.bind(console));
       this.apps_db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
         this.handleChange(change);
       });
@@ -66,14 +66,14 @@ export class AppsService {
     this.apps_db.get(appId).then(res => {
       res.status = 'unloaded';
       return this.apps_db.put(res);
-    });
+    }).catch(console.log.bind(console));
   }
 
   public loadApp(appId) {
     this.apps_db.get(appId).then(res => {
       res.status = 'loaded';
       return this.apps_db.put(res);
-    });
+    }).catch(console.log.bind(console));
   }
 
   public getApp(appId) {
@@ -117,7 +117,7 @@ export class AppsService {
         } else {
           this.apps_db.put(res);
         }
-    });
+    }).catch(console.log.bind(console));
   }
 
   remove_activity(activityId) {
@@ -136,7 +136,7 @@ export class AppsService {
           }
         }
         this.apps_db.bulkDocs(apps).then( res => {resolve(res); } );
-      });
+      }).catch(console.log.bind(console));
     });
   }
 
@@ -151,8 +151,8 @@ export class AppsService {
         for (let app of apps) {
           app.activites.push(outputActivity);
         }
-      this.apps_db.bulkDocs(apps).then( res => { resolve(res); } );
-    });
+      this.apps_db.bulkDocs(apps).then( res => { resolve(res); } ).catch(console.log.bind(console));;
+    }).catch(console.log.bind(console));
    });
   }
 

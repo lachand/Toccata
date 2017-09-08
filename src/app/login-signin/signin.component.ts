@@ -8,21 +8,20 @@ declare const require: any;
 PouchDB.plugin(require('pouchdb-authentication'));
 
 import { UserService } from '../services/user.service';
-import { MessagesService } from '../services/messages.service';
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html'
 })
-export class SigninComponent implements OnInit{
+export class SigninComponent implements OnInit {
+
   signinForm: FormGroup;
   db: any;
-  user: any;
   teacher: any;
-  constructor(private userService: UserService, private router: Router,
-              private formBuilder: FormBuilder, messagesService: MessagesService) {
-    this.db = messagesService.messages_db;
-    this.user = userService;
+
+  constructor(private user: UserService, private router: Router,
+              private formBuilder: FormBuilder) {
+    this.db = this.user.db;
   }
 
   ngOnInit() {

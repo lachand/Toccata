@@ -11,8 +11,6 @@ import {RessourcesService} from '../../services/ressources.service';
 
 export class ChatSendComponent implements OnInit {
   sendMessage: FormGroup;
-  ressourcesService: any;
-  user: any;
   userName: any;
   userId: any;
   userAvatar: any;
@@ -20,27 +18,15 @@ export class ChatSendComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    userService: UserService,
-    ressourcesService: RessourcesService
-  ) {
-    this.ressourcesService = ressourcesService;
-    this.user = userService;
-  }
+    private user: UserService,
+    private ressourcesService: RessourcesService
+  ) {}
 
   ngOnInit() {
     this.resetDefault();
-    this.user.getUsername().then( (res) => {
-      this.userName = res;
-      this.sendMessage.value['author']['name'] = res;
-    });
-    this.user.getId().then( (res) => {
-      this.userId = res;
-      this.sendMessage.value['author']['_id'] = res;
-    });
-    this.user.getAvatar().then( (res) => {
-      this.userAvatar = res;
-      this.sendMessage.value['author']['avatar'] = res;
-    });
+    this.sendMessage.value['author']['name'] = this.user.name;
+    this.sendMessage.value['author']['_id'] = this.user.id;
+    this.sendMessage.value['author']['avatar'] = this.user.avatar;
     this.sendMessage.value['activites'] = [['3521d40f-ac00-42f4-8099-7594080bca3e']];
     this.sendMessage.value['applications'] = [[this.loadedChat]];
   }
