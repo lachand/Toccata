@@ -146,12 +146,11 @@ export class ActivityService {
     this.db.get(activityId).then( res => {
       const newActivity = {
         'name': 'Copie de ' + res.name,
-        'participants': res.participants
+        'participants': [this.user.id]
       }
-      this.db.post(newActivity).then( resActivity => {
-        this.apps.duplicateAppsFromActivity(activityId, resActivity.id).then(
-          this.user.duplicateUsersFromActivity(activityId, resActivity.id)
-        ).catch(console.log.bind(console));
+      this.db.post(newActivity).then( activityCreated => {
+        this.apps.duplicateAppsFromActivity(activityId, activityCreated.id);
+        this.user.addActivity(activityCreated.id, this.user.id);
       }).catch(console.log.bind(console));
     }).catch(console.log.bind(console));
   }

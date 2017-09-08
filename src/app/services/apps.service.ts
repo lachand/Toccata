@@ -82,22 +82,20 @@ export class AppsService {
 
   private handleChange(change) {
     if (!change.deleted) {
-      for (let i = 0; i < change.doc.activites.length; i++) {
-        let changedDoc = null;
-        let changedIndex = null;
-        this.apps[change.doc.activites[i]].forEach((doc, index) => {
-          if (doc._id === change.doc._id) {
-            changedDoc = doc;
-            changedIndex = index;
-          }
-        });
-        if (changedDoc) {
-          this.apps[change.doc.activites[i]][changedIndex] = change.doc;
-          this.change.emit({changeType: 'modification', value: change.doc});
-        } else {
-          this.apps[change.doc.activites[i]].push(change.doc);
-          this.change.emit({changeType: 'create', value: change.doc});
+      let changedDoc = null;
+      let changedIndex = null;
+      this.apps[change.doc.activity].forEach((doc, index) => {
+        if (doc._id === change.doc._id) {
+          changedDoc = doc;
+          changedIndex = index;
         }
+      });
+      if (changedDoc) {
+        this.apps[change.doc.activity][changedIndex] = change.doc;
+        this.change.emit({changeType: 'modification', value: change.doc});
+      } else {
+        this.apps[change.doc.activity].push(change.doc);
+        this.change.emit({changeType: 'create', value: change.doc});
       }
     } else {
       for (let app in this.apps) {
@@ -108,15 +106,10 @@ export class AppsService {
     }
   }
 
-  public deleteApp(appId, activity_id) {
+  public deleteApp(appId) {
     this.apps_db.get(appId).then( res => {
-        res.activites.splice(res.activites.indexOf(activity_id), 1 );
-        if (res.activites.length === 0) {
-          res._deleted = true;
-          this.apps_db.put(res);
-        } else {
-          this.apps_db.put(res);
-        }
+      res._deleted = true;
+      this.apps_db.put(res);
     }).catch(console.log.bind(console));
   }
 
@@ -129,31 +122,32 @@ export class AppsService {
           apps.push(row.value);
         });
         for (let app of apps) {
-          app.activites.splice(activityId, 1);
-          console.log(app.activites);
-          if (app.activites.length === 0 || app.activites === null) {
             app._deleted = true;
           }
-        }
         this.apps_db.bulkDocs(apps).then( res => {resolve(res); } );
       }).catch(console.log.bind(console));
     });
   }
 
   duplicateAppsFromActivity(inputActivity, outputActivity) {
-    return new Promise(resolve => {
     this.apps_db.query('byActivity/by-activity',
       { startkey: inputActivity, endkey: inputActivity}).then(result => {
         let apps = [];
         const docs = result.rows.map((row) => {
+          row.value.activity = outputActivity;
+          delete row.value._id;
+          delete row.value._rev;
           apps.push(row.value);
         });
-        for (let app of apps) {
-          app.activites.push(outputActivity);
-        }
-      this.apps_db.bulkDocs(apps).then( res => { resolve(res); } ).catch(console.log.bind(console));;
+        console.log(apps);
+        const db = this.apps_db;
+      return Promise.all(apps.map(function (app) {
+        console.log(db);
+        return db.post(app);
+      })).then(function (arrayOfResults) {
+        console.log(arrayOfResults);
+      });
     }).catch(console.log.bind(console));
-   });
   }
 
   logout() {

@@ -39,14 +39,14 @@ import {MdDialogRef} from '@angular/material';
         appToAdd = {'type': this.formNewApp.value.applicationType,
           'name': this.formNewApp.value.appName,
           'status': 'unloaded',
-          'activites': [this.activity._id]};
+          'activity': this.activity._id};
       } else if (this.formNewApp.value.serviceName !== '' && this.formNewApp.value.url !== '') {
         appToAdd = {'type': this.formNewApp.value.applicationType,
           'service': this.formNewApp.value.serviceName,
           'name': this.formNewApp.value.appName,
           'status': 'unloaded',
           'url': this.formNewApp.value.url,
-          'activites': [this.activity._id]};
+          'activity': this.activity._id};
       }
       this.activityService.apps.createApp(appToAdd);
       this.dialogRef.close();

@@ -146,12 +146,18 @@ export class UserService {
   }
 
   remove_activity(activityId) {
-    console.log(this);
-    console.log(this.allUsers);
     for (let user of this.allUsers){
       user.activites.splice(user.activites.indexOf(activityId), 1);
     }
     this.db.bulkDocs(this.allUsers);
+  }
+
+  addActivity(activityId, userId) {
+    this.db.get(userId).then( userSelected => {
+      console.log(userSelected);
+      userSelected.activites.push(activityId);
+      this.db.put(userSelected);
+    });
   }
 
   private handleChangeParticipants(change) {
@@ -199,22 +205,6 @@ export class UserService {
       this.allUsers.splice(changedIndex, 1);
       this.change.emit({changeType: 'delete', value: changedIndex});
     }
-  }
-
-  duplicateUsersFromActivity(inputActivity, outputActivity) {
-    return new Promise(resolve => {
-      this.db.query('byActivity/by-activity',
-        { startkey: inputActivity, endkey: inputActivity}).then(result => {
-        let users = [];
-        const docs = result.rows.map((row) => {
-          users.push(row.value);
-        });
-        for (let user of users) {
-          user.activites.push(outputActivity);
-        }
-        this.db.bulkDocs(users).then( res => { resolve(res); } );
-      }).catch(console.log.bind(console));
-    });
   }
 
   logout() {
