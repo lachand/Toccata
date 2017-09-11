@@ -36,17 +36,27 @@ export class ActivityChangeUsersComponent {
         let user = this.userChecked[i].user;
         if (this.userChecked[i].checked) {
           user.activites.push(this.activityService.activity_loaded._id);
+          for (const activite of this.activityService.activity_loaded_child){
+            user.activites.push(activite._id);
+            activite.participants.push(user._id);
+          }
           this.activityService.activity_loaded.participants.push(user._id);
         } else {
           this.activityService.activity_loaded.participants.splice(this.activityService.activity_loaded.participants.indexOf(user._id),1);
           user.activites.splice(user.activites.indexOf(this.activityService.activity_loaded._id), 1);
+          for (const activite of this.activityService.activity_loaded_child){
+            user.activites.splice(user.activites.indexOf(activite._id), 1);
+            activite.participants.splice(this.activityService.activity_loaded_child.participants.indexOf(user._id),1);
+          }
         }
         this.usersToChange.push(user);
       }
     }
     this.activityService.user.db.bulkDocs(this.usersToChange).then( res2 => {
       this.activityService.db.put(this.activityService.activity_loaded).then( res3 => {
-        this.dialogRef.close();
+        this.activityService.db.bulkDocs(this.activityService.activity_loaded_child).then( res4 => {
+          this.dialogRef.close();
+        });
       });
     });
   }

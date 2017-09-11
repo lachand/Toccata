@@ -1,6 +1,6 @@
 <script src="../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<app-activity-name-edit [edit]="true"></app-activity-name-edit>
+<app-activity-name-edit [edit]="false"></app-activity-name-edit>
 
 <div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
 
@@ -18,7 +18,7 @@
         </md-icon>
       </md-card-header>
       <p *ngIf="showDescription">
-        <app-activity-description-edit [edit]="true"></app-activity-description-edit>
+        {{activityService.activity_loaded.description}}
       </p>
     </md-card>
   </div>
@@ -36,7 +36,7 @@
                    *ngIf="showApps">expand_less
           </md-icon>
         </md-card-header>
-      <app-activity-apps-edit [edit]="true" *ngIf="showApps"></app-activity-apps-edit>
+      <app-activity-apps-edit [edit]="false" *ngIf="showApps"></app-activity-apps-edit>
     </md-card>
   </div>
 
@@ -53,7 +53,7 @@
                  *ngIf="showParticipants">expand_less
         </md-icon>
       </md-card-header>
-      <app-activity-participants-edit [edit]="true" *ngIf="showParticipants"></app-activity-participants-edit>
+      <app-activity-participants-edit [edit]="false" *ngIf="showParticipants"></app-activity-participants-edit>
     </md-card>
   </div>
 
@@ -70,7 +70,7 @@
                  *ngIf="showSequence">expand_less
         </md-icon>
       </md-card-header>
-      <app-activity-sequence-edit [edit]="true" *ngIf="showSequence"></app-activity-sequence-edit>
+      <app-activity-sequence-edit [edit]="false" *ngIf="showSequence"></app-activity-sequence-edit>
     </md-card>
   </div>
 

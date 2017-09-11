@@ -21,7 +21,7 @@ export class RessourcesService {
       retry: true,
       continuous: true
     };
-    this.ressources_db.sync(this.ressources_db_remote, options).on('change', function (change) {
+    this.ressources_db.sync(this.ressources_db_remote, options).once('change', function (change) {
       this.handleChange(change);
     }).on('paused', function (info) {
     }).on('active', function (info) {
@@ -45,7 +45,7 @@ export class RessourcesService {
           });
         resolve(this.ressources[name]);
       }).catch(console.log.bind(console));
-      this.ressources_db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+      this.ressources_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
         this.handleChange(change);
       });
     }).catch((error) => {

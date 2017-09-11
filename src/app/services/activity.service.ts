@@ -26,8 +26,8 @@ export class ActivityService {
       retry: true,
       continuous: true
     };
-    this.db.sync(this.db_remote, options).on('change', function (change) {
-      this.handleChange(change);
+    this.db.sync(this.db_remote, options).on('change', change => {
+      //this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
     }).on('active', function (info) {
@@ -76,6 +76,7 @@ export class ActivityService {
           this.user.getParticipants(result._id).then( res2 => {
             this.db.query('byParent/by-parent',
               { startkey: result._id, endkey: result._id}).then(activityChilds => {
+              this.activity_loaded_child = [];
               activityChilds.rows.map((row) => {
                 this.activity_loaded_child.push(row.value);
                 resolve(this.activity_loaded);
@@ -84,14 +85,20 @@ export class ActivityService {
 
           }).catch(console.log.bind(console));
         }).catch(console.log.bind(console));
-        this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
-          if (change.id === this.activity_loaded._id) {
-            this.activity_loaded = change.doc;
-            this.changes.emit(change);
-          }
-        });
+        //this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
+        //  if (change.id === this.activity_loaded._id) {
+        //    this.activity_loaded = change.doc;
+        //    this.changes.emit(change);
+        //  }
+        //});
       }).catch(console.log.bind(console));
     });
+  }
+
+  public unloadActivity() {
+    this.activity_loaded = null;
+    this.activities_list = [];
+    this.apps.logout();
   }
 
   public createActivity(activity) {
@@ -101,6 +108,27 @@ export class ActivityService {
       }).catch(function (err) {
         console.log(err);
         return false;
+      });
+    });
+  }
+
+  public createSubActivity(parentId) {
+    return new Promise(resolve => {
+    this.db.get(parentId).then(parent => {
+      const subActivity = {
+        'name': 'nouvelle activité',
+        'participants': parent.participants,
+        'parent': parent._id,
+        'type': 'Sequence',
+        'description': "Il n'y à aucune description"
+      };
+        this.db.post(subActivity).then((response) => {
+          console.log(response);
+          resolve(response);
+        }).catch(function (err) {
+          console.log(err);
+          return false;
+        });
       });
     });
   }
@@ -120,21 +148,28 @@ export class ActivityService {
           }
         });
         if (changedDoc) {
-          if (change.doc.participants.indexOf(this.user.name) !== -1){
+          if (change.doc.participants.indexOf(this.user.id) === -1) {
             this.activities_list.splice(changedIndex, 1);
           } else {
             this.activities_list[changedIndex] = change.doc;
+            if (change.doc._id === this.activity_loaded._id) {
+              this.activity_loaded = change.doc;
+            }
             this.changes.emit({changeType: 'modification', value: change.doc});
           }
         } else {
-          if (change.doc.participants.indexOf(this.user.name) !== -1) {
+          if (change.doc.participants.indexOf(this.user.id) !== -1) {
+            if (change.doc.type === 'Main') {
             this.activities_list.push(change.doc);
+            } else {
+              this.activity_loaded_child.push(change.doc);
+            }
             this.changes.emit({changeType: 'create', value: change.doc});
           }
         }
     } else {
       console.log(change);
-      this.activities_list.splice(this.activities_list.indexOf(change.doc.id), 1);
+      this.activities_list.splice(this.activities_list.indexOf(change.doc._id), 1);
       this.changes.emit({changeType: 'delete', value: change});
       }
   }
@@ -165,9 +200,7 @@ export class ActivityService {
   }
 
   logout() {
-    this.activity_loaded = null;
-    this.activities_list = [];
-    this.apps.logout();
+    this.unloadActivity();
     this.user.logout();
   }
 }

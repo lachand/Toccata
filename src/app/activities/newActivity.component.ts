@@ -20,7 +20,9 @@ export class NewActivityComponent {
     const activityName = this.activityName;
     this.activityService.createActivity({
       'name': activityName,
-      'participants': [this.user.id]}).then(res => {
+      'participants': [this.user.id],
+      'type': 'Main',
+      'description': "Il n'y à aucune description"}).then(res => {
         console.log(res['id']);
         this.activityService.user.db.get(this.user.id).then( res2 => {
           res2.activites.push(res['id']);

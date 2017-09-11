@@ -119,7 +119,7 @@ export class UserService {
         });
         resolve(this.allUsers);
       }).catch(console.log.bind(console));
-      this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+      this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
         this.handleChangeAllUsers(change);
       });
     }).catch((error) => {
@@ -137,7 +137,7 @@ export class UserService {
         });
         resolve(this.participants);
       }).catch(console.log.bind(console));
-      this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+      this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
         this.handleChangeParticipants(change);
       });
     }).catch((error) => {

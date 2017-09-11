@@ -25,6 +25,12 @@ export class MyActivitiesComponent {
     });
   }
 
+  show_activity(activity_id) {
+    this.activityService.load_activity(activity_id).then(res => {
+      this.router.navigate(['activity_view']);
+    });
+  }
+
   edit_activity(activity_id) {
     this.activityService.load_activity(activity_id).then( res => {
       this.router.navigate(['activity_edit']);

@@ -8,6 +8,6 @@
     </md-list-item>
   </md-list>
 
-    <button md-button type="submit">Ajouter des participants</button>
+    <button *ngIf="userService.fonction === 'Enseignant' && edit===true" md-button type="submit">Ajouter des participants</button>
   </form>
 </div>

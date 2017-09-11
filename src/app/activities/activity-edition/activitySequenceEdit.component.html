@@ -9,7 +9,18 @@
       <p>
         {{activity.description}}
       </p>
+
+      <md-card-actions>
+        <md-icon (click)="show_subactivity(activity._id)">visibility</md-icon>
+        <md-icon *ngIf="userService.fonction === 'Enseignant' && edit===true" (click)="edit_subactivity(activity._id)">settings</md-icon>
+        <md-icon *ngIf="userService.fonction === 'Enseignant' && edit===true" (click)="delete_subactivity(activity._id)">close</md-icon>
+      </md-card-actions>
+
     </md-card>
+  </div>
+
+  <div fxFlex="45%" class="flex-card-centered">
+    <button (click)="new_subactivity()" *ngIf="userService.fonction === 'Enseignant' && edit===true" md-fab color="primary"><md-icon>add</md-icon></button>
   </div>
 
 </div>

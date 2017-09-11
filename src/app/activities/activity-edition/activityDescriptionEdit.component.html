@@ -1,0 +1,13 @@
+<script src="../../../main.ts"></script>
+<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<div *ngIf="!descriptionEdition" class="name-edition">
+  {{activityService.activity_loaded.description}} <md-icon class="aligned-with-text" (click)="switch()">mode_edit</md-icon>
+</div>
+
+<div *ngIf="descriptionEdition" class="name-edition">
+  <md-input-container >
+    <input mdInput placeholder="Description de l'activité" type="text" name="description" [(ngModel)]="description">
+  </md-input-container>
+  <md-icon class="aligned-with-text" (click)="changeTheDescription()">done</md-icon>
+  <md-icon class="aligned-with-text" (click)="switch()">close</md-icon>
+</div>

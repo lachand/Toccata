@@ -32,6 +32,8 @@ import {MenuComponent} from './menu/menu.component';
 import {ActivityChangeUsersComponent} from './activities/activity-edition/activityChangeUsers.component';
 import {ActivityNameEditComponent} from './activities/activity-edition/activityNameEdit.component';
 import {ActivitySequenceEditComponent} from './activities/activity-edition/activitySequenceEdit.component';
+import {ActivityViewComponent} from "./activities/activity-edition/activityView.component";
+import {ActivityDescriptionEditComponent} from "./activities/activity-edition/activityDescriptionEdit.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -44,11 +46,13 @@ import {ActivitySequenceEditComponent} from './activities/activity-edition/activ
     SigninComponent,
     MyActivitiesComponent,
     ActivityEditComponent,
+    ActivityViewComponent,
     ActivityAppsEditComponent,
     ActivityParticipantsEditComponent,
     ActivityNewAppComponent,
     ActivityChangeUsersComponent,
     ActivityNameEditComponent,
+    ActivityDescriptionEditComponent,
     ActivitySequenceEditComponent,
     NewActivityComponent,
     MenuComponent,

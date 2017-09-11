@@ -35,7 +35,7 @@ export class MessagesService {
           this.messages.push(row.doc);
         });
         resolve(this.messages);
-        this.messages_db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+        this.messages_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
           this.handleChange(change);
         });
       }).catch((error) => {

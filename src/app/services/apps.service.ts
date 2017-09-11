@@ -18,7 +18,7 @@ export class AppsService {
       retry: true,
       continuous: true
     };
-    this.apps_db.sync(this.apps_db_remote, options).on('change', function (change) {
+    this.apps_db.sync(this.apps_db_remote, options).once('change', function (change) {
       this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
@@ -45,7 +45,7 @@ export class AppsService {
           });
         resolve(this.apps[name]);
       }).catch(console.log.bind(console));
-      this.apps_db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+      this.apps_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
         this.handleChange(change);
       });
     }).catch((error) => {

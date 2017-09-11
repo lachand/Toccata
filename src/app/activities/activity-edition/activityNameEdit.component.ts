@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 
 @Component({
@@ -10,6 +10,7 @@ import {ActivityService} from '../../services/activity.service';
 export class ActivityNameEditComponent {
   nameEdition: boolean;
   appName: string;
+  @Input() edit: boolean;
 
   constructor(private activityService: ActivityService) {
     this.nameEdition = false;

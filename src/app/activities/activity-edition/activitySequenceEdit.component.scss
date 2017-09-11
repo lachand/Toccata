@@ -3,10 +3,23 @@
   padding: 1%;
 }
 
+.flex-card-centered{
+  margin: auto;
+  padding: 1%;
+  justify-content:center;
+  align-items:center;
+}
+
 .flex-main-div {
   padding: 1%;
 }
 
 .aligned-with-h3 {
   margin-top: 15px;
+}
+
+.icon-huge {
+    font-size:45px;
+    height:45px;
+    width: 45px;
 }
