@@ -46,7 +46,7 @@ export class AppsService {
         resolve(this.apps[name]);
       }).catch(console.log.bind(console));
       this.apps_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-        this.handleChange(change);
+        //this.handleChange(change);
       });
     }).catch((error) => {
       console.log(error);
@@ -81,29 +81,31 @@ export class AppsService {
   }
 
   private handleChange(change) {
-    if (!change.deleted) {
-      let changedDoc = null;
-      let changedIndex = null;
-      this.apps[change.doc.activity].forEach((doc, index) => {
-        if (doc._id === change.doc._id) {
-          changedDoc = doc;
-          changedIndex = index;
+    for (const document of change.changes.docs) {
+      if (!document._deleted) {
+          let changedDoc = null;
+          let changedIndex = null;
+          this.apps[document.activity].forEach((doc, index) => {
+            if (doc._id === document._id) {
+              changedDoc = doc;
+              changedIndex = index;
+            }
+          });
+          if (changedDoc) {
+            this.apps[document.activity][changedIndex] = document;
+            this.change.emit({changeType: 'modification', value: document});
+          } else {
+            this.apps[document.activity].push(document);
+            this.change.emit({changeType: 'create', value: document});
+          }
+        } else {
+          for (let app in this.apps) {
+            this.apps[app].splice(app, 1);
+            /** Tricky way **/
+            this.change.emit({changeType: 'delete', value: change});
+          }
         }
-      });
-      if (changedDoc) {
-        this.apps[change.doc.activity][changedIndex] = change.doc;
-        this.change.emit({changeType: 'modification', value: change.doc});
-      } else {
-        this.apps[change.doc.activity].push(change.doc);
-        this.change.emit({changeType: 'create', value: change.doc});
       }
-    } else {
-      for (let app in this.apps) {
-        this.apps[app].splice(app, 1);
-        /** Tricky way **/
-        this.change.emit({changeType: 'delete', value: change});
-      }
-    }
   }
 
   public deleteApp(appId) {

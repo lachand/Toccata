@@ -46,7 +46,7 @@ export class RessourcesService {
         resolve(this.ressources[name]);
       }).catch(console.log.bind(console));
       this.ressources_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-        this.handleChange(change);
+        //this.handleChange(change);
       });
     }).catch((error) => {
       console.log(error);
@@ -72,29 +72,31 @@ export class RessourcesService {
   }
 
   handleChange(change) {
-    if (!change.deleted) {
-    for (let i = 0; i < change.doc.applications.length; i++) {
-      let changedDoc = null;
-      let changedIndex = null;
-        this.ressources[change.doc.applications[i]].forEach((doc, index) => {
-          if (doc._id === change.doc._id) {
-            changedDoc = doc;
-            changedIndex = index;
+    for (const document of change.changes.docs) {
+      if (!document._deleted) {
+        for (let i = 0; i < document.applications.length; i++) {
+          let changedDoc = null;
+          let changedIndex = null;
+          this.ressources[document.applications[i]].forEach((doc, index) => {
+            if (doc._id === document._id) {
+              changedDoc = doc;
+              changedIndex = index;
+            }
+          });
+          if (changedDoc) {
+            this.ressources[document.applications[i]][changedIndex] = document;
+            this.change.emit({changeType: 'modification', value: document});
+          } else {
+            this.ressources[document.applications[i]].push(document);
+            this.change.emit({changeType: 'create', value: document});
           }
-        });
-        if (changedDoc) {
-          this.ressources[change.doc.applications[i]][changedIndex] = change.doc;
-          this.change.emit({changeType: 'modification', value: change.doc});
-        } else {
-          this.ressources[change.doc.applications[i]].push(change.doc);
-          this.change.emit({changeType: 'create', value: change.doc});
-        }
         }
       } else {
-      this.ressources_db.get(change.doc._id).then( res => {
-        console.log(res);
-      }).catch(console.log.bind(console));
-      console.log('toto : ', change);
+        this.ressources_db.get(document._id).then(res => {
+          console.log(res);
+        }).catch(console.log.bind(console));
+        console.log('toto : ', change);
+      }
     }
   }
 }

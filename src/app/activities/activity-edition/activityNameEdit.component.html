@@ -1,7 +1,7 @@
 <script src="../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div *ngIf="!nameEdition" class="name-edition">
-  <h3>Activité : {{activityService.activity_loaded.name}} <md-icon class="aligned-with-text" (click)="switch()">mode_edit</md-icon></h3>
+  <h3>Activité : {{activityService.activity_loaded.name}} <md-icon *ngIf="edit" class="aligned-with-text" (click)="switch()">mode_edit</md-icon></h3>
 </div>
 
 <div *ngIf="nameEdition" class="name-edition">

@@ -9,12 +9,14 @@ import {ActivityService} from '../../services/activity.service';
 
 export class ActivityDescriptionEditComponent {
   descriptionEdition: boolean;
-  description: string;
+  description: String = '';
   @Input() edit: boolean;
 
   constructor(private activityService: ActivityService) {
     this.descriptionEdition = false;
-    this.description = this.activityService.activity_loaded.description;
+    if (this.activityService.activity_loaded.description !== "Il n'y a aucune description") {
+      this.description = this.activityService.activity_loaded.description;
+    }
   }
 
   switch() {

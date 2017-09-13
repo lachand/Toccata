@@ -22,7 +22,7 @@ export class NewActivityComponent {
       'name': activityName,
       'participants': [this.user.id],
       'type': 'Main',
-      'description': "Il n'y à aucune description"}).then(res => {
+      'description': "Il n'y a aucune description"}).then(res => {
         console.log(res['id']);
         this.activityService.user.db.get(this.user.id).then( res2 => {
           res2.activites.push(res['id']);

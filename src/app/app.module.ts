@@ -34,6 +34,7 @@ import {ActivityNameEditComponent} from './activities/activity-edition/activityN
 import {ActivitySequenceEditComponent} from './activities/activity-edition/activitySequenceEdit.component';
 import {ActivityViewComponent} from "./activities/activity-edition/activityView.component";
 import {ActivityDescriptionEditComponent} from "./activities/activity-edition/activityDescriptionEdit.component";
+import {DialogConfirmationComponent} from "./activities/dialogConfirmation.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -55,6 +56,7 @@ import {ActivityDescriptionEditComponent} from "./activities/activity-edition/ac
     ActivityDescriptionEditComponent,
     ActivitySequenceEditComponent,
     NewActivityComponent,
+    DialogConfirmationComponent,
     MenuComponent,
     NgxAutoScroll],
   imports: [
@@ -68,7 +70,7 @@ import {ActivityDescriptionEditComponent} from "./activities/activity-edition/ac
     FlexLayoutModule,
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent, ActivityChangeUsersComponent],
+  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
   providers: [UserService, ActivityService, RessourcesService, LoggedInGuard, AppsService],
   bootstrap: [AppComponent]
 })

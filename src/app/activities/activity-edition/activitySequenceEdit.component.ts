@@ -20,13 +20,13 @@ export class ActivitySequenceEditComponent {
 
   show_subactivity(activityId) {
     this.activityService.load_activity(activityId).then( res => {
-      this.router.navigate(['activity_view']);
+      this.router.navigate(['activity_view/' + activityId]);
     });
   }
 
   edit_subactivity(activityId) {
     this.activityService.load_activity(activityId).then( res => {
-      this.router.navigate(['activity_edit']);
+      this.router.navigate(['activity_edit/' + activityId]);
     });
   }
 
@@ -40,9 +40,7 @@ export class ActivitySequenceEditComponent {
             users.push(row.value);
           });
         this.userService.db.bulkDocs(users).then(res => {
-          this.activityService.load_activity(newActivity['id']).then( result => {
-              this.router.navigate(['activity_edit']);
-            });
+          //this.activityService.load_activity(newActivity['id']);
           });
         });
     });

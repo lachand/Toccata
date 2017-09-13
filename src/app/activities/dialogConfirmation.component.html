@@ -1,0 +1,11 @@
+<script src="../../main.ts"></script>
+<div layout="row" >
+  <div>
+    <h2 md-dialog-title>Confirmation</h2>
+    <md-dialog-content>{{message}}</md-dialog-content>
+    <md-dialog-actions>
+      <button md-button [md-dialog-close]="true">Oui</button>
+      <button md-button [md-dialog-close]="false">Non</button>
+    </md-dialog-actions>
+  </div>
+</div>

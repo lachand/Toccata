@@ -27,7 +27,7 @@ export class ExternalAppComponent {
     });
     this.appInfo = this.activity.apps.getApp(this.appId).then( res => {
       this.appInfo = res;
-      this.appLink = sanitizer.bypassSecurityTrustResourceUrl(this.appInfo.url + '&userName=' + this.user.name);
+      this.appLink = sanitizer.bypassSecurityTrustResourceUrl(this.appInfo.url /**+ '&userName=' + this.user.name**/);
     });
     }
 

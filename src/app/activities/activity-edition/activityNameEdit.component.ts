@@ -9,7 +9,7 @@ import {ActivityService} from '../../services/activity.service';
 
 export class ActivityNameEditComponent {
   nameEdition: boolean;
-  appName: string;
+  appName: String = '';
   @Input() edit: boolean;
 
   constructor(private activityService: ActivityService) {

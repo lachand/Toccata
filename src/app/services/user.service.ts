@@ -146,10 +146,18 @@ export class UserService {
   }
 
   remove_activity(activityId) {
-    for (let user of this.allUsers){
-      user.activites.splice(user.activites.indexOf(activityId), 1);
+    return new Promise( resolve => {
+      let usersToChange = [];
+      for (let user of this.allUsers) {
+        user.activites.splice(user.activites.indexOf(activityId), 1);
+        usersToChange.push(user);
+      }
+      this.db.bulkDocs(usersToChange).then(result => {
+        console.log(result);
+        resolve(result);
+      });
     }
-    this.db.bulkDocs(this.allUsers);
+  );
   }
 
   addActivity(activityId, userId) {
@@ -161,11 +169,13 @@ export class UserService {
   }
 
   private handleChangeParticipants(change) {
-    let changedDoc = null;
-    let changedIndex = null;
-    if (!change.deleted) {
+    console.log(change);
+    for (const document of change.doc) {
+      let changedDoc = null;
+      let changedIndex = null;
+      if (!document._deleted) {
         this.participants.forEach((doc, index) => {
-          if (doc._id === change.doc._id) {
+          if (doc._id === document._id) {
             changedDoc = doc;
             changedIndex = index;
           }
@@ -175,36 +185,39 @@ export class UserService {
           this.participants.splice(changedIndex, 1);
           this.change.emit({changeType: 'delete', value: changedIndex});
         } else {
-          this.participants.push(change.doc);
-          this.change.emit({changeType: 'create', value: change.doc});
+          this.participants.push(document);
+          this.change.emit({changeType: 'create', value: document});
         }
-    } else {
+      } else {
         this.participants.splice(changedIndex, 1);
         this.change.emit({changeType: 'delete', value: changedIndex});
+      }
     }
   }
 
   private handleChangeAllUsers(change) {
+    for (const document of change.doc){
     let changedDoc = null;
     let changedIndex = null;
-    if (!change.deleted) {
+    if (!document._deleted) {
       this.allUsers.forEach((doc, index) => {
-        if (doc._id === change.doc._id) {
+        if (doc._id === document._id) {
           changedDoc = doc;
           changedIndex = index;
         }
       });
       if (changedDoc) {
-        this.allUsers[changedIndex] = change.doc;
-        this.change.emit({changeType: 'modification', value: change.doc});
+        this.allUsers[changedIndex] = document;
+        this.change.emit({changeType: 'modification', value: document});
       } else {
-        this.allUsers.push(change.doc);
-        this.change.emit({changeType: 'create', value: change.doc});
+        this.allUsers.push(document);
+        this.change.emit({changeType: 'create', value: document});
       }
     } else {
       this.allUsers.splice(changedIndex, 1);
       this.change.emit({changeType: 'delete', value: changedIndex});
     }
+  }
   }
 
   logout() {

@@ -3,10 +3,6 @@
   padding: 1%;
 }
 
-.material-icons {
-  padding-left: 10%;
-}
-
 .flex-card-centered{
   margin: auto;
   padding: 1%;
@@ -16,6 +12,7 @@
 
 .flex-main-div {
   padding: 1%;
+  margin: 1%;
 }
 
 .aligned-with-h3 {
@@ -26,4 +23,8 @@
     font-size:45px;
     height:45px;
     width: 45px;
+}
+
+.material-icons {
+  padding-left: 10%;
 }

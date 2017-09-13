@@ -13,9 +13,9 @@ export const routes = [
   { path: 'login', component: LoginComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: 'activities', component: MyActivitiesComponent, canActivate: [LoggedInGuard] },
-  { path: 'activity_edit', component: ActivityEditComponent, canActivate: [LoggedInGuard]},
-  { path: 'activity_view', component: ActivityViewComponent, canActivate: [LoggedInGuard]},
-  { path: 'activity_apps', component: ActivityAppsComponent/**, canActivate: [LoggedInGuard]**/, children:
+  { path: 'activity_edit/:id', component: ActivityEditComponent, canActivate: [LoggedInGuard]},
+  { path: 'activity_view/:id', component: ActivityViewComponent, canActivate: [LoggedInGuard]},
+  { path: 'activity_apps/:id', component: ActivityAppsComponent/**, canActivate: [LoggedInGuard]**/, children:
     [{ path: 'Chat/:id', component: ChatComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
       { path: 'Externe/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'}]},
   { path: 'inscription', component: SigninComponent}

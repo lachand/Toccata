@@ -1,21 +1,24 @@
-<div layout="row" >
-<div>
-  <md-nav-list>
-    <md-list-item *ngFor="let activity of activityService.activities_list">
-          <h3 md-line> {{activity.name}} </h3>
-          <md-icon (click)="load_activity(activity._id)">launch</md-icon>
-          <md-icon (click)="show_activity(activity._id)">visibility</md-icon>
 
-          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">settings</md-icon>
-          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="duplicate_activity(activity._id)">content_copy</md-icon>
-          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon>
-          <md-icon (click)="show = !show">info</md-icon>
-      <p md-line *ngIf="show">
+  <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
+    <div *ngFor="let activity of activityService.activities_list" fxFlex="40%" class="flex-card">
+      <md-card>
+        <md-card-header>
+          <h3 md-line>{{activity.name}}</h3>
+        </md-card-header>
+        <p>
           {{activity.description}}
-      </p>
-    </md-list-item>
-  </md-nav-list>
+        </p>
 
-  <button md-button *ngIf="user.fonction === 'Enseignant'" (click)="newActivity()">Nouvelle activité</button>
-</div>
+        <md-card-actions>
+          <md-icon (click)="show_activity(activity._id)">visibility</md-icon>
+          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">mode_edit</md-icon>
+          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">delete</md-icon>
+        </md-card-actions>
+
+      </md-card>
+    </div>
+
+    <div fxFlex="10%" class="flex-card-centered">
+      <button (click)="newActivity()" *ngIf="user.fonction === 'Enseignant'" md-fab color="primary"><md-icon>add</md-icon></button>
+    </div>
 </div>
