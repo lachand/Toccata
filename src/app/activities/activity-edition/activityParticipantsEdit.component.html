@@ -1,13 +1,14 @@
 <script src="../../../main.ts"></script>
-<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<div layout="row" >
-  <form (ngSubmit)="changeParticipants()">
+
+  <form>
+
+    <md-card-header>
+      <h3 md-line>Participants <md-icon (click)="changeParticipants()" *ngIf="userService.fonction === 'Enseignant' && edit===true">mode_edit</md-icon></h3>
+    </md-card-header>
+
   <md-list>
     <md-list-item *ngFor="let participant of activityService.user.participants">
       <h3 md-line> {{participant.name}} </h3>
     </md-list-item>
   </md-list>
-
-    <button *ngIf="userService.fonction === 'Enseignant' && edit===true" md-button type="submit">Ajouter des participants</button>
   </form>
-</div>

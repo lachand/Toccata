@@ -55,9 +55,6 @@ export class ActivityService {
             this.activities_list.push(row.value);
           });
           resolve(this.activities_list);
-          this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
-            //this.handleChange(change);
-          });
         }).catch(console.log.bind(console));
     }).catch(console.log.bind(console));
   }
@@ -89,17 +86,12 @@ export class ActivityService {
             });
         });
     });
-    //this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-    //  if (change.id === this.activity_loaded._id) {
-    //    this.activity_loaded = change.doc;
-    //    this.changes.emit(change);
-    //  }
-    //});
   }
 
   public unloadActivity() {
     this.activity_loaded = null;
     this.activities_list = [];
+    this.activity_loaded_child = []
     this.apps.logout();
   }
 
@@ -208,7 +200,7 @@ private handleChange(change) {
       let changedDoc = null;
       let changedIndex = null;
       this.activities_list.forEach((doc, index) => {
-        console.log(document);
+        console.log(doc, document);
         if (doc._id === document._id) {
           changedDoc = doc;
           changedIndex = index;
@@ -217,7 +209,6 @@ private handleChange(change) {
       if (changedDoc) {
         if (document.participants.indexOf(this.user.id) === -1) {
           this.activities_list.splice(changedIndex, 1);
-          console.log("splice");
         } else {
           this.activities_list[changedIndex] = document;
           if (document._id === this.activity_loaded._id) {
@@ -229,8 +220,13 @@ private handleChange(change) {
         if (document.participants.indexOf(this.user.id) !== -1) {
           if (document.type === 'Main') {
             this.activities_list.push(document);
-          } else {
+          } else if (document._id !== this.activity_loaded._id) {
             this.activity_loaded_child.push(document);
+          } else {
+            console.log("this is the good one");
+            this.activity_loaded = document;
+            console.log(this.activity_loaded);
+            this.changes.emit({changeType: 'modification', value: document});
           }
           this.changes.emit({changeType: 'create', value: document});
         }
@@ -240,7 +236,6 @@ private handleChange(change) {
       this.changes.emit({changeType: 'delete', value: change});
     }
   }
-  console.log("al : ", this.activities_list);
 }
 
 }

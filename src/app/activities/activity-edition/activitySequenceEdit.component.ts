@@ -26,7 +26,7 @@ export class ActivitySequenceEditComponent {
 
   edit_subactivity(activityId) {
     this.activityService.load_activity(activityId).then( res => {
-      this.router.navigate(['activity_edit/' + activityId]);
+      console.log(this.router.navigate(['activity_edit/' + activityId]));
     });
   }
 

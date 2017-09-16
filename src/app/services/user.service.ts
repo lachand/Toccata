@@ -13,7 +13,7 @@ export class UserService {
   id: any;
   avatar: any;
   fonction: any;
-  participants: any;
+  participants: any = null;
   allUsers: Array<any>;
 
   @Output()
@@ -119,8 +119,9 @@ export class UserService {
         });
         resolve(this.allUsers);
       }).catch(console.log.bind(console));
-      this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
+      this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
         this.handleChangeAllUsers(change);
+        this.handleChangeParticipants(change);
       });
     }).catch((error) => {
       console.log(error);
@@ -137,9 +138,10 @@ export class UserService {
         });
         resolve(this.participants);
       }).catch(console.log.bind(console));
-      this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-        this.handleChangeParticipants(change);
-      });
+      //this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
+        //this.handleChangeParticipants(change);
+        //this.handleChangeAllUsers(change);
+      //});
     }).catch((error) => {
       console.log(error);
     });
@@ -153,7 +155,6 @@ export class UserService {
         usersToChange.push(user);
       }
       this.db.bulkDocs(usersToChange).then(result => {
-        console.log(result);
         resolve(result);
       });
     }
@@ -169,29 +170,33 @@ export class UserService {
   }
 
   private handleChangeParticipants(change) {
-    console.log(change);
-    for (const document of change.doc) {
-      let changedDoc = null;
-      let changedIndex = null;
-      if (!document._deleted) {
-        this.participants.forEach((doc, index) => {
-          if (doc._id === document._id) {
-            changedDoc = doc;
-            changedIndex = index;
+    console.log("change", this.participants);
+    if (this.participants != null) {
+      this.db.get(change.doc._id).then(user => {
+        console.log(user);
+        const document = user;
+        let changedDoc = null;
+        let changedIndex = null;
+        if (!document._deleted) {
+          this.participants.forEach((doc, index) => {
+            if (doc._id === document._id) {
+              changedDoc = doc;
+              changedIndex = index;
+            }
+          });
+          if (changedDoc) {
+            // = delete des participants de l'activité chargée
+            this.participants.splice(changedIndex, 1);
+            this.change.emit({changeType: 'delete', value: changedIndex});
+          } else {
+            this.participants.push(document);
+            this.change.emit({changeType: 'create', value: document});
           }
-        });
-        if (changedDoc) {
-          // = delete des participants de l'activité chargée
+        } else {
           this.participants.splice(changedIndex, 1);
           this.change.emit({changeType: 'delete', value: changedIndex});
-        } else {
-          this.participants.push(document);
-          this.change.emit({changeType: 'create', value: document});
         }
-      } else {
-        this.participants.splice(changedIndex, 1);
-        this.change.emit({changeType: 'delete', value: changedIndex});
-      }
+      });
     }
   }
 

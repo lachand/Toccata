@@ -14,7 +14,7 @@ export class ActivityNameEditComponent {
 
   constructor(private activityService: ActivityService) {
     this.nameEdition = false;
-    this.appName = this.activityService.activity_loaded.name;
+    this.appName = '';
   }
 
   switch() {
@@ -25,6 +25,7 @@ export class ActivityNameEditComponent {
     this.activityService.db.get(this.activityService.activity_loaded._id).then( res => {
       res.name = this.appName;
       this.activityService.db.put(res).then(this.switch());
+      this.appName = '';
     });
   }
 

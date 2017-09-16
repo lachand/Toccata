@@ -18,7 +18,7 @@ export class AppsService {
       retry: true,
       continuous: true
     };
-    this.apps_db.sync(this.apps_db_remote, options).once('change', function (change) {
+    this.apps_db.sync(this.apps_db_remote, options).on('change', change => {
       this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
@@ -45,9 +45,9 @@ export class AppsService {
           });
         resolve(this.apps[name]);
       }).catch(console.log.bind(console));
-      this.apps_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
+      //this.apps_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
         //this.handleChange(change);
-      });
+      //});
     }).catch((error) => {
       console.log(error);
     });
@@ -81,7 +81,8 @@ export class AppsService {
   }
 
   private handleChange(change) {
-    for (const document of change.changes.docs) {
+    for (const document of change.change.docs) {
+      console.log(document);
       if (!document._deleted) {
           let changedDoc = null;
           let changedIndex = null;
@@ -99,19 +100,35 @@ export class AppsService {
             this.change.emit({changeType: 'create', value: document});
           }
         } else {
-          for (let app in this.apps) {
-            this.apps[app].splice(app, 1);
+          for (let activity in this.apps) {
+            console.log(this.getIndexOf(document, this.apps[activity]));
+            this.apps[activity].splice(this.getIndexOf(document, this.apps[activity]), 1);
             /** Tricky way **/
             this.change.emit({changeType: 'delete', value: change});
+            console.log(this.apps);
           }
         }
       }
   }
 
+  getIndexOf(document, array) {
+    let i = 0;
+    for (const element of array){
+        if (element._id === document._id) {
+          return i;
+        }
+        i = i + 1;
+      }
+    return -1;
+    }
+
   public deleteApp(appId) {
     this.apps_db.get(appId).then( res => {
       res._deleted = true;
-      this.apps_db.put(res);
+      return this.apps_db.put(res).then(result => {
+        return result;
+      }
+      );
     }).catch(console.log.bind(console));
   }
 

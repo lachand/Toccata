@@ -1,6 +1,6 @@
 
   <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-    <div *ngFor="let activity of activityService.activities_list" fxFlex="40%" class="flex-card">
+    <div *ngFor="let activity of activityService.activities_list" fxFlex="33%" class="flex-card">
       <md-card>
         <md-card-header>
           <h3 md-line>{{activity.name}}</h3>
@@ -18,7 +18,7 @@
       </md-card>
     </div>
 
-    <div fxFlex="10%" class="flex-card-centered">
-      <button (click)="newActivity()" *ngIf="user.fonction === 'Enseignant'" md-fab color="primary"><md-icon>add</md-icon></button>
+    <div fxFlex="33%" class="flex-card-centered">
+      <button (click)="newActivity()" *ngIf="user.fonction === 'Enseignant'" md-mini-fab color="primary"><md-icon>add</md-icon></button>
     </div>
 </div>

@@ -6,54 +6,7 @@
 
   <div fxFlex="90%" class="flex-card">
     <md-card>
-      <md-card-header>
-        <h3 md-line>Description</h3>
-        <md-icon class="aligned-with-h3"
-                 (click)="showDescription = !showDescription"
-                  *ngIf="!showDescription">expand_more
-        </md-icon>
-        <md-icon class="aligned-with-h3"
-                 (click)="showDescription = !showDescription"
-                 *ngIf="showDescription">expand_less
-        </md-icon>
-      </md-card-header>
-      <p *ngIf="showDescription">
         {{activityService.activity_loaded.description}}
-      </p>
-    </md-card>
-  </div>
-
-  <div fxFlex="90%" class="flex-card">
-    <md-card>
-        <md-card-header>
-          <h3 md-line>Applications</h3>
-          <md-icon class="aligned-with-h3"
-                   (click)="showApps = !showApps"
-                   *ngIf="!showApps">expand_more
-          </md-icon>
-          <md-icon class="aligned-with-h3"
-                   (click)="showApps = !showApps"
-                   *ngIf="showApps">expand_less
-          </md-icon>
-        </md-card-header>
-      <app-activity-apps-edit [edit]="false" *ngIf="showApps"></app-activity-apps-edit>
-    </md-card>
-  </div>
-
-  <div fxFlex="90%" class="flex-card" *ngIf="activityService.activity_loaded.type ==='Main'">
-    <md-card>
-      <md-card-header>
-        <h3 md-line>Participants</h3>
-        <md-icon class="aligned-with-h3"
-                 (click)="showParticipants = !showParticipants"
-                 *ngIf="!showParticipants">expand_more
-        </md-icon>
-        <md-icon class="aligned-with-h3"
-                 (click)="showParticipants = !showParticipants"
-                 *ngIf="showParticipants">expand_less
-        </md-icon>
-      </md-card-header>
-      <app-activity-participants-edit [edit]="false" *ngIf="showParticipants"></app-activity-participants-edit>
     </md-card>
   </div>
 
@@ -61,27 +14,24 @@
     <md-card>
       <md-card-header>
         <h3 md-line>Séquence d'activités</h3>
-        <md-icon class="aligned-with-h3"
-                 (click)="showSequence = !showSequence"
-                 *ngIf="!showSequence">expand_more
-        </md-icon>
-        <md-icon class="aligned-with-h3"
-                 (click)="showSequence = !showSequence"
-                 *ngIf="showSequence">expand_less
-        </md-icon>
       </md-card-header>
-      <app-activity-sequence-edit [edit]="false" *ngIf="showSequence"></app-activity-sequence-edit>
+      <app-activity-sequence-edit [edit]="false"></app-activity-sequence-edit>
     </md-card>
   </div>
 
-  <!--
-  <div fxFlex="45%" class="flex-card">
+  <div fxFlex="90%" class="flex-card">
     <md-card>
-      <md-card-header>
-        <h3>Ressources</h3>
-      </md-card-header>
+        <md-card-header>
+          <h3 md-line>Applications</h3>
+        </md-card-header>
+      <app-activity-apps-edit [edit]="false"></app-activity-apps-edit>
     </md-card>
   </div>
-  -->
+
+  <div fxFlex="90%" class="flex-card" *ngIf="activityService.activity_loaded.type ==='Main'">
+    <md-card>
+      <app-activity-participants-edit [edit]="false"></app-activity-participants-edit>
+    </md-card>
+  </div>
 
 </div>

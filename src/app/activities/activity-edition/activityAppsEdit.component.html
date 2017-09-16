@@ -6,11 +6,11 @@
     <md-list-item *ngFor="let app of activityService.apps.apps[activityService.activity_loaded._id]">
       <h3 md-line> {{app.name}} </h3>
       <div>
-        <md-icon *ngIf="user.fonction === 'Enseignant' && edit == true" (click)="delete_app(app._id)">close</md-icon>
+        <md-icon *ngIf="user.fonction === 'Enseignant' && edit == true" (click)="delete_app(app._id)">delete</md-icon>
       </div>
     </md-list-item>
   </md-list>
 
-    <button *ngIf="user.fonction === 'Enseignant' && edit == true" md-button type="submit">Ajouter une application</button>
+    <button *ngIf="user.fonction === 'Enseignant' && edit===true" md-mini-fab fab color="primary" type="submit"><md-icon>add</md-icon></button>
   </form>
 </div>

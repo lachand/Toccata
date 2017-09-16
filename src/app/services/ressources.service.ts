@@ -21,7 +21,7 @@ export class RessourcesService {
       retry: true,
       continuous: true
     };
-    this.ressources_db.sync(this.ressources_db_remote, options).once('change', function (change) {
+    this.ressources_db.sync(this.ressources_db_remote, options).on('change', function (change) {
       this.handleChange(change);
     }).on('paused', function (info) {
     }).on('active', function (info) {

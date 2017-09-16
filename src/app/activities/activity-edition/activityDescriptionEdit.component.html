@@ -1,7 +1,11 @@
 <script src="../../../main.ts"></script>
-<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+
+<md-card-header>
+  <h3 md-line>Description <md-icon class="aligned-with-text" (click)="switch()">mode_edit</md-icon></h3>
+</md-card-header>
+
 <div *ngIf="!descriptionEdition" class="name-edition">
-  {{activityService.activity_loaded.description}} <md-icon class="aligned-with-text" (click)="switch()">mode_edit</md-icon>
+  {{activityService.activity_loaded.description}}
 </div>
 
 <div *ngIf="descriptionEdition" class="name-edition">

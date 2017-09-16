@@ -29,6 +29,22 @@ export class ActivityChangeUsersComponent {
     }
   }
 
+  reloadUsers() {
+    return this.activityService.user.getAllusers().then(() => {
+      this.userChecked = [];
+      this.userCheckedInitially = []
+      for (let user of this.activityService.user.allUsers) {
+        if (user.activites.indexOf(this.activityService.activity_loaded._id) !== -1) {
+          this.userChecked.push({'user': user, 'checked': true});
+          this.userCheckedInitially.push({'user': user, 'checked': true});
+        } else {
+          this.userChecked.push({'user': user, 'checked': false});
+          this.userCheckedInitially.push({'user': user, 'checked': false});
+        }
+      }
+    });
+  }
+
   changeUsers() {
     this.usersToChange = [];
     for (let i = 0; i < this.userChecked.length; i++) {
@@ -46,7 +62,9 @@ export class ActivityChangeUsersComponent {
           user.activites.splice(user.activites.indexOf(this.activityService.activity_loaded._id), 1);
           for (const activite of this.activityService.activity_loaded_child){
             user.activites.splice(user.activites.indexOf(activite._id), 1);
-            activite.participants.splice(this.activityService.activity_loaded_child.participants.indexOf(user._id),1);
+            if (activite.participants != null) {
+              activite.participants.splice(activite.participants.indexOf(user._id),1);
+            }
           }
         }
         this.usersToChange.push(user);
@@ -55,7 +73,8 @@ export class ActivityChangeUsersComponent {
     this.activityService.user.db.bulkDocs(this.usersToChange).then( res2 => {
       this.activityService.db.put(this.activityService.activity_loaded).then( res3 => {
         this.activityService.db.bulkDocs(this.activityService.activity_loaded_child).then( res4 => {
-          this.dialogRef.close();
+          this.reloadUsers().then( () => this.dialogRef.close());
+
         });
       });
     });

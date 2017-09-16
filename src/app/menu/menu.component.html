@@ -1,10 +1,11 @@
 <div layout="row" >
   <md-toolbar color="primary">
 
-    <button md-button routerLink="/">
+    <!--<button md-button routerLink="/">
       <md-icon>home</md-icon>
       ABCDE
     </button>
+    -->
 
     <span class="fill-remaining-space"></span>
     <div fxLayout="row" fxShow="false" fxShow.gt-xs>
@@ -12,10 +13,10 @@
       <button md-menu-item routerLink="/activity_apps" *ngIf="userService.loggedIn && activityService.activity_loaded !== null">Activité en cours</button>
       <button md-menu-item (click)="logout()" routerLink="/" *ngIf="userService.loggedIn">Déconnexion</button>
     </div>
-    <!--<button md-button [md-menu-trigger-for]="menu" fxHide="false" fxHide.gt-xs *ngIf="userService.loggedIn">
+    <button md-button [md-menu-trigger-for]="menu" fxHide="false" fxHide.gt-xs *ngIf="userService.loggedIn">
       <md-icon>menu</md-icon>
     </button>
-    -->
+
 
   </md-toolbar>
 
