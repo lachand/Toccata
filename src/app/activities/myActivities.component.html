@@ -5,9 +5,7 @@
         <md-card-header>
           <h3 md-line>{{activity.name}}</h3>
         </md-card-header>
-        <p>
-          {{activity.description}}
-        </p>
+        <div [innerHTML]="activity.description"></div>
 
         <md-card-actions>
           <md-icon (click)="show_activity(activity._id)">visibility</md-icon>

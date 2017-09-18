@@ -10,6 +10,7 @@ import {ActivityService} from '../../services/activity.service';
 export class ActivityDescriptionEditComponent {
   descriptionEdition: boolean;
   description: String = '';
+  editorOptions: any;
   @Input() edit: boolean;
 
   constructor(private activityService: ActivityService) {
@@ -17,6 +18,28 @@ export class ActivityDescriptionEditComponent {
     if (this.activityService.activity_loaded.description !== "Il n'y a aucune description") {
       this.description = this.activityService.activity_loaded.description;
     }
+    this.editorOptions = {
+      toolbar: 'full',
+      toolbar_full: [
+        {
+          name: 'basicstyles',
+          items: ['Bold', 'Italic', 'Strike', 'Underline']
+        },
+        {name: 'paragraph', items: ['BulletedList', 'NumberedList', 'Blockquote']},
+        {name: 'editing', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+        {name: 'links', items: ['Link', 'Unlink']},
+        '/',
+        {
+          name: 'styles',
+          items: ['FontSize', 'TextColor', 'PasteText', 'PasteFromWord']
+        },
+        {name: 'insert', items: ['Image', 'Table']},
+        {name: 'forms', items: ['Outdent', 'Indent']},
+        {name: 'clipboard', items: ['Undo', 'Redo']}
+      ],
+      disableNativeSpellChecker: false,
+      uiColor: '#FAFAFA',
+    };
   }
 
   switch() {

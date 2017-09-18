@@ -6,6 +6,7 @@ import { MaterialModule, MdIconModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {NgxAutoScroll} from 'ngx-auto-scroll/lib/ngx-auto-scroll.directive';
+import { CKEditorModule } from 'ng2-ckeditor';
 import { routes } from './app.routes';
 
 import { AppComponent } from './app.component';
@@ -65,6 +66,7 @@ import {DialogConfirmationComponent} from "./activities/dialogConfirmation.compo
     ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,
+    CKEditorModule,
     MdIconModule,
     MaterialModule,
     FlexLayoutModule,
