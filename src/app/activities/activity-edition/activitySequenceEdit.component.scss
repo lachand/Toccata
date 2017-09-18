@@ -21,6 +21,13 @@
   flex-wrap: wrap;
 }
 
+.activity-description{
+  flex-wrap: wrap;
+  height: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .aligned-with-h3 {
   margin-top: 15px;
 }
@@ -29,11 +36,4 @@
     font-size:45px;
     height:45px;
     width: 45px;
-}
-
-p {
-  width: 100%;
-  height: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
