@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:nodeserver": "ng build && cp nodeserver\/* dist",
-    "build:nodeserver-prod": "ng build -prod && cp nodeserver\/* dist",
-    "serve-build" : "npm run build:nodeserver && cd dist && node index.js",
+    "build:nodeserver": "ng build && cp nodeserver/* dist",
+    "build:nodeserver-prod": "ng build -prod && cp nodeserver/* dist",
+    "serve-build": "npm run build:nodeserver && cd dist && node index.js",
     "serve-build-prod": "npm run build:nodeserver-prod && cd dist && node index.js",
-    "start" : "npm run build:nodeserver-prod && cd dist && node index.js",
+    "start": "npm run build:nodeserver-prod && cd dist && node index.js",
     "clean": "rimraf public /*",
     "build": "tsc && gulp --production",
     "serve": "lite-server --port=8000",
@@ -77,6 +77,7 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0",
+    "typings": "^2.1.1",
     "webpack": "^3.6.0",
     "zone.js": "^0.8.17"
   },
