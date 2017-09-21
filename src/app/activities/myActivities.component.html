@@ -1,22 +1,17 @@
 
   <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-    <div *ngFor="let activity of activityService.activities_list" fxFlex="33%" class="flex-card">
-      <md-card>
+    <div *ngFor="let activity of activityService.activities_list | orderBy : '-createdAt'" fxFlex="33%" class="flex-card">
+      <md-card class="activity-card" (click)="view_or_edit(activity._id)">
         <md-card-header>
           <h3 md-line>{{activity.name}}</h3>
+          <div class="header-card-actions"><md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon></div>
         </md-card-header>
+
         <div [innerHTML]="activity.description" class="activity-description"></div>
-
-        <md-card-actions>
-          <md-icon (click)="show_activity(activity._id)">visibility</md-icon>
-          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activity._id)">mode_edit</md-icon>
-          <md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">delete</md-icon>
-        </md-card-actions>
-
       </md-card>
     </div>
 
-    <div fxFlex="33%" class="flex-card-centered">
-      <button (click)="newActivity()" *ngIf="user.fonction === 'Enseignant'" md-mini-fab color="primary"><md-icon>add</md-icon></button>
+    <div fxFlex="30%" class="flex-card-centered">
+      <md-icon class="icon-huge" (click)="newActivity()" *ngIf="user.fonction === 'Enseignant'">add_circle</md-icon>
     </div>
 </div>

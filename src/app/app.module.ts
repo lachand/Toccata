@@ -5,9 +5,9 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule, MdIconModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import {NgxAutoScroll} from 'ngx-auto-scroll/lib/ngx-auto-scroll.directive';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { routes } from './app.routes';
+import {ScrollToModule} from 'ng2-scroll-to';
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './applications/chat/chat.component';
@@ -26,16 +26,16 @@ import {AppLoadingComponent} from './activities/appLoading.component';
 import {ActivityEditComponent} from './activities/activity-edition/activityEdit.component';
 import {ActivityAppsEditComponent} from './activities/activity-edition/activityAppsEdit.component';
 import {ActivityNewAppComponent} from './activities/activity-edition/activityNewApp.component';
-import {NewActivityComponent} from './activities/newActivity.component';
 import {ActivityParticipantsEditComponent} from './activities/activity-edition/activityParticipantsEdit.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MenuComponent} from './menu/menu.component';
 import {ActivityChangeUsersComponent} from './activities/activity-edition/activityChangeUsers.component';
 import {ActivityNameEditComponent} from './activities/activity-edition/activityNameEdit.component';
 import {ActivitySequenceEditComponent} from './activities/activity-edition/activitySequenceEdit.component';
-import {ActivityViewComponent} from "./activities/activity-edition/activityView.component";
-import {ActivityDescriptionEditComponent} from "./activities/activity-edition/activityDescriptionEdit.component";
-import {DialogConfirmationComponent} from "./activities/dialogConfirmation.component";
+import {ActivityViewComponent} from './activities/activity-edition/activityView.component';
+import {ActivityDescriptionEditComponent} from './activities/activity-edition/activityDescriptionEdit.component';
+import {DialogConfirmationComponent} from './activities/dialogConfirmation.component';
+import {OrderBy} from './external/orderBy';
 
 @NgModule({
   declarations: [AppComponent,
@@ -56,10 +56,9 @@ import {DialogConfirmationComponent} from "./activities/dialogConfirmation.compo
     ActivityNameEditComponent,
     ActivityDescriptionEditComponent,
     ActivitySequenceEditComponent,
-    NewActivityComponent,
     DialogConfirmationComponent,
     MenuComponent,
-    NgxAutoScroll],
+    OrderBy],
   imports: [
     BrowserModule,
     FormsModule,
@@ -70,9 +69,10 @@ import {DialogConfirmationComponent} from "./activities/dialogConfirmation.compo
     MdIconModule,
     MaterialModule,
     FlexLayoutModule,
+    ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, NewActivityComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
+  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
   providers: [UserService, ActivityService, RessourcesService, LoggedInGuard, AppsService],
   bootstrap: [AppComponent]
 })

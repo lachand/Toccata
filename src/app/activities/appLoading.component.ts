@@ -13,7 +13,7 @@ export class AppLoadingComponent {
   appToLoad: any;
   dialogRef: MdDialogRef<AppLoadingComponent>;
 
-  constructor(private activityService: ActivityService, private router: Router) {
+  constructor(public activityService: ActivityService, public router: Router) {
     this.activity = activityService.activity_loaded;
   }
 

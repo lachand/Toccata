@@ -1,6 +1,7 @@
 import PouchDB from 'pouchdb';
-import {EventEmitter, Output} from '@angular/core';
+import {EventEmitter, Inject, Output} from '@angular/core';
 import * as config from 'variables';
+import {Http} from '@angular/http';
 
 export class AppsService {
   apps_db: any;
@@ -10,15 +11,20 @@ export class AppsService {
   @Output()
   change = new EventEmitter();
 
-  constructor() {
+  constructor(@Inject(Http) public http: Http) {
     this.apps_db = new PouchDB('applications');
-    this.apps_db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/applications');
+    this.apps_db_remote = new PouchDB(config.HOST + config.PORT + '/applications');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
-    this.apps_db.sync(this.apps_db_remote, options).on('change', change => {
+    this.apps_db.sync(this.apps_db_remote, options);
+    this.apps_db.changes({
+      since: 'now',
+      live: true,
+      include_docs: true }).on('change', change => {
+      console.log(change);
       this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
@@ -55,7 +61,18 @@ export class AppsService {
 
   public createApp(app) {
     this.apps_db.post(app).then((response) => {
-      return true;
+      this.apps_db.get(response.id).then(appAdded => {
+        console.log(appAdded);
+        if (appAdded.type === 'Feuille de calcul') {
+          appAdded.url = 'https://framacalc.org/' + appAdded._id;
+        } else if (appAdded.type === 'Editeur de texte') {
+          appAdded.url = 'https://annuel2.framapad.org/p/' + appAdded._id;
+        } else { return true; }
+        this.http.get(appAdded.url);
+        this.apps_db.put(appAdded).then( () => {
+          return true;
+        });
+      });
     }).catch(function (err) {
       console.log(err);
       return false;
@@ -81,7 +98,7 @@ export class AppsService {
   }
 
   private handleChange(change) {
-    for (const document of change.change.docs) {
+    const document = change.doc;
       console.log(document);
       if (!document._deleted) {
           let changedDoc = null;
@@ -101,14 +118,12 @@ export class AppsService {
           }
         } else {
           for (let activity in this.apps) {
-            console.log(this.getIndexOf(document, this.apps[activity]));
             this.apps[activity].splice(this.getIndexOf(document, this.apps[activity]), 1);
             /** Tricky way **/
             this.change.emit({changeType: 'delete', value: change});
             console.log(this.apps);
           }
         }
-      }
   }
 
   getIndexOf(document, array) {

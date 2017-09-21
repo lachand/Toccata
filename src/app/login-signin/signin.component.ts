@@ -19,8 +19,8 @@ export class SigninComponent implements OnInit {
   db: any;
   teacher: any;
 
-  constructor(private user: UserService, private router: Router,
-              private formBuilder: FormBuilder) {
+  constructor(public user: UserService, public router: Router,
+              public formBuilder: FormBuilder) {
     this.db = this.user.db;
   }
 

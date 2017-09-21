@@ -17,9 +17,9 @@ export class ChatSendComponent implements OnInit {
   @Input() loadedChat: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private user: UserService,
-    private ressourcesService: RessourcesService
+    public formBuilder: FormBuilder,
+    public user: UserService,
+    public ressourcesService: RessourcesService
   ) {}
 
   ngOnInit() {

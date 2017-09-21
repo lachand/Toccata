@@ -14,9 +14,9 @@ export class ChatComponent {
 
   @Input() chatId;
 
-  constructor(private ressourcesServices: RessourcesService,
-              private user: UserService,
-              private route: ActivatedRoute) {
+  constructor(public ressourcesServices: RessourcesService,
+              public user: UserService,
+              public route: ActivatedRoute) {
     this.route.params.subscribe( result => {
       this.chatId = result.id;
       this.changeChat();

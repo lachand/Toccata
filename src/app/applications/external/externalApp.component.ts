@@ -19,7 +19,7 @@ export class ExternalAppComponent {
   @Input() appId;
 
   constructor(activityService: ActivityService, userService: UserService,
-              private router: Router, private route: ActivatedRoute, sanitizer: DomSanitizer) {
+              public router: Router, public route: ActivatedRoute, sanitizer: DomSanitizer) {
     this.activity = activityService;
     this.user = userService;
     this.route.params.subscribe( result => {

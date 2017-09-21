@@ -11,8 +11,8 @@ import {ActivityService} from '../services/activity.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-  constructor(private userService: UserService, private router: Router,
-              private activityService: ActivityService) {
+  constructor(public userService: UserService, public router: Router,
+              public activityService: ActivityService) {
   }
 
   logout() {

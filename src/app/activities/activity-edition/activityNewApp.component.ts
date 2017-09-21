@@ -16,10 +16,10 @@ import {MdDialogRef} from '@angular/material';
   applicationType: any;
   formNewApp: FormGroup;
 
-  appsType = ['Chat', 'Externe'];
+  appsType = ['Chat', 'Feuille de calcul', 'Editeur de texte', 'Externe'];
 
-  constructor(private activityService: ActivityService, private router: Router,
-              private formBuilder: FormBuilder) {
+  constructor(public activityService: ActivityService, public router: Router,
+              public formBuilder: FormBuilder) {
     this.activity = activityService.activity_loaded;
     this.formNewApp = this.formBuilder.group({
       appName: ['', Validators.required],

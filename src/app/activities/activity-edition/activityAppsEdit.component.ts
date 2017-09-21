@@ -15,12 +15,12 @@ export class ActivityAppsEditComponent {
   dialog: any;
   @Input() edit: boolean;
 
-  constructor(private activityService: ActivityService, private router: Router,
-              private user: UserService, dialog: MdDialog) {
+  constructor(public activityService: ActivityService, public router: Router,
+              public user: UserService, dialog: MdDialog) {
     this.dialog = dialog;
   }
 
-  private newApp() {
+  newApp() {
       const dialogRef = this.dialog.open(ActivityNewAppComponent);
       dialogRef.componentInstance.dialogRef = dialogRef;
   }

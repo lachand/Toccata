@@ -1,11 +1,11 @@
 <script src="../../../main.ts"></script>
 
 <md-card-header>
-  <h3 md-line>Description <md-icon class="aligned-with-text" (click)="switch()">mode_edit</md-icon></h3>
+  <h3 (dblclick)="switch()" md-line>Description</h3>
 </md-card-header>
 
 <div *ngIf="!descriptionEdition" class="name-edition">
-  <div [innerHTML]="activityService.activity_loaded.description"></div>
+  <div (dblclick)="switch()" [innerHTML]="activityService.activity_loaded.description"></div>
 </div>
 
 <div *ngIf="descriptionEdition" class="name-edition">

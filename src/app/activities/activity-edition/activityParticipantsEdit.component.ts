@@ -15,10 +15,10 @@ export class ActivityParticipantsEditComponent {
   activity: ActivityService;
   @Input() edit: boolean;
 
-  constructor(private activityService: ActivityService,
-              private router: Router,
-              private dialog: MdDialog,
-              private userService: UserService) {
+  constructor(public activityService: ActivityService,
+              public router: Router,
+              public dialog: MdDialog,
+              public userService: UserService) {
   }
 
   private changeParticipants() {

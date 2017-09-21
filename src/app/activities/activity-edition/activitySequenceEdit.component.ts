@@ -12,9 +12,9 @@ import {UserService} from '../../services/user.service';
 export class ActivitySequenceEditComponent {
   @Input() edit: boolean;
 
-  constructor(private activityService: ActivityService,
-              private userService: UserService,
-              private router: Router) {
+  constructor(public activityService: ActivityService,
+              public userService: UserService,
+              public router: Router) {
     console.log(this.activityService.activity_loaded_child);
   }
 
@@ -47,6 +47,15 @@ export class ActivitySequenceEditComponent {
   }
 
   delete_subactivity(activityId) {
+    this.activityService.delete_activity(activityId);
+  }
+
+  view_or_edit(activityId) {
+    if (this.userService.fonction === 'Enseignant') {
+      this.edit_subactivity(activityId);
+    } else {
+      this.show_subactivity(activityId);
+    }
   }
 
 }

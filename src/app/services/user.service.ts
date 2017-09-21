@@ -21,8 +21,8 @@ export class UserService {
 
   constructor() {
     this.loggedIn = false;
-    this.db = new PouchDB(config.HOST + ':' + config.PORT + '/users');
-    this.db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/users');
+    this.db = new PouchDB(config.HOST + config.PORT + '/users');
+    this.db_remote = new PouchDB(config.HOST + config.PORT + '/users');
     const options = {
       live: true,
       retry: true,
@@ -170,7 +170,6 @@ export class UserService {
   }
 
   private handleChangeParticipants(change) {
-    console.log("change", this.participants);
     if (this.participants != null) {
       this.db.get(change.doc._id).then(user => {
         console.log(user);

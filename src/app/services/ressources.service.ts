@@ -15,16 +15,23 @@ export class RessourcesService {
     //this.messages_db = new PouchDB('messages');
     this.temp_changes = [];
     this.ressources_db = new PouchDB('ressources');
-    this.ressources_db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/ressources');
+    this.ressources_db_remote = new PouchDB(config.HOST + config.PORT + '/ressources');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
-    this.ressources_db.sync(this.ressources_db_remote, options).on('change', function (change) {
+    this.ressources_db.sync(this.ressources_db_remote, options);
+    this.ressources_db.changes({
+      since: 'now',
+      live: true,
+      include_docs: true }).on('change', change => {
+      console.log(change);
       this.handleChange(change);
     }).on('paused', function (info) {
+      // replication was paused, usually because of a lost connection
     }).on('active', function (info) {
+      // replication was resumed
     }).on('error', function (err) {
       // totally unhandled error (shouldn't happen)
     });
@@ -72,7 +79,7 @@ export class RessourcesService {
   }
 
   handleChange(change) {
-    for (const document of change.changes.docs) {
+    const document = change.doc;
       if (!document._deleted) {
         for (let i = 0; i < document.applications.length; i++) {
           let changedDoc = null;
@@ -98,5 +105,4 @@ export class RessourcesService {
         console.log('toto : ', change);
       }
     }
-  }
 }

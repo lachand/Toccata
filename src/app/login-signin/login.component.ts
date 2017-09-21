@@ -18,9 +18,9 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   db: any;
   user: any;
-  constructor(private userService: UserService, private router: Router,
-              private formBuilder: FormBuilder,
-              private activityService: ActivityService) {
+  constructor(public userService: UserService, public router: Router,
+              public formBuilder: FormBuilder,
+              public activityService: ActivityService) {
     this.db = userService.db;
     this.user = userService;
   }

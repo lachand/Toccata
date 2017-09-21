@@ -1,6 +1,7 @@
 {
   "couchdb": {
-    "uuid": "3b5df3fc-2f12-482c-9061-31fb8fe102a0"
+    "uuid": "3b5df3fc-2f12-482c-9061-31fb8fe102a0",
+    "database_dir": "./Database/"
   },
   "admins": {
     "eleve": "-pbkdf2-91dc9d6f1d59a267729bc968686b0f19f0978aef,1ed1ec17f13815414619a19014917b1681691e415d1f9192,10",

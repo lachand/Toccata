@@ -12,7 +12,7 @@ export class ActivityNameEditComponent {
   appName: String = '';
   @Input() edit: boolean;
 
-  constructor(private activityService: ActivityService) {
+  constructor(public activityService: ActivityService) {
     this.nameEdition = false;
     this.appName = '';
   }

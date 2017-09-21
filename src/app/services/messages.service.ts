@@ -13,8 +13,8 @@ export class MessagesService {
 
   constructor() {
     //this.messages_db = new PouchDB('messages');
-    this.messages_db = new PouchDB(config.HOST + ':' + config.PORT + '/messages');
-    this.messages_db_remote = config.HOST + ':' + config.PORT + '/messages';
+    this.messages_db = new PouchDB(config.HOST + config.PORT + '/messages');
+    this.messages_db_remote = config.HOST + config.PORT + '/messages';
     const options = {
       live: true,
       retry: true,

@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../services/activity.service';
 import {Router} from '@angular/router';
 import {MdDialog} from '@angular/material';
-import {NewActivityComponent} from './newActivity.component';
 import {UserService} from '../services/user.service';
 import {DialogConfirmationComponent} from "./dialogConfirmation.component";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-my-activities',
@@ -16,7 +16,9 @@ export class MyActivitiesComponent {
   activities: any;
   dialog: any;
 
-  constructor(private user: UserService, private activityService: ActivityService, private router: Router,
+  constructor(public user: UserService,
+              public activityService: ActivityService,
+              public router: Router,
               dialog: MdDialog) {
     this.dialog = dialog;
   }
@@ -40,22 +42,44 @@ export class MyActivitiesComponent {
   }
 
   newActivity() {
-    const dialogRef = this.dialog.open(NewActivityComponent);
-    dialogRef.componentInstance.dialogRef = dialogRef;
+    this.activityService.createActivity({
+      'name': 'Nouvelle activité',
+      'participants': [this.user.id],
+      'type': 'Main',
+      'description': "Il n'y a aucune description",
+      'child': [],
+      'createdAt': Date.now()} ).then(res => {
+      console.log(res['id']);
+      this.activityService.user.db.get(this.user.id).then( res2 => {
+        res2.activites.push(res['id']);
+        this.activityService.user.db.put(res2).then( res3 => {
+          this.activityService.load_activity(res['id']);
+        });
+      });
+    });
   }
 
-  delete_activity(activityId) {
+  delete_activity(activityId, $event) {
+    $event.preventDefault();
     const dialogRef = this.dialog.open(DialogConfirmationComponent, {
       data: { message: 'Voulez vous vraiment supprimer cette activité ?' },
     });
     dialogRef.componentInstance.dialogRef = dialogRef;
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {this.activityService.delete_activity(activityId); }
+      if (result) {return this.activityService.delete_activity(activityId); }
     });
     //this.activityService.delete_activity(activityId);
   }
 
   duplicate_activity(activityId) {
     this.activityService.duplicate(activityId);
+}
+
+  view_or_edit(activityId) {
+  if (this.user.fonction === 'Enseignant') {
+    this.edit_activity(activityId);
+  } else {
+    this.show_activity(activityId);
+  }
 }
 }

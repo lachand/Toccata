@@ -9,7 +9,7 @@ import {ActivityService} from '../../services/activity.service';
 
 export class ActivityEditComponent {
 
-  constructor(private activityService: ActivityService) {
+  constructor(public activityService: ActivityService) {
   }
 
 }

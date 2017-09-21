@@ -17,6 +17,8 @@ export const routes = [
   { path: 'activity_view/:id', component: ActivityViewComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_apps/:id', component: ActivityAppsComponent/**, canActivate: [LoggedInGuard]**/, children:
     [{ path: 'Chat/:id', component: ChatComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
-      { path: 'Externe/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'}]},
+      { path: 'Externe/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
+      { path: 'Editeur de texte/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
+      { path: 'Feuille de calcul/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'}]},
   { path: 'inscription', component: SigninComponent}
 ];

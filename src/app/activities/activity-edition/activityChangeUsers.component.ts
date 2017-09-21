@@ -15,7 +15,7 @@ export class ActivityChangeUsersComponent {
   userCheckedInitially: Array<any>;
   usersToChange: Array<any>;
 
-  constructor(private activityService: ActivityService, private router: Router) {
+  constructor(public activityService: ActivityService, public router: Router) {
     this.userChecked = [];
     this.userCheckedInitially = []
     for (let user of this.activityService.user.allUsers) {

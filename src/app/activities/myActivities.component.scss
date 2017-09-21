@@ -3,11 +3,8 @@
 }
 
 .flex-card-centered{
-  margin-left: 10%;
-  margin-top: 12%;
   padding: 1%;
-  justify-content:center;
-  align-items:center;
+  margin: auto;
 }
 
 .activity-description{
@@ -15,6 +12,16 @@
   height: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.header-card-actions{
+  margin-left: auto;
+  margin-right: 0px;
+  margin-top: -10px;
+}
+
+.activity-card{
+  cursor: pointer;
 }
 
 .flex-main-div {

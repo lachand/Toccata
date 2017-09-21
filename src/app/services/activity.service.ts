@@ -1,11 +1,9 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {ChangeDetectorRef, EventEmitter, Injectable, Output} from '@angular/core';
 import {UserService} from './user.service';
 
 import * as config from '../../variables';
 import PouchDB from 'pouchdb';
-import Pouchfind from 'pouchdb-find';
 import {AppsService} from './apps.service';
-PouchDB.plugin(Pouchfind);
 
 @Injectable()
 export class ActivityService {
@@ -18,15 +16,20 @@ export class ActivityService {
   apps: AppsService;
   @Output() changes = new EventEmitter();
 
-  constructor(userService: UserService, appsService: AppsService) {
+  constructor(userService: UserService,
+              appsService: AppsService) {
     this.db = new PouchDB('activites');
-    this.db_remote = new PouchDB(config.HOST + ':' + config.PORT + '/activites');
+    this.db_remote = new PouchDB(config.HOST + config.PORT + '/activites');
     const options = {
       live: true,
       retry: true,
       continuous: true
     };
-    this.db.sync(this.db_remote, options).on('change', change => {
+    this.db.sync(this.db_remote, options);
+    this.db.changes({
+      since: 'now',
+      live: true,
+      include_docs: true }).on('change', change => {
       this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
@@ -39,6 +42,17 @@ export class ActivityService {
     this.apps = appsService;
     this.activity_loaded = null;
     this.activity_loaded_child = [];
+  }
+
+  getIndexOf(document, array) {
+    let i = 0;
+    for (const element of array){
+      if (element._id === document._id) {
+        return i;
+      }
+      i = i + 1;
+    }
+    return -1;
   }
 
   public getActivities() {
@@ -106,6 +120,7 @@ export class ActivityService {
   }
 
   public createSubActivity(parentId) {
+    let newActivity;
     return new Promise((resolve, reject) => {
       this.db.get(parentId).then(parent => {
         const subActivity = {
@@ -113,12 +128,23 @@ export class ActivityService {
           'participants': parent.participants,
           'parent': parent._id,
           'type': 'Sequence',
-          'description': "Il n'y a aucune description"
+          'description': "Il n'y a aucune description",
+          'child': [],
+          'createdAt': Date.now()
         };
         return this.db.post(subActivity);
       })
-        .then((response) => {
-          resolve(response);
+        .then( response => {
+          newActivity = response;
+          return this.db.get(parentId);
+      })
+        .then( parent => {
+          console.log(parent);
+          parent.child.push(newActivity.id);
+          return this.db.put(parent);
+        })
+        .then(() => {
+          resolve(newActivity);
         })
         .catch(function (err) {
           console.log(err);
@@ -138,6 +164,13 @@ export class ActivityService {
     return new Promise((resolve, reject) => {
       this.db.get(activityId)
         .then(res => {
+          // A Nettoyer
+          if (res.parent !== null) {
+            this.db.get(res.parent).then(parent => {
+              parent.child.splice(parent.child.indexOf(activityId), 1);
+              this.db.put(parent);
+            });
+          }
           res._deleted = true;
           deletedActivity = res;
           return this.db.query('byParent/by-parent',
@@ -158,7 +191,9 @@ export class ActivityService {
                 resolve(finalRes);
               });
             }));
-          } else { resolve(activityDeleted); }
+          } else {
+            resolve(activityDeleted);
+          }
         });
     });
   }
@@ -195,46 +230,48 @@ export class ActivityService {
   }
 
 private handleChange(change) {
-  for (const document of change.change.docs) {
-    if (!document._deleted) {
-      let changedDoc = null;
-      let changedIndex = null;
-      this.activities_list.forEach((doc, index) => {
-        console.log(doc, document);
-        if (doc._id === document._id) {
-          changedDoc = doc;
-          changedIndex = index;
-        }
-      });
-      if (changedDoc) {
-        if (document.participants.indexOf(this.user.id) === -1) {
-          this.activities_list.splice(changedIndex, 1);
-        } else {
-          this.activities_list[changedIndex] = document;
-          if (document._id === this.activity_loaded._id) {
-            this.activity_loaded = document;
-          }
-          this.changes.emit({changeType: 'modification', value: document});
-        }
+  const document = change.doc;
+  if (!document._deleted) {
+    let changedDoc = null;
+    let changedIndex = null;
+    this.activities_list.forEach((doc, index) => {
+      if (doc._id === document._id) {
+        changedDoc = doc;
+        changedIndex = index;
+      }
+    });
+    if (changedDoc) {
+      if (document.participants.indexOf(this.user.id) === -1) {
+        this.activities_list.splice(changedIndex, 1);
       } else {
-        if (document.participants.indexOf(this.user.id) !== -1) {
-          if (document.type === 'Main') {
-            this.activities_list.push(document);
-          } else if (document._id !== this.activity_loaded._id) {
-            this.activity_loaded_child.push(document);
-          } else {
-            console.log("this is the good one");
-            this.activity_loaded = document;
-            console.log(this.activity_loaded);
-            this.changes.emit({changeType: 'modification', value: document});
-          }
-          this.changes.emit({changeType: 'create', value: document});
+        this.activities_list[changedIndex] = document;
+        if (document._id === this.activity_loaded._id) {
+          this.activity_loaded = document;
         }
+        this.changes.emit({changeType: 'modification', value: document});
       }
     } else {
-      this.activities_list.splice(this.activities_list.indexOf(document._id), 1);
-      this.changes.emit({changeType: 'delete', value: change});
+      if (document.participants.indexOf(this.user.id) !== -1) {
+        if (document.type === 'Main') {
+          this.activities_list.push(document);
+        } else if (document._id !== this.activity_loaded._id) {
+          const index = this.getIndexOf(document, this.activity_loaded_child);
+          if (index === -1) {
+            this.activity_loaded_child.push(document);
+          } else {
+            this.activity_loaded_child[index] = document;
+          }
+        } else {
+          this.activity_loaded = document;
+          this.changes.emit({changeType: 'modification', value: document});
+        }
+        this.changes.emit({changeType: 'create', value: document});
+      }
     }
+  } else {
+    const index = this.getIndexOf(document, this.activities_list);
+    this.activities_list.splice(index, 1);
+    this.changes.emit({changeType: 'delete', value: index});
   }
 }
 

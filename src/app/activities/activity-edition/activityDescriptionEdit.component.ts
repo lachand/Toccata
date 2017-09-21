@@ -13,7 +13,7 @@ export class ActivityDescriptionEditComponent {
   editorOptions: any;
   @Input() edit: boolean;
 
-  constructor(private activityService: ActivityService) {
+  constructor(public activityService: ActivityService) {
     this.descriptionEdition = false;
     if (this.activityService.activity_loaded.description !== "Il n'y a aucune description") {
       this.description = this.activityService.activity_loaded.description;

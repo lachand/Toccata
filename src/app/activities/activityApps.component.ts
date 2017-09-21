@@ -15,7 +15,7 @@ export class ActivityAppsComponent {
   user: UserService;
   dialog: any;
 
-  constructor(private activityService: ActivityService, private router: Router,
+  constructor(public activityService: ActivityService, public router: Router,
               dialog: MdDialog) {
     this.dialog = dialog;
   }
