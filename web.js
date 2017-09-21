@@ -12,7 +12,7 @@ var express = require('express'),
   fs = require('fs');
 
 var app = express();
-var staticRoot = __dirname + '/dist/';
+var staticRoot = 'dist/';
 
 app.set('port', (process.env.PORT || 3000));
 
