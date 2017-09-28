@@ -3,7 +3,7 @@ var express = require('express'),
   fs = require('fs');
 
 var app = express();
-var staticRoot = __dirname + '/';
+var staticRoot = __dirname + '/dist/';
 
 app.set('port', (process.env.PORT || 80));
 
@@ -32,5 +32,5 @@ app.use(function(req, res, next){
 //});
 
 app.listen(app.get('port'), function() {
-  console.log('app running on port', app.get('port'));
+  console.log('app running on port', app.get('port'), staticRoot);
 });
