@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "start": "node server",
+    "heroku-postbuild": "ng build --aot -prod",
     "build:nodeserver": "ng build && cp nodeserver/* dist",
     "build:nodeserver-prod": "ng build -prod && cp nodeserver/* dist",
     "serve-build": "npm run build:nodeserver && cd dist && node index.js",
     "serve-build-prod": "npm run build:nodeserver-prod && cd dist && node index.js",
-    "start": "npm run build:nodeserver-prod && cd dist && node index.js",
     "clean": "rimraf public /*",
     "build": "tsc && gulp --production",
     "serve": "lite-server --port=8000",
