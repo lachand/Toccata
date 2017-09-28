@@ -2,7 +2,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import {MdSlideToggleModule, MdIconModule, MdDialogModule, MdRadioModule, MdTabsModule, MdOptionModule, MdMenuModule } from '@angular/material';
+import {
+  MdSlideToggleModule, MdIconModule, MdDialogModule, MdRadioModule, MdTabsModule, MdOptionModule, MdMenuModule,
+  MdCardModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { CKEditorModule } from 'ng2-ckeditor';
@@ -68,6 +71,7 @@ import {OrderBy} from './external/orderBy';
     CKEditorModule,
     MdIconModule,
     MdSlideToggleModule,
+    MdCardModule,
     MdDialogModule,
     MdRadioModule,
     MdTabsModule,
