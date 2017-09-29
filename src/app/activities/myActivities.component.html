@@ -4,7 +4,7 @@
       <md-card class="activity-card" (click)="view_or_edit(activity._id)">
         <md-card-header>
           <h3 md-line>{{activity.name}}</h3>
-          <div class="header-card-actions"><md-icon *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">close</md-icon></div>
+          <div class="header-card-actions"><button md-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
         </md-card-header>
 
         <div [innerHTML]="activity.description" class="activity-description"></div>

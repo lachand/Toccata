@@ -21,6 +21,7 @@ export class MyActivitiesComponent {
               public router: Router,
               dialog: MdDialog) {
     this.dialog = dialog;
+    console.log(user);
   }
 
   load_activity(activity_id) {

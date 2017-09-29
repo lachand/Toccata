@@ -57,6 +57,7 @@ export class UserService {
               reject(err);
             }
           }}).then( (res) => {
+          console.log(res);
           this.name = res['name'];
           this.id = res['_id'];
           this.avatar = res['avatar'];
