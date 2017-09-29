@@ -61,7 +61,6 @@ export class MyActivitiesComponent {
   }
 
   delete_activity(activityId, $event) {
-    $event.preventDefault();
     const dialogRef = this.dialog.open(DialogConfirmationComponent, {
       data: { message: 'Voulez vous vraiment supprimer cette activité ?' },
     });
@@ -69,7 +68,6 @@ export class MyActivitiesComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {return this.activityService.delete_activity(activityId); }
     });
-    //this.activityService.delete_activity(activityId);
   }
 
   duplicate_activity(activityId) {
