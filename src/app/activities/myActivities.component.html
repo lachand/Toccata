@@ -1,13 +1,18 @@
 
   <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
     <div *ngFor="let activity of activityService.activities_list | orderBy : '-createdAt'" fxFlex="33%" class="flex-card">
-      <md-card class="activity-card" (click)="view_or_edit(activity._id)">
+      <md-card class="activity-card" (dbclick)="view_or_edit(activity._id)">
         <md-card-header>
           <h3 md-line>{{activity.name}}</h3>
           <div class="header-card-actions"><button md-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
         </md-card-header>
 
         <div [innerHTML]="activity.description" class="activity-description"></div>
+
+        <md-card-actions>
+          <md-icon>play_arrow</md-icon>
+          <md-icon>pause</md-icon>
+        </md-card-actions>
       </md-card>
     </div>
 

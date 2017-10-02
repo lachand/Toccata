@@ -5,7 +5,7 @@
     <span *ngFor="let application of activityService.apps.apps[activityService.activity_loaded._id]">
     <a md-tab-link class="tab"
        *ngIf="application.status === 'loaded'"
-       [routerLink]="[{ outlets: { 'apps': [application.type, application._id] } }]"
+       [routerLink]="[{ outlets: { '../apps': [application.type, application._id] } }]"
        routerLinkActive #rla="routerLinkActive"
        [active]="rla.isActive">
       {{application.name}}<md-icon class="aligned-with-text" (click)="unloadApp(application._id)">close</md-icon>

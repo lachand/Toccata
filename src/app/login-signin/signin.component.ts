@@ -52,14 +52,21 @@ export class SigninComponent implements OnInit {
         if (this.teacher) {
           fonct = 'Enseignant';
         }
-        this.db.putUser(this.signinForm.value.username, {
+        return this.db.putUser(this.signinForm.value.username, {
           metadata: {
             avatar: this.signinForm.value.avatar,
             fonction: fonct
           }
         }, function (err, response) {
-          // etc.
-        }).then((res2) => {
+        }).then( userCreated => {
+          const user = {
+            _id: userCreated.id,
+            avatar: this.signinForm.value.avatar,
+            fonction: fonct
+          };
+          return this.db.put(user);
+          }
+        ).then((res2) => {
           console.log(res2);
         });
       });
