@@ -176,24 +176,18 @@ export class ActivityService {
           deletedActivity = res;
           return this.db.query('byParent/by-parent',
           { startkey: res._id, endkey: res._id}); })
-        .then(activityChilds => {
-          console.log(activityChilds);
+        .then( activityChilds => {
           activityChilds.rows.map((row) => {
-            console.log("2bis");
             childs.push(row.value);
           });
           return this.user.remove_activity(activityId); })
         .then(res1 => {
-          console.log("3");
           return this.apps.remove_activity(activityId); })
         .then(res2 => {
-          console.log("4");
           return this.db.put(deletedActivity); })
         .then(activityDeleted => {
-          console.log("5");
           if (childs.length > 0) {
             return Promise.all(childs.map( (child) => {
-              console.log("6");
               return this.delete_activity(child._id).then(finalRes => {
                 resolve(finalRes);
               });
