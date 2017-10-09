@@ -105,7 +105,7 @@ export class ActivityService {
   public unloadActivity() {
     this.activity_loaded = null;
     this.activities_list = [];
-    this.activity_loaded_child = []
+    this.activity_loaded_child = [];
     this.apps.logout();
   }
 
@@ -128,7 +128,7 @@ export class ActivityService {
           'participants': parent.participants,
           'parent': parent._id,
           'type': 'Sequence',
-          'description': "Il n'y a aucune description",
+          'description': 'Il n\'y a aucune description',
           'child': [],
           'createdAt': Date.now()
         };
@@ -206,7 +206,7 @@ export class ActivityService {
         const newActivity = {
           'name': 'Copie de ' + res.name,
           'participants': [this.user.id]
-        }
+        };
         return this.db.post(newActivity);
       })
         .then(activityCreated => {

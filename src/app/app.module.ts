@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import {
   MdSlideToggleModule, MdIconModule, MdDialogModule, MdRadioModule,
   MdTabsModule, MdOptionModule, MdMenuModule, MdCardModule, MdInputModule,
-  MdButtonModule, MdToolbarModule, MdTooltipModule
+  MdButtonModule, MdToolbarModule, MdTooltipModule, MdProgressBarModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -81,6 +81,7 @@ import {OrderBy} from './external/orderBy';
     MdOptionModule,
     MdMenuModule,
     MdInputModule,
+    MdProgressBarModule,
     MdButtonModule,
     FlexLayoutModule,
     ScrollToModule.forRoot(),

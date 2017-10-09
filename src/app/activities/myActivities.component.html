@@ -1,18 +1,24 @@
-
-  <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
+<div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
     <div *ngFor="let activity of activityService.activities_list | orderBy : '-createdAt'" fxFlex="33%" class="flex-card">
       <md-card class="activity-card" (dblclick)="view_or_edit(activity._id)">
-        <md-card-header>
-          <h3 md-line>{{activity.name}}</h3>
-          <div class="header-card-actions"><button md-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
-        </md-card-header>
+          <img md-card-image src="http://163.172.38.12:5984/activites/{{activity._id}}/{{activity.image}}" alt="http://163.172.38.12:5984/{{activity._id}}/{{activity.image}}">
 
+          <!--<div class="header-card-actions"><button md-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
+        -->
+
+        <h3 md-line>{{activity.name}}</h3>
         <div [innerHTML]="activity.description" class="activity-description"></div>
 
-        <md-card-actions>
-          <md-icon>play_arrow</md-icon>
-          <md-icon>pause</md-icon>
+        <md-card-actions class="centered">
+          <md-icon class="icon-huge" (click)="activity_change_status(activity._id, 'started')">play_arrow</md-icon>
+          <md-icon class="icon-huge" (click)="activity_change_status(activity._id, 'paused')">pause</md-icon>
         </md-card-actions>
+
+        <md-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode">
+        </md-progress-bar>
       </md-card>
     </div>
 

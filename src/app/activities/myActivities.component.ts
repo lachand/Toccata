@@ -3,8 +3,7 @@ import {ActivityService} from '../services/activity.service';
 import {Router} from '@angular/router';
 import {MdDialog} from '@angular/material';
 import {UserService} from '../services/user.service';
-import {DialogConfirmationComponent} from "./dialogConfirmation.component";
-import {Observable} from "rxjs/Observable";
+import {DialogConfirmationComponent} from './dialogConfirmation.component';
 
 @Component({
   selector: 'app-my-activities',
@@ -52,8 +51,12 @@ export class MyActivitiesComponent {
       'createdAt': Date.now()} ).then(res => {
       console.log(res['id']);
       this.activityService.user.db.get(this.user.id).then( res2 => {
-        res2.activites.push(res['id']);
+        res2.activites.push({
+          'id' : res['id'],
+          'status' : 'paused'});
+        console.log(res2.activites);
         this.activityService.user.db.put(res2).then( res3 => {
+          console.log(res3);
           this.activityService.load_activity(res['id']);
         });
       });
@@ -80,5 +83,13 @@ export class MyActivitiesComponent {
   } else {
     this.show_activity(activityId);
   }
+}
+
+  activity_change_status(activityId, status) {
+    if (this.user.fonction === 'Enseignant') {
+      return this.user.setActivityStatusByTeacher(activityId, status);
+    } else {
+      return this.user.setActivityStatusByStudent(activityId, status);
+    }
 }
 }

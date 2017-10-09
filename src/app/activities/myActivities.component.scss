@@ -7,9 +7,13 @@
   margin: auto;
 }
 
+.centered{
+  margin: auto;
+}
+
 .activity-description{
   flex-wrap: wrap;
-  height: 150px;
+  height: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
 }

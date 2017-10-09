@@ -165,8 +165,9 @@ export class UserService {
   addActivity(activityId, userId) {
     this.db.get(userId).then( userSelected => {
       console.log(userSelected);
-      userSelected.activites.push(activityId);
-      this.db.put(userSelected);
+      userSelected.activites[activityId] = {'status' : 'paused'};
+      console.log(userSelected.activites);
+      this.db.put(userSelected).thne(result => {console.log('result : ',result);});
     });
   }
 
@@ -223,6 +224,44 @@ export class UserService {
       this.change.emit({changeType: 'delete', value: changedIndex});
     }
   }
+  }
+
+  setActivityStatusByTeacher(activityId, status) {
+    return new Promise( (resolve, reject) => {
+      let users = [];
+      this.db.query('byActivity/by-activity',
+        {startkey: activityId, endkey: activityId})
+        .then(result => {
+          console.log(result);
+          const docs = result.rows.map((row) => {
+            users.push(row.value);
+            console.log(row.value);
+          });
+          for (const user of users) {
+            for (const activity of user.activites) {
+              if (activity.id === activityId) {
+                activity.status = status;
+              }
+            }
+          }
+          console.log(users);
+          this.db.bulkDocs(users).then(result2 => { console.log(resolve(result2)); });
+        });
+    });
+  }
+
+  setActivityStatusByStudent(activityId, status) {
+    return new Promise( (resolve, reject) => {
+      return this.db.get(this.id)
+        .then( user => {
+          for (const activity of user.activites){
+            if (activity.id === activityId){
+              activity.status = status;
+            }
+          }
+          return this.db.put(user);
+        });
+    });
   }
 
   logout() {

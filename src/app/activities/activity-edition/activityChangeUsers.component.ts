@@ -19,21 +19,34 @@ export class ActivityChangeUsersComponent {
     this.userChecked = [];
     this.userCheckedInitially = []
     for (let user of this.activityService.user.allUsers) {
-      if (user.activites.indexOf(this.activityService.activity_loaded._id) !== -1) {
+      if (this.getIndexOf(user.activites, this.activityService.activity_loaded._id) !== -1) {
+        console.log("yes");
         this.userChecked.push({'user': user, 'checked': true});
         this.userCheckedInitially.push({'user': user, 'checked': true});
       } else {
+        console.log("no");
         this.userChecked.push({'user': user, 'checked': false});
         this.userCheckedInitially.push({'user': user, 'checked': false});
       }
     }
+    console.log(this.userChecked);
+  }
+
+  getIndexOf(table, id) {
+    for (let i = 0; i < table.length; i++) {
+      if (table[i].id === id) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   reloadUsers() {
     return this.activityService.user.getAllusers().then(() => {
       this.userChecked = [];
       this.userCheckedInitially = []
-      for (let user of this.activityService.user.allUsers) {
+      for (const user of this.activityService.user.allUsers) {
+        console.log(user.activites.indexOf(this.activityService.activity_loaded._id));
         if (user.activites.indexOf(this.activityService.activity_loaded._id) !== -1) {
           this.userChecked.push({'user': user, 'checked': true});
           this.userCheckedInitially.push({'user': user, 'checked': true});
@@ -51,9 +64,13 @@ export class ActivityChangeUsersComponent {
       if (this.userChecked[i].checked !== this.userCheckedInitially[i].checked) {
         let user = this.userChecked[i].user;
         if (this.userChecked[i].checked) {
-          user.activites.push(this.activityService.activity_loaded._id);
+          user.activites.push({
+            'id' : this.activityService.activity_loaded._id,
+            'status' : 'paused'});
           for (const activite of this.activityService.activity_loaded_child){
-            user.activites.push(activite._id);
+            user.activites.push({
+              'id' : activite._id,
+              'status' : 'paused'});
             activite.participants.push(user._id);
           }
           this.activityService.activity_loaded.participants.push(user._id);
