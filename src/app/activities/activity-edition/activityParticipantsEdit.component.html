@@ -3,12 +3,16 @@
   <form>
 
     <md-card-header>
-      <h3 md-line>Participants <md-icon (click)="changeParticipants()" *ngIf="userService.fonction === 'Enseignant' && edit===true">mode_edit</md-icon></h3>
+      <h3 md-line>Participants</h3>
     </md-card-header>
 
-  <md-list>
-    <md-list-item *ngFor="let participant of activityService.user.participants">
-      <h3 md-line> {{participant.name}} </h3>
-    </md-list-item>
-  </md-list>
+    <div fxLayout="row">
+    <div fxFlex="33%" *ngFor="let participant of activityService.user.participants">
+      <img src="{{participant.avatar}}" class="avatar-circle">
+    </div>
+
+    <div fxFlex="33%">
+      <md-icon class="icon-huge" (click)="changeParticipants()" *ngIf="userService.fonction === 'Enseignant' && edit===true">add_circle</md-icon>
+    </div>
+    </div>
   </form>

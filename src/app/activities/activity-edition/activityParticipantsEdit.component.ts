@@ -7,7 +7,8 @@ import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-activity-participants-edit',
-  templateUrl: './activityParticipantsEdit.component.html'
+  templateUrl: './activityParticipantsEdit.component.html',
+  styleUrls: ['activityParticipantsEdit.component.scss']
 })
 
 export class ActivityParticipantsEditComponent {

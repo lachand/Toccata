@@ -2,14 +2,20 @@
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div layout="row" >
   <form (ngSubmit)="newApp()">
-  <md-list>
+  <md-nav-list>
     <md-list-item *ngFor="let app of activityService.apps.apps[activityService.activity_loaded._id]">
-      <h3 md-line> {{app.name}} </h3>
+      <md-icon md-list-icon>folder</md-icon>
+      <p md-line> {{app.name}} </p>
       <div>
         <md-icon *ngIf="user.fonction === 'Enseignant' && edit == true" (click)="delete_app(app._id)">delete</md-icon>
       </div>
     </md-list-item>
-  </md-list>
-    <md-icon class="icon-huge" (click)="newApp()" *ngIf="user.fonction === 'Enseignant' && edit===true">add_circle</md-icon>
+
+    <md-list-item *ngIf="user.fonction === 'Enseignant' && edit===true" (click)="newApp()">
+      <md-icon md-list-icon>add_circle</md-icon>
+      <p md-line>Nouvelle application</p>
+    </md-list-item>
+
+  </md-nav-list>
   </form>
 </div>

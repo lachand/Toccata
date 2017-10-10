@@ -1,40 +1,49 @@
 <script src="../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<div fxFlex="90%" class="flex-card">
+<div fxFlex="100%" class="flex-card">
   <md-card>
 <app-activity-name-edit [edit]="true"></app-activity-name-edit>
 
-<div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
+<div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 
-  <div fxFlex="60%" class="flex-card">
-    <md-card>
-        <app-activity-description-edit [edit]="true"></app-activity-description-edit>
-    </md-card>
-  </div>
+  <div fxFlex="33%">
 
-  <div fxFlex="60%" class="flex-card">
-    <md-card>
-      <md-card-header>
-        <h3 md-line>Séquence d'activités</h3>
-      </md-card-header>
-      <app-activity-sequence-edit [edit]="true"></app-activity-sequence-edit>
-    </md-card>
-  </div>
-
-  <div fxFlex="70%" class="flex-card">
-    <md-card>
+    <div>
+      <md-card class="flex-card">
         <md-card-header>
           <h3 md-line>Applications</h3>
         </md-card-header>
-      <app-activity-apps-edit [edit]="true"></app-activity-apps-edit>
-    </md-card>
+        <app-activity-apps-edit [edit]="true"></app-activity-apps-edit>
+      </md-card>
+    </div>
+
+    <div *ngIf="activityService.activity_loaded.type ==='Main'">
+      <md-card class="flex-card">
+        <app-activity-participants-edit [edit]="true"></app-activity-participants-edit>
+      </md-card>
+    </div>
+
   </div>
 
-  <div fxFlex="70%" class="flex-card" *ngIf="activityService.activity_loaded.type ==='Main'">
-    <md-card>
-      <app-activity-participants-edit [edit]="true"></app-activity-participants-edit>
+  <div fxFlex="63%">
+
+    <div>
+    <md-card class="flex-card">
+      <app-activity-description-edit [edit]="true"></app-activity-description-edit>
     </md-card>
+    </div>
+
+    <div>
+    <md-card class="flex-card">
+        <md-card-header>
+          <h3 md-line>Séquence d'activités</h3>
+        </md-card-header>
+        <app-activity-sequence-edit [edit]="true"></app-activity-sequence-edit>
+    </md-card>
+    </div>
+
   </div>
+
 </div>
   </md-card>
 </div>
