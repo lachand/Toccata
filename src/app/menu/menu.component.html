@@ -25,7 +25,6 @@
 
   <md-menu x-position="before" #menu="mdMenu">
     <button md-menu-item routerLink="/activities" [mdMenuTriggerFor]="menu" *ngIf="userService.loggedIn">Mes activités</button>
-    <button md-menu-item routerLink="/activity_apps" [mdMenuTriggerFor]="menu" *ngIf="userService.loggedIn && activityService.activity_loaded !== null">Activité en cours</button>
     <button md-menu-item routerLink="/" [mdMenuTriggerFor]="menu" *ngIf="userService.loggedIn">Déconnexion</button>
   </md-menu>
 
