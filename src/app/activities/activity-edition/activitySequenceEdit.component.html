@@ -1,17 +1,17 @@
 <script src="../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-  <div *ngFor="let activity of activityService.activity_loaded_child" fxFlex="33%" class="flex-card">
+<div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
+  <div *ngFor="let activity of activityService.activity_loaded_child | orderBy : ['+position']" fxFlex="98%" class="flex-card">
     <md-card class="activity-card" (click)="view_or_edit(activity._id)">
       <md-card-header>
-        <h3 md-line>{{activity.name}}</h3>
         <div class="header-card-actions"><md-icon *ngIf="userService.fonction === 'Enseignant'" (click)="delete_activity(activity._id, $event)">close</md-icon></div>
       </md-card-header>
+      <h3 md-line>{{activity.name}}</h3>
       <div [innerHTML]="activity.description" class="activity-description"></div>
     </md-card>
   </div>
 
-  <div fxFlex="33%" class="flex-card-centered">
+  <div fxFlex="98%" class="flex-card-centered">
     <md-icon class="icon-huge" (click)="new_subactivity()" *ngIf="userService.fonction === 'Enseignant' && edit===true">add_circle</md-icon>
   </div>
 

@@ -45,7 +45,6 @@ export class OrderBy implements PipeTransform {
           : propertyToCheck;
 
         return input.sort(function(a:any,b:any){
-          console.log(a,b,a[property],b[property],property);
           return !desc
             ? OrderBy._orderByComparator(a[property], b[property])
             : -OrderBy._orderByComparator(a[property], b[property]);

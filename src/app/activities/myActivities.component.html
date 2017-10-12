@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-    <div *ngFor="let activity of activityService.activities_list | orderBy : '-createdAt'" fxFlex="33%" class="flex-card">
+    <div *ngFor="let activity of activityService.activities_list | orderBy : ['-createdAt']" fxFlex="33%" class="flex-card">
       <md-card class="activity-card" (dblclick)="view_or_edit(activity._id)">
           <img md-card-image src="http://163.172.38.12:5984/activites/{{activity._id}}/{{activity.image}}" alt="http://163.172.38.12:5984/{{activity._id}}/{{activity.image}}">
 
