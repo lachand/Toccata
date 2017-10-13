@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {
-  MdSlideToggleModule, MdIconModule, MdDialogModule, MdRadioModule,
-  MdTabsModule, MdOptionModule, MdMenuModule, MdCardModule, MdInputModule,
-  MdButtonModule, MdToolbarModule, MdTooltipModule, MdProgressBarModule, MdListModule
+  MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
+  MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
+  MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -70,20 +70,20 @@ import {OrderBy} from './external/orderBy';
     HttpModule,
     BrowserAnimationsModule,
     CKEditorModule,
-    MdSlideToggleModule,
-    MdCardModule,
-    MdDialogModule,
-    MdRadioModule,
-    MdTabsModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdOptionModule,
-    MdMenuModule,
-    MdInputModule,
-    MdProgressBarModule,
-    MdButtonModule,
-    MdListModule,
-    MdIconModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatDialogModule,
+    MatRadioModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatOptionModule,
+    MatMenuModule,
+    MatInputModule,
+    MatProgressBarModule,
+    MatButtonModule,
+    MatListModule,
+    MatIconModule,
     FlexLayoutModule,
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
