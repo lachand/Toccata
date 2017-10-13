@@ -70,7 +70,6 @@ import {OrderBy} from './external/orderBy';
     HttpModule,
     BrowserAnimationsModule,
     CKEditorModule,
-    MdIconModule,
     MdSlideToggleModule,
     MdCardModule,
     MdDialogModule,
@@ -84,6 +83,7 @@ import {OrderBy} from './external/orderBy';
     MdProgressBarModule,
     MdButtonModule,
     MdListModule,
+    MdIconModule,
     FlexLayoutModule,
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
