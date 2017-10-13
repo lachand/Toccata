@@ -21,7 +21,7 @@
     "init": "npm install"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": "6.11.3"
   },
   "private": true,
   "dependencies": {
