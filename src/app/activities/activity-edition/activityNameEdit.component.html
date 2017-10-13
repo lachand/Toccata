@@ -5,9 +5,9 @@
 </div>
 
 <div *ngIf="nameEdition" class="name-edition">
-  <md-input-container >
+  <mat-input-container>
     <input mdInput placeholder="Nom de l'application" type="text" name="appName" [(ngModel)]="appName">
-  </md-input-container>
-  <md-icon class="aligned-with-text" (click)="changeTheName()">done</md-icon>
-  <md-icon class="aligned-with-text" (click)="switch()">close</md-icon>
+  </mat-input-container>
+  <mat-icon class="aligned-with-text" (click)="changeTheName()">done</mat-icon>
+  <mat-icon class="aligned-with-text" (click)="switch()">close</mat-icon>
 </div>

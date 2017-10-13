@@ -1,16 +1,16 @@
 <script src="../../../main.ts"></script>
 <div layout="row" >
 <div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>
-  <md-nav-list>
-    <md-list-item *ngFor="let message of messages">
-      <img md-list-avatar src="{{message.author.avatar}}" alt="">
-      <h3 md-line> {{message.author.name}} </h3>
-      <p md-line>{{message.text}}</p>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let message of messages">
+      <img mat-list-avatar src="{{message.author.avatar}}" alt="">
+      <h3 mat-line> {{message.author.name}} </h3>
+      <p mat-line>{{message.text}}</p>
       <div>
-        <md-icon *ngIf="message.editable" (click)="deleteMessage(message)">clear</md-icon>
+        <mat-icon *ngIf="message.editable" (click)="deleteMessage(message)">clear</mat-icon>
       </div>
-    </md-list-item>
-  </md-nav-list>
+    </mat-list-item>
+  </mat-nav-list>
 </div>
 </div>
 <div layout="row" >

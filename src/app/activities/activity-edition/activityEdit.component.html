@@ -1,7 +1,7 @@
 <script src="../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div fxFlex="100%" class="flex-card">
-  <md-card>
+  <mat-card>
     <app-activity-name-edit [edit]="true"></app-activity-name-edit>
 
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
@@ -9,24 +9,24 @@
       <div fxFlex="33%">
 
         <div>
-          <md-card class="flex-card">
+          <mat-card class="flex-card">
             <app-activity-description-edit [edit]="true"></app-activity-description-edit>
-          </md-card>
+          </mat-card>
         </div>
 
         <div>
-          <md-card class="flex-card">
-            <md-card-header>
-              <h3 md-line>Applications</h3>
-            </md-card-header>
+          <mat-card class="flex-card">
+            <mat-card-header>
+              <h3 mat-line>Applications</h3>
+            </mat-card-header>
             <app-activity-apps-edit [edit]="true"></app-activity-apps-edit>
-          </md-card>
+          </mat-card>
         </div>
 
         <div *ngIf="activityService.activity_loaded.type ==='Main'">
-          <md-card class="flex-card">
+          <mat-card class="flex-card">
             <app-activity-participants-edit [edit]="true"></app-activity-participants-edit>
-          </md-card>
+          </mat-card>
         </div>
 
       </div>
@@ -34,16 +34,16 @@
       <div fxFlex="63%">
 
         <div>
-          <md-card class="flex-card">
-            <md-card-header>
-              <h3 md-line>Etapes</h3>
-            </md-card-header>
+          <mat-card class="flex-card">
+            <mat-card-header>
+              <h3 mat-line>Etapes</h3>
+            </mat-card-header>
             <app-activity-sequence-edit [edit]="true"></app-activity-sequence-edit>
-          </md-card>
+          </mat-card>
         </div>
 
       </div>
 
     </div>
-  </md-card>
+  </mat-card>
 </div>

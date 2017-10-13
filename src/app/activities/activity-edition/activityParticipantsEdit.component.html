@@ -2,9 +2,9 @@
 
   <form>
 
-    <md-card-header>
-      <h3 md-line>Participants</h3>
-    </md-card-header>
+    <mat-card-header>
+      <h3 mat-line>Participants</h3>
+    </mat-card-header>
 
     <div fxLayout="row">
     <div fxFlex="33%" *ngFor="let participant of activityService.user.participants">
@@ -12,7 +12,9 @@
     </div>
 
     <div fxFlex="33%">
-      <md-icon class="icon-huge" (click)="changeParticipants()" *ngIf="userService.fonction === 'Enseignant' && edit===true">add_circle</md-icon>
+      <mat-icon class="icon-huge" (click)="changeParticipants()"
+                *ngIf="userService.fonction === 'Enseignant' && edit===true">add_circle
+      </mat-icon>
     </div>
     </div>
   </form>

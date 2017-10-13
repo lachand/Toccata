@@ -3,16 +3,17 @@
 <form (ngSubmit)="loadApp()">
   <h3>Applications disponibles</h3>
 
-  <md-radio-group class="example-radio-group" [(ngModel)]="appToLoad" name="activity._id">
+  <mat-radio-group class="example-radio-group" [(ngModel)]="appToLoad" name="activity._id">
     <div *ngFor="let application of activityService.apps.apps[activity._id]">
-    <md-radio-button class="example-radio-button" *ngIf="application.status === 'unloaded'" [value]="application._id">
+      <mat-radio-button class="example-radio-button" *ngIf="application.status === 'unloaded'"
+                        [value]="application._id">
       {{application.name}}
-    </md-radio-button>
+      </mat-radio-button>
     </div>
-  </md-radio-group>
+  </mat-radio-group>
 
   <div>
-    <button md-button type="submit">Charger</button>
-    <button md-button md-dialog-close="Close">Fermer</button>
+    <button mat-button type="submit">Charger</button>
+    <button mat-button mat-dialog-close="Close">Fermer</button>
   </div>
 </form>

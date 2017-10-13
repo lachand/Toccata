@@ -1,11 +1,13 @@
 <div layout="row" >
 <form [formGroup]="sendMessage" (ngSubmit)="addMessage()">
 
-  <md-input-container>
+  <mat-input-container>
     <input mdInput placeholder="Message" type="text" formControlName="text">
-  </md-input-container>
+  </mat-input-container>
 
-  <button md-button type="submit"><md-icon>send</md-icon></button>
+  <button mat-button type="submit">
+    <mat-icon>send</mat-icon>
+  </button>
 
 </form>
 </div>

@@ -2,20 +2,20 @@
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div layout="row" >
   <form (ngSubmit)="newApp()">
-  <md-nav-list>
-    <md-list-item *ngFor="let app of activityService.apps.apps[activityService.activity_loaded._id]">
-      <md-icon md-list-icon>folder</md-icon>
-      <p md-line> {{app.name}} </p>
+    <mat-nav-list>
+      <mat-list-item *ngFor="let app of activityService.apps.apps[activityService.activity_loaded._id]">
+        <mat-icon mat-list-icon>folder</mat-icon>
+        <p mat-line> {{app.name}} </p>
       <div>
-        <md-icon *ngIf="user.fonction === 'Enseignant' && edit == true" (click)="delete_app(app._id)">delete</md-icon>
+        <mat-icon *ngIf="user.fonction === 'Enseignant' && edit == true" (click)="delete_app(app._id)">delete</mat-icon>
       </div>
-    </md-list-item>
+      </mat-list-item>
 
-    <md-list-item *ngIf="user.fonction === 'Enseignant' && edit===true" (click)="newApp()">
-      <md-icon md-list-icon>add_circle</md-icon>
-      <p md-line>Nouvelle application</p>
-    </md-list-item>
+      <mat-list-item *ngIf="user.fonction === 'Enseignant' && edit===true" (click)="newApp()">
+        <mat-icon mat-list-icon>add_circle</mat-icon>
+        <p mat-line>Nouvelle application</p>
+      </mat-list-item>
 
-  </md-nav-list>
+    </mat-nav-list>
   </form>
 </div>

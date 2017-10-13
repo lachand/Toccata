@@ -5,36 +5,36 @@
 <div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
 
   <div fxFlex="90%" class="flex-card">
-    <md-card>
-      <md-card-header>
-        <h3 md-line>Description</h3>
-      </md-card-header>
+    <mat-card>
+      <mat-card-header>
+        <h3 mat-line>Description</h3>
+      </mat-card-header>
       <div [innerHTML]="activityService.activity_loaded.description"></div>
-    </md-card>
+    </mat-card>
   </div>
 
   <div fxFlex="90%" class="flex-card">
-    <md-card>
-      <md-card-header>
-        <h3 md-line>Séquence d'activités</h3>
-      </md-card-header>
+    <mat-card>
+      <mat-card-header>
+        <h3 mat-line>Séquence d'activités</h3>
+      </mat-card-header>
       <app-activity-sequence-edit [edit]="false"></app-activity-sequence-edit>
-    </md-card>
+    </mat-card>
   </div>
 
   <div fxFlex="90%" class="flex-card">
-    <md-card>
-        <md-card-header>
-          <h3 md-line>Applications</h3>
-        </md-card-header>
+    <mat-card>
+      <mat-card-header>
+        <h3 mat-line>Applications</h3>
+      </mat-card-header>
       <app-activity-apps-edit [edit]="false"></app-activity-apps-edit>
-    </md-card>
+    </mat-card>
   </div>
 
   <div fxFlex="90%" class="flex-card" *ngIf="activityService.activity_loaded.type ==='Main'">
-    <md-card>
+    <mat-card>
       <app-activity-participants-edit [edit]="false"></app-activity-participants-edit>
-    </md-card>
+    </mat-card>
   </div>
 
 </div>

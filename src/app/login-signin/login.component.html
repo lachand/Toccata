@@ -1,27 +1,27 @@
 
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
   <div class="flex-card">
-  <md-card>
+    <mat-card>
 
     <h3>Connexion</h3>
 <form [formGroup]="loginForm" (ngSubmit)="login()">
 
   <div>
-    <md-input-container>
+    <mat-input-container>
       <input mdInput placeholder="Nom d'utilisateur" type="text" formControlName="username">
-    </md-input-container>
+    </mat-input-container>
   </div>
 
   <div>
-    <md-input-container>
+    <mat-input-container>
       <input mdInput placeholder="Mot de passe" type="password" formControlName="password">
-    </md-input-container>
+    </mat-input-container>
   </div>
 
   <div>
-    <button md-button type="submit">Connexion</button>
+    <button mat-button type="submit">Connexion</button>
   </div>
 </form>
-  </md-card>
+    </mat-card>
 </div>
 </div>
