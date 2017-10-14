@@ -10,15 +10,15 @@
   </mat-select>
 
   <mat-input-container>
-  <input mdInput placeholder="Nom de l'application" type="text" formControlName="appName">
+    <input matInput placeholder="Nom de l'application" type="text" formControlName="appName">
   </mat-input-container>
   <div [hidden]="!(applicationType == 'Externe')">
     <mat-input-container>
-      <input mdInput placeholder="Nom du service" type="text" formControlName="serviceName">
+      <input matInput placeholder="Nom du service" type="text" formControlName="serviceName">
     </mat-input-container>
 
     <mat-input-container>
-      <input mdInput placeholder="Lien vers l'application" type="text" formControlName="url">
+      <input matInput placeholder="Lien vers l'application" type="text" formControlName="url">
     </mat-input-container>
 
   </div>
