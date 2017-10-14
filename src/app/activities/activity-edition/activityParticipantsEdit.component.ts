@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {ActivityChangeUsersComponent} from './activityChangeUsers.component';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {UserService} from "../../services/user.service";
 
 @Component({
@@ -18,7 +18,7 @@ export class ActivityParticipantsEditComponent {
 
   constructor(public activityService: ActivityService,
               public router: Router,
-              public dialog: MdDialog,
+              public dialog: MatDialog,
               public userService: UserService) {
   }
 

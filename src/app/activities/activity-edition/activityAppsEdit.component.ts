@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {ActivityNewAppComponent} from './activityNewApp.component';
 import {UserService} from '../../services/user.service';
 
@@ -16,7 +16,7 @@ export class ActivityAppsEditComponent {
   @Input() edit: boolean;
 
   constructor(public activityService: ActivityService, public router: Router,
-              public user: UserService, dialog: MdDialog) {
+              public user: UserService, dialog: MatDialog) {
     this.dialog = dialog;
   }
 

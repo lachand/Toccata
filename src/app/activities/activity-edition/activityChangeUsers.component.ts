@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
-import {MdDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-activity-change-users',
@@ -10,7 +10,7 @@ import {MdDialogRef} from '@angular/material';
 
 export class ActivityChangeUsersComponent {
 
-  dialogRef: MdDialogRef<ActivityChangeUsersComponent>;
+  dialogRef: MatDialogRef<ActivityChangeUsersComponent>;
   userChecked: Array<any>;
   userCheckedInitially: Array<any>;
   usersToChange: Array<any>;

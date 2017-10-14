@@ -2,7 +2,7 @@ import { Component} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-activity-new-app',
@@ -12,7 +12,7 @@ import {MdDialogRef} from '@angular/material';
   export class ActivityNewAppComponent {
   apps: any;
   activity: any;
-  dialogRef: MdDialogRef<ActivityNewAppComponent>;
+  dialogRef: MatDialogRef<ActivityNewAppComponent>;
   applicationType: any;
   formNewApp: FormGroup;
 

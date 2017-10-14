@@ -1,7 +1,7 @@
 import { Component} from '@angular/core';
 import {ActivityService} from '../services/activity.service';
 import {Router} from '@angular/router';
-import {MdDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-app-loading',
@@ -11,7 +11,7 @@ import {MdDialogRef} from '@angular/material';
 export class AppLoadingComponent {
   activity: any;
   appToLoad: any;
-  dialogRef: MdDialogRef<AppLoadingComponent>;
+  dialogRef: MatDialogRef<AppLoadingComponent>;
 
   constructor(public activityService: ActivityService, public router: Router) {
     this.activity = activityService.activity_loaded;

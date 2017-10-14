@@ -2,7 +2,7 @@ import { Component} from '@angular/core';
 import {UserService} from '../services/user.service';
 import {ActivityService} from '../services/activity.service';
 import {Router} from '@angular/router';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {AppLoadingComponent} from './appLoading.component';
 
 @Component({
@@ -16,7 +16,7 @@ export class ActivityAppsComponent {
   dialog: any;
 
   constructor(public activityService: ActivityService, public router: Router,
-              dialog: MdDialog) {
+              dialog: MatDialog) {
     this.dialog = dialog;
   }
 

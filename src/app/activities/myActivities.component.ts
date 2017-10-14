@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../services/activity.service';
 import {Router} from '@angular/router';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {UserService} from '../services/user.service';
 import {DialogConfirmationComponent} from './dialogConfirmation.component';
 
@@ -18,7 +18,7 @@ export class MyActivitiesComponent {
   constructor(public user: UserService,
               public activityService: ActivityService,
               public router: Router,
-              dialog: MdDialog) {
+              dialog: MatDialog) {
     this.dialog = dialog;
     console.log(user);
   }
