@@ -26,10 +26,10 @@
   </mat-toolbar>
 
   <mat-menu x-position="before" #menu="mdMenu">
-    <button mat-menu-item routerLink="/activities" [mdMenuTriggerFor]="menu" *ngIf="userService.loggedIn">Mes
+    <button mat-menu-item routerLink="/activities" [mat-menu-trigger-for]="menu" *ngIf="userService.loggedIn">Mes
       activités
     </button>
-    <button mat-menu-item routerLink="/" [mdMenuTriggerFor]="menu" *ngIf="userService.loggedIn">Déconnexion</button>
+    <button mat-menu-item routerLink="/" [mat-menu-trigger-for]="menu" *ngIf="userService.loggedIn">Déconnexion</button>
   </mat-menu>
 
   <router-outlet></router-outlet>
