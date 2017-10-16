@@ -40,6 +40,7 @@ import {ActivityViewComponent} from './activities/activity-edition/activityView.
 import {ActivityDescriptionEditComponent} from './activities/activity-edition/activityDescriptionEdit.component';
 import {DialogConfirmationComponent} from './activities/dialogConfirmation.component';
 import {OrderBy} from './external/orderBy';
+import {ActivityRessourcesComponent} from './activities/activity-edition/activityRessources.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -60,6 +61,7 @@ import {OrderBy} from './external/orderBy';
     ActivityNameEditComponent,
     ActivityDescriptionEditComponent,
     ActivitySequenceEditComponent,
+    ActivityRessourcesComponent,
     DialogConfirmationComponent,
     MenuComponent,
     OrderBy],

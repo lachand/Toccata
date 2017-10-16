@@ -60,8 +60,18 @@ export class RessourcesService {
     });
   }
 
-  createRessource(ressource) {
-    this.ressources_db.post(ressource).then((response) => {
+  createRessource(ressource, activityId) {
+    const ressourceToAdd = {
+      'name': 'ressource.name',
+      'activity': activityId,
+      '_attachments': {
+        'filename': {
+          'content_type': ressource.type,
+          'data': ressource
+        }
+      }
+    };
+    this.ressources_db.post(ressourceToAdd).then((response) => {
       return true;
     }).catch(function (err) {
       console.log(err);

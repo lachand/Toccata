@@ -1,0 +1,11 @@
+<script src="../../../main.ts"></script>
+<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<div layout="row">
+  <mat-nav-list>
+    <mat-list-item *ngIf="user.fonction === 'Enseignant' && edit===true" (click)="newRessource()">
+      <mat-icon mat-list-icon>add_circle</mat-icon>
+      <input type="file" id="hiddenfile" style="display:none" (change)="uploadRessource()"/>
+      <p>Nouvelle ressource</p>
+    </mat-list-item>
+  </mat-nav-list>
+</div>

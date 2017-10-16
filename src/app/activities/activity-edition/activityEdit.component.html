@@ -17,6 +17,15 @@
         <div>
           <mat-card class="flex-card">
             <mat-card-header>
+              <h3 mat-line>Ressources</h3>
+            </mat-card-header>
+            <app-activity-ressources [edit]="true"></app-activity-ressources>
+          </mat-card>
+        </div>
+
+        <div>
+          <mat-card class="flex-card">
+            <mat-card-header>
               <h3 mat-line>Applications</h3>
             </mat-card-header>
             <app-activity-apps-edit [edit]="true"></app-activity-apps-edit>
