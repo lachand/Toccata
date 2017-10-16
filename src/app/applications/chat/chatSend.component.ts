@@ -48,7 +48,7 @@ export class ChatSendComponent implements OnInit {
   addMessage(): void {
     if (this.sendMessage.valid) {
       this.sendMessage.value.date = moment().format('x');
-      this.ressourcesService.createRessource(this.sendMessage.value);
+      //this.ressourcesService.createRessource(this.sendMessage.value);
       this.resetDefault();
     }
   }
