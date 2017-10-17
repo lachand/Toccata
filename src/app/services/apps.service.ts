@@ -51,9 +51,6 @@ export class AppsService {
           });
         resolve(this.apps[name]);
       }).catch(console.log.bind(console));
-      //this.apps_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-        //this.handleChange(change);
-      //});
     }).catch((error) => {
       console.log(error);
     });

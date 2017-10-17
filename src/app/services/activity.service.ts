@@ -4,6 +4,7 @@ import {UserService} from './user.service';
 import * as config from '../../variables';
 import PouchDB from 'pouchdb';
 import {AppsService} from './apps.service';
+import {RessourcesService} from "./ressources.service";
 
 @Injectable()
 export class ActivityService {
@@ -14,10 +15,12 @@ export class ActivityService {
   activity_loaded_child: any;
   user: any;
   apps: AppsService;
+  ressources: RessourcesService;
   @Output() changes = new EventEmitter();
 
   constructor(userService: UserService,
-              appsService: AppsService) {
+              appsService: AppsService,
+              ressourcesService: RessourcesService) {
     this.db = new PouchDB('activites');
     this.db_remote = new PouchDB(config.HOST + config.PORT + '/activites');
     const options = {
@@ -40,6 +43,7 @@ export class ActivityService {
     });
     this.user = userService;
     this.apps = appsService;
+    this.ressources = ressourcesService;
     this.activity_loaded = null;
     this.activity_loaded_child = [];
   }
@@ -83,7 +87,10 @@ export class ActivityService {
       })
         .then((result) => {
           this.activity_loaded = result;
-          this.apps.getApps(result._id)
+          return (this.ressources.getRessources(result._id))
+            .then(() => {
+              return this.apps.getApps(result._id);
+            })
             .then(() => {
               return this.user.getParticipants(result._id);
             })

@@ -14,11 +14,19 @@ import {RessourcesService} from '../../services/ressources.service';
 export class ActivityRessourcesComponent {
   dialog: any;
   @Input() edit: boolean;
+  image: RegExp;
+  text: RegExp;
+  video: RegExp;
+  audio: RegExp;
 
   constructor(public activityService: ActivityService, public router: Router,
               public user: UserService, dialog: MatDialog,
               public ressourcesService: RessourcesService) {
     this.dialog = dialog;
+    this.image = /image\/(?:.*)/i;
+    this.text = /text\/(?:.*)/i;
+    this.video = /video\/(?:.*)/i;
+    this.audio = /audio\/(?:.*)/i;
   }
 
   newRessource() {
