@@ -157,4 +157,8 @@ export class ResourcesService {
       }
     }
   }
+
+  getResourceData(resourceId: any, attachmentId: any) {
+    return this.resourcesDb.getAttachment(resourceId, attachmentId);
+  }
 }
