@@ -7,7 +7,7 @@ import PouchDB from 'pouchdb';
 export class UserService {
   loggedIn = false;
   db: any;
-  db_remote: any;
+  dbRemote: any;
   user: User;
   name: any;
   id: any;
@@ -23,14 +23,14 @@ export class UserService {
   constructor() {
     this.loggedIn = false;
     this.db = new PouchDB(config.HOST + config.PORT + '/users');
-    this.db_remote = new PouchDB(config.HOST + config.PORT + '/users');
+    this.dbRemote = new PouchDB(config.HOST + config.PORT + '/users');
     const options = {
       live: true,
       retry: true,
       continuous: true,
       timeout: 10000
     };
-    this.userSync = this.db.sync(this.db_remote, options);
+    this.userSync = this.db.sync(this.dbRemote, options);
     this.getAllusers();
   }
 
@@ -70,42 +70,6 @@ export class UserService {
         ).catch(console.log.bind(console));
         }
       );
-  }
-
-  getName(userId) {
-    return new Promise((resolve, reject) => {
-      this.db.getUser(userId, function (err, response) {
-        if (err) {
-          if (err.name === 'not_found') {
-            console.log('user not found');
-            reject(err);
-          } else {
-            console.log(err);
-            reject(err);
-          }
-        }}).then( (res) => {
-          resolve(res['name']);
-        }
-      ).catch(console.log.bind(console));
-    });
-  }
-
-  getActivities() {
-    return new Promise((resolve, reject) => {
-      this.db.getUser(this.name, function (err, response) {
-        if (err) {
-          if (err.name === 'not_found') {
-            console.log('user not found');
-            reject(err);
-          } else {
-            console.log(err);
-            reject(err);
-          }
-        }}).then( (res) => {
-          resolve(res['activites']);
-        }
-      ).catch(console.log.bind(console));
-    });
   }
 
   getAllusers() {
@@ -152,8 +116,8 @@ export class UserService {
 
   remove_activity(activityId) {
     return new Promise( resolve => {
-      let usersToChange = [];
-      for (let user of this.allUsers) {
+      const usersToChange = [];
+      for (const user of this.allUsers) {
         user.activites.splice(user.activites.indexOf(activityId), 1);
         usersToChange.push(user);
       }
@@ -169,7 +133,9 @@ export class UserService {
       console.log(userSelected);
       userSelected.activites[activityId] = {'status' : 'paused'};
       console.log(userSelected.activites);
-      this.db.put(userSelected).thne(result => {console.log('result : ',result);});
+      this.db.put(userSelected).thne(result => {
+        console.log('result : ', result);
+      });
     });
   }
 
@@ -230,7 +196,7 @@ export class UserService {
 
   setActivityStatusByTeacher(activityId, status) {
     return new Promise( (resolve, reject) => {
-      let users = [];
+      const users = [];
       this.db.query('byActivity/by-activity',
         {startkey: activityId, endkey: activityId})
         .then(result => {

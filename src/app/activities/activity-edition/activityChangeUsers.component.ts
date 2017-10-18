@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialogRef} from '@angular/material';
@@ -17,19 +17,16 @@ export class ActivityChangeUsersComponent {
 
   constructor(public activityService: ActivityService, public router: Router) {
     this.userChecked = [];
-    this.userCheckedInitially = []
-    for (let user of this.activityService.user.allUsers) {
-      if (this.getIndexOf(user.activites, this.activityService.activity_loaded._id) !== -1) {
-        console.log("yes");
+    this.userCheckedInitially = [];
+    for (const user of this.activityService.user.allUsers) {
+      if (this.getIndexOf(user.activites, this.activityService.activityLoaded._id) !== -1) {
         this.userChecked.push({'user': user, 'checked': true});
         this.userCheckedInitially.push({'user': user, 'checked': true});
       } else {
-        console.log("no");
         this.userChecked.push({'user': user, 'checked': false});
         this.userCheckedInitially.push({'user': user, 'checked': false});
       }
     }
-    console.log(this.userChecked);
   }
 
   getIndexOf(table, id) {
@@ -44,10 +41,10 @@ export class ActivityChangeUsersComponent {
   reloadUsers() {
     return this.activityService.user.getAllusers().then(() => {
       this.userChecked = [];
-      this.userCheckedInitially = []
+      this.userCheckedInitially = [];
       for (const user of this.activityService.user.allUsers) {
-        console.log(user.activites.indexOf(this.activityService.activity_loaded._id));
-        if (user.activites.indexOf(this.activityService.activity_loaded._id) !== -1) {
+        console.log(user.activites.indexOf(this.activityService.activityLoaded._id));
+        if (user.activites.indexOf(this.activityService.activityLoaded._id) !== -1) {
           this.userChecked.push({'user': user, 'checked': true});
           this.userCheckedInitially.push({'user': user, 'checked': true});
         } else {
@@ -62,25 +59,25 @@ export class ActivityChangeUsersComponent {
     this.usersToChange = [];
     for (let i = 0; i < this.userChecked.length; i++) {
       if (this.userChecked[i].checked !== this.userCheckedInitially[i].checked) {
-        let user = this.userChecked[i].user;
+        const user = this.userChecked[i].user;
         if (this.userChecked[i].checked) {
           user.activites.push({
-            'id' : this.activityService.activity_loaded._id,
+            'id': this.activityService.activityLoaded._id,
             'status' : 'paused'});
-          for (const activite of this.activityService.activity_loaded_child){
+          for (const activite of this.activityService.activityLoadedChild) {
             user.activites.push({
               'id' : activite._id,
               'status' : 'paused'});
             activite.participants.push(user._id);
           }
-          this.activityService.activity_loaded.participants.push(user._id);
+          this.activityService.activityLoaded.participants.push(user._id);
         } else {
-          this.activityService.activity_loaded.participants.splice(this.activityService.activity_loaded.participants.indexOf(user._id),1);
-          user.activites.splice(user.activites.indexOf(this.activityService.activity_loaded._id), 1);
-          for (const activite of this.activityService.activity_loaded_child){
+          this.activityService.activityLoaded.participants.splice(this.activityService.activityLoaded.participants.indexOf(user._id), 1);
+          user.activites.splice(user.activites.indexOf(this.activityService.activityLoaded._id), 1);
+          for (const activite of this.activityService.activityLoadedChild) {
             user.activites.splice(user.activites.indexOf(activite._id), 1);
             if (activite.participants != null) {
-              activite.participants.splice(activite.participants.indexOf(user._id),1);
+              activite.participants.splice(activite.participants.indexOf(user._id), 1);
             }
           }
         }
@@ -88,8 +85,8 @@ export class ActivityChangeUsersComponent {
       }
     }
     this.activityService.user.db.bulkDocs(this.usersToChange).then( res2 => {
-      this.activityService.db.put(this.activityService.activity_loaded).then( res3 => {
-        this.activityService.db.bulkDocs(this.activityService.activity_loaded_child).then( res4 => {
+      this.activityService.db.put(this.activityService.activityLoaded).then(res3 => {
+        this.activityService.db.bulkDocs(this.activityService.activityLoadedChild).then(res4 => {
           this.reloadUsers().then( () => this.dialogRef.close());
 
         });

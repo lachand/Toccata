@@ -3,7 +3,7 @@ import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {ActivityChangeUsersComponent} from './activityChangeUsers.component';
 import {MatDialog} from '@angular/material';
-import {UserService} from "../../services/user.service";
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-activity-participants-edit',

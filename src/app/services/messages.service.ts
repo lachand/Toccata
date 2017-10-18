@@ -4,17 +4,16 @@ import { Message } from '../../models/message.model';
 import {EventEmitter, Output} from '@angular/core';
 
 export class MessagesService {
-  messages_db: any;
-  messages_db_remote: any;
+  messagesDb: any;
+  messagesDbRemote: any;
   messages: Array<Message>;
 
   @Output()
   change = new EventEmitter();
 
   constructor() {
-    //this.messages_db = new PouchDB('messages');
-    this.messages_db = new PouchDB(config.HOST + config.PORT + '/messages');
-    this.messages_db_remote = config.HOST + config.PORT + '/messages';
+    this.messagesDb = new PouchDB(config.HOST + config.PORT + '/messages');
+    this.messagesDbRemote = config.HOST + config.PORT + '/messages';
     const options = {
       live: true,
       retry: true,
@@ -28,7 +27,7 @@ export class MessagesService {
       return Promise.resolve(this.messages);
     }
     return new Promise(resolve => {
-      this.messages_db.allDocs({
+      this.messagesDb.allDocs({
         include_docs: true
       }).then((result) => {
         this.messages = [];
@@ -36,7 +35,7 @@ export class MessagesService {
           this.messages.push(row.doc);
         });
         resolve(this.messages);
-        this.messages_db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
+        this.messagesDb.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
           this.handleChange(change);
         });
       }).catch((error) => {
@@ -46,7 +45,7 @@ export class MessagesService {
   }
 
   createMessage(message: Message) {
-    this.messages_db.post(message).then((response) => {
+    this.messagesDb.post(message).then((response) => {
       return true;
     }).catch(function (err) {
       console.log(err);
@@ -59,7 +58,7 @@ export class MessagesService {
   }
 
   deleteMessage(message: Message) {
-    this.messages_db.remove(message).then((response) => {
+    this.messagesDb.remove(message).then((response) => {
       return true;
     }).catch(function (err) {
       console.log(err);

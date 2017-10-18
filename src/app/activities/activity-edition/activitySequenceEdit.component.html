@@ -1,7 +1,8 @@
 <script src="../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
-  <div *ngFor="let activity of activityService.activity_loaded_child | orderBy : ['+position']" fxFlex="98%" class="flex-card">
+  <div *ngFor="let activity of activityService.activityLoadedChild | orderBy : ['+position']" fxFlex="98%"
+       class="flex-card">
     <mat-card class="activity-card" (click)="view_or_edit(activity._id)">
       <mat-card-header>
         <div class="header-card-actions">

@@ -9,7 +9,7 @@
       <mat-card-header>
         <h3 mat-line>Description</h3>
       </mat-card-header>
-      <div [innerHTML]="activityService.activity_loaded.description"></div>
+      <div [innerHTML]="activityService.activityLoaded.description"></div>
     </mat-card>
   </div>
 
@@ -31,7 +31,7 @@
     </mat-card>
   </div>
 
-  <div fxFlex="90%" class="flex-card" *ngIf="activityService.activity_loaded.type ==='Main'">
+  <div fxFlex="90%" class="flex-card" *ngIf="activityService.activityLoaded.type ==='Main'">
     <mat-card>
       <app-activity-participants-edit [edit]="false"></app-activity-participants-edit>
     </mat-card>

@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import { FormGroup, FormBuilder} from '@angular/forms';
 import {UserService} from '../../services/user.service';
-import {RessourcesService} from '../../services/ressources.service';
+import {ResourcesService} from '../../services/resources.service';
 
 @Component({
   selector: 'app-chat-send',
@@ -19,7 +19,7 @@ export class ChatSendComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     public user: UserService,
-    public ressourcesService: RessourcesService
+    public resourcesService: ResourcesService
   ) {}
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class ChatSendComponent implements OnInit {
   addMessage(): void {
     if (this.sendMessage.valid) {
       this.sendMessage.value.date = moment().format('x');
-      //this.ressourcesService.createRessource(this.sendMessage.value);
+      //this.resourcesService.createResource(this.sendMessage.value);
       this.resetDefault();
     }
   }

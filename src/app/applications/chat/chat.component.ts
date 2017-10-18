@@ -1,8 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {UserService} from '../../services/user.service';
-import {RessourcesService} from 'app/services/ressources.service';
-import {ActivityService} from '../../services/activity.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ResourcesService} from 'app/services/resources.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -14,14 +13,14 @@ export class ChatComponent {
 
   @Input() chatId;
 
-  constructor(public ressourcesServices: RessourcesService,
+  constructor(public resourcesServices: ResourcesService,
               public user: UserService,
               public route: ActivatedRoute) {
     this.route.params.subscribe( result => {
       this.chatId = result.id;
       this.changeChat();
     });
-    this.ressourcesServices.getRessources({type: 'chat', id: this.chatId}).then( res => {
+    this.resourcesServices.getResources({type: 'chat', id: this.chatId}).then(res => {
       this.messages = res;
       this.messages.sort(function(a, b){return a.date - b.date; });
       for (let i = 0; i < this.messages.length; i++) {
@@ -31,7 +30,7 @@ export class ChatComponent {
   }
 
   changeChat() {
-    this.ressourcesServices.getRessources({type: 'chat', id: this.chatId}).then( res => {
+    this.resourcesServices.getResources({type: 'chat', id: this.chatId}).then(res => {
       this.messages = res;
       this.messages.sort(function(a, b){return a.date - b.date; });
       for (let i = 0; i < this.messages.length; i++) {

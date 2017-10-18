@@ -23,7 +23,7 @@ import {SigninComponent} from './login-signin/signin.component';
 import {MyActivitiesComponent} from './activities/myActivities.component';
 import {ActivityAppsComponent} from './activities/activityApps.component';
 import {ActivityService} from 'app/services/activity.service';
-import {RessourcesService} from './services/ressources.service';
+import {ResourcesService} from './services/resources.service';
 import {AppsService} from './services/apps.service';
 import {ExternalAppComponent} from 'app/applications/external/externalApp.component';
 import {AppLoadingComponent} from './activities/appLoading.component';
@@ -40,7 +40,7 @@ import {ActivityViewComponent} from './activities/activity-edition/activityView.
 import {ActivityDescriptionEditComponent} from './activities/activity-edition/activityDescriptionEdit.component';
 import {DialogConfirmationComponent} from './activities/dialogConfirmation.component';
 import {OrderBy} from './external/orderBy';
-import {ActivityRessourcesComponent} from './activities/activity-edition/activityRessources.component';
+import {ActivityResourcesComponent} from './activities/activity-edition/activityResources.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -61,7 +61,7 @@ import {ActivityRessourcesComponent} from './activities/activity-edition/activit
     ActivityNameEditComponent,
     ActivityDescriptionEditComponent,
     ActivitySequenceEditComponent,
-    ActivityRessourcesComponent,
+    ActivityResourcesComponent,
     DialogConfirmationComponent,
     MenuComponent,
     OrderBy],
@@ -91,7 +91,7 @@ import {ActivityRessourcesComponent} from './activities/activity-edition/activit
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
-  providers: [UserService, ActivityService, RessourcesService, LoggedInGuard, AppsService],
+  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

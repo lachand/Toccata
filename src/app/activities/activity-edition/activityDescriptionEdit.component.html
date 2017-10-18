@@ -5,7 +5,7 @@
 </mat-card-header>
 
 <div *ngIf="!descriptionEdition" class="name-edition">
-  <div (dblclick)="switch()" [innerHTML]="activityService.activity_loaded.description"></div>
+  <div (dblclick)="switch()" [innerHTML]="activityService.activityLoaded.description"></div>
 </div>
 
 <div *ngIf="descriptionEdition" class="name-edition">

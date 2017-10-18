@@ -15,7 +15,6 @@ export class ActivitySequenceEditComponent {
   constructor(public activityService: ActivityService,
               public userService: UserService,
               public router: Router) {
-    console.log(this.activityService.activity_loaded_child);
   }
 
   show_subactivity(activityId) {
@@ -31,10 +30,13 @@ export class ActivitySequenceEditComponent {
   }
 
   new_subactivity() {
-    this.activityService.createSubActivity(this.activityService.activity_loaded._id).then( newActivity => {
+    this.activityService.createSubActivity(this.activityService.activityLoaded._id).then(newActivity => {
       this.userService.db.query('byActivity/by-activity',
-        { startkey: this.activityService.activity_loaded._id, endkey: this.activityService.activity_loaded._id}).then( participants => {
-          let users = [];
+        {
+          startkey: this.activityService.activityLoaded._id,
+          endkey: this.activityService.activityLoaded._id
+        }).then(participants => {
+        const users = [];
           participants.rows.map((row) => {
             row.value.activites.push(newActivity['id']);
             users.push(row.value);

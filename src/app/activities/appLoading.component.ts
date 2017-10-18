@@ -14,7 +14,7 @@ export class AppLoadingComponent {
   dialogRef: MatDialogRef<AppLoadingComponent>;
 
   constructor(public activityService: ActivityService, public router: Router) {
-    this.activity = activityService.activity_loaded;
+    this.activity = activityService.activityLoaded;
   }
 
   loadApp() {

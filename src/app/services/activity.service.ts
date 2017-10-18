@@ -1,22 +1,22 @@
-import {ChangeDetectorRef, EventEmitter, Injectable, Output} from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {UserService} from './user.service';
 
 import * as config from '../../variables';
 import PouchDB from 'pouchdb';
 import {AppsService} from './apps.service';
-import {RessourcesService} from "./ressources.service";
+import {ResourcesService} from './resources.service';
 
 @Injectable()
 export class ActivityService {
   db: any;
-  db_remote: any;
-  activity_loaded: any;
-  activities_list: Array<any>;
-  activity_loaded_child: any;
+  dbRemote: any;
+  activityLoaded: any;
+  activitiesList: Array<any>;
+  activityLoadedChild: any;
   user: any;
 
   apps: AppsService;
-  ressources: RessourcesService;
+  resources: ResourcesService;
 
   activitySync: any;
 
@@ -24,16 +24,16 @@ export class ActivityService {
 
   constructor(userService: UserService,
               appsService: AppsService,
-              ressourcesService: RessourcesService) {
+              resourcesService: ResourcesService) {
     this.db = new PouchDB('activites');
-    this.db_remote = new PouchDB(config.HOST + config.PORT + '/activites');
+    this.dbRemote = new PouchDB(config.HOST + config.PORT + '/activites');
     const options = {
       live: true,
       retry: true,
       continuous: true,
       timeout: 10000
     };
-    this.activitySync = this.db.sync(this.db_remote, options);
+    this.activitySync = this.db.sync(this.dbRemote, options);
     this.db.changes({
       since: 'now',
       live: true,
@@ -48,9 +48,9 @@ export class ActivityService {
     });
     this.user = userService;
     this.apps = appsService;
-    this.ressources = ressourcesService;
-    this.activity_loaded = null;
-    this.activity_loaded_child = [];
+    this.resources = resourcesService;
+    this.activityLoaded = null;
+    this.activityLoadedChild = [];
   }
 
   getIndexOf(document, array) {
@@ -66,33 +66,33 @@ export class ActivityService {
 
   public getActivities() {
     const name = this.user.id;
-    if (this.activities_list && this.activities_list.length > 0) {
-      return Promise.resolve(this.activities_list);
+    if (this.activitiesList && this.activitiesList.length > 0) {
+      return Promise.resolve(this.activitiesList);
     }
     return new Promise(resolve => {
       this.db.query('byParticipant/by-participant',
         {startkey: name, endkey: name})
         .then(result => {
-          this.activities_list = [];
+          this.activitiesList = [];
           result.rows.map((row) => {
-            this.activities_list.push(row.value);
+            this.activitiesList.push(row.value);
           });
-          resolve(this.activities_list);
+          resolve(this.activitiesList);
         }).catch(console.log.bind(console));
     }).catch(console.log.bind(console));
   }
 
   public load_activity(activity_id) {
-    if (this.activity_loaded && this.activity_loaded._id === activity_id) {
-      return Promise.resolve(this.activity_loaded);
+    if (this.activityLoaded && this.activityLoaded._id === activity_id) {
+      return Promise.resolve(this.activityLoaded);
     }
     return new Promise(resolve => {
       this.db.get(activity_id, {
         include_docs: true
       })
         .then((result) => {
-          this.activity_loaded = result;
-          return (this.ressources.getRessources(result._id))
+          this.activityLoaded = result;
+          return (this.resources.getResources(result._id))
             .then(() => {
               return this.apps.getApps(result._id);
             })
@@ -104,10 +104,10 @@ export class ActivityService {
                 {startkey: result._id, endkey: result._id});
             })
             .then(activityChilds => {
-              this.activity_loaded_child = [];
+              this.activityLoadedChild = [];
               activityChilds.rows.map((row) => {
-                this.activity_loaded_child.push(row.value);
-                resolve(this.activity_loaded);
+                this.activityLoadedChild.push(row.value);
+                resolve(this.activityLoaded);
               });
             });
         });
@@ -115,9 +115,9 @@ export class ActivityService {
   }
 
   public unloadActivity() {
-    this.activity_loaded = null;
-    this.activities_list = [];
-    this.activity_loaded_child = [];
+    this.activityLoaded = null;
+    this.activitiesList = [];
+    this.activityLoadedChild = [];
     this.apps.logout();
   }
 
@@ -247,7 +247,7 @@ private handleChange(change) {
   if (!document._deleted) {
     let changedDoc = null;
     let changedIndex = null;
-    this.activities_list.forEach((doc, index) => {
+    this.activitiesList.forEach((doc, index) => {
       if (doc._id === document._id) {
         changedDoc = doc;
         changedIndex = index;
@@ -255,35 +255,35 @@ private handleChange(change) {
     });
     if (changedDoc) {
       if (document.participants.indexOf(this.user.id) === -1) {
-        this.activities_list.splice(changedIndex, 1);
+        this.activitiesList.splice(changedIndex, 1);
       } else {
-        this.activities_list[changedIndex] = document;
-        if (document._id === this.activity_loaded._id) {
-          this.activity_loaded = document;
+        this.activitiesList[changedIndex] = document;
+        if (document._id === this.activityLoaded._id) {
+          this.activityLoaded = document;
         }
         this.changes.emit({changeType: 'modification', value: document});
       }
     } else {
       if (document.participants.indexOf(this.user.id) !== -1) {
         if (document.type === 'Main') {
-          this.activities_list.push(document);
-        } else if (document._id !== this.activity_loaded._id) {
-          const index = this.getIndexOf(document, this.activity_loaded_child);
+          this.activitiesList.push(document);
+        } else if (document._id !== this.activityLoaded._id) {
+          const index = this.getIndexOf(document, this.activityLoadedChild);
           if (index === -1) {
-            this.activity_loaded_child.push(document);
+            this.activityLoadedChild.push(document);
           } else {
-            this.activity_loaded_child[index] = document;
+            this.activityLoadedChild[index] = document;
           }
         } else {
-          this.activity_loaded = document;
+          this.activityLoaded = document;
           this.changes.emit({changeType: 'modification', value: document});
         }
         this.changes.emit({changeType: 'create', value: document});
       }
     }
   } else {
-    const index = this.getIndexOf(document, this.activities_list);
-    this.activities_list.splice(index, 1);
+    const index = this.getIndexOf(document, this.activitiesList);
+    this.activitiesList.splice(index, 1);
     this.changes.emit({changeType: 'delete', value: index});
   }
 }

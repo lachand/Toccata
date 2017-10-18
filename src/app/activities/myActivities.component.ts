@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivityService} from '../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -46,7 +46,7 @@ export class MyActivitiesComponent {
       'name': 'Nouvelle activité',
       'participants': [this.user.id],
       'type': 'Main',
-      'description': "Il n'y a aucune description",
+      'description': 'Il n\'y a aucune description',
       'child': [],
       'createdAt': Date.now()} ).then(res => {
       console.log(res['id']);

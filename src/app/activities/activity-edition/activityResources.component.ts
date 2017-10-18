@@ -3,15 +3,15 @@ import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
-import {RessourcesService} from '../../services/ressources.service';
+import {ResourcesService} from '../../services/resources.service';
 
 @Component({
-  selector: 'app-activity-ressources',
-  templateUrl: './activityRessources.component.html',
-  styleUrls: ['./activityRessources.component.scss']
+  selector: 'app-activity-resources',
+  templateUrl: './activityResources.component.html',
+  styleUrls: ['./activityResources.component.scss']
 })
 
-export class ActivityRessourcesComponent {
+export class ActivityResourcesComponent {
   dialog: any;
   @Input() edit: boolean;
   image: RegExp;
@@ -21,7 +21,7 @@ export class ActivityRessourcesComponent {
 
   constructor(public activityService: ActivityService, public router: Router,
               public user: UserService, dialog: MatDialog,
-              public ressourcesService: RessourcesService) {
+              public resourcesService: ResourcesService) {
     this.dialog = dialog;
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
@@ -29,14 +29,14 @@ export class ActivityRessourcesComponent {
     this.audio = /audio\/(?:.*)/i;
   }
 
-  newRessource() {
+  newResource() {
     document.getElementById('hiddenfile').click();
   }
 
-  uploadRessource() {
+  uploadResource() {
     const input = document.querySelector('input');
     const file = input.files[0];
-    this.ressourcesService.createRessource(file, this.activityService.activity_loaded._id);
+    this.resourcesService.createResource(file, this.activityService.activityLoaded._id);
   }
 
 }

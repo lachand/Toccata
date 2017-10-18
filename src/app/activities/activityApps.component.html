@@ -2,7 +2,7 @@
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div>
   <nav mat-tab-nav-bar>
-    <span *ngFor="let application of activityService.apps.apps[activityService.activity_loaded._id]">
+    <span *ngFor="let application of activityService.apps.apps[activityService.activityLoaded._id]">
     <a mat-tab-link class="tab"
        *ngIf="application.status === 'loaded'"
        [routerLink]="[{ outlets: { '../apps': [application.type, application._id] } }]"

@@ -6,7 +6,7 @@ import {MyActivitiesComponent} from './activities/myActivities.component';
 import {ActivityAppsComponent} from './activities/activityApps.component';
 import {ExternalAppComponent} from './applications/external/externalApp.component';
 import {ActivityEditComponent} from './activities/activity-edition/activityEdit.component';
-import {ActivityViewComponent} from "./activities/activity-edition/activityView.component";
+import {ActivityViewComponent} from './activities/activity-edition/activityView.component';
 
 export const routes = [
 //  { path: '', component: HomeComponent, pathMatch: 'full' },

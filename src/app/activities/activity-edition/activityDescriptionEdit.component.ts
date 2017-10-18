@@ -15,8 +15,8 @@ export class ActivityDescriptionEditComponent {
 
   constructor(public activityService: ActivityService) {
     this.descriptionEdition = false;
-    if (this.activityService.activity_loaded.description !== "Il n'y a aucune description") {
-      this.description = this.activityService.activity_loaded.description;
+    if (this.activityService.activityLoaded.description !== 'Il n\'y a aucune description') {
+      this.description = this.activityService.activityLoaded.description;
     }
     this.editorOptions = {
       toolbar: 'full',
@@ -47,7 +47,7 @@ export class ActivityDescriptionEditComponent {
   }
 
   changeTheDescription() {
-    this.activityService.db.get(this.activityService.activity_loaded._id).then( res => {
+    this.activityService.db.get(this.activityService.activityLoaded._id).then(res => {
       res.description = this.description;
       this.activityService.db.put(res).then(this.switch());
     });

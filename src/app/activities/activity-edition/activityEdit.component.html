@@ -19,7 +19,7 @@
             <mat-card-header>
               <h3 mat-line>Ressources</h3>
             </mat-card-header>
-            <app-activity-ressources [edit]="true"></app-activity-ressources>
+            <app-activity-resources [edit]="true"></app-activity-resources>
           </mat-card>
         </div>
 
@@ -32,7 +32,7 @@
           </mat-card>
         </div>
 
-        <div *ngIf="activityService.activity_loaded.type ==='Main'">
+        <div *ngIf="activityService.activityLoaded.type ==='Main'">
           <mat-card class="flex-card">
             <app-activity-participants-edit [edit]="true"></app-activity-participants-edit>
           </mat-card>

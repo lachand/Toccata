@@ -3,7 +3,7 @@
 <div layout="row" >
   <form (ngSubmit)="newApp()">
     <mat-nav-list>
-      <mat-list-item *ngFor="let app of activityService.apps.apps[activityService.activity_loaded._id]">
+      <mat-list-item *ngFor="let app of activityService.apps.apps[activityService.activityLoaded._id]">
         <mat-icon mat-list-icon>folder</mat-icon>
         <p mat-line> {{app.name}} </p>
       <div>

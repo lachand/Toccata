@@ -1,0 +1,20 @@
+<script src="../../../main.ts"></script>
+<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<div layout="row">
+  <mat-nav-list>
+
+    <mat-list-item *ngFor="let resource of resourcesService.resources[activityService.activityLoaded._id]">
+      <mat-icon mat-list-icon *ngIf="image.test(resource.type)">image</mat-icon>
+      <mat-icon mat-list-icon *ngIf="text.test(resource.type)">description</mat-icon>
+      <mat-icon mat-list-icon *ngIf="video.test(resource.type)">videocam</mat-icon>
+      <mat-icon mat-list-icon *ngIf="audio.test(resource.type)">audiotrack</mat-icon>
+      <p mat-line> {{resource.name}} </p>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="user.fonction === 'Enseignant' && edit===true" (click)="newResource()">
+      <mat-icon mat-list-icon>add_circle</mat-icon>
+      <input type="file" id="hiddenfile" style="display:none" (change)="uploadResource()"/>
+      <p mat-line>Nouvelle resource</p>
+    </mat-list-item>
+  </mat-nav-list>
+</div>

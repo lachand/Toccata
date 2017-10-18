@@ -13,8 +13,8 @@
     <span class="fill-remaining-space"></span>
     <div fxLayout="row" fxShow="false" fxShow.gt-xs>
       <button mat-menu-item routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
-      <button mat-menu-item [routerLink]="['/activity_apps', activityService.activity_loaded._id]"
-              *ngIf="userService.loggedIn && activityService.activity_loaded !== null">Activité en cours
+      <button mat-menu-item [routerLink]="['/activity_apps', activityService.activityLoaded._id]"
+              *ngIf="userService.loggedIn && activityService.activityLoaded !== null">Activité en cours
       </button>
       <button mat-menu-item (click)="logout()" routerLink="/" *ngIf="userService.loggedIn">Déconnexion</button>
     </div>

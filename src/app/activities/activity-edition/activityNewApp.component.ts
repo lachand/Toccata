@@ -20,7 +20,7 @@ import {MatDialogRef} from '@angular/material';
 
   constructor(public activityService: ActivityService, public router: Router,
               public formBuilder: FormBuilder) {
-    this.activity = activityService.activity_loaded;
+    this.activity = activityService.activityLoaded;
     this.formNewApp = this.formBuilder.group({
       appName: ['', Validators.required],
       applicationType: ['', Validators.required],
