@@ -7,6 +7,7 @@ export class AppsService {
   apps_db: any;
   apps_db_remote: any;
   apps: any;
+  appsSync: any;
 
   @Output()
   change = new EventEmitter();
@@ -17,9 +18,10 @@ export class AppsService {
     const options = {
       live: true,
       retry: true,
-      continuous: true
+      continuous: true,
+      timeout: 10000
     };
-    this.apps_db.sync(this.apps_db_remote, options);
+    this.appsSync = this.apps_db.sync(this.apps_db_remote, options);
     this.apps_db.changes({
       since: 'now',
       live: true,

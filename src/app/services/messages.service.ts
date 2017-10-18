@@ -18,7 +18,8 @@ export class MessagesService {
     const options = {
       live: true,
       retry: true,
-      continuous: true
+      continuous: true,
+      timeout: 10000
     };
 
   }

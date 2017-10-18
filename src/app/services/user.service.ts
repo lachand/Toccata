@@ -15,6 +15,7 @@ export class UserService {
   fonction: any;
   participants: any = null;
   allUsers: Array<any>;
+  userSync: any;
 
   @Output()
   change = new EventEmitter();
@@ -26,9 +27,10 @@ export class UserService {
     const options = {
       live: true,
       retry: true,
-      continuous: true
+      continuous: true,
+      timeout: 10000
     };
-    this.db.sync(this.db_remote, options);
+    this.userSync = this.db.sync(this.db_remote, options);
     this.getAllusers();
   }
 

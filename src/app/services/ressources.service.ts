@@ -7,6 +7,7 @@ export class RessourcesService {
   ressources_db_remote: any;
   ressources: any;
   temp_changes: Array<any>;
+  resourcesSync: any;
 
   @Output()
   change = new EventEmitter();
@@ -20,9 +21,10 @@ export class RessourcesService {
     const options = {
       live: true,
       retry: true,
-      continuous: true
+      continuous: true,
+      timeout: 10000
     };
-    this.ressources_db.sync(this.ressources_db_remote, options);
+    this.resourcesSync = this.ressources_db.sync(this.ressources_db_remote, options);
     this.ressources_db.changes({
       since: 'now',
       live: true,

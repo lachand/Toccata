@@ -14,8 +14,12 @@ export class ActivityService {
   activities_list: Array<any>;
   activity_loaded_child: any;
   user: any;
+
   apps: AppsService;
   ressources: RessourcesService;
+
+  activitySync: any;
+
   @Output() changes = new EventEmitter();
 
   constructor(userService: UserService,
@@ -26,9 +30,10 @@ export class ActivityService {
     const options = {
       live: true,
       retry: true,
-      continuous: true
+      continuous: true,
+      timeout: 10000
     };
-    this.db.sync(this.db_remote, options);
+    this.activitySync = this.db.sync(this.db_remote, options);
     this.db.changes({
       since: 'now',
       live: true,
