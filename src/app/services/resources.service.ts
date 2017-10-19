@@ -22,6 +22,8 @@ export class ResourcesService {
       live: true,
       retry: true,
       continuous: true,
+      timeout: false,
+      heartbeat: false,
       ajax: {timeout: 60000}
     };
     this.resourcesSync = this.resourcesDb.sync(this.resourcesDbRemote, options);

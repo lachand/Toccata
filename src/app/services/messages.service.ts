@@ -18,7 +18,9 @@ export class MessagesService {
       live: true,
       retry: true,
       continuous: true,
-      timeout: 10000
+      timeout: false,
+      heartbeat: false,
+      ajax: {timeout: 60000}
     };
 
   }

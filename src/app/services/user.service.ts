@@ -28,6 +28,8 @@ export class UserService {
       live: true,
       retry: true,
       continuous: true,
+      timeout: false,
+      heartbeat: false,
       ajax: {timeout: 60000}
     };
     this.userSync = this.db.sync(this.dbRemote, options);

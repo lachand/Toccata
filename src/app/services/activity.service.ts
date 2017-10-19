@@ -31,6 +31,8 @@ export class ActivityService {
       live: true,
       retry: true,
       continuous: true,
+      timeout: false,
+      heartbeat: false,
       ajax: {timeout: 60000}
     };
     this.activitySync = this.db.sync(this.dbRemote, options);
