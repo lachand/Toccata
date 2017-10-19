@@ -12,7 +12,7 @@ import {ResourcesService} from "../../services/resources.service";
 })
 
 export class ActivityResourceViewComponent {
-  private resourceUrl: any;
+  resourceUrl: any;
 
   constructor(public resourceService: ResourcesService) {
     this.showResource('f31e4433-e569-421d-a83b-cbcc85f5e178', 'logo.png');
