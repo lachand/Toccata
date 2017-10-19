@@ -33,7 +33,10 @@ export class ActivityService {
       continuous: true,
       timeout: false,
       heartbeat: false,
-      ajax: {timeout: 60000}
+      ajax: {
+        timeout: false,
+        hearbeat: false
+      }
     };
     this.activitySync = this.db.sync(this.dbRemote, options);
     this.db.changes({

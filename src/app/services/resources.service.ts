@@ -24,7 +24,10 @@ export class ResourcesService {
       continuous: true,
       timeout: false,
       heartbeat: false,
-      ajax: {timeout: 60000}
+      ajax: {
+        timeout: false,
+        hearbeat: false
+      }
     };
     this.resourcesSync = this.resourcesDb.sync(this.resourcesDbRemote, options);
     this.resourcesDb.changes({

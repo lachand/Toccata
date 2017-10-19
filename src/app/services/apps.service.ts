@@ -21,7 +21,10 @@ export class AppsService {
       continuous: true,
       timeout: false,
       heartbeat: false,
-      ajax: {timeout: 60000}
+      ajax: {
+        timeout: false,
+        hearbeat: false
+      }
     };
     this.appsSync = this.appsDb.sync(this.appsDbRemote, options);
     this.appsDb.changes({
