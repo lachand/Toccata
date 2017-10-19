@@ -8,7 +8,7 @@ export class UserService {
   loggedIn = false;
   db: any;
   dbRemote: any;
-  user: User;
+  user: any;
   name: any;
   id: any;
   avatar: any;
@@ -28,7 +28,7 @@ export class UserService {
       live: true,
       retry: true,
       continuous: true,
-      timeout: 10000
+      ajax: {timeout: 60000}
     };
     this.userSync = this.db.sync(this.dbRemote, options);
     this.getAllusers();

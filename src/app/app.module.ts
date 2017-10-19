@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import {
   MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
-  MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule
+  MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -42,6 +42,7 @@ import {DialogConfirmationComponent} from './activities/dialogConfirmation.compo
 import {OrderBy} from './external/orderBy';
 import {ActivityResourcesComponent} from './activities/activity-edition/activityResources.component';
 import {ActivityResourceViewComponent} from './activities/activity-edition/activityResourceView.component';
+import {SideNavMenuComponent} from './menu/sideNavMenu/sideNavMenu.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -66,6 +67,7 @@ import {ActivityResourceViewComponent} from './activities/activity-edition/activ
     ActivityResourceViewComponent,
     DialogConfirmationComponent,
     MenuComponent,
+    SideNavMenuComponent,
     OrderBy],
   imports: [
     BrowserModule,
@@ -88,6 +90,7 @@ import {ActivityResourceViewComponent} from './activities/activity-edition/activ
     MatButtonModule,
     MatListModule,
     MatIconModule,
+    MatSidenavModule,
     FlexLayoutModule,
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})

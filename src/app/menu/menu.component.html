@@ -11,26 +11,15 @@
     -->
 
     <span class="fill-remaining-space"></span>
-    <div fxLayout="row" fxShow="false" fxShow.gt-xs>
-      <button mat-menu-item routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
-      <button mat-menu-item [routerLink]="['/activity_apps', activityService.activityLoaded._id]"
-              *ngIf="userService.loggedIn && activityService.activityLoaded !== null">Activité en cours
-      </button>
-      <button mat-menu-item (click)="logout()" routerLink="/" *ngIf="userService.loggedIn">Déconnexion</button>
-    </div>
-    <button mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-xs *ngIf="userService.loggedIn">
-      <mat-icon>menu</mat-icon>
-    </button>
 
+    <button mat-button [matMenuTriggerFor]="menu" *ngIf="userService.loggedIn">Menu</button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
+      <button mat-menu-item (click)="logout()" routerLink="/" *ngIf="userService.loggedIn">Déconnexion</button>
+    </mat-menu>
 
   </mat-toolbar>
-
-  <mat-menu x-position="before" #menu="matMenu">
-    <button mat-menu-item routerLink="/activities" [mat-menu-trigger-for]="menu" *ngIf="userService.loggedIn">Mes
-      activités
-    </button>
-    <button mat-menu-item routerLink="/" [mat-menu-trigger-for]="menu" *ngIf="userService.loggedIn">Déconnexion</button>
-  </mat-menu>
 
   <router-outlet></router-outlet>
 
