@@ -43,3 +43,42 @@ app.use(function(req, res, next){
 app.listen(app.get('port'), function() {
   console.log('app running on port', app.get('port'));
 });
+
+
+// SuperLogin configuration :
+var express = require('express');
+var http = require('http');
+var bodyParser = require('body-parser');
+var logger = require('morgan');
+var SuperLogin = require('superlogin');
+
+var appSuperLogin = express();
+appSuperLogin.set('port', process.env.PORT || 3000);
+appSuperLogin.use(logger('dev'));
+appSuperLogin.use(bodyParser.json());
+appSuperLogin.use(bodyParser.urlencoded({extended: false}));
+
+var config = {
+  dbServer: {
+    protocol: 'http://',
+    host: '163.172.38.12:5984',
+    user: '',
+    password: '',
+    userDB: 'sl-users',
+    couchAuthDB: '_users'
+  },
+  mailer: {},
+  userDBs: {
+    defaultDBs: {
+      private: ['user']
+    }
+  }
+}
+
+// Initialize SuperLogin
+var superlogin = new SuperLogin(config);
+
+// Mount SuperLogin's routes to our app
+appSuperLogin.use('/auth', superlogin.router);
+
+http.createServer(appSuperLogin).listen(appSuperLogin.get('port'));

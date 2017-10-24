@@ -1,0 +1,21 @@
+<mat-card class="activity-card" (dblclick)="view_or_edit(activityId)">
+  <img mat-card-image src="http://163.172.38.12:5984/activites/{{activityId}}/{{activityInfos?.image}}"
+       alt="http://163.172.38.12:5984/{{activityId}}/{{activityInfos?.image}}">
+
+  <!--<div class="header-card-actions"><button mat-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
+-->
+
+  <h3 mat-line>{{activityInfos?.name}}</h3>
+  <div [innerHTML]="activityInfos?.description" class="activity-description"></div>
+
+        <mat-card-actions class="centered">
+          <mat-icon class="icon-huge" (click)="activity_change_status(activityId, 'started')">play_arrow</mat-icon>
+          <mat-icon class="icon-huge" (click)="activity_change_status(activityId, 'paused')">pause</mat-icon>
+        </mat-card-actions>
+
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode">
+        </mat-progress-bar>
+      </mat-card>

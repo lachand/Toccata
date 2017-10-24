@@ -36,9 +36,8 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.user.login(this.loginForm.value.username, this.loginForm.value.password).then( (result) => {
         if (this.user.isLoggedIn()) {
-          this.activityService.getActivities().then( res => {
-            console.log('debug');
-            console.log(this.router.navigate(['../activities']));
+          this.activityService.getUserActivities().then(res => {
+            this.router.navigate(['../activities']);
           });
         }
         }

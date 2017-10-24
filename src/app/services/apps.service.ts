@@ -38,7 +38,7 @@ export class AppsService {
     }).on('active', function (info) {
       // replication was resumed
     }).on('error', function (err) {
-      // totally unhandled error (shouldn't happen)
+      console.log('applications', err);
     });
     this.apps = {};
 

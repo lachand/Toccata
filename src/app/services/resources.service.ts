@@ -41,7 +41,7 @@ export class ResourcesService {
     }).on('active', function (info) {
       // replication was resumed
     }).on('error', function (err) {
-      // totally unhandled error (shouldn't happen)
+      console.log('resources', err);
     });
 
   }
@@ -84,7 +84,7 @@ export class ResourcesService {
         });
         console.log(this.resources);
         resolve(this.resources[name]);
-      }).catch(console.log.bind(console));
+      });
     }).catch((error) => {
       console.log(error);
     });

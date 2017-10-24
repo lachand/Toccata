@@ -2,11 +2,11 @@ import { LoginComponent } from './login-signin/login.component';
 import { ChatComponent } from './applications/chat/chat.component';
 import {LoggedInGuard} from './verifications/logged-in.guards';
 import {SigninComponent} from './login-signin/signin.component';
-import {MyActivitiesComponent} from './activities/myActivities.component';
-import {ActivityAppsComponent} from './activities/activityApps.component';
+import {MyActivitiesComponent} from './activities/myActivities/myActivities.component';
+import {ActivityAppsComponent} from './activities/activityApps/activityApps.component';
 import {ExternalAppComponent} from './applications/external/externalApp.component';
-import {ActivityEditComponent} from './activities/activity-edition/activityEdit.component';
-import {ActivityViewComponent} from './activities/activity-edition/activityView.component';
+import {ActivityEditComponent} from './activities/activity-edition/activityEdit/activityEdit.component';
+import {ActivityViewComponent} from './activities/activity-edition/activityView/activityView.component';
 
 export const routes = [
 //  { path: '', component: HomeComponent, pathMatch: 'full' },

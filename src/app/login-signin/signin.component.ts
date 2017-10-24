@@ -8,6 +8,7 @@ declare const require: any;
 PouchDB.plugin(require('pouchdb-authentication'));
 
 import { UserService } from '../services/user.service';
+import {Http, Headers} from '@angular/http';
 
 @Component({
   selector: 'app-signin',
@@ -19,8 +20,10 @@ export class SigninComponent implements OnInit {
   db: any;
   teacher: any;
 
-  constructor(public user: UserService, public router: Router,
-              public formBuilder: FormBuilder) {
+  constructor(public user: UserService,
+              public router: Router,
+              public formBuilder: FormBuilder,
+              public http: Http) {
     this.db = this.user.db;
   }
 
@@ -35,7 +38,23 @@ export class SigninComponent implements OnInit {
 
   signup(): void {
     if (this.signinForm.valid) {
-      this.db.signup(this.signinForm.value.username, this.signinForm.value.password, function (err, response) {
+
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+
+      const credential = {
+        username: this.signinForm.value.username,
+        password: this.signinForm.value.password
+      }
+
+      this.http.post('http://localhost:3000/auth/login', JSON.stringify(credential), {headers: headers})
+        .subscribe(res => {
+          console.log(res);
+        }, (err) => {
+          console.log(err);
+        });
+
+      /**this.db.signup(this.signinForm.value.username, this.signinForm.value.password, function (err, response) {
         if (err) {
           if (err.name === 'conflict') {
             console.log('user already exists, choose another username');
@@ -68,7 +87,7 @@ export class SigninComponent implements OnInit {
         ).then((res2) => {
           console.log(res2);
         });
-      });
+      });**/
     }
   }
 

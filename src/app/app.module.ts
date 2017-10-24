@@ -20,29 +20,29 @@ import { UserService } from './services/user.service';
 import { LoginComponent } from './login-signin/login.component';
 import {LoggedInGuard} from './verifications/logged-in.guards';
 import {SigninComponent} from './login-signin/signin.component';
-import {MyActivitiesComponent} from './activities/myActivities.component';
-import {ActivityAppsComponent} from './activities/activityApps.component';
+import {MyActivitiesComponent} from './activities/myActivities/myActivities.component';
+import {ActivityAppsComponent} from './activities/activityApps/activityApps.component';
 import {ActivityService} from 'app/services/activity.service';
 import {ResourcesService} from './services/resources.service';
 import {AppsService} from './services/apps.service';
 import {ExternalAppComponent} from 'app/applications/external/externalApp.component';
-import {AppLoadingComponent} from './activities/appLoading.component';
-import {ActivityEditComponent} from './activities/activity-edition/activityEdit.component';
-import {ActivityAppsEditComponent} from './activities/activity-edition/activityAppsEdit.component';
-import {ActivityNewAppComponent} from './activities/activity-edition/activityNewApp.component';
-import {ActivityParticipantsEditComponent} from './activities/activity-edition/activityParticipantsEdit.component';
+import {AppLoadingComponent} from './activities/appLoading/appLoading.component';
+import {ActivityEditComponent} from './activities/activity-edition/activityEdit/activityEdit.component';
+import {ActivityAppsEditComponent} from './activities/activity-edition/activityAppsEdit/activityAppsEdit.component';
+import {ActivityNewAppComponent} from './activities/activity-edition/activityNewApp/activityNewApp.component';
+import {ActivityParticipantsEditComponent} from './activities/activity-edition/activityParticipantsEdit/activityParticipantsEdit.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MenuComponent} from './menu/menu.component';
-import {ActivityChangeUsersComponent} from './activities/activity-edition/activityChangeUsers.component';
-import {ActivityNameEditComponent} from './activities/activity-edition/activityNameEdit.component';
-import {ActivitySequenceEditComponent} from './activities/activity-edition/activitySequenceEdit.component';
-import {ActivityViewComponent} from './activities/activity-edition/activityView.component';
-import {ActivityDescriptionEditComponent} from './activities/activity-edition/activityDescriptionEdit.component';
-import {DialogConfirmationComponent} from './activities/dialogConfirmation.component';
+import {ActivityChangeUsersComponent} from './activities/activity-edition/activityChangeUsers/activityChangeUsers.component';
+import {ActivityNameEditComponent} from './activities/activity-edition/activityNameEdit/activityNameEdit.component';
+import {ActivitySequenceEditComponent} from './activities/activity-edition/activitySequenceEdit/activitySequenceEdit.component';
+import {ActivityViewComponent} from './activities/activity-edition/activityView/activityView.component';
+import {ActivityDescriptionEditComponent} from './activities/activity-edition/activityDescriptionEdit/activityDescriptionEdit.component';
+import {DialogConfirmationComponent} from './dialogConfirmation/dialogConfirmation.component';
 import {OrderBy} from './external/orderBy';
-import {ActivityResourcesComponent} from './activities/activity-edition/activityResources.component';
-import {ActivityResourceViewComponent} from './activities/activity-edition/activityResourceView.component';
-import {SideNavMenuComponent} from './menu/sideNavMenu/sideNavMenu.component';
+import {ActivityResourcesComponent} from './activities/activity-edition/activityResources/activityResources.component';
+import {ActivityResourceViewComponent} from './activities/activity-edition/activityResourceView/activityResourceView.component';
+import {ActivityInfosComponent} from 'app/activities/activityInfos/activityInfos.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -64,10 +64,10 @@ import {SideNavMenuComponent} from './menu/sideNavMenu/sideNavMenu.component';
     ActivityDescriptionEditComponent,
     ActivitySequenceEditComponent,
     ActivityResourcesComponent,
+    ActivityInfosComponent,
     ActivityResourceViewComponent,
     DialogConfirmationComponent,
     MenuComponent,
-    SideNavMenuComponent,
     OrderBy],
   imports: [
     BrowserModule,
@@ -95,7 +95,7 @@ import {SideNavMenuComponent} from './menu/sideNavMenu/sideNavMenu.component';
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  entryComponents: [AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
+  entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
   providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService],
   bootstrap: [AppComponent]
 })

@@ -41,7 +41,7 @@ export class UserService {
 
   public login(username, password) {
     return new Promise((resolve, reject) => {
-      this.db.login(username, password, function (err, response) {
+        this.dbRemote.login(username, password, function (err, response) {
         if (err) {
           if (err.name === 'unauthorized') {
             console.log('name or password incorrect');
@@ -52,9 +52,10 @@ export class UserService {
           }
         }
       }).then((result) => {
+            console.log(result);
         this.loggedIn = result['ok'];
         console.log('logged');
-        this.db.getUser(username, function (err, response) {
+            this.dbRemote.getUser(username, function (err, response) {
           if (err) {
             if (err.name === 'not_found') {
               console.log('user not found');
@@ -72,7 +73,9 @@ export class UserService {
           resolve(this.loggedIn);
           });
           }
-        ).catch(console.log.bind(console));
+        ).catch(function (err) {
+          console.log(err);
+        });
         }
       );
   }
@@ -109,7 +112,7 @@ export class UserService {
           this.participants.push(row.value);
         });
         resolve(this.participants);
-      }).catch(console.log.bind(console));
+      });
       //this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
         //this.handleChangeParticipants(change);
         //this.handleChangeAllUsers(change);

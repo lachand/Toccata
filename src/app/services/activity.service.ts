@@ -14,6 +14,7 @@ export class ActivityService {
   activitiesList: Array<any>;
   activityLoadedChild: any;
   user: any;
+  userActivitiesListId: Array<any> = [];
 
   apps: AppsService;
   resources: ResourcesService;
@@ -42,14 +43,15 @@ export class ActivityService {
     this.db.changes({
       since: 'now',
       live: true,
-      include_docs: true }).on('change', change => {
+      include_docs: true
+    }).on('change', change => {
       this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
     }).on('active', function (info) {
       // replication was resumed
     }).on('error', function (err) {
-      // totally unhandled error (shouldn't happen)
+      console.log('activities', err);
     });
     this.user = userService;
     this.apps = appsService;
@@ -60,13 +62,44 @@ export class ActivityService {
 
   getIndexOf(document, array) {
     let i = 0;
-    for (const element of array){
+    for (const element of array) {
       if (element._id === document._id) {
         return i;
       }
       i = i + 1;
     }
     return -1;
+  }
+
+  public getUserActivities() {
+
+    const name = this.user.id;
+
+    if (this.userActivitiesListId.length > 0) {
+      return Promise.resolve(this.userActivitiesListId);
+    }
+    return new Promise(resolve => {
+      this.db.query('byParticipant/id-by-participant',
+        {startkey: name, endkey: name})
+        .then(result => {
+          result.rows.map((row) => {
+            this.userActivitiesListId.push(row.id);
+          });
+          resolve(this.userActivitiesListId);
+        }).catch(console.log.bind(console));
+    }).catch(console.log.bind(console));
+  }
+
+  public getActivityInfos(activityId) {
+    return new Promise(resolve => {
+      return this.db.get(activityId).then(activity => {
+        resolve({
+          name: activity.name,
+          description: activity.description,
+          image: activity.image
+        });
+      }).catch(console.log.bind(console));
+    });
   }
 
   public getActivities() {
@@ -151,11 +184,11 @@ export class ActivityService {
         };
         return this.db.post(subActivity);
       })
-        .then( response => {
+        .then(response => {
           newActivity = response;
           return this.db.get(parentId);
-      })
-        .then( parent => {
+        })
+        .then(parent => {
           console.log(parent);
           parent.child.push(newActivity.id);
           return this.db.put(parent);
@@ -192,19 +225,23 @@ export class ActivityService {
           res._deleted = true;
           deletedActivity = res;
           return this.db.query('byParent/by-parent',
-          { startkey: res._id, endkey: res._id}); })
-        .then( activityChilds => {
+            {startkey: res._id, endkey: res._id});
+        })
+        .then(activityChilds => {
           activityChilds.rows.map((row) => {
             childs.push(row.value);
           });
-          return this.user.remove_activity(activityId); })
+          return this.user.remove_activity(activityId);
+        })
         .then(res1 => {
-          return this.apps.remove_activity(activityId); })
+          return this.apps.remove_activity(activityId);
+        })
         .then(res2 => {
-          return this.db.put(deletedActivity); })
+          return this.db.put(deletedActivity);
+        })
         .then(activityDeleted => {
           if (childs.length > 0) {
-            return Promise.all(childs.map( (child) => {
+            return Promise.all(childs.map((child) => {
               return this.delete_activity(child._id).then(finalRes => {
                 resolve(finalRes);
               });
@@ -247,9 +284,39 @@ export class ActivityService {
     this.user.logout();
   }
 
-private handleChange(change) {
-  const document = change.doc;
-  if (!document._deleted) {
+  private handleChange(change) {
+    console.log(change);
+    const document = change.doc;
+    if (!document._deleted) {
+      if (document.participants.indexOf(this.user.id) === -1) {
+        console.log("activité supprimée");
+      } else {
+        if (this.activityLoaded && document._id === this.activityLoaded._id) {
+          this.activityLoaded = document;
+          console.log('modificationLoaded');
+          this.changes.emit({changeType: 'modificationLoaded', value: document});
+        } else {
+          if (this.userActivitiesListId.indexOf(document._id) === -1) {
+            if (document.participants.indexOf(this.user.id) !== -1) {
+              if (document.type === 'Main') {
+                this.userActivitiesListId.push(document._id);
+              }
+              console.log('creation');
+              this.changes.emit({changeType: 'create', value: document});
+            }
+          } else {
+            console.log('modification');
+            this.changes.emit({changeType: 'modification', valude: document});
+          }
+        }
+      }
+
+    }
+  }
+
+}
+
+/**if (!document._deleted) {
     let changedDoc = null;
     let changedIndex = null;
     this.activitiesList.forEach((doc, index) => {
@@ -290,7 +357,4 @@ private handleChange(change) {
     const index = this.getIndexOf(document, this.activitiesList);
     this.activitiesList.splice(index, 1);
     this.changes.emit({changeType: 'delete', value: index});
-  }
-}
-
-}
+  }**/
