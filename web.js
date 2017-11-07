@@ -44,7 +44,7 @@ app.listen(app.get('port'), function() {
   console.log('app running on port', app.get('port'));
 });
 
-
+/**
 // SuperLogin configuration :
 var express = require('express');
 var http = require('http');
@@ -82,3 +82,4 @@ var superlogin = new SuperLogin(config);
 appSuperLogin.use('/auth', superlogin.router);
 
 http.createServer(appSuperLogin).listen(appSuperLogin.get('port'));
+ **/
