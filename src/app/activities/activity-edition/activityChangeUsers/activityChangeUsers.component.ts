@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialogRef} from '@angular/material';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'app-activity-change-users',
@@ -15,18 +16,25 @@ export class ActivityChangeUsersComponent {
   userCheckedInitially: Array<any>;
   usersToChange: Array<any>;
 
-  constructor(public activityService: ActivityService, public router: Router) {
+  constructor(public activityService: ActivityService, public router: Router,
+              public userService: UserService) {
     this.userChecked = [];
     this.userCheckedInitially = [];
-    for (const user of this.activityService.user.allUsers) {
-      if (this.getIndexOf(user.activites, this.activityService.activityLoaded._id) !== -1) {
-        this.userChecked.push({'user': user, 'checked': true});
-        this.userCheckedInitially.push({'user': user, 'checked': true});
-      } else {
-        this.userChecked.push({'user': user, 'checked': false});
-        this.userCheckedInitially.push({'user': user, 'checked': false});
+    this.userService.getAllUsers().then((allUsers: Array<any>) => {
+        this.userService.getParticipants(this.activityService.activityLoaded._id).then((participants: Array<any>) => {
+          console.log(allUsers, participants);
+          for (const user of allUsers) {
+            if (participants.includes(user)) {
+              this.userChecked.push({'user': user, 'checked': true});
+              this.userCheckedInitially.push({'user': user, 'checked': true});
+            } else {
+              this.userChecked.push({'user': user, 'checked': false});
+              this.userCheckedInitially.push({'user': user, 'checked': false});
+            }
+          }
+        });
       }
-    }
+    );
   }
 
   getIndexOf(table, id) {
@@ -57,47 +65,37 @@ export class ActivityChangeUsersComponent {
 
   changeUsers() {
     this.usersToChange = [];
-    for (let i = 0; i < this.userChecked.length; i++) {
-      if (this.userChecked[i].checked !== this.userCheckedInitially[i].checked) {
-        const user = this.userChecked[i].user;
-        if (this.userChecked[i].checked) {
-          user.activites.push({
-            'id': this.activityService.activityLoaded._id,
-            'status' : 'paused'});
-          for (const activite of this.activityService.activityLoadedChild) {
-            user.activites.push({
-              'id' : activite._id,
-              'status' : 'paused'});
-            activite.participants.push(user._id);
+
+    return Promise.all(this.userChecked.map(userSelected => {
+        for (let i = 0; i < this.userCheckedInitially.length; i++) {
+          if (userSelected.user === this.userCheckedInitially[i].user && userSelected.checked !== this.userCheckedInitially[i].checked) {
+            console.log(userSelected, this.userCheckedInitially[i]);
+            const user = userSelected.user;
+            if (userSelected.checked) {
+              return this.userService.addActivity(this.activityService.activityLoaded._id, user)
+                .then(() => {
+                  return this.activityService.addUser(user, this.activityService.activityLoaded._id);
+                });
           }
-          this.activityService.activityLoaded.participants.push(user._id);
-        } else {
-          this.activityService.activityLoaded.participants.splice(this.activityService.activityLoaded.participants.indexOf(user._id), 1);
-          user.activites.splice(user.activites.indexOf(this.activityService.activityLoaded._id), 1);
-          for (const activite of this.activityService.activityLoadedChild) {
-            user.activites.splice(user.activites.indexOf(activite._id), 1);
-            if (activite.participants != null) {
-              activite.participants.splice(activite.participants.indexOf(user._id), 1);
+            else {
+              console.log('remove activity');
+              return this.userService.removeActivity(this.activityService.activityLoaded._id, user)
+                .then(() => {
+                  return this.activityService.removeUser(user, this.activityService.activityLoaded._id);
+                });
             }
           }
         }
-        this.usersToChange.push(user);
       }
-    }
-    this.activityService.user.db.bulkDocs(this.usersToChange).then( res2 => {
-      this.activityService.db.put(this.activityService.activityLoaded).then(res3 => {
-        this.activityService.db.bulkDocs(this.activityService.activityLoadedChild).then(res4 => {
-          this.reloadUsers().then( () => this.dialogRef.close());
-
-        });
-      });
-    });
+    ));
   }
 
   changeValue(event) {
     for (const user of this.userChecked) {
-      if (user.user.name === event.source.name) {
+      if (user.user === event.source.name) {
         user.checked = !user.checked;
+        console.log(user.checked);
+        console.log(this.userChecked);
       }
     }
   }

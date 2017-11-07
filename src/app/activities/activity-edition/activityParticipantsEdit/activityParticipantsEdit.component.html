@@ -7,8 +7,8 @@
     </mat-card-header>
 
     <div fxLayout="row">
-    <div fxFlex="33%" *ngFor="let participant of activityService.user.participants">
-      <img src="{{participant.avatar}}" class="avatar-circle">
+      <div fxFlex="33%" *ngFor="let participantId of activityService.userService.participants">
+        <app-participant-infos [participantId]="participantId"></app-participant-infos>
     </div>
 
     <div fxFlex="33%">

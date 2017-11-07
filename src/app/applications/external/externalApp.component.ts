@@ -25,10 +25,10 @@ export class ExternalAppComponent {
     this.route.params.subscribe( result => {
       this.appId = result.id;
     });
-    this.appInfo = this.activity.apps.getApp(this.appId).then( res => {
-      this.appInfo = res;
-      this.appLink = sanitizer.bypassSecurityTrustResourceUrl(this.appInfo.url /**+ '&userName=' + this.user.name**/);
-    });
+    //this.appInfo = this.activity.apps.getApp(this.appId).then( res => {
+    //  this.appInfo = res;
+    //  this.appLink = sanitizer.bypassSecurityTrustResourceUrl(this.appInfo.url /**+ '&userName=' + this.user.name**/);
+    //});
     }
 
 }

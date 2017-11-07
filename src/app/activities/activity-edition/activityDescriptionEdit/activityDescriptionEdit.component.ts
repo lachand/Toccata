@@ -42,15 +42,19 @@ export class ActivityDescriptionEditComponent {
     };
   }
 
-  switch() {
+  switchDescription() {
+    console.log('enter in edition mode');
     this.descriptionEdition = !this.descriptionEdition;
   }
 
+  /**
+   * Change the description of an activity
+   */
   changeTheDescription() {
-    this.activityService.db.get(this.activityService.activityLoaded._id).then(res => {
-      res.description = this.description;
-      this.activityService.db.put(res).then(this.switch());
-    });
+    this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description)
+      .then(() => {
+        this.switchDescription();
+      });
   }
 
 }

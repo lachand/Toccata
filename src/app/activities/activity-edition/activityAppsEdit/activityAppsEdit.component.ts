@@ -3,6 +3,7 @@ import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {ActivityNewAppComponent} from '../activityNewApp/activityNewApp.component';
+import {AppsService} from 'app/services/apps.service';
 import {UserService} from '../../../services/user.service';
 
 @Component({
@@ -16,16 +17,18 @@ export class ActivityAppsEditComponent {
   @Input() edit: boolean;
 
   constructor(public activityService: ActivityService, public router: Router,
-              public user: UserService, dialog: MatDialog) {
+              public appsService: AppsService, dialog: MatDialog,
+              public user: UserService) {
     this.dialog = dialog;
+    console.log(user.fonction, this.edit);
   }
 
-  newApp() {
+  newApplication() {
       const dialogRef = this.dialog.open(ActivityNewAppComponent);
       dialogRef.componentInstance.dialogRef = dialogRef;
   }
 
-  private delete_app(appId) {
+  private deleteApplication(appId) {
     this.activityService.apps.deleteApp(appId);
   }
 }

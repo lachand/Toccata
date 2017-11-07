@@ -1,0 +1,7 @@
+<mat-list-item>
+  <mat-icon mat-list-icon *ngIf="image.test(resource?.type)">image</mat-icon>
+  <mat-icon mat-list-icon *ngIf="text.test(resource?.type)">description</mat-icon>
+  <mat-icon mat-list-icon *ngIf="video.test(resource?.type)">videocam</mat-icon>
+  <mat-icon mat-list-icon *ngIf="audio.test(resource?.type)">audiotrack</mat-icon>
+  <p mat-line> {{resource?.name}} </p>
+</mat-list-item>

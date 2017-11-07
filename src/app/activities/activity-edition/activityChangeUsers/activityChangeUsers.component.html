@@ -6,9 +6,9 @@
   <div *ngFor="let participant of userChecked">
     <mat-slide-toggle class="example-margin"
                       [checked]="participant.checked"
-                      [name]="participant.user.name"
+                      [name]="participant.user"
                       (change)="changeValue($event)">
-    {{participant.user.name}}
+      {{participant.user}}
     </mat-slide-toggle>
   </div>
 

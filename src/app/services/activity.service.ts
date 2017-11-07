@@ -2,60 +2,44 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {UserService} from './user.service';
 
 import * as config from '../../variables';
-import PouchDB from 'pouchdb';
 import {AppsService} from './apps.service';
+import {DatabaseService} from './database.service';
 import {ResourcesService} from './resources.service';
+import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class ActivityService {
   db: any;
-  dbRemote: any;
   activityLoaded: any;
   activitiesList: Array<any>;
   activityLoadedChild: any;
   user: any;
   userActivitiesListId: Array<any> = [];
 
-  apps: AppsService;
-  resources: ResourcesService;
-
-  activitySync: any;
-
   @Output() changes = new EventEmitter();
 
-  constructor(userService: UserService,
-              appsService: AppsService,
-              resourcesService: ResourcesService) {
-    this.db = new PouchDB('activites');
-    this.dbRemote = new PouchDB(config.HOST + config.PORT + '/activites');
-    const options = {
-      live: true,
-      retry: true,
-      continuous: true,
-      timeout: false,
-      heartbeat: false,
-      ajax: {
-        timeout: false,
-        hearbeat: false
+  constructor(public userService: UserService,
+              public apps: AppsService,
+              public resourcesService: ResourcesService,
+              public database: DatabaseService,
+              public appsService: AppsService) {
+    this.database.changes.subscribe(
+      (change) => {
+        if (change.type === 'Activity') {
+          if (change.doc.type === 'Main') {
+            this.changes.emit({doc: change.doc, type: 'Main'});
+
+            if (change.doc._id === this.activityLoaded._id) {
+              this.load_activity(change.doc._id);
+            }
+          } else {
+            this.changes.emit({doc: change.doc, type: 'Sequence'});
+          }
+        }
       }
-    };
-    this.activitySync = this.db.sync(this.dbRemote, options);
-    this.db.changes({
-      since: 'now',
-      live: true,
-      include_docs: true
-    }).on('change', change => {
-      this.handleChange(change);
-    }).on('paused', function (info) {
-      // replication was paused, usually because of a lost connection
-    }).on('active', function (info) {
-      // replication was resumed
-    }).on('error', function (err) {
-      console.log('activities', err);
-    });
+    );
+
     this.user = userService;
-    this.apps = appsService;
-    this.resources = resourcesService;
     this.activityLoaded = null;
     this.activityLoadedChild = [];
   }
@@ -90,68 +74,6 @@ export class ActivityService {
     }).catch(console.log.bind(console));
   }
 
-  public getActivityInfos(activityId) {
-    return new Promise(resolve => {
-      return this.db.get(activityId).then(activity => {
-        resolve({
-          name: activity.name,
-          description: activity.description,
-          image: activity.image
-        });
-      }).catch(console.log.bind(console));
-    });
-  }
-
-  public getActivities() {
-    const name = this.user.id;
-    if (this.activitiesList && this.activitiesList.length > 0) {
-      return Promise.resolve(this.activitiesList);
-    }
-    return new Promise(resolve => {
-      this.db.query('byParticipant/by-participant',
-        {startkey: name, endkey: name})
-        .then(result => {
-          this.activitiesList = [];
-          result.rows.map((row) => {
-            this.activitiesList.push(row.value);
-          });
-          resolve(this.activitiesList);
-        }).catch(console.log.bind(console));
-    }).catch(console.log.bind(console));
-  }
-
-  public load_activity(activity_id) {
-    if (this.activityLoaded && this.activityLoaded._id === activity_id) {
-      return Promise.resolve(this.activityLoaded);
-    }
-    return new Promise(resolve => {
-      this.db.get(activity_id, {
-        include_docs: true
-      })
-        .then((result) => {
-          this.activityLoaded = result;
-          return (this.resources.getResources(result._id))
-            .then(() => {
-              return this.apps.getApps(result._id);
-            })
-            .then(() => {
-              return this.user.getParticipants(result._id);
-            })
-            .then(() => {
-              return this.db.query('byParent/by-parent',
-                {startkey: result._id, endkey: result._id});
-            })
-            .then(activityChilds => {
-              this.activityLoadedChild = [];
-              activityChilds.rows.map((row) => {
-                this.activityLoadedChild.push(row.value);
-                resolve(this.activityLoaded);
-              });
-            });
-        });
-    });
-  }
-
   public unloadActivity() {
     this.activityLoaded = null;
     this.activitiesList = [];
@@ -159,48 +81,175 @@ export class ActivityService {
     this.apps.logout();
   }
 
-  public createActivity(activity) {
+  /**
+   * Load an activity
+   * @param activity_id
+   * @returns {Promise<any>}
+   */
+  public load_activity(activity_id) {
+    return new Promise(resolve => {
+      this.database.getDocument(activity_id)
+        .then((result) => {
+          this.activityLoaded = result;
+          this.activityLoadedChild = result['subactivityList'];
+          return this.resourcesService.getResources(this.activityLoaded._id);
+        })
+        .then(() => {
+          return this.appsService.getApplications(this.activityLoaded._id);
+        })
+        .then(() => {
+          return this.userService.getParticipants(this.activityLoaded._id);
+        })
+        .then(() => {
+            resolve(this.activityLoaded);
+          }
+        )
+        .catch(err => {
+          console.log(`Error in activity service whith call to loadActivity:
+          ${err}`);
+        });
+    });
+  }
+
+  /**
+   * Create a new activity empty activity
+   * @returns {Promise<any>}
+   */
+  public createActivity(activityType) {
+    let dbName = '';
     return new Promise((resolve, reject) => {
-      this.db.post(activity)
-        .then(response => resolve(response)).catch(function (err) {
-        console.log(err);
-        reject(err);
+      this.database.createDatabase('activity').then(newDatabase => {
+        dbName = newDatabase['name'].replace(`${config.HOST}${config.PORT}/`, '');
+        const activityToCreate = {
+          _id: dbName,
+          type: activityType,
+          name: 'Nouvelle activité',
+          description: `Il n'y à aucune description`,
+          userList: [this.user.id],
+          subactivityList: [],
+          resourceList: [],
+          applicationList: [],
+          createdAt: Date.now(),
+          dbName: dbName,
+          documentType: 'Activity'
+        };
+        return this.database.addDocument(activityToCreate);
+      })
+        .then(() => {
+          return this.database.getDocument(this.user.id);
+        })
+        .then(userDoc => {
+          userDoc['activityList'].push(dbName);
+          return this.database.updateDocument(userDoc);
+        })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(`Error in activity service whith call to createActivity:
+          ${err}`);
       });
     });
   }
 
-  public createSubActivity(parentId) {
-    let newActivity;
-    return new Promise((resolve, reject) => {
-      this.db.get(parentId).then(parent => {
-        const subActivity = {
-          'name': 'nouvelle activité',
-          'participants': parent.participants,
-          'parent': parent._id,
-          'type': 'Sequence',
-          'description': 'Il n\'y a aucune description',
-          'child': [],
-          'createdAt': Date.now()
-        };
-        return this.db.post(subActivity);
-      })
-        .then(response => {
-          newActivity = response;
-          return this.db.get(parentId);
-        })
-        .then(parent => {
-          console.log(parent);
-          parent.child.push(newActivity.id);
-          return this.db.put(parent);
+  /**
+   * Get list of activities and connect to databases
+   * @returns {any}
+   */
+  public getActivities() {
+    const name = this.user.id;
+    if (this.activitiesList && this.activitiesList.length > 0) {
+      return Promise.resolve(this.activitiesList);
+    }
+    return new Promise(resolve => {
+      this.database.getDocument(`${this.user.id}`)
+        .then(userDoc => {
+          this.activitiesList = userDoc['activityList'];
+          console.log(this.activitiesList);
+          const tempThis = this;
+          const promises = this.activitiesList.map(function (activityId) {
+            tempThis.database.addDatabase(activityId);
+          });
+          return Promise.all(promises);
         })
         .then(() => {
-          resolve(newActivity);
+          resolve(this.activitiesList);
         })
-        .catch(function (err) {
-          console.log(err);
-          reject(err);
+        .catch(err => {
+          console.log(`Error in activity service whith call to getActivities : 
+          ${err}`);
         });
     });
+  }
+
+  /**
+   * Get informations about an activity
+   * @param activityId
+   * @returns {Promise<any>}
+   */
+  public getActivityInfos(activityId) {
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId).then(activity => {
+        resolve({
+          name: activity['name'],
+          description: activity['description'],
+          image: activity['image'],
+          dbName: activity['dbName']
+        });
+      }).catch(err => {
+        console.log(`Error in activity service whith call to getActivityInfos : 
+          ${err}`);
+      });
+    });
+  }
+
+  /**
+   * Create an activity which is a child of the current activity
+   * @param parentId
+   * @returns {Promise<any>}
+   */
+  public createSubActivity(parentId) {
+    return new Promise(resolve => {
+      let subActivity;
+      return this.database.getDocument(parentId)
+        .then(parent => {
+          subActivity = {
+            _id: `activity_${this.database.guid()}`,
+            name: 'nouvelle activité',
+            description: 'Il n\'y a aucune description',
+            userList: parent['userList'],
+            resourceList: parent['resourceList'],
+            applicationList: parent['applicationList'],
+            parent: parent['_id'],
+            type: 'Sequence',
+            subActivityList: [],
+            createdAt: Date.now(),
+            dbName: parent['dbName'],
+            documentType: 'Activity'
+          };
+        })
+        .then(() => {
+          return this.database.addDocument(subActivity);
+        })
+        .then(() => {
+          return this.database.getDocument(parentId);
+        })
+        .then(parent => {
+          parent['subactivityList'].push(subActivity._id);
+          return this.database.updateDocument(parent);
+        })
+        .then(() => {
+          resolve(subActivity);
+        })
+        .catch(err => {
+          console.log(`Error in activity service whith call to createSubActivity : 
+          ${err}`);
+        });
+    });
+  }
+
+  deleteActivity(activityId) {
+    console.log("delete activity");
   }
 
   getParticipants(activityId) {
@@ -284,77 +333,89 @@ export class ActivityService {
     this.user.logout();
   }
 
-  private handleChange(change) {
-    console.log(change);
-    const document = change.doc;
-    if (!document._deleted) {
-      if (document.participants.indexOf(this.user.id) === -1) {
-        console.log("activité supprimée");
-      } else {
-        if (this.activityLoaded && document._id === this.activityLoaded._id) {
-          this.activityLoaded = document;
-          console.log('modificationLoaded');
-          this.changes.emit({changeType: 'modificationLoaded', value: document});
-        } else {
-          if (this.userActivitiesListId.indexOf(document._id) === -1) {
-            if (document.participants.indexOf(this.user.id) !== -1) {
-              if (document.type === 'Main') {
-                this.userActivitiesListId.push(document._id);
-              }
-              console.log('creation');
-              this.changes.emit({changeType: 'create', value: document});
-            }
-          } else {
-            console.log('modification');
-            this.changes.emit({changeType: 'modification', valude: document});
-          }
-        }
-      }
-
-    }
+  /**
+   * Change the value corresponding of a key in an activity
+   * @param {string} key
+   * @param {String} value
+   */
+  activityEdit(activityId: string, key: string, value: String) {
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId)
+        .then(res => {
+          res[key] = value;
+          return this.database.updateDocument(res);
+        })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          console.log(`Error in user activity whith call to activityEdit : 
+          ${err}`);
+        });
+    });
   }
 
-}
-
-/**if (!document._deleted) {
-    let changedDoc = null;
-    let changedIndex = null;
-    this.activitiesList.forEach((doc, index) => {
-      if (doc._id === document._id) {
-        changedDoc = doc;
-        changedIndex = index;
-      }
-    });
-    if (changedDoc) {
-      if (document.participants.indexOf(this.user.id) === -1) {
-        this.activitiesList.splice(changedIndex, 1);
-      } else {
-        this.activitiesList[changedIndex] = document;
-        if (document._id === this.activityLoaded._id) {
-          this.activityLoaded = document;
-        }
-        this.changes.emit({changeType: 'modification', value: document});
-      }
-    } else {
-      if (document.participants.indexOf(this.user.id) !== -1) {
-        if (document.type === 'Main') {
-          this.activitiesList.push(document);
-        } else if (document._id !== this.activityLoaded._id) {
-          const index = this.getIndexOf(document, this.activityLoadedChild);
-          if (index === -1) {
-            this.activityLoadedChild.push(document);
-          } else {
-            this.activityLoadedChild[index] = document;
+  /**
+   * Add a specific user to the specified activity
+   * @param userName
+   */
+  addUser(userName: any, activityId: any) {
+    const tempThis = this;
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId)
+        .then(activity => {
+          activity['userList'].push(userName);
+          const subactivities = activity['subactivityList'];
+          console.log(subactivities);
+          if (!isNullOrUndefined(subactivities)) {
+            return Promise.all(subactivities.map(function (subactivity) {
+              return tempThis.addUser(userName, subactivity);
+            }))
+              .then(() => {
+                return this.database.updateDocument(activity);
+              });
           }
-        } else {
-          this.activityLoaded = document;
-          this.changes.emit({changeType: 'modification', value: document});
-        }
-        this.changes.emit({changeType: 'create', value: document});
-      }
-    }
-  } else {
-    const index = this.getIndexOf(document, this.activitiesList);
-    this.activitiesList.splice(index, 1);
-    this.changes.emit({changeType: 'delete', value: index});
-  }**/
+        })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(`Error in user activity whith call to addUser : 
+          ${err}`);
+        });
+    });
+  }
+
+  /**
+   * Remove a specific user to the specified activity
+   * @param userName
+   */
+  removeUser(userName: any, activityId: any) {
+    let subactivities;
+    const tempThis = this;
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId)
+        .then(activity => {
+          activity['userList'].splice(activity['userList'].indexOf(userName), 1);
+
+          subactivities = activity['subactivityList'];
+
+          if (!isNullOrUndefined(subactivities)) {
+            return Promise.all(subactivities.map(function (subactivity) {
+              return tempThis.removeUser(userName, subactivity);
+            }))
+              .then(() => {
+                return this.database.updateDocument(activity);
+              });
+          }
+        })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(`Error in user activity whith call to removeUser : 
+          ${err}`);
+        });
+    });
+  }
+}

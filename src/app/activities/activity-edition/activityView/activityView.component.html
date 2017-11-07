@@ -6,13 +6,11 @@
 
   <div fxFlex="90%" class="flex-card">
     <mat-card>
-      <mat-card-header>
-        <h3 mat-line>Description</h3>
-      </mat-card-header>
-      <div [innerHTML]="activityService.activityLoaded.description"></div>
+      <app-activity-description-edit [edit]="false"></app-activity-description-edit>
     </mat-card>
   </div>
 
+  <!--
   <div fxFlex="90%" class="flex-card">
     <mat-card>
       <mat-card-header>
@@ -36,5 +34,6 @@
       <app-activity-participants-edit [edit]="false"></app-activity-participants-edit>
     </mat-card>
   </div>
+  -->
 
 </div>

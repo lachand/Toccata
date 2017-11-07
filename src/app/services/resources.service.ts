@@ -1,169 +1,92 @@
-import PouchDB from 'pouchdb';
-import * as config from 'variables';
-import {EventEmitter, Output} from '@angular/core';
+import {DatabaseService} from './database.service';
+import {Injectable} from '@angular/core';
 
+@Injectable()
 export class ResourcesService {
-  resourcesDb: any;
-  resourcesDbRemote: any;
   resources: any;
-  tempChanges: Array<any>;
-  resourcesSync: any;
 
-  @Output()
-  change = new EventEmitter();
+  /**
+   * Get informations about a specific resource
+   * @param resourceId
+   */AppsService
 
-  constructor() {
-    //this.messagesDb = new PouchDB('messages');
-    this.tempChanges = [];
+  constructor(public database: DatabaseService) {
     this.resources = {};
-    this.resourcesDb = new PouchDB('resources');
-    this.resourcesDbRemote = new PouchDB(config.HOST + config.PORT + '/resources');
-    const options = {
-      live: true,
-      retry: true,
-      continuous: true,
-      timeout: false,
-      heartbeat: false,
-      ajax: {
-        timeout: false,
-        hearbeat: false
-      }
-    };
-    this.resourcesSync = this.resourcesDb.sync(this.resourcesDbRemote, options);
-    this.resourcesDb.changes({
-      since: 'now',
-      live: true,
-      include_docs: true }).on('change', change => {
-      console.log(change);
-      this.handleChange(change);
-    }).on('paused', function (info) {
-      // replication was paused, usually because of a lost connection
-    }).on('active', function (info) {
-      // replication was resumed
-    }).on('error', function (err) {
-      console.log('resources', err);
-    });
-
   }
 
   /**
-   getResources(app) {
-    const name = app.id;
-    if (this.resources[name] && this.resources[name].length > 0) {
-      return Promise.resolve(this.resources[name]);
-    }
-    return new Promise(resolve => {
-      this.resourcesDb.query('byApplication/by-application',
-        { startkey: name, endkey: name}).then(result => {
-          this.resources[name] = [];
-          const docs = result.rows.map((row) => {
-            this.resources[name].push(row.value);
-          });
-        resolve(this.resources[name]);
-      }).catch(console.log.bind(console));
-      this.resourcesDb.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-        //this.handleChange(change);
-      });
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-   **/
-
+   * Get all resources of the current activity
+   * @param activityId
+   * @returns {Promise<any>}
+   */
   public getResources(activityId) {
-    const name = activityId;
-    if (this.resources[name] && this.resources[name].length > 0) {
-      return Promise.resolve(this.resources[name]);
-    }
     return new Promise(resolve => {
-      this.resourcesDb.query('byActivity/by-activity',
-        {startkey: name, endkey: name}).then(result => {
-        this.resources[name] = [];
-        const docs = result.rows.map((row) => {
-          this.resources[name].push(row.value);
+      return this.database.getDocument(activityId)
+        .then(activity => {
+          this.resources = activity['resourceList'];
+          resolve(this.resources);
         });
-        console.log(this.resources);
-        resolve(this.resources[name]);
-      });
-    }).catch((error) => {
-      console.log(error);
     });
   }
 
+  /**
+   * Create a new resource and upload it
+   * @param resource
+   * @param activityId
+   */
   createResource(resource, activityId) {
-    const resourceToAdd = {
-      'name': resource.name,
-      'activity': activityId,
-      'type': resource.type,
-      '_attachments': {
-        'filename': {
-          'content_type': resource.type,
-          'data': resource
-        }
-      }
-    };
-    this.resourcesDb.post(resourceToAdd).then((response) => {
-      return true;
-    }).catch(function (err) {
-      console.log(err);
-      return false;
+    return new Promise(resolve => {
+      let activity;
+      let resourceToAdd;
+      return this.database.getDocument(activityId).then(res => {
+        activity = res
+        resourceToAdd = {
+          _id: `resource_${resource.name}`,
+          name: resource.name,
+          activity: activityId,
+          documentType: 'Resource',
+          type: resource.type,
+          dbName: activity['dbName'],
+          _attachments: {
+            filename: {
+              content_type: resource.type,
+              data: resource
+            }
+          }
+        };
+        return this.database.addDocument(resourceToAdd);
+      })
+        .then(res => {
+          activity['resourceList'].push(`resource_${resource.name}`);
+          return this.database.updateDocument(activity);
+        })
+        .then(() => resolve(resourceToAdd))
+        .catch(err => {
+          console.log(`Error in resource service whith call to createResource : 
+          ${err}`);
+        });
+    });
+  }
+
+  getResourceInfos(resourceId: any) {
+    return new Promise(resolve => {
+      return this.database.getDocument(resourceId).then(resource => {
+        resolve({
+          name: resource['name'],
+          type: resource['type']
+        });
+      }).catch(err => {
+        console.log(`Error in resource service whith call to getResourceInfos : 
+          ${err}`);
+      });
     });
   }
 
   deleteResource(resource) {
-    this.resourcesDb.remove(resource).then((response) => {
-      return true;
-    }).catch(function (err) {
-      console.log(err);
-      return false;
-    });
-  }
-
-  getIndexOf(document, array) {
-    let i = 0;
-    for (const element of array) {
-      if (element._id === document._id) {
-        return i;
-      }
-      i = i + 1;
-    }
-    return -1;
-  }
-
-  private handleChange(change) {
-    const document = change.doc;
-    if (!document._deleted) {
-      let changedDoc = null;
-      let changedIndex = null;
-      console.log('changed doc : ', this.resources, this.resources[document.activity]);
-      this.resources[document.activity].forEach((doc, index) => {
-        if (doc._id === document._id) {
-          changedDoc = doc;
-          changedIndex = index;
-        }
-      });
-      console.log('changed doc bis : ', changedDoc);
-      if (changedDoc) {
-        console.log(this.resources, this.resources[document.activity]);
-        this.resources[document.activity][changedIndex] = document;
-        this.change.emit({changeType: 'modification', value: document});
-      } else {
-        console.log('creation : ');
-        this.resources[document.activity].push(document);
-        this.change.emit({changeType: 'create', value: document});
-        console.log('resources : ', this.resources, this.resources[document.activity]);
-      }
-    } else {
-      for (const activity in this.resources) {
-        this.resources[activity].splice(this.getIndexOf(document, this.resources[activity]), 1);
-        /** Tricky way **/
-        this.change.emit({changeType: 'delete', value: change});
-        console.log(this.resources);
-      }
-    }
+    return new Promise(resolve => resolve(true));
   }
 
   getResourceData(resourceId: any, attachmentId: any) {
-    return this.resourcesDb.getAttachment(resourceId, attachmentId);
+    return new Promise(resolve => resolve(true));
   }
 }

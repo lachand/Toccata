@@ -3,6 +3,7 @@ import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+import {AppsService} from '../../../services/apps.service';
 
 @Component({
   selector: 'app-activity-new-app',
@@ -11,45 +12,45 @@ import {MatDialogRef} from '@angular/material';
 
   export class ActivityNewAppComponent {
   apps: any;
+  appType: any;
   activity: any;
   dialogRef: MatDialogRef<ActivityNewAppComponent>;
-  applicationType: any;
   formNewApp: FormGroup;
 
-  appsType = ['Chat', 'Feuille de calcul', 'Editeur de texte', 'Externe'];
+  appsType = ['Chat', 'Feuille de calcul', 'Editeur de texte', 'Post-it', 'Chronomètre', 'Externe'];
 
-  constructor(public activityService: ActivityService, public router: Router,
+  constructor(public activityService: ActivityService,
+              public router: Router,
+              public appsService: AppsService,
               public formBuilder: FormBuilder) {
-    this.activity = activityService.activityLoaded;
     this.formNewApp = this.formBuilder.group({
       appName: ['', Validators.required],
-      applicationType: ['', Validators.required],
+      appType: ['', Validators.required],
       serviceName: '',
       url: ''
     });
+
+    this.appType = '';
+    this.activity = activityService.activityLoaded;
     this.formNewApp.valueChanges.subscribe(data => {
-      this.applicationType = data.applicationType;
+      this.appType = data.appType;
     });
   }
 
+  /**
+   * Create a new application and add it to current activity
+   */
   newApp() {
-    let appToAdd = {};
-    this.activityService.db.get(this.activity._id).then(res => {
-      if (this.formNewApp.value.applicationType !== 'Externe') {
-        appToAdd = {'type': this.formNewApp.value.applicationType,
-          'name': this.formNewApp.value.appName,
-          'status': 'unloaded',
-          'activity': this.activity._id};
-      } else if (this.formNewApp.value.serviceName !== '' && this.formNewApp.value.url !== '') {
-        appToAdd = {'type': this.formNewApp.value.applicationType,
-          'service': this.formNewApp.value.serviceName,
-          'name': this.formNewApp.value.appName,
-          'status': 'unloaded',
-          'url': this.formNewApp.value.url,
-          'activity': this.activity._id};
-      }
-      this.activityService.apps.createApp(appToAdd);
-      this.dialogRef.close();
+    const appToAdd = {
+      type: this.formNewApp.value.appType,
+      provider: this.formNewApp.value.appType,
+      name: this.formNewApp.value.appName
+    };
+    console.log(this.formNewApp);
+    this.activityService.getActivityInfos(this.activity._id).then(activity => {
+      this.appsService.createApp(appToAdd, activity['dbName']).then(() => {
+        this.dialogRef.close();
+      });
     });
   }
 

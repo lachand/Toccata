@@ -3,20 +3,23 @@
 <form [formGroup]="formNewApp" (ngSubmit)="newApp()">
   <h3>Nouvelle application</h3>
 
-  <mat-select placeholder="Type d'application" formControlName="applicationType">
+  <mat-form-field>
+    <mat-select matInput placeholder="Type d'application" formControlName="appType" ngDefaultControl>
     <mat-option *ngFor="let appType of appsType" [value]="appType">
       {{ appType }}
     </mat-option>
   </mat-select>
+  </mat-form-field>
 
   <mat-input-container>
     <input matInput placeholder="Nom de l'application" type="text" formControlName="appName">
   </mat-input-container>
-  <div [hidden]="!(applicationType == 'Externe')">
+
+
+  <div [hidden]="!(appType == 'Externe')">
     <mat-input-container>
       <input matInput placeholder="Nom du service" type="text" formControlName="serviceName">
     </mat-input-container>
-
     <mat-input-container>
       <input matInput placeholder="Lien vers l'application" type="text" formControlName="url">
     </mat-input-container>

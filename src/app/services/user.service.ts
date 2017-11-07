@@ -1,242 +1,87 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {User} from '../../models/user.model';
-import * as config from 'variables';
-import PouchDB from 'pouchdb';
+import {DatabaseService} from './database.service';
 
 @Injectable()
 export class UserService {
   loggedIn = false;
-  db: any;
-  dbRemote: any;
   user: any;
   name: any;
   id: any;
   avatar: any;
   fonction: any;
-  participants: any = null;
+  participants: Array<any> = null;
   allUsers: Array<any>;
-  userSync: any;
 
   @Output()
   change = new EventEmitter();
 
-  constructor() {
+  constructor(public database: DatabaseService) {
     this.loggedIn = false;
-    this.db = new PouchDB(config.HOST + config.PORT + '/users');
-    this.dbRemote = new PouchDB(config.HOST + config.PORT + '/users');
-    const options = {
-      live: true,
-      retry: true,
-      continuous: true,
-      timeout: false,
-      heartbeat: false,
-      ajax: {
-        timeout: false,
-        hearbeat: false
-      }
-    };
-    this.userSync = this.db.sync(this.dbRemote, options);
-    this.getAllusers();
   }
 
-  public login(username, password) {
+  /**
+   * Create new user in database
+   * @param {string} username
+   * @param {string} password
+   * @returns {Promise<any>}
+   */
+  signup(username: string, password: string) {
     return new Promise((resolve, reject) => {
-        this.dbRemote.login(username, password, function (err, response) {
+      this.database.dbRemote.signup(username, password, function (err) {
         if (err) {
-          if (err.name === 'unauthorized') {
-            console.log('name or password incorrect');
+          if (err.name === 'conflict') {
+            reject(err);
+          } else if (err.name === 'forbidden') {
             reject(err);
           } else {
-            console.log(err);
-            reject(err);
           }
         }
-      }).then((result) => {
-            console.log(result);
-        this.loggedIn = result['ok'];
-        console.log('logged');
-            this.dbRemote.getUser(username, function (err, response) {
+      }).then(userCreated => {
+        resolve(userCreated);
+      }).catch(err => {
+        console.log(`Error in user service whith call to signup : 
+        ${err}`);
+        reject(err);
+      });
+    });
+  }
+
+  /**
+   * Login an user
+   * @param username
+   * @param password
+   * @returns {Promise<any>}
+   */
+  public login(username, password) {
+    return new Promise((resolve, reject) => {
+        this.database.dbRemote.login(username, password, function (err, response) {
           if (err) {
-            if (err.name === 'not_found') {
-              console.log('user not found');
+            if (err.name === 'unauthorized') {
+              console.log('name or password incorrect');
               reject(err);
             } else {
               console.log(err);
               reject(err);
             }
-          }}).then( (res) => {
-          console.log(res);
-          this.name = res['name'];
-          this.id = res['_id'];
-          this.avatar = res['avatar'];
-          this.fonction = res['fonction'];
-          resolve(this.loggedIn);
+          }
+        }).then((result) => {
+          this.loggedIn = result['ok'];
+          return this.database.addDatabase(`user_${username}`);
+        })
+          .then(() => {
+            return this.database.getDocument(username);
+          })
+          .then((res) => {
+            console.log(res);
+            this.name = res['name'];
+            this.id = res['_id'];
+            this.avatar = res['avatar'];
+            this.fonction = res['fonct'];
+            resolve(this.loggedIn);
           });
-          }
-        ).catch(function (err) {
-          console.log(err);
-        });
-        }
-      );
-  }
-
-  getAllusers() {
-    return new Promise(resolve => {
-      this.db.allDocs({
-        include_docs: true,
-        attachments: true
-      }).then(result => {
-        this.allUsers = [];
-        const docs = result.rows.map((row) => {
-          if (row.id !== '_design/byActivity') {
-            this.allUsers.push(row.doc);
-          }
-        });
-        resolve(this.allUsers);
-      }).catch(console.log.bind(console));
-      this.db.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
-        this.handleChangeAllUsers(change);
-        this.handleChangeParticipants(change);
-      });
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
-  getParticipants(activityId) {
-    return new Promise(resolve => {
-      this.db.query('byActivity/by-activity',
-        { startkey: activityId, endkey: activityId}).then(result => {
-        this.participants = [];
-        const docs = result.rows.map((row) => {
-          this.participants.push(row.value);
-        });
-        resolve(this.participants);
-      });
-      //this.db.changes({live: true, since: 'now', include_docs: true}).once('change', (change) => {
-        //this.handleChangeParticipants(change);
-        //this.handleChangeAllUsers(change);
-      //});
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
-  remove_activity(activityId) {
-    return new Promise( resolve => {
-      const usersToChange = [];
-      for (const user of this.allUsers) {
-        user.activites.splice(user.activites.indexOf(activityId), 1);
-        usersToChange.push(user);
       }
-      this.db.bulkDocs(usersToChange).then(result => {
-        resolve(result);
-      });
-    }
-  );
-  }
-
-  addActivity(activityId, userId) {
-    this.db.get(userId).then( userSelected => {
-      console.log(userSelected);
-      userSelected.activites[activityId] = {'status' : 'paused'};
-      console.log(userSelected.activites);
-      this.db.put(userSelected).thne(result => {
-        console.log('result : ', result);
-      });
-    });
-  }
-
-  private handleChangeParticipants(change) {
-    if (this.participants != null) {
-      this.db.get(change.doc._id).then(user => {
-        console.log(user);
-        const document = user;
-        let changedDoc = null;
-        let changedIndex = null;
-        if (!document._deleted) {
-          this.participants.forEach((doc, index) => {
-            if (doc._id === document._id) {
-              changedDoc = doc;
-              changedIndex = index;
-            }
-          });
-          if (changedDoc) {
-            // = delete des participants de l'activité chargée
-            this.participants.splice(changedIndex, 1);
-            this.change.emit({changeType: 'delete', value: changedIndex});
-          } else {
-            this.participants.push(document);
-            this.change.emit({changeType: 'create', value: document});
-          }
-        } else {
-          this.participants.splice(changedIndex, 1);
-          this.change.emit({changeType: 'delete', value: changedIndex});
-        }
-      });
-    }
-  }
-
-  private handleChangeAllUsers(change) {
-    for (const document of change.doc){
-    let changedDoc = null;
-    let changedIndex = null;
-    if (!document._deleted) {
-      this.allUsers.forEach((doc, index) => {
-        if (doc._id === document._id) {
-          changedDoc = doc;
-          changedIndex = index;
-        }
-      });
-      if (changedDoc) {
-        this.allUsers[changedIndex] = document;
-        this.change.emit({changeType: 'modification', value: document});
-      } else {
-        this.allUsers.push(document);
-        this.change.emit({changeType: 'create', value: document});
-      }
-    } else {
-      this.allUsers.splice(changedIndex, 1);
-      this.change.emit({changeType: 'delete', value: changedIndex});
-    }
-  }
-  }
-
-  setActivityStatusByTeacher(activityId, status) {
-    return new Promise( (resolve, reject) => {
-      const users = [];
-      this.db.query('byActivity/by-activity',
-        {startkey: activityId, endkey: activityId})
-        .then(result => {
-          console.log(result);
-          const docs = result.rows.map((row) => {
-            users.push(row.value);
-            console.log(row.value);
-          });
-          for (const user of users) {
-            for (const activity of user.activites) {
-              if (activity.id === activityId) {
-                activity.status = status;
-              }
-            }
-          }
-          console.log(users);
-          this.db.bulkDocs(users).then(result2 => { console.log(resolve(result2)); });
-        });
-    });
-  }
-
-  setActivityStatusByStudent(activityId, status) {
-    return new Promise( (resolve, reject) => {
-      return this.db.get(this.id)
-        .then( user => {
-          for (const activity of user.activites){
-            if (activity.id === activityId){
-              activity.status = status;
-            }
-          }
-          return this.db.put(user);
-        });
+    ).catch(function (err) {
+      console.log(err);
     });
   }
 
@@ -251,5 +96,153 @@ export class UserService {
 
   isLoggedIn() {
     return this.loggedIn;
+  }
+
+  /**
+   * Create an user
+   * @param {string} username
+   * @param {string} name
+   * @param {string} surname
+   * @param {string} avatar
+   * @param isTeacher
+   * @returns {Promise<any>}
+   */
+  createUser(username: string, name: string, surname: string, avatar: string, isTeacher: any) {
+    return new Promise(resolve => {
+      const fonct = isTeacher ? 'teacher' : 'student';
+      const document = {
+        _id: username,
+        name: name,
+        surname: surname,
+        avatar: avatar,
+        fonct: fonct,
+        activityList: [],
+        documentType: 'user',
+        dbName: `user_${username}`
+      };
+
+      return this.database.addDatabase(document.dbName)
+        .then(databaseCreated => {
+          return this.database.addDocument(document);
+        })
+        .then(res => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(`Error in user service whith call to createUser : 
+        ${err}`);
+        });
+    });
+  }
+
+  /**
+   * Get all available users
+   * @returns {Promise<any>}
+   */
+  getAllUsers() {
+    return new Promise(resolve => {
+      return this.database.getDocument('userList').then(res => {
+        this.allUsers = res['userList'];
+        resolve(this.allUsers);
+      })
+        .catch(err => {
+          console.log(`Error in user service whith call to getAllUsers : 
+        ${err}`);
+        });
+    });
+  }
+
+  /**
+   * Get participants of a specific activity
+   * @param activityId
+   * @returns {Promise<any>}
+   */
+  getParticipants(activityId) {
+    return new Promise(resolve => {
+      const tempThis = this;
+      return this.database.getDocument(activityId).then(activity => {
+          this.participants = activity['userList'];
+          return Promise.all(this.participants.map(function (user) {
+            return tempThis.database.addDatabase(`user_${user}`);
+          }));
+        }
+      )
+        .then(() => {
+          resolve(this.participants);
+        })
+        .catch(err => {
+          console.log(`Error in user service whith call to getParticipants : 
+        ${err}`);
+        });
+    });
+  }
+
+  /**
+   * Get information about a specific participant
+   * @param participantId
+   */
+  getParticipantInfos(participantId: any) {
+    return new Promise(resolve => {
+      console.log(participantId);
+      return this.database.getDocument(participantId)
+        .then(participant => {
+          resolve(participant);
+        })
+        .catch(err => {
+          console.log(`Error in user service whith call to getParticipantInfos : 
+        ${err}`);
+        });
+    });
+  }
+
+  /**
+   * Add an activity to a specific user
+   * @param activityId
+   */
+  addActivity(activityId, userName) {
+    return new Promise(resolve => {
+      return this.database.addDatabase(`user_${userName}`).then(() => {
+        return this.database.getDocument(userName)
+          .then(user => {
+            user['activityList'].push(activityId);
+            return this.database.addDocument(user);
+          })
+          .then(resUser => {
+            resolve(resUser);
+          })
+          .catch(err => {
+            console.log(`Error in user service whith call to addActivity : 
+        ${err}`);
+          });
+      });
+    })
+      ;
+  }
+
+  /**
+   * Remove an activity to a specific user
+   * @param activityId
+   */
+  removeActivity(activityId, userName) {
+    return new Promise(resolve => {
+      console.log(`going to add a database: user_${userName}`);
+      return this.database.addDatabase(`user_${userName}`).then(() => {
+        console.log('database added');
+        return this.database.getDocument(userName).then(user => {
+          console.log('get user : ', userName);
+          console.log(user['activityList'].indexOf(activityId));
+          user['activityList'].splice(user['activityList'].indexOf(activityId), 1);
+          return this.database.addDocument(user);
+        })
+          .then(resUser => {
+            resolve(resUser);
+          });
+      })
+        .catch(err => {
+          console.log(`Error in user service whith call to addActivity : 
+        ${err}`);
+        });
+    });
   }
 }

@@ -16,13 +16,9 @@ import {ActivityService} from 'app/services/activity.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  db: any;
-  user: any;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
               public activityService: ActivityService) {
-    this.db = userService.db;
-    this.user = userService;
   }
 
   ngOnInit() {
@@ -32,32 +28,22 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Login a user
+   */
   login(): void {
     if (this.loginForm.valid) {
-      this.user.login(this.loginForm.value.username, this.loginForm.value.password).then( (result) => {
-        if (this.user.isLoggedIn()) {
-          this.activityService.getUserActivities().then(res => {
-            this.router.navigate(['../activities']);
-          });
-        }
-        }
-      );
-    }
-  }
-
-  signup(): void {
-    if (this.loginForm.valid) {
-      this.db.signup(this.loginForm.value.username, this.loginForm.value.password, function (err, response) {
-        if (err) {
-          if (err.name === 'conflict') {
-            console.log('user already exists, choose another username');
-          } else if (err.name === 'forbidden') {
-            console.log('invalid username');
-          } else {
-            console.log(err);
+      this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
+          if (this.userService.isLoggedIn()) {
+            return this.activityService.getActivities().then(res => {
+              return this.userService.getAllUsers();
+            })
+              .then(() => {
+                this.router.navigate(['../activities']);
+              });
           }
         }
-      });
+      );
     }
   }
 

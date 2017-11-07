@@ -5,7 +5,8 @@ import { HttpModule } from '@angular/http';
 import {
   MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
-  MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule
+  MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
+  MatFormFieldModule, MatSelectModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -43,6 +44,11 @@ import {OrderBy} from './external/orderBy';
 import {ActivityResourcesComponent} from './activities/activity-edition/activityResources/activityResources.component';
 import {ActivityResourceViewComponent} from './activities/activity-edition/activityResourceView/activityResourceView.component';
 import {ActivityInfosComponent} from 'app/activities/activityInfos/activityInfos.component';
+import {DatabaseService} from 'app/services/database.service';
+import {ActivitySequenceInfosComponent} from './activities/activity-edition/activitySequenceInfos/activitySequenceInfos.component';
+import {ResourceInfosComponent} from './activities/activity-edition/resourceInfos/resourceInfos.component';
+import {ParticipantInfosComponent} from './activities/activity-edition/participantsInfos/participantInfos.component';
+import {ApplicationInfosComponent} from "./activities/activity-edition/applicationInfos/applicationInfos.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -65,13 +71,20 @@ import {ActivityInfosComponent} from 'app/activities/activityInfos/activityInfos
     ActivitySequenceEditComponent,
     ActivityResourcesComponent,
     ActivityInfosComponent,
+    ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
+    ResourceInfosComponent,
+    ApplicationInfosComponent,
+    ParticipantInfosComponent,
     DialogConfirmationComponent,
     MenuComponent,
     OrderBy],
   imports: [
     BrowserModule,
     FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
     ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,
@@ -96,7 +109,7 @@ import {ActivityInfosComponent} from 'app/activities/activityInfos/activityInfos
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
-  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService],
+  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

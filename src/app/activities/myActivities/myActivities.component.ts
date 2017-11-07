@@ -41,14 +41,9 @@ export class MyActivitiesComponent {
   }
 
   newActivity() {
-    this.activityService.createActivity({
-      'name': 'Nouvelle activité',
-      'participants': [this.user.id],
-      'type': 'Main',
-      'description': 'Il n\'y a aucune description',
-      'child': [],
-      'createdAt': Date.now()} ).then(res => {
-      console.log(res['id']);
+    this.activityService.createActivity('Main')
+      .then(res => {
+        /**console.log(res['id']);
       this.activityService.user.db.get(this.user.id).then( res2 => {
         res2.activites.push({
           'id' : res['id'],
@@ -58,7 +53,7 @@ export class MyActivitiesComponent {
           console.log(res3);
           this.activityService.load_activity(res['id']);
         });
-      });
+      });**/
     });
   }
 
@@ -86,9 +81,9 @@ export class MyActivitiesComponent {
 
   activity_change_status(activityId, status) {
     if (this.user.fonction === 'Enseignant') {
-      return this.user.setActivityStatusByTeacher(activityId, status);
+      //return this.user.setActivityStatusByTeacher(activityId, status);
     } else {
-      return this.user.setActivityStatusByStudent(activityId, status);
+      //return this.user.setActivityStatusByStudent(activityId, status);
     }
 }
 }

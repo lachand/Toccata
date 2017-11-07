@@ -20,31 +20,52 @@ export class ActivityInfosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.activityId);
     this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
       this.activityInfos = activityInfos;
     });
-    console.log(this.activityInfos);
+    this.activityService.changes.subscribe((change) => {
+      if (change.type === 'Main') {
+        this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
+          this.activityInfos = activityInfos;
+        });
+      }
+    });
   }
 
+  /**
+   * Load a specific activity
+   * @param activity_id
+   */
   load_activity(activity_id) {
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_apps/' + activity_id]);
     });
   }
 
+  /**
+   * Show a specific activity
+   * @param activity_id
+   */
   show_activity(activity_id) {
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_view/' + activity_id]);
     });
   }
 
+  /**
+   * Edit a specific activity
+   * @param activity_id
+   */
   edit_activity(activity_id) {
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });
   }
 
+  /**
+   * Select if we load the view or the edition of a specific activity
+   * @param activityId
+   */
   view_or_edit(activityId) {
     if (this.user.fonction === 'Enseignant') {
       this.edit_activity(activityId);
@@ -55,9 +76,9 @@ export class ActivityInfosComponent implements OnInit {
 
   activity_change_status(activityId, status) {
     if (this.user.fonction === 'Enseignant') {
-      return this.user.setActivityStatusByTeacher(activityId, status);
+      //return this.user.setActivityStatusByTeacher(activityId, status);
     } else {
-      return this.user.setActivityStatusByStudent(activityId, status);
+      //return this.user.setActivityStatusByStudent(activityId, status);
     }
   }
 }

@@ -21,12 +21,15 @@ export class ActivityNameEditComponent {
     this.nameEdition = !this.nameEdition;
   }
 
+  /**
+   * Change the name of the activity
+   */
   changeTheName() {
-    this.activityService.db.get(this.activityService.activityLoaded._id).then(res => {
-      res.name = this.appName;
-      this.activityService.db.put(res).then(this.switch());
-      this.appName = '';
-    });
+    this.activityService.activityEdit(this.activityService.activityLoaded._id, 'name', this.appName)
+      .then(() => {
+        this.switch();
+        this.appName = '';
+      });
   }
 
 }
