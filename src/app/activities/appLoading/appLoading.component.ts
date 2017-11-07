@@ -20,7 +20,7 @@ export class AppLoadingComponent {
   loadApp() {
     const appId = this.appToLoad;
     if (appId != null) {
-      this.activityService.apps.loadApp(appId);
+      //this.activityService.apps.loadApp(appId);
       this.dialogRef.close();
     }
   }

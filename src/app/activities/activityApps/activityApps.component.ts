@@ -26,7 +26,7 @@ export class ActivityAppsComponent {
   }
 
   unloadApp(appId) {
-    return this.activityService.apps.unloadApp(appId);
+    //return this.activityService.apps.unloadApp(appId);
   }
 
 }
