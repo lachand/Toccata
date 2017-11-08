@@ -33,8 +33,9 @@ export class DatabaseService {
         };
 
         this.dbList.push(config.HOST + config.PORT + '/userList');
-        this.db.replicate.from(this.dbRemote, tempOptions);
-        this.db.replicate.to(this.dbRemote, tempOptions);
+        this.db.replicate.from(this.dbRemote, tempOptions).then(() => {
+          this.db.replicate.to(this.dbRemote, tempOptions);
+        });
 
         this.db.changes({
           since: 'now',
@@ -80,8 +81,9 @@ export class DatabaseService {
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
-            this.db.replicate.from(dbToAdd, tempOptions);
-            this.db.replicate.to(dbToAdd, tempOptions);
+            this.db.replicate.from(dbToAdd, tempOptions).then(() => {
+              this.db.replicate.to(dbToAdd, tempOptions);
+            });
             resolve(dbToAdd);
           });
       }
@@ -99,8 +101,9 @@ export class DatabaseService {
             return doc.dbName === `${databaseName}_${guid}`;
           };
           this.dbList.push(`${databaseName}_${guid}`);
-          this.db.replicate.from(dbToAdd, tempOptions);
-          this.db.replicate.to(dbToAdd, tempOptions);
+          this.db.replicate.from(dbToAdd, tempOptions).then(() => {
+            this.db.replicate.to(dbToAdd, tempOptions);
+          });
           resolve(dbToAdd);
         });
     });
