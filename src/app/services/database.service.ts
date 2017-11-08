@@ -36,7 +36,8 @@ export class DatabaseService {
         tempOptions.filter = function (doc) {
           return doc.dbName === 'userList';
         };
-        this.dbRemote.replicate.to(this.db);
+        this.db.replicate.from(this.dbRemote, tempOptions);
+        //this.dbRemote.replicate.to(this.db);
         this.db.replicate.to(this.dbRemote, tempOptions);
         this.dbList.push(config.HOST + config.PORT + '/userList');
 
@@ -45,6 +46,7 @@ export class DatabaseService {
           live: true,
           include_docs: true
         }).on('change', change => {
+          console.log("changes");
           this.handleChange(change);
         }).on('paused', function (info) {
           // replication was paused, usually because of a lost connection
@@ -82,7 +84,8 @@ export class DatabaseService {
             tempOptions.filter = function (doc) {
               return doc.dbName === databaseName;
             };
-            dbToAdd.replicate.to(this.db, options);
+            this.db.replicate.from(dbToAdd, tempOptions);
+            //dbToAdd.replicate.to(this.db, options);
             this.db.replicate.to(dbToAdd, tempOptions);
             this.dbList.push(databaseName);
             resolve(dbToAdd);
@@ -133,6 +136,7 @@ export class DatabaseService {
    * @returns {Promise<any>}
    */
   getDocument(docId: string) {
+    console.log(docId);
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
       })

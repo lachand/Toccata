@@ -165,7 +165,6 @@ export class ActivityService {
       this.database.getDocument(`${this.user.id}`)
         .then(userDoc => {
           this.activitiesList = userDoc['activityList'];
-          console.log(this.activitiesList);
           const tempThis = this;
           const promises = this.activitiesList.map(function (activityId) {
             tempThis.database.addDatabase(activityId);

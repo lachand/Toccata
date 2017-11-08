@@ -67,6 +67,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activityId
    */
   view_or_edit(activityId) {
+    console.log(this.user.fonction);
     if (this.user.fonction === 'Enseignant') {
       this.edit_activity(activityId);
     } else {
