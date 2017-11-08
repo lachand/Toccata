@@ -19,30 +19,25 @@ export class DatabaseService {
     this.db = new PouchDB('localDatabase');
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
     this.dbRemote.info()
-      .then(() => {
+      .then((infos) => {
         this.options = {
           live: true,
           retry: true,
-          continuous: true,
-          timeout: false,
-          heartbeat: false,
-          auto_compaction: true,
-          ajax: {
-            timeout: false,
-            hearbeat: false
-          }
         };
+
+        console.log(infos);
+
         const tempOptions = this.options;
         tempOptions.filter = function (doc) {
           return doc.dbName === 'userList';
         };
-        this.db.replicate.from(this.dbRemote, tempOptions);
-        //this.dbRemote.replicate.to(this.db);
-        this.db.replicate.to(this.dbRemote, tempOptions);
+
         this.dbList.push(config.HOST + config.PORT + '/userList');
+        this.db.replicate.from(this.dbRemote, tempOptions);
+        this.db.replicate.to(this.dbRemote, tempOptions);
 
         this.db.changes({
-          since: '0',
+          since: 'now',
           live: true,
           include_docs: true
         }).on('change', change => {
@@ -74,7 +69,7 @@ export class DatabaseService {
    */
   addDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
-      if (this.dbList.indexOf(databaseName) === -1) {
+      if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
         const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}`);
@@ -84,10 +79,9 @@ export class DatabaseService {
             tempOptions.filter = function (doc) {
               return doc.dbName === databaseName;
             };
-            this.db.replicate.from(dbToAdd, tempOptions);
-            //dbToAdd.replicate.to(this.db, options);
-            this.db.replicate.to(dbToAdd, tempOptions);
             this.dbList.push(databaseName);
+            this.db.replicate.from(dbToAdd, tempOptions);
+            this.db.replicate.to(dbToAdd, tempOptions);
             resolve(dbToAdd);
           });
       }
@@ -104,9 +98,9 @@ export class DatabaseService {
           tempOptions.filter = function (doc) {
             return doc.dbName === `${databaseName}_${guid}`;
           };
-          dbToAdd.replicate.to(this.db, options);
-          this.db.replicate.to(dbToAdd, tempOptions);
           this.dbList.push(`${databaseName}_${guid}`);
+          this.db.replicate.from(dbToAdd, tempOptions);
+          this.db.replicate.to(dbToAdd, tempOptions);
           resolve(dbToAdd);
         });
     });
@@ -139,6 +133,7 @@ export class DatabaseService {
     console.log(docId);
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
+        console.log(res);
       })
         .then(() => {
           return this.db.get(docId);

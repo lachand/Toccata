@@ -25,11 +25,12 @@ export class ActivityService {
               public appsService: AppsService) {
     this.database.changes.subscribe(
       (change) => {
+        console.log(`there is a change ${change}`);
         if (change.type === 'Activity') {
           if (change.doc.type === 'Main') {
             this.changes.emit({doc: change.doc, type: 'Main'});
 
-            if (change.doc._id === this.activityLoaded._id) {
+            if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
             }
           } else {
