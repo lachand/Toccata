@@ -29,6 +29,7 @@ export class ActivityService {
         if (change.type === 'Activity') {
           if (change.doc.type === 'Main') {
             this.changes.emit({doc: change.doc, type: 'Main'});
+            this.activitiesList.push(change.doc._id);
 
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
