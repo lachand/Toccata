@@ -30,7 +30,7 @@ export class ActivityService {
           if (change.doc.type === 'Main') {
             this.changes.emit({doc: change.doc, type: 'Main'});
 
-            if (this.activitiesList.indexOf(change.doc._id) > -1) {
+            if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
             }
 
