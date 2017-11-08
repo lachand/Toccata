@@ -42,7 +42,7 @@ export class DatabaseService {
         this.dbList.push(config.HOST + config.PORT + '/userList');
 
         this.db.changes({
-          since: 'now',
+          since: '0',
           live: true,
           include_docs: true
         }).on('change', change => {
