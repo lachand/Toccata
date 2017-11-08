@@ -86,6 +86,7 @@ export class ActivityChangeUsersComponent {
             }
           }
         }
+      this.dialogRef.close();
       }
     ));
   }

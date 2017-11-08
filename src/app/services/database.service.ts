@@ -9,6 +9,7 @@ export class DatabaseService {
   dbRemote: any;
   dbList: Array<any> = [];
   options: any;
+  dbSync: any;
   changes: EventEmitter<any> = new EventEmitter();
 
   @Output()
@@ -16,42 +17,38 @@ export class DatabaseService {
 
   constructor() {
 
-    this.db = new PouchDB('localDatabase');
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
-    this.dbRemote.info()
-      .then((infos) => {
-        this.options = {
-          live: true,
-          retry: true,
-        };
+    this.db = new PouchDB('localDatabase');
 
-        console.log(infos);
+    this.options = {
+      live: true,
+      retry: true,
+      continuous: true
+    };
+    const tempOptions = this.options;
+    tempOptions.filter = function (doc) {
+      return doc.dbName === 'userList';
+    };
+    this.dbSync = this.db.sync(this.dbRemote, tempOptions);
 
-        const tempOptions = this.options;
-        tempOptions.filter = function (doc) {
-          return doc.dbName === 'userList';
-        };
+    this.db.changes({
+      since: 'now',
+      live: true,
+      include_docs: true
+    }).on('change', change => {
+      console.log("changes");
+      this.handleChange(change);
+    }).on('paused', function (info) {
+      // replication was paused, usually because of a lost connection
+    }).on('active', function (info) {
+      // replication was resumed
+    }).on('error', function (err) {
+      console.log('activities', err);
+    });
 
-        this.dbList.push(config.HOST + config.PORT + '/userList');
-        this.db.replicate.from(this.dbRemote, tempOptions).then(() => {
-          this.db.replicate.to(this.dbRemote, tempOptions);
-        });
-
-        this.db.changes({
-          since: 'now',
-          live: true,
-          include_docs: true
-        }).on('change', change => {
-          console.log("changes");
-          this.handleChange(change);
-        }).on('paused', function (info) {
-          // replication was paused, usually because of a lost connection
-        }).on('active', function (info) {
-          // replication was resumed
-        }).on('error', function (err) {
-          console.log('activities', err);
-        });
-      });
+    this.dbList.push(config.HOST + config.PORT + '/userList');
+    //this.db.replicate.from(this.dbRemote, tempOptions);
+    //this.db.replicate.to(this.dbRemote, tempOptions);
   }
 
   /**
@@ -81,9 +78,8 @@ export class DatabaseService {
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
-            this.db.replicate.from(dbToAdd, tempOptions).then(() => {
-              this.db.replicate.to(dbToAdd, tempOptions);
-            });
+            this.db.replicate.from(dbToAdd, tempOptions);
+            this.db.replicate.to(dbToAdd, tempOptions);
             resolve(dbToAdd);
           });
       }
@@ -101,9 +97,8 @@ export class DatabaseService {
             return doc.dbName === `${databaseName}_${guid}`;
           };
           this.dbList.push(`${databaseName}_${guid}`);
-          this.db.replicate.from(dbToAdd, tempOptions).then(() => {
-            this.db.replicate.to(dbToAdd, tempOptions);
-          });
+          this.db.replicate.from(dbToAdd, tempOptions);
+          this.db.replicate.to(dbToAdd, tempOptions);
           resolve(dbToAdd);
         });
     });
@@ -136,7 +131,7 @@ export class DatabaseService {
     console.log(docId);
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
-        console.log(res);
+        console.log(res, docId);
       })
         .then(() => {
           return this.db.get(docId);
