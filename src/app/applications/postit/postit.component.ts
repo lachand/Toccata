@@ -1,11 +1,11 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-chat',
+  selector: 'app-post-it',
   templateUrl: './postit.component.html',
 })
 
-export class ChatComponent {
+export class PostItComponent {
 
   constructor() {
     /**const KanbanTest = new jKanban({
