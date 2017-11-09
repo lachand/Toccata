@@ -1,7 +1,7 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
-  <div *ngFor="let activityId of activityService.activityLoadedChild | orderBy : ['+position']" fxFlex="98%"
+  <div *ngFor="let activityId of activityService.activityLoadedChild" fxFlex="98%"
        class="flex-card">
     <app-activity-sequence-infos [activityId]="activityId"></app-activity-sequence-infos>
   </div>
