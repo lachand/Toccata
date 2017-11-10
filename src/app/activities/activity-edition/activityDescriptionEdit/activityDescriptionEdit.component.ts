@@ -43,7 +43,7 @@ export class ActivityDescriptionEditComponent {
   }
 
   switchDescription() {
-    console.log('enter in edition mode');
+    this.description = this.activityService.activityLoaded.description;
     this.descriptionEdition = !this.descriptionEdition;
   }
 

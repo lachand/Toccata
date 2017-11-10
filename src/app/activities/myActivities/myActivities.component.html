@@ -4,8 +4,12 @@
     <app-activity-infos [activityId]="activity"></app-activity-infos>
   </div>
 
-  <div fxFlex="30%" class="flex-card-centered">
-    <mat-icon class="icon-huge" (click)="newActivity()">add_circle</mat-icon>
-    <p>Ajouter une activité</p>
+  <div fxFlex="33%" class="flex-card">
+    <mat-card class="activity-card" (dbclick)="newActivity()">
+      <div class="div-centered">
+        <mat-icon class="icon-huge" (click)="newActivity()">add_circle</mat-icon>
+        <p>Ajouter une activité</p>
+      </div>
+    </mat-card>
   </div>
 </div>

@@ -25,7 +25,7 @@ export class ActivityService {
               public appsService: AppsService) {
     this.database.changes.subscribe(
       (change) => {
-        console.log(`there is a change ${change}`);
+        console.log(`there is a change ${change.type}`);
         if (change.type === 'Activity') {
           if (change.doc.type === 'Main') {
             this.changes.emit({doc: change.doc, type: 'Main'});
@@ -33,12 +33,15 @@ export class ActivityService {
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
             }
-
+            console.log(this.activityLoaded._id, change.doc);
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
             }
           } else {
             this.changes.emit({doc: change.doc, type: 'Sequence'});
+            if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
+              this.load_activity(change.doc._id);
+            }
           }
         }
       }
@@ -129,7 +132,7 @@ export class ActivityService {
           _id: dbName,
           type: activityType,
           name: 'Nouvelle activité',
-          description: `Il n'y à aucune description`,
+          description: `Nouvelle description`,
           userList: [this.user.id],
           subactivityList: [],
           resourceList: [],
