@@ -24,6 +24,7 @@ export class PostitComponent {
   dataAdapter: any;
   columns: any[];
   template: string;
+
   itemRenderer = (element: any, item: any, resource: any): void => {
     element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML =
       '<span style="line-height: 23px; margin-left: 5px;">' + resource.name + '</span>';

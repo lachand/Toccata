@@ -55,6 +55,7 @@ import {ResourceInfosComponent} from './activities/activity-edition/resourceInfo
 import {ParticipantInfosComponent} from './activities/activity-edition/participantsInfos/participantInfos.component';
 import {ApplicationInfosComponent} from './activities/activity-edition/applicationInfos/applicationInfos.component';
 import {PostitComponent} from './applications/postit/postit.component';
+import {ChronometreComponent} from "./applications/chronometre/chronometre.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -79,6 +80,7 @@ import {PostitComponent} from './applications/postit/postit.component';
     ActivityInfosComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
+    ChronometreComponent,
     ResourceInfosComponent,
     ApplicationInfosComponent,
     jqxKanbanComponent,

@@ -78,6 +78,7 @@
     "rimraf": "^2.6.2",
     "rxjs": "^5.1.0",
     "superlogin": "^0.6.1",
+    "timer-stopwatch": "^0.2.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0",
