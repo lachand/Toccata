@@ -1,4 +1,4 @@
-<mat-card class="activity-card" (dblclick)="view_or_edit(activityId)">
+<mat-card class="activity-card" (dblclick)="show_activity(activityId)">
   <!--
   <img mat-card-image src="http://163.172.38.12:5984/activites/{{activityId}}/{{activityInfos?.image}}"
        alt="http://163.172.38.12:5984/{{activityId}}/{{activityInfos?.image}}">
@@ -7,7 +7,21 @@
   <div class="header-card-actions"><button mat-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
 -->
 
-  <h3 mat-line>{{activityInfos?.name}}</h3>
+  <h3 mat-line>{{activityInfos?.name}}
+    <button class="menu-right-align" mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </h3>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activityId)">
+      <span>Editer</span>
+    </button>
+    <button mat-menu-item (click)="show_activity(activityId)">
+      <span>Voir</span>
+    </button>
+  </mat-menu>
+
   <div [innerHTML]="activityInfos?.description" class="activity-description"></div>
 
         <mat-card-actions class="centered">
