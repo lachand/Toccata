@@ -1,6 +1,0 @@
-# folder to ignore
-.idea
-node_modules
-#files to ignore
-*.iml
-/jkanban.dev.scss

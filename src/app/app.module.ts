@@ -1,3 +1,6 @@
+import 'zone.js';
+import 'reflect-metadata';
+
 import {BrowserModule} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +16,8 @@ import { RouterModule } from '@angular/router';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { routes } from './app.routes';
 import {ScrollToModule} from 'ng2-scroll-to';
+import {jqxKanbanComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxkanban';
+import {jqxSplitterComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxsplitter';
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './applications/chat/chat.component';
@@ -48,7 +53,8 @@ import {DatabaseService} from 'app/services/database.service';
 import {ActivitySequenceInfosComponent} from './activities/activity-edition/activitySequenceInfos/activitySequenceInfos.component';
 import {ResourceInfosComponent} from './activities/activity-edition/resourceInfos/resourceInfos.component';
 import {ParticipantInfosComponent} from './activities/activity-edition/participantsInfos/participantInfos.component';
-import {ApplicationInfosComponent} from "./activities/activity-edition/applicationInfos/applicationInfos.component";
+import {ApplicationInfosComponent} from './activities/activity-edition/applicationInfos/applicationInfos.component';
+import {PostitComponent} from './applications/postit/postit.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -75,6 +81,9 @@ import {ApplicationInfosComponent} from "./activities/activity-edition/applicati
     ActivityResourceViewComponent,
     ResourceInfosComponent,
     ApplicationInfosComponent,
+    jqxKanbanComponent,
+    jqxSplitterComponent,
+    PostitComponent,
     ParticipantInfosComponent,
     DialogConfirmationComponent,
     MenuComponent,

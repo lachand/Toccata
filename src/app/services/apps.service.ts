@@ -116,4 +116,25 @@ export class AppsService {
   logout() {
     this.applications = [];
   }
+
+  /**
+   * Get ressources of an application
+   * @param appId
+   * @returns {Promise<any>}
+   */
+  getRessources(appId) {
+    return new Promise(resolve => {
+      this.databaseService.db.find({
+        selector: {
+          'documentType': 'Ressource application',
+          'application': appId
+        }
+      }).then(function (result) {
+        resolve(result);
+      }).catch(function (err) {
+        console.log(`Error in apps service whith call to getRessources : 
+          ${err}`);
+      });
+    });
+  }
 }

@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import * as config from 'variables';
 import PouchDB from 'pouchdb';
+import PouchdbFind from 'pouchdb-find';
 
 @Injectable()
 export class DatabaseService {
@@ -16,6 +17,8 @@ export class DatabaseService {
   change = new EventEmitter();
 
   constructor() {
+
+    PouchDB.plugin(PouchdbFind);
 
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
     this.db = new PouchDB('localDatabase');
@@ -36,7 +39,7 @@ export class DatabaseService {
       live: true,
       include_docs: true
     }).on('change', change => {
-      console.log("changes");
+      console.log("changes", change);
       this.handleChange(change);
     }).on('paused', function (info) {
       // replication was paused, usually because of a lost connection
@@ -176,6 +179,20 @@ export class DatabaseService {
           console.log(`Error in database service whith call to updateDocument:
           ${err}`);
         });
+    });
+  }
+
+  /**
+   * Remove the specified document
+   * @param id
+   */
+  removeDocument(documentId) {
+    return new Promise(resolve => {
+      this.db.get(documentId).then(document => {
+        this.db.remove(document).then(res => {
+          resolve(res);
+        });
+      });
     });
   }
 }
