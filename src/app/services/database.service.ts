@@ -21,7 +21,7 @@ export class DatabaseService {
     PouchDB.plugin(PouchdbFind);
 
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
-    this.db = new PouchDB('localDatabase');
+    this.db = new PouchDB('myLocalDatabase');
 
     this.options = {
       live: true,
