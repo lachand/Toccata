@@ -27,6 +27,7 @@ import {AppsService} from '../../../services/apps.service';
       appName: ['', Validators.required],
       appType: ['', Validators.required],
       serviceName: '',
+      chronometreValue: '',
       url: ''
     });
 
@@ -41,10 +42,17 @@ import {AppsService} from '../../../services/apps.service';
    * Create a new application and add it to current activity
    */
   newApp() {
+    // Case Chronometer
+    const options = {};
+    if (this.formNewApp.value.appType === 'Chronomètre') {
+      options['time'] = this.formNewApp.value.chronometreValue;
+    }
+
     const appToAdd = {
       type: this.formNewApp.value.appType,
       provider: this.formNewApp.value.appType,
-      name: this.formNewApp.value.appName
+      name: this.formNewApp.value.appName,
+      options: options
     };
     console.log(this.formNewApp);
     this.activityService.getActivityInfos(this.activity._id).then(activity => {

@@ -47,6 +47,13 @@ export class AppsService {
       dbName: dbName,
     };
 
+    if (app.type === 'Chronomètre') {
+      application['running'] = false;
+      application['initialTime'] = app.options.time;
+      application['timeLeft'] = app.options.time;
+      application['startedAt'] = '';
+    }
+
     if (app.provider === 'Feuille de calcul') {
       application.url = `https://framacalc.org/${guid}`;
     } else if (app.provider === 'Editeur de texte') {

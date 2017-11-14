@@ -15,6 +15,11 @@
     <input matInput placeholder="Nom de l'application" type="text" formControlName="appName">
   </mat-input-container>
 
+  <div [hidden]="!(appType == 'Chronomètre')">
+    <mat-input-container>
+      <input matInput placeholder="Durée" type="time" formControlName="chronometreValue">
+    </mat-input-container>
+  </div>
 
   <div [hidden]="!(appType == 'Externe')">
     <mat-input-container>

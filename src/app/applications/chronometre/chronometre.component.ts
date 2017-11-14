@@ -14,7 +14,7 @@ import {Stopwatch} from 'timer-stopwatch';
 export class ChronometreComponent {
 
   // For tests
-  appName: any = 'application_chronometre_zz2e9963-3380-2be1-5zz8-9f4debfd4d8a';
+  appName: any = 'application_Chronomètre_6afec131-6fc0-c38f-c87d-ad88031d76d9';
   chronometre: any;
   timeLeft: any;
   timer: any;
@@ -28,7 +28,7 @@ export class ChronometreComponent {
       console.log(chrono);
       this.chronometre = chrono;
       this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
-      this.timer = new Stopwatch(this.timeLeft, {refreshRateMS: 1000, almostDoneMS: 300000});
+      this.timer = new Stopwatch(this.timeLeft, {refreshRateMS: 1000, almostDoneMS: 450000});
     });
   }
 
