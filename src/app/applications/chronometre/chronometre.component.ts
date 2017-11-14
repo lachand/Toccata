@@ -84,7 +84,7 @@ export class ChronometreComponent {
       this.mm = m;
       this.ss = s;
 
-      if (h === '00' && m === '01' && s === '00') {
+      if (h === '00' && m === '09' && s === '00') {
         document.getElementById('chronometer').className = 'blink';
       }
       console.log(`${h}:${m}:${s}`);
