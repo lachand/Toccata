@@ -28,7 +28,7 @@ export class ChronometreComponent {
       console.log(chrono);
       this.chronometre = chrono;
       this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
-      this.timer = new Stopwatch(this.timeLeft, {refreshRateMS: 1000, almostDoneMS: 450000});
+      this.timer = new Stopwatch(this.timeLeft, {refreshRateMS: 1000, almostDoneMS: 540000});
     });
   }
 
