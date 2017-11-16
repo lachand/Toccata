@@ -27,11 +27,23 @@ export class ChronometreComponent implements OnInit {
   ngOnInit(): void {
     const Stopwatch = require('timer-stopwatch');
     this.databaseService.getDocument(this.appId).then(chrono => {
-      console.log(chrono);
+      const actualTime = Date.now();
+      let timeChronometer;
       this.chronometre = chrono;
+      console.log(this.chronometre);
       this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
-      this.timer = new Stopwatch(this.timeLeft, {refreshRateMS: 1000, almostDoneMS: 540000});
+      if (this.chronometre.running) {
+        timeChronometer = this.timeLeft - ( actualTime - this.chronometre.startedAt);
+      } else {
+        timeChronometer = this.timeLeft;
+      }
+
+      this.timer = new Stopwatch(timeChronometer, {refreshRateMS: 1000, almostDoneMS: 540000});
       this.title = this.chronometre.timeLeft;
+      if (this.chronometre.running) {
+        this.timerStart();
+        console.log(timeChronometer, this.chronometre.running, this.timer);
+      }
     });
   }
 
@@ -69,6 +81,15 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerStart() {
+    if (!this.chronometre.running) {
+      const startedAt = Date.now();
+      this.databaseService.getDocument(this.appId).then(chronometre => {
+        chronometre['startedAt'] = startedAt;
+        chronometre['running'] = true;
+        this.databaseService.updateDocument(chronometre);
+      });
+    }
+
     this.timer.onTime((time) => {
       this.title = this.parseMillisecondsIntoReadableTime(time.ms);
     });
@@ -76,10 +97,20 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerPause() {
+    this.databaseService.getDocument(this.appId).then(chronometre => {
+      chronometre['running'] = false;
+      chronometre['timeLeft'] = this.parseMillisecondsIntoReadableTime(chronometre['initialTime']);
+      this.databaseService.updateDocument(chronometre);
+    });
     this.timer.stop();
   }
 
   timerReload() {
+    this.databaseService.getDocument(this.appId).then(chronometre => {
+      chronometre['running'] = false;
+      chronometre['timeLeft'] = chronometre['initialTime'];
+      this.databaseService.updateDocument(chronometre);
+    });
     this.timeLeft = this.timeInMiliSeconds(this.chronometre.initialTime);
     this.timer.reset(this.timeLeft);
   }
