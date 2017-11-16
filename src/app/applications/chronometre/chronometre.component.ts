@@ -99,7 +99,7 @@ export class ChronometreComponent implements OnInit {
   timerPause() {
     this.databaseService.getDocument(this.appId).then(chronometre => {
       chronometre['running'] = false;
-      chronometre['timeLeft'] = this.parseMillisecondsIntoReadableTime(chronometre['initialTime']);
+      chronometre['timeLeft'] = this.timeLeft - ( Date.now() - chronometre['startedAt']);
       this.databaseService.updateDocument(chronometre);
     });
     this.timer.stop();
