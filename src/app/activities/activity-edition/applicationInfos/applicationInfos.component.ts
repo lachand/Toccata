@@ -20,4 +20,9 @@ export class ApplicationInfosComponent implements OnInit {
     });
   }
 
+  switchStatus() {
+    this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
+      this.application = applicationInfos;
+    });
+  }
 }

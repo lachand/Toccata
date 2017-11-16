@@ -7,9 +7,17 @@ export class AppsService {
   applications: any;
 
   @Output()
-  change = new EventEmitter();
+  changes = new EventEmitter();
 
   constructor(@Inject(Http) public http: Http, public databaseService: DatabaseService) {
+    this.databaseService.changes.subscribe(
+      (change) => {
+        console.log(`there is a change ${change.type}`);
+        if (change.type === 'Application') {
+          this.changes.emit({doc: change.doc, type: 'Application'});
+        }
+      }
+    );
   }
 
   /**
@@ -34,12 +42,12 @@ export class AppsService {
    * @param dbName
    * @returns {Promise<any>}
    */
-  public createApp(app, dbName) {
+  public createApp(app, activityId, dbName) {
     console.log('debug : ', app, dbName);
     const guid = this.databaseService.guid();
     const application = {
       _id: `application_${app.provider}_${guid}`,
-      name: app.provider,
+      name: app.name,
       documentType: 'Application',
       type: app.type,
       status: 'unloaded',
@@ -61,14 +69,14 @@ export class AppsService {
     }
 
     return new Promise(resolve => {
-      return this.databaseService.getDocument(dbName).then(activity => {
+      return this.databaseService.getDocument(activityId).then(activity => {
         activity['applicationList'].push(application._id);
         return this.databaseService.addDocument(activity);
       })
         .then(() => {
           return this.databaseService.addDocument(application).then(res => {
             resolve(res);
-          })
+          });
         }).catch(err => {
           console.log(`Error in apps service whith call to createApp:
           ${err}`);
@@ -84,10 +92,11 @@ export class AppsService {
     console.log(applicationId);
     return new Promise(resolve => {
       return this.databaseService.getDocument(applicationId).then(application => {
-        console.log("debug : ", application);
         resolve({
           name: application['name'],
-          id: application['_id']
+          id: application['_id'],
+          type: application['type'],
+          status: application['status']
         });
       }).catch(err => {
         console.log(`Error in apps service whith call to getApplicationInfos : 
@@ -142,6 +151,35 @@ export class AppsService {
         console.log(`Error in apps service whith call to getRessources : 
           ${err}`);
       });
+    });
+  }
+
+  /**
+   * Switch the status of the application
+   * @param applicationId
+   */
+  switchApplicationStatus(applicationId: any) {
+    return new Promise(resolve => {
+      return this.databaseService.getDocument(applicationId).then(application => {
+          let status = application['status'];
+          if (status === 'unloaded') {
+            status = 'loaded';
+          } else {
+            status = 'unloaded';
+          }
+          application['status'] = status;
+          return this.databaseService.updateDocument(application);
+        }
+      ).then(() => {
+        return this.getApplicationInfos(applicationId);
+      })
+        .then(appInfos => {
+          resolve(appInfos);
+        })
+        .catch(function (err) {
+          console.log(`Error in apps service whith call to getRessources : 
+          ${err}`);
+        });
     });
   }
 }

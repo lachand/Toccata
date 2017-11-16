@@ -13,7 +13,6 @@ import {AppsService} from '../../../services/apps.service';
   export class ActivityNewAppComponent {
   apps: any;
   appType: any;
-  activity: any;
   dialogRef: MatDialogRef<ActivityNewAppComponent>;
   formNewApp: FormGroup;
 
@@ -32,7 +31,6 @@ import {AppsService} from '../../../services/apps.service';
     });
 
     this.appType = '';
-    this.activity = activityService.activityLoaded;
     this.formNewApp.valueChanges.subscribe(data => {
       this.appType = data.appType;
     });
@@ -55,8 +53,8 @@ import {AppsService} from '../../../services/apps.service';
       options: options
     };
     console.log(this.formNewApp);
-    this.activityService.getActivityInfos(this.activity._id).then(activity => {
-      this.appsService.createApp(appToAdd, activity['dbName']).then(() => {
+    this.activityService.getActivityInfos(this.activityService.activityLoaded._id).then(activity => {
+      this.appsService.createApp(appToAdd, this.activityService.activityLoaded._id, activity['dbName']).then(() => {
         this.dialogRef.close();
       });
     });

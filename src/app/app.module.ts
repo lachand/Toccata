@@ -9,7 +9,7 @@ import {
   MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
   MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
-  MatFormFieldModule, MatSelectModule
+  MatFormFieldModule, MatSelectModule, MatStepperModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -55,7 +55,9 @@ import {ResourceInfosComponent} from './activities/activity-edition/resourceInfo
 import {ParticipantInfosComponent} from './activities/activity-edition/participantsInfos/participantInfos.component';
 import {ApplicationInfosComponent} from './activities/activity-edition/applicationInfos/applicationInfos.component';
 import {PostitComponent} from './applications/postit/postit.component';
-import {ChronometreComponent} from "./applications/chronometre/chronometre.component";
+import {ChronometreComponent} from './applications/chronometre/chronometre.component';
+import {ActivityNameComponent} from './activities/activity-edition/activityName/activityName.component';
+import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/applicationLaunched/applicationLaunched.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -80,6 +82,8 @@ import {ChronometreComponent} from "./applications/chronometre/chronometre.compo
     ActivityInfosComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
+    ActivityNameComponent,
+    ApplicationLaunchedComponent,
     ChronometreComponent,
     ResourceInfosComponent,
     ApplicationInfosComponent,
@@ -104,6 +108,7 @@ import {ChronometreComponent} from "./applications/chronometre/chronometre.compo
     MatCardModule,
     MatDialogModule,
     MatRadioModule,
+    MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,

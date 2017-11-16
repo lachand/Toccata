@@ -33,12 +33,17 @@ export class LoginComponent implements OnInit {
    */
   login(): void {
     if (this.loginForm.valid) {
+      console.log("here");
       this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
-          if (this.userService.isLoggedIn()) {
+        console.log("debug - 1");
+        if (this.userService.isLoggedIn()) {
+          console.log("debug0");
             return this.activityService.getActivities().then(res => {
+              console.log("debug 1");
               return this.userService.getAllUsers();
             })
               .then(() => {
+                console.log("debug 2");
                 this.router.navigate(['../activities']);
               });
           }

@@ -1,4 +1,4 @@
-import {Component, ViewChild, ViewEncapsulation, OnInit} from '@angular/core';
+import {Component, ViewChild, ViewEncapsulation, OnInit, Input} from '@angular/core';
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
@@ -11,26 +11,30 @@ import {Stopwatch} from 'timer-stopwatch';
   encapsulation: ViewEncapsulation.None
 })
 
-export class ChronometreComponent {
+export class ChronometreComponent implements OnInit {
+
+  @Input() appId;
 
   // For tests
-  appName: any = 'application_Chronomètre_6afec131-6fc0-c38f-c87d-ad88031d76d9';
   chronometre: any;
   timeLeft: any;
   timer: any;
-  hh: any;
-  mm: any;
-  ss: any;
+  title: any;
 
   constructor(public databaseService: DatabaseService) {
+  }
+
+  ngOnInit(): void {
     const Stopwatch = require('timer-stopwatch');
-    this.databaseService.getDocument(this.appName).then(chrono => {
+    this.databaseService.getDocument(this.appId).then(chrono => {
       console.log(chrono);
       this.chronometre = chrono;
       this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
       this.timer = new Stopwatch(this.timeLeft, {refreshRateMS: 1000, almostDoneMS: 540000});
+      this.title = this.chronometre.timeLeft;
     });
   }
+
 
   /**
    * This is a response from XerxesNoble to the post
@@ -55,42 +59,29 @@ export class ChronometreComponent {
     let absoluteSeconds = Math.floor(seconds);
     let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
-    return h + ':' + m + ':' + s;
+    if (m === '14' && s !== '00') {
+      document.getElementById('title').className = 'blink';
+    } else if (m === '14' && s === '00') {
+      document.getElementById('title').className = 'blink-fast';
+    }
+
+    return `${m}:${s}`;
   }
 
   timerStart() {
-    this.timer.onDone(() => {
-      document.getElementById('chronometer').className = 'blink-fast';
-    });
     this.timer.onTime((time) => {
-      console.log(time);
-      //Get hours from milliseconds
-      let milliseconds = time.ms;
-      let hours = milliseconds / (1000 * 60 * 60);
-      let absoluteHours = Math.floor(hours);
-      let h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
-
-      //Get remainder from hours and convert to minutes
-      let minutes = (hours - absoluteHours) * 60;
-      let absoluteMinutes = Math.floor(minutes);
-      let m = absoluteMinutes > 9 ? absoluteMinutes : '0' + absoluteMinutes;
-
-      //Get remainder from minutes and convert to seconds
-      let seconds = (minutes - absoluteMinutes) * 60;
-      let absoluteSeconds = Math.floor(seconds);
-      let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
-
-      this.hh = h;
-      this.mm = m;
-      this.ss = s;
-
-      //if (h === '00' && m === '09' && s === '00') {
-      if (this.mm === '08') {
-        document.getElementById('chronometer').className = 'blink';
-      }
-      console.log(`${h}:${m}:${s}`);
+      this.title = this.parseMillisecondsIntoReadableTime(time.ms);
     });
     this.timer.start();
+  }
+
+  timerPause() {
+    this.timer.stop();
+  }
+
+  timerReload() {
+    this.timeLeft = this.timeInMiliSeconds(this.chronometre.initialTime);
+    this.timer.reset(this.timeLeft);
   }
 
   timeInMiliSeconds(str) {
@@ -102,10 +93,6 @@ export class ChronometreComponent {
       s += m * parseInt(p.pop(), 10);
       m *= 60;
     }
-
-    this.hh = p[0];
-    this.mm = p[1];
-    this.ss = p[2];
 
     return (s * 1000);
   }

@@ -1,42 +1,68 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<app-activity-name-edit [edit]="false"></app-activity-name-edit>
+<div fxFlex="100%" class="flex-card">
+  <mat-card>
 
-<div fxLayout="column" fxLayout.xs="column" class="flex-main-div">
+    <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
+      <div fxFlex="33%">
+        <h3>{{activityService.activityLoaded.name}}</h3>
+      </div>
+      <div fxFlex="63%">
 
-  <div fxFlex="90%" class="flex-card">
-    <mat-card>
-      <app-activity-description-edit [edit]="false"></app-activity-description-edit>
-    </mat-card>
-  </div>
+        <div>
+          <mat-horizontal-stepper [linear]="false" (selectionChange)="loadActivity($event)">
+            <mat-step *ngFor="let step of steps" [completed]="false">
+              <ng-template matStepLabel>
+                <activity-name [activityId]="step"></activity-name>
+              </ng-template>
+            </mat-step>
+          </mat-horizontal-stepper>
+        </div>
+      </div>
+    </div>
 
-  <app-postit></app-postit>
-  <app-chronometre></app-chronometre>
+    <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 
-  <!--
-  <div fxFlex="90%" class="flex-card">
-    <mat-card>
-      <mat-card-header>
-        <h3 mat-line>Séquence d'activités</h3>
-      </mat-card-header>
-      <app-activity-sequence-edit [edit]="false"></app-activity-sequence-edit>
-    </mat-card>
-  </div>
+      <div fxFlex="33%">
 
-  <div fxFlex="90%" class="flex-card">
-    <mat-card>
-      <mat-card-header>
-        <h3 mat-line>Applications</h3>
-      </mat-card-header>
-      <app-activity-apps-edit [edit]="false"></app-activity-apps-edit>
-    </mat-card>
-  </div>
+        <div>
+          <mat-card class="flex-card">
+            <app-activity-description-edit [edit]="false"></app-activity-description-edit>
+          </mat-card>
+        </div>
 
-  <div fxFlex="90%" class="flex-card" *ngIf="activityService.activityLoaded.type ==='Main'">
-    <mat-card>
-      <app-activity-participants-edit [edit]="false"></app-activity-participants-edit>
-    </mat-card>
-  </div>
-  -->
 
+        <div>
+          <mat-card class="flex-card">
+            <mat-card-header>
+              <h3 mat-line>Ressources</h3>
+            </mat-card-header>
+            <app-activity-resources [edit]="false"></app-activity-resources>
+          </mat-card>
+        </div>
+
+        <div>
+          <mat-card class="flex-card">
+            <mat-card-header>
+              <h3 mat-line>Applications</h3>
+            </mat-card-header>
+            <app-activity-apps-edit [edit]="false"></app-activity-apps-edit>
+          </mat-card>
+        </div>
+
+        <div *ngIf="activityService.activityLoaded.type ==='Main'">
+          <mat-card class="flex-card">
+            <app-activity-participants-edit [edit]="true"></app-activity-participants-edit>
+          </mat-card>
+        </div>
+
+      </div>
+
+      <div fxFlex="66%">
+        <application-launched *ngFor="let app of activityService.activityLoaded.applicationList"
+                              [appId]="app"></application-launched>
+      </div>
+    </div>
+
+  </mat-card>
 </div>

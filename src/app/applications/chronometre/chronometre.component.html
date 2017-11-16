@@ -1,5 +1,8 @@
-<div>
-  Temps restant :
-  <h2 id="chronometer">{{hh}} : {{mm}} : {{ss}}</h2>
-  <mat-icon (click)="timerStart()">play_arrow</mat-icon>
-</div>
+<mat-card>
+  <mat-card-title>Temps restant :
+    <div id="title">{{title}}</div>
+    <mat-icon (click)="timerStart()">play_arrow</mat-icon>
+    <mat-icon (click)="timerPause()">pause</mat-icon>
+    <mat-icon (click)="timerReload()">replay</mat-icon>
+  </mat-card-title>
+</mat-card>

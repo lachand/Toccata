@@ -32,24 +32,30 @@ export class DatabaseService {
     tempOptions.filter = function (doc) {
       return doc.dbName === 'userList';
     };
-    this.dbSync = this.db.sync(this.dbRemote, tempOptions);
 
-    this.db.changes({
-      since: 'now',
-      live: true,
-      include_docs: true
-    }).on('change', change => {
-      console.log("changes", change);
-      this.handleChange(change);
-    }).on('paused', function (info) {
-      // replication was paused, usually because of a lost connection
-    }).on('active', function (info) {
-      // replication was resumed
-    }).on('error', function (err) {
-      console.log('activities', err);
+    this.db.replicate.from(this.dbRemote).on('complete', (info) => {
+      console.log(info);
+      this.db.sync(this.dbRemote, tempOptions);
+
+      this.db.changes({
+        since: 'now',
+        live: true,
+        include_docs: true,
+        retry: true
+      }).on('change', change => {
+        console.log("changes", change);
+        this.handleChange(change);
+      }).on('paused', function (info) {
+        // replication was paused, usually because of a lost connection
+      }).on('active', function (info) {
+        // replication was resumed
+      }).on('error', function (err) {
+        console.log('activities', err);
+      });
+
+      this.dbList.push(config.HOST + config.PORT + '/userList');
     });
 
-    this.dbList.push(config.HOST + config.PORT + '/userList');
     //this.db.replicate.from(this.dbRemote, tempOptions);
     //this.db.replicate.to(this.dbRemote, tempOptions);
   }
@@ -81,9 +87,11 @@ export class DatabaseService {
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
-            this.db.replicate.from(dbToAdd, tempOptions);
-            this.db.replicate.to(dbToAdd, tempOptions);
-            resolve(dbToAdd);
+            this.db.replicate.from(dbToAdd).on('complete', (info) => {
+              console.log(info);
+              this.db.sync(dbToAdd, tempOptions);
+              resolve(dbToAdd);
+            });
           });
       }
     });
@@ -100,9 +108,11 @@ export class DatabaseService {
             return doc.dbName === `${databaseName}_${guid}`;
           };
           this.dbList.push(`${databaseName}_${guid}`);
-          this.db.replicate.from(dbToAdd, tempOptions);
-          this.db.replicate.to(dbToAdd, tempOptions);
-          resolve(dbToAdd);
+          this.db.replicate.from(dbToAdd).on('complete', (info) => {
+            console.log(info);
+            this.db.sync(dbToAdd, tempOptions);
+            resolve(dbToAdd);
+          });
         });
     });
   }

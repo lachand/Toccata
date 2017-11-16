@@ -11,6 +11,7 @@ import {isNullOrUndefined} from "util";
 export class ActivityService {
   db: any;
   activityLoaded: any;
+  sisters: any;
   activitiesList: Array<any>;
   activityLoadedChild: any;
   user: any;
@@ -98,6 +99,7 @@ export class ActivityService {
     return new Promise(resolve => {
       this.database.getDocument(activity_id)
         .then((result) => {
+          this.sisters = this.activityLoadedChild;
           this.activityLoaded = result;
           this.activityLoadedChild = result['subactivityList'];
           return this.resourcesService.getResources(this.activityLoaded._id);

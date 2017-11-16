@@ -1,4 +1,4 @@
-import {Component, ViewChild, ViewEncapsulation, OnInit} from '@angular/core';
+import {Component, ViewChild, ViewEncapsulation, OnInit, Input} from '@angular/core';
 import {jqxKanbanComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxkanban';
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
@@ -13,8 +13,7 @@ import {DatabaseService} from '../../services/database.service';
 
 export class PostitComponent {
 
-  // For tests
-  appName: any = 'application_Post-it_96c5e5d9-a7b3-6b9b-f42c-9328cd2c8e37';
+  @Input() appId;
 
   @ViewChild('myKanban') myKanban: jqxKanbanComponent;
 
@@ -73,7 +72,7 @@ export class PostitComponent {
         } else {
           if (change.type === 'Ressource application' &&
             change.doc.applicationType === 'Post-it' &&
-            change.doc.application === this.appName) {
+            change.doc.application === this.appId) {
             if (change.doc.ressourceType === 'Postit') {
               const datas = this.myKanban.source().loadedData;
               let finded = false;
@@ -96,7 +95,7 @@ export class PostitComponent {
       }
     );
 
-    this.appsService.getRessources(this.appName).then((res) => {
+    this.appsService.getRessources(this.appId).then((res) => {
       const appRessources = res;
       console.log(res);
       for (const element of appRessources['docs']) {
@@ -169,7 +168,7 @@ export class PostitComponent {
           '_id': `ressource_application_Post-it_Postit_${this.databaseService.guid()}`,
           'state': args.column.dataField,
           'documentType': 'Ressource application',
-          'application': this.appName,
+          'application': this.appId,
           'applicationType': 'Post-it',
           'ressourceType': 'Postit',
           'label': 'Nouveau Post-it',
