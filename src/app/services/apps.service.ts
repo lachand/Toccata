@@ -189,10 +189,15 @@ export class AppsService {
    * @returns {Promise<any>}
    */
   getApplication(appId: any) {
+    console.log(appId);
     return new Promise(resolve => {
-      this.databaseService.getDocument(appId).then(app => {
+      return this.databaseService.getDocument(appId).then(app => {
         resolve(app);
-      });
+      })
+        .catch(function (err) {
+          console.log(`Error in apps service whith call to getApplication : 
+          ${err}`);
+        });
     });
   }
 
@@ -205,7 +210,11 @@ export class AppsService {
     return new Promise(resolve => {
       this.databaseService.updateDocument(app).then(res => {
         resolve(res);
-      });
+      })
+        .catch(function (err) {
+          console.log(`Error in apps service whith call to getApplication : 
+          ${err}`);
+        });
     });
   }
 }
