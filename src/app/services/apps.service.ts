@@ -14,7 +14,7 @@ export class AppsService {
       (change) => {
         console.log(`there is a change ${change.type}`);
         if (change.type === 'Application') {
-          this.changes.emit({doc: change.doc, type: 'Application'});
+          this.changes.emit({doc: change.doc, type: change.doc.type});
         }
       }
     );
@@ -180,6 +180,32 @@ export class AppsService {
           console.log(`Error in apps service whith call to getRessources : 
           ${err}`);
         });
+    });
+  }
+
+  /**
+   * Get a specified application
+   * @param appId
+   * @returns {Promise<any>}
+   */
+  getApplication(appId: any) {
+    return new Promise(resolve => {
+      this.databaseService.getDocument(appId).then(app => {
+        resolve(app);
+      });
+    });
+  }
+
+  /**
+   * update a specified application
+   * @param app
+   * @returns {Promise<any>}
+   */
+  updateApplication(app: any) {
+    return new Promise(resolve => {
+      this.databaseService.updateDocument(app).then(res => {
+        resolve(res);
+      });
     });
   }
 }

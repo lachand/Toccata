@@ -21,30 +21,59 @@ export class ChronometreComponent implements OnInit {
   timer: any;
   title: any;
 
-  constructor(public databaseService: DatabaseService) {
+  constructor(public databaseService: DatabaseService, public appsService: AppsService) {
   }
 
   ngOnInit(): void {
     const Stopwatch = require('timer-stopwatch');
-    this.databaseService.getDocument(this.appId).then(chrono => {
+    this.appsService.getApplication(this.appId).then(chrono => {
       const actualTime = Date.now();
       let timeChronometer;
       this.chronometre = chrono;
       console.log(this.chronometre);
       this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
+
       if (this.chronometre.running) {
         timeChronometer = this.timeLeft - ( actualTime - this.chronometre.startedAt);
       } else {
         timeChronometer = this.timeLeft;
       }
-
-      this.timer = new Stopwatch(timeChronometer, {refreshRateMS: 1000, almostDoneMS: 540000});
+      console.log(timeChronometer);
+      this.timer = new Stopwatch(timeChronometer, {refreshRateMS: 1000});
       this.title = this.chronometre.timeLeft;
+      console.log(this.timer);
+
       if (this.chronometre.running) {
         this.timerStart();
-        console.log(timeChronometer, this.chronometre.running, this.timer);
       }
+
+      console.log(this.timer)
+
+      this.appsService.changes.subscribe(change => {
+        if (change.type === 'Chronomètre' && this.appId === change.doc._id) {
+          this.handleChange(change.doc);
+        }
+      });
     });
+  }
+
+  handleChange(change) {
+    const actualTime = Date.now();
+    let timeChronometer;
+    this.chronometre = change;
+    this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
+    if (this.chronometre.running) {
+      timeChronometer = this.timeLeft - ( actualTime - this.chronometre.startedAt);
+    } else {
+      timeChronometer = this.timeLeft;
+    }
+    this.timer.reset(timeChronometer);
+    this.title = this.chronometre.timeLeft;
+    if (this.chronometre.running) {
+      this.timer.start();
+    } else {
+      this.timer.stop();
+    }
   }
 
 
@@ -81,38 +110,38 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerStart() {
+    this.timer.onTime((time) => {
+      console.log(time);
+      this.title = this.parseMillisecondsIntoReadableTime(time.ms);
+      console.log(this.title);
+    });
     if (!this.chronometre.running) {
       const startedAt = Date.now();
-      this.databaseService.getDocument(this.appId).then(chronometre => {
+      this.appsService.getApplication(this.appId).then(chronometre => {
         chronometre['startedAt'] = startedAt;
         chronometre['running'] = true;
-        this.databaseService.updateDocument(chronometre);
+        this.appsService.updateApplication(chronometre);
       });
     }
-
-    this.timer.onTime((time) => {
-      this.title = this.parseMillisecondsIntoReadableTime(time.ms);
-    });
     this.timer.start();
   }
 
   timerPause() {
-    this.databaseService.getDocument(this.appId).then(chronometre => {
+    this.appsService.getApplication(this.appId).then(chronometre => {
       chronometre['running'] = false;
-      chronometre['timeLeft'] = this.timeLeft - ( Date.now() - chronometre['startedAt']);
-      this.databaseService.updateDocument(chronometre);
+      chronometre['timeLeft'] = this.parseMillisecondsIntoReadableTime(this.timeLeft - ( Date.now() - chronometre['startedAt']));
+      this.appsService.updateApplication(chronometre);
     });
-    this.timer.stop();
   }
 
   timerReload() {
-    this.databaseService.getDocument(this.appId).then(chronometre => {
+    this.appsService.getApplication(this.appId).then(chronometre => {
       chronometre['running'] = false;
       chronometre['timeLeft'] = chronometre['initialTime'];
-      this.databaseService.updateDocument(chronometre);
+      this.appsService.updateApplication(chronometre);
     });
     this.timeLeft = this.timeInMiliSeconds(this.chronometre.initialTime);
-    this.timer.reset(this.timeLeft);
+    //this.timer.reset(this.timeLeft);
   }
 
   timeInMiliSeconds(str) {
