@@ -84,6 +84,7 @@ export class DatabaseService {
           .then(() => {
             const tempOptions = this.options;
             tempOptions.filter = function (doc) {
+              console.log(doc.dbName, databaseName);
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
