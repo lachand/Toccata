@@ -23,6 +23,22 @@ export class DatabaseService {
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
     this.db = new PouchDB('myLocalDatabase');
 
+    this.db.changes({
+      since: 'now',
+      live: true,
+      include_docs: true,
+      retry: true
+    }).on('change', change => {
+      console.log("changes", change);
+      this.handleChange(change);
+    }).on('paused', function (info) {
+      console.log(info);
+    }).on('active', function (info) {
+      console.log(info);
+    }).on('error', function (err) {
+      console.log('activities', err);
+    });
+
     this.options = {
       live: true,
       retry: true,
@@ -36,22 +52,6 @@ export class DatabaseService {
     this.db.replicate.from(this.dbRemote).on('complete', (info) => {
       console.log(info);
       this.db.sync(this.dbRemote, tempOptions);
-
-      this.db.changes({
-        since: 'now',
-        live: true,
-        include_docs: true,
-        retry: true
-      }).on('change', change => {
-        console.log("changes", change);
-        this.handleChange(change);
-      }).on('paused', function (info) {
-        // replication was paused, usually because of a lost connection
-      }).on('active', function (info) {
-        // replication was resumed
-      }).on('error', function (err) {
-        console.log('activities', err);
-      });
 
       this.dbList.push(config.HOST + config.PORT + '/userList');
     });
