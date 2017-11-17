@@ -23,19 +23,29 @@ export class ActivityViewComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Set the current step to 'undefined' if the current activity is the main activity
+   */
   ngAfterViewInit(): void {
     if (this.activityService.activityLoaded.type === 'Main') {
-      this.stepper.selectedIndex = undefined;
+      //this.stepper.selectedIndex = null;
     }
   }
 
+  /**
+   * Load an activity when the user clicks on a step
+   * @param $event
+   */
   loadActivity($event) {
+    console.log($event);
     const activityId = this.steps[$event.selectedIndex];
-    this.activityService.load_activity(activityId).then(res => {
-      this.router.navigate(['activity_view/' + activityId]);
-    });
+    this.loadAnActivity(activityId);
   }
 
+  /**
+   * Load a specified activity
+   * @param activityId
+   */
   loadAnActivity(activityId) {
     this.activityService.load_activity(activityId).then(res => {
       this.router.navigate(['activity_view/' + activityId]);

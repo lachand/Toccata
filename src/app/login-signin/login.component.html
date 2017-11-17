@@ -19,7 +19,8 @@
   </div>
 
   <div>
-    <button mat-button type="submit">Connexion</button>
+    <button mat-button type="submit" *ngIf="!loading">Connexion</button>
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   </div>
 </form>
     </mat-card>

@@ -23,6 +23,7 @@ export class PostitComponent {
   dataAdapter: any;
   columns: any[];
   template: string;
+  title: any;
 
   itemRenderer = (element: any, item: any, resource: any): void => {
     element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML =
@@ -148,6 +149,8 @@ export class PostitComponent {
       + '<div class="jqx-kanban-item-text"></div>'
       + '<div style="display: none;" class="jqx-kanban-item-footer"></div>'
       + '</div>';
+
+    this.title = 'Kanban';
 
   }
 

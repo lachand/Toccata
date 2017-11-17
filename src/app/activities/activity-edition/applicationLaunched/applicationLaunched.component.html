@@ -1,4 +1,9 @@
-<div *ngIf="application?.status === 'loaded'">
+<mat-card class="flex-card" *ngIf="application?.status === 'loaded'">
+  <button class="menu-right-align" mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <div>
   <app-chronometre *ngIf="application?.type === 'Chronomètre'" [appId]="application?.id"></app-chronometre>
   <app-postit *ngIf="application?.type === 'Post-It'" [appId]="application?.id"></app-postit>
 </div>
+</mat-card>

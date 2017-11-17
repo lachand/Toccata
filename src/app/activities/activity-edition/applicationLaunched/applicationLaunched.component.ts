@@ -3,7 +3,8 @@ import {AppsService} from '../../../services/apps.service';
 
 @Component({
   selector: 'application-launched',
-  templateUrl: './applicationLaunched.component.html'
+  templateUrl: './applicationLaunched.component.html',
+  styleUrls: ['./applicationLaunched.component.scss']
 })
 
 export class ApplicationLaunchedComponent implements OnInit {
@@ -13,12 +14,20 @@ export class ApplicationLaunchedComponent implements OnInit {
 
   constructor(public appsService: AppsService) {
     this.appsService.changes.subscribe(change => {
-      this.application = change.doc;
+      if (this.appId === change.doc._id) {
+        this.application = change.doc;
+      }
     });
   }
 
   ngOnInit(): void {
     this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
+      this.application = applicationInfos;
+    });
+  }
+
+  close() {
+    this.appsService.closeApplication(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
     });
   }

@@ -16,12 +16,14 @@ import {ActivityService} from 'app/services/activity.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  loading: boolean;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
               public activityService: ActivityService) {
   }
 
   ngOnInit() {
+    this.loading = false;
     this.loginForm = this.formBuilder.group({
       username: '',
       password: ''
@@ -33,7 +35,7 @@ export class LoginComponent implements OnInit {
    */
   login(): void {
     if (this.loginForm.valid) {
-      console.log("here");
+      this.loading = true;
       this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
         console.log("debug - 1");
         if (this.userService.isLoggedIn()) {

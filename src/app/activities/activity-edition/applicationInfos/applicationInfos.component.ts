@@ -1,9 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
+import {MatListItem} from "@angular/material";
 
 @Component({
   selector: 'app-application-infos',
-  templateUrl: './applicationInfos.component.html'
+  templateUrl: './applicationInfos.component.html',
+  styleUrls: ['./applicationInfos.component.scss']
 })
 
 export class ApplicationInfosComponent implements OnInit {

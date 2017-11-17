@@ -9,7 +9,7 @@ import {
   MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
   MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
-  MatFormFieldModule, MatSelectModule, MatStepperModule
+  MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -112,6 +112,7 @@ import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/appl
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
     MatOptionModule,
     MatMenuModule,
     MatInputModule,

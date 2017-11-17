@@ -1,5 +1,4 @@
-<mat-card class="flex-card">
-  <h3>Post-it</h3>
+<h3>{{title}}</h3>
 <jqxKanban *ngIf="columns.length > 0"
            #myKanban
            (onItemMoved)="onItemMoved($event)"
@@ -8,4 +7,3 @@
            [height]="400" [template]="template" [source]="dataAdapter" [columns]="columns"
            [resources]="resourcesAdapterFunc()" [itemRenderer]="itemRenderer">
 </jqxKanban>
-</mat-card>
