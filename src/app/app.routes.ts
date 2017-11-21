@@ -7,12 +7,14 @@ import {ActivityAppsComponent} from './activities/activityApps/activityApps.comp
 import {ExternalAppComponent} from './applications/external/externalApp.component';
 import {ActivityEditComponent} from './activities/activity-edition/activityEdit/activityEdit.component';
 import {ActivityViewComponent} from './activities/activity-edition/activityView/activityView.component';
+import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicates.component";
 
 export const routes = [
 //  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: 'activities', component: MyActivitiesComponent, canActivate: [LoggedInGuard] },
+  {path: 'duplicates/:id', component: ViewDuplicatesComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_edit/:id', component: ActivityEditComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_view/:id', component: ActivityViewComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_apps/:id', component: ActivityAppsComponent/**, canActivate: [LoggedInGuard]**/, children:

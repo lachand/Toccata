@@ -203,7 +203,8 @@ export class ActivityService {
           name: activity['name'],
           description: activity['description'],
           image: activity['image'],
-          dbName: activity['dbName']
+          dbName: activity['dbName'],
+          master: activity['master']
         });
       }).catch(err => {
         console.log(`Error in activity service whith call to getActivityInfos : 
@@ -425,6 +426,75 @@ export class ActivityService {
           console.log(`Error in user activity whith call to removeUser : 
           ${err}`);
         });
+    });
+  }
+
+  /**
+   * Duplicate a specified activity in a new database
+   * @param activityId
+   */
+  duplicateActivity(activityId: any) {
+    return new Promise(resolve => {
+      let dbName, guid, newDb;
+      return this.database.getDocument(activityId).then(activity => {
+        dbName = activity['dbName'];
+        guid = this.database.guid();
+        newDb = `${dbName}_duplicate_${guid}`;
+        console.log(newDb);
+        return this.database.addDatabase(newDb);
+      })
+        .then(() => {
+          return this.database.getAllDocs(dbName);
+        })
+        .then(docs => {
+          console.log(docs.docs);
+          return Promise.all(docs.docs.map(row => {
+            const doc = row;
+            doc.dbName = newDb;
+            doc._id = `${doc._id}_duplicate_${guid}`;
+            if (doc.documentType === 'Activity') {
+              let ressources = []
+              for (let resource of doc.resourceList) {
+                ressources.push(`${resource}_duplicate_${guid}`);
+              }
+              let applications = []
+              for (let application of doc.applicationList) {
+                applications.push(`${application}_duplicate_${guid}`);
+              }
+              let subactivities = [];
+              for (let subactivity of doc.subactivityList) {
+                subactivities.push(`${subactivity}_duplicate_${guid}`);
+              }
+              doc.userList = [this.userService.id];
+              if (doc.master) {
+                doc.master = false;
+                doc.masterActivity = dbName;
+              }
+              doc.resourceList = ressources;
+              doc.applicationList = applications;
+              doc.subactivityList = subactivities;
+            } else if (doc.documentType === 'Resource application') {
+              doc.application = `${doc.application}_duplicate_${guid}`;
+            } else if (doc.documentType === 'Resource') {
+              doc.activity = `${doc.activity}_duplicate_${guid}`;
+            }
+            delete doc._rev;
+            return this.database.addDocument(doc);
+          }));
+        })
+        .catch(err => {
+          console.log(`Error in activity service whith call to duplicateActivity : 
+          ${err}`);
+        });
+    });
+  }
+
+  getActivityDuplicate(activityId: any) {
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId).then(activity => {
+        console.log(activity);
+        resolve(activity['duplicateList']);
+      });
     });
   }
 }

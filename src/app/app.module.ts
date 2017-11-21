@@ -58,6 +58,7 @@ import {PostitComponent} from './applications/postit/postit.component';
 import {ChronometreComponent} from './applications/chronometre/chronometre.component';
 import {ActivityNameComponent} from './activities/activity-edition/activityName/activityName.component';
 import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/applicationLaunched/applicationLaunched.component';
+import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicates.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -84,6 +85,7 @@ import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/appl
     ActivityResourceViewComponent,
     ActivityNameComponent,
     ApplicationLaunchedComponent,
+    ViewDuplicatesComponent,
     ChronometreComponent,
     ResourceInfosComponent,
     ApplicationInfosComponent,

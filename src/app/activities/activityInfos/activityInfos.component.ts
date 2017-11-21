@@ -22,6 +22,7 @@ export class ActivityInfosComponent implements OnInit {
   ngOnInit(): void {
     this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
       this.activityInfos = activityInfos;
+      console.log(activityInfos);
     });
     this.activityService.changes.subscribe((change) => {
       if (change.type === 'Main') {
@@ -81,5 +82,13 @@ export class ActivityInfosComponent implements OnInit {
     } else {
       //return this.user.setActivityStatusByStudent(activityId, status);
     }
+  }
+
+  duplicate_activity(activityId) {
+    this.activityService.duplicateActivity(activityId);
+  }
+
+  show_duplicates(activityId) {
+    this.router.navigate(['duplicates/' + activityId]);
   }
 }

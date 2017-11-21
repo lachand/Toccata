@@ -50,7 +50,6 @@ export class DatabaseService {
     };
 
     this.db.replicate.from(this.dbRemote).on('complete', (info) => {
-      console.log(info);
       this.db.sync(this.dbRemote, tempOptions);
 
       this.dbList.push(config.HOST + config.PORT + '/userList');
@@ -84,12 +83,10 @@ export class DatabaseService {
           .then(() => {
             const tempOptions = this.options;
             tempOptions.filter = function (doc) {
-              console.log(doc.dbName, databaseName);
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
             this.db.replicate.from(dbToAdd).on('complete', (info) => {
-              console.log(info);
               this.db.sync(dbToAdd, tempOptions);
               resolve(dbToAdd);
             });
@@ -110,7 +107,6 @@ export class DatabaseService {
           };
           this.dbList.push(`${databaseName}_${guid}`);
           this.db.replicate.from(dbToAdd).on('complete', (info) => {
-            console.log(info);
             this.db.sync(dbToAdd, tempOptions);
             resolve(dbToAdd);
           });
@@ -142,15 +138,15 @@ export class DatabaseService {
    * @returns {Promise<any>}
    */
   getDocument(docId: string) {
-    console.log(docId);
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
-        console.log(res, docId);
+        console.log(res);
       })
         .then(() => {
           return this.db.get(docId);
         })
         .then(result => {
+          console.log(result);
           resolve(result);
         })
         .catch(err => {
@@ -204,6 +200,16 @@ export class DatabaseService {
           resolve(res);
         });
       });
+    });
+  }
+
+  getAllDocs(dbName) {
+    return this.db.find({
+      selector: {
+        dbName: dbName
+      }
+    }).then(res => {
+      return res;
     });
   }
 }

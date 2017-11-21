@@ -1,0 +1,58 @@
+.flex-card {
+  padding: 1%;
+}
+
+.flex-card-centered {
+  padding: 1%;
+  margin: auto;
+  height: 277px;
+}
+
+.centered {
+  margin: auto;
+}
+
+.activity-description {
+  flex-wrap: wrap;
+  height: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.div-centered {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.header-card-actions {
+  margin-left: auto;
+  margin-right: 0px;
+  margin-top: -10px;
+}
+
+.activity-card {
+  cursor: pointer;
+  height: 210px;
+}
+
+.flex-main-div {
+  padding: 1%;
+  margin: 1%;
+  flex-wrap: wrap;
+}
+
+.aligned-with-h3 {
+  margin-top: 15px;
+}
+
+.icon-huge {
+  font-size: 45px;
+  height: 45px;
+  width: 45px;
+}
+
+.material-icons {
+  cursor: pointer;
+}
