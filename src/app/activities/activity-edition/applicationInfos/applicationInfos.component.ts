@@ -17,6 +17,11 @@ export class ApplicationInfosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.appsService.changes.subscribe(change => {
+      if (this.applicationId === change.doc._id) {
+        this.application = change.doc;
+      }
+    });
     this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
     });

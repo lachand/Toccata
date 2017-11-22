@@ -34,7 +34,6 @@ export class ActivityService {
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
             }
-            console.log(this.activityLoaded._id, change.doc);
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
             }
@@ -121,6 +120,25 @@ export class ActivityService {
     });
   }
 
+  setCurrentActivity(activityId) {
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId).then(doc => {
+        if (doc['type'] === 'Main') {
+          doc['currentLoaded'] = doc['_id'];
+          return this.database.updateDocument(doc);
+        } else {
+          console.log(doc);
+          return this.database.getDocument(doc['parent']).then(parent => {
+            parent['currentLoaded'] = doc['_id'];
+            return this.database.updateDocument(parent).then(res => {
+              resolve(res);
+            })
+          });
+        }
+      });
+    });
+  }
+
   /**
    * Create a new activity empty activity
    * @returns {Promise<any>}
@@ -204,7 +222,9 @@ export class ActivityService {
           description: activity['description'],
           image: activity['image'],
           dbName: activity['dbName'],
-          master: activity['master']
+          master: activity['master'],
+          currentLoaded: activity['currentLoaded'],
+          subactivityList: activity['subactivityList']
         });
       }).catch(err => {
         console.log(`Error in activity service whith call to getActivityInfos : 

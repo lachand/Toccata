@@ -140,13 +140,11 @@ export class DatabaseService {
   getDocument(docId: string) {
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
-        console.log(res);
       })
         .then(() => {
           return this.db.get(docId);
         })
         .then(result => {
-          console.log(result);
           resolve(result);
         })
         .catch(err => {

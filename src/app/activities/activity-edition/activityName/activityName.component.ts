@@ -16,7 +16,11 @@ export class ActivityNameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(`id : ${this.activityId}`);
+    this.activityService.changes.subscribe(change => {
+      if (change.doc._id === this.activityId) {
+        this.activityName = change.doc.name;
+      }
+    });
     this.activityService.getActivityInfos(this.activityId).then(res => {
       this.activityName = res['name'];
     });

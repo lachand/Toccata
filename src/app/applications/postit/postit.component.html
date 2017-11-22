@@ -4,6 +4,7 @@
            (onItemMoved)="onItemMoved($event)"
            (onItemAttrClicked)="myKanbanOnItemAttrClicked($event)"
            (onColumnAttrClicked)="myKanbanonColumnAttrClicked($event)"
+           [width]="'100%'"
            [height]="400" [template]="template" [source]="dataAdapter" [columns]="columns"
            [resources]="resourcesAdapterFunc()" [itemRenderer]="itemRenderer">
 </jqxKanban>

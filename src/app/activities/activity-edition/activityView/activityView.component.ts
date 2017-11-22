@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatStepper} from "@angular/material";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-activity-edit',
@@ -16,6 +17,16 @@ export class ActivityViewComponent implements AfterViewInit {
 
   constructor(public activityService: ActivityService,
               public router: Router) {
+    /**
+     this.activityService.changes.subscribe(change => {
+        if (this.activityService.activityLoaded.type === 'Main') {
+          this.steps = this.activityService.activityLoadedChild;
+        } else {
+          this.steps = this.activityService.sisters;
+        }
+    });
+     **/
+
     if (this.activityService.activityLoaded.type === 'Main') {
       this.steps = this.activityService.activityLoadedChild;
     } else {
@@ -27,8 +38,13 @@ export class ActivityViewComponent implements AfterViewInit {
    * Set the current step to 'undefined' if the current activity is the main activity
    */
   ngAfterViewInit(): void {
-    if (this.activityService.activityLoaded.type === 'Main') {
-      //this.stepper.selectedIndex = null;
+    console.log('toto : ', this.stepper.selectedIndex);
+    const activityId = this.activityService.activityLoaded.currentLoaded;
+    if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
+      this.stepper.selectedIndex = this.steps.indexOf(activityId);
+      this.activityService.load_activity(activityId).then(res => {
+        this.router.navigate(['activity_view/' + activityId]);
+      });
     }
   }
 
@@ -37,7 +53,7 @@ export class ActivityViewComponent implements AfterViewInit {
    * @param $event
    */
   loadActivity($event) {
-    console.log($event);
+    console.log(this.stepper, $event.selectedIndex);
     const activityId = this.steps[$event.selectedIndex];
     this.loadAnActivity(activityId);
   }
@@ -47,8 +63,10 @@ export class ActivityViewComponent implements AfterViewInit {
    * @param activityId
    */
   loadAnActivity(activityId) {
-    this.activityService.load_activity(activityId).then(res => {
-      this.router.navigate(['activity_view/' + activityId]);
+    this.activityService.setCurrentActivity(activityId).then(() => {
+      this.activityService.load_activity(activityId).then(res => {
+        this.router.navigate(['activity_view/' + activityId]);
+      });
     });
   }
 
