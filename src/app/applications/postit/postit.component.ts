@@ -3,6 +3,7 @@ import {jqxKanbanComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxka
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-postit',
@@ -84,11 +85,11 @@ export class PostitComponent {
               }
               if (!finded) {
                 this.myKanban.addItem({
+                  id: change.doc._id,
                   status: change.doc.state,
-                  text: change.doc.label,
-                  id: change.doc._id
+                  text: change.doc.label
                 });
-                console.log(this.myKanban.source());
+                console.log(this.myKanban.getItems());
               }
             }
           }
@@ -154,8 +155,16 @@ export class PostitComponent {
 
   myKanbanOnItemAttrClicked(event: any): void {
     const args = event.args;
+    console.log(args, event);
     if (args.attribute === 'template') {
-      this.databaseService.removeDocument(args.item.id);
+      let id;
+      if (isNullOrUndefined(args.item)) {
+        id = this.myKanban.getItems()[args.itemId].id;
+      } else {
+        id = args.item.id;
+      }
+      console.log(id);
+      this.databaseService.removeDocument(id);
     }
   };
 

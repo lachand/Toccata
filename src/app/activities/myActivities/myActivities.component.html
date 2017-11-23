@@ -1,10 +1,10 @@
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-  <div *ngFor="let activity of activityService.activitiesList" fxFlex="33%"
+  <div *ngFor="let activity of activityService.activitiesList" fxFlex="32%"
        class="flex-card">
     <app-activity-infos [activityId]="activity"></app-activity-infos>
   </div>
 
-  <div fxFlex="33%" class="flex-card">
+  <div fxFlex="32%" class="flex-card">
     <mat-card class="activity-card" (dbclick)="newActivity()">
       <div class="div-centered">
         <mat-icon class="icon-huge" (click)="newActivity()">add_circle</mat-icon>
