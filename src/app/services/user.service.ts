@@ -109,7 +109,7 @@ export class UserService {
    */
   createUser(username: string, name: string, surname: string, avatar: string, isTeacher: any) {
     return new Promise(resolve => {
-      const fonct = isTeacher ? 'teacher' : 'student';
+      const fonct = isTeacher ? 'Enseignant' : 'Eleve';
       const document = {
         _id: username,
         name: name,

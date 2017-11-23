@@ -83,10 +83,30 @@ export class ResourcesService {
   }
 
   deleteResource(resource) {
-    return new Promise(resolve => resolve(true));
+    return new Promise(resolve => {
+      return this.database.getDocument(resource).then(res => {
+        console.log(res);
+        resolve(res);
+      });
+    });
+  }
+
+  getResource(resource) {
+    return new Promise(resolve => {
+      return this.database.getDocument(resource).then(res => {
+        console.log(res);
+        resolve(res);
+      });
+    });
   }
 
   getResourceData(resourceId: any, attachmentId: any) {
-    return new Promise(resolve => resolve(true));
+    return new Promise(resolve => {
+      console.log(resourceId, attachmentId);
+      return this.database.db.getAttachment(resourceId, attachmentId).then(res => {
+        console.log(res);
+        resolve(res);
+      });
+    });
   }
 }

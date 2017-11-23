@@ -3,6 +3,26 @@
 <div fxFlex="100%" class="flex-card">
   <mat-card>
 
+    <h3>
+      <activity-name *ngIf="activityService.activityLoaded.type === 'Main'"
+                     [activityId]="activityService.activityLoaded._id"
+                     (click)="loadAnActivity(activityService.activityLoaded._id)"></activity-name>
+      <activity-name *ngIf="activityService.activityLoaded.type === 'Sequence'"
+                     [activityId]="activityService.activityLoaded.parent"
+                     (click)="loadAnActivity(activityService.activityLoaded.parent)"></activity-name>
+    </h3>
+
+    <div>
+      <mat-horizontal-stepper [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
+        <mat-step *ngFor="let step of steps" [completed]="false">
+          <ng-template matStepLabel>
+            <activity-name [activityId]="step"></activity-name>
+          </ng-template>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+
+    <!--
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
       <div fxFlex="33%">
         <h3>
@@ -27,6 +47,7 @@
         </div>
       </div>
     </div>
+  -->
 
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 

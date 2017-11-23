@@ -34,4 +34,10 @@ export class ResourceInfosComponent implements OnInit {
     });
   }
 
+  openRessource() {
+    this.resourcesService.getResourceData(this.resourceId, this.resource.name).then(ressource => {
+      console.log(ressource);
+    });
+  }
+
 }

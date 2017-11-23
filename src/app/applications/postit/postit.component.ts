@@ -106,9 +106,7 @@ export class PostitComponent {
             iconClassName: this.getIconClassName(),
             dataField: element.name
           };
-          if (this.columns.indexOf(column) === -1) {
-            this.columns.push(column);
-          }
+          this.columns[element.position] = column;
         } else if (element.ressourceType === 'Postit') {
           const postit = {
             id: element._id,
