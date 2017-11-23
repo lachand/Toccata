@@ -22,7 +22,7 @@
     </button>
     <button mat-menu-item *ngIf="user.fonction === 'Enseignant' && activityInfos?.master === true"
             (click)="duplicate_activity(activityId)">
-      <span>Dupliquer</span>
+      <span>Partager</span>
     </button>
     <button mat-menu-item *ngIf="user.fonction === 'Enseignant' && activityInfos?.master  === true"
             (click)="show_duplicates(activityId)">

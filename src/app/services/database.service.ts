@@ -194,9 +194,18 @@ export class DatabaseService {
   removeDocument(documentId) {
     return new Promise(resolve => {
       this.db.get(documentId).then(document => {
-        this.db.remove(document).then(res => {
+        document._deleted = true;
+        this.db.put(document).then(res => {
           resolve(res);
-        });
+          console.log(res);
+        })
+          .catch(err => {
+            console.log(`Error in database service whith call to deleteDocument:
+          ${err}`);
+          });
+        //this.db.remove(document).then(res => {
+        //  resolve(res);
+        //});
       });
     });
   }
