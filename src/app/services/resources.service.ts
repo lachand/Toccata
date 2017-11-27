@@ -69,8 +69,10 @@ export class ResourcesService {
   }
 
   getResourceInfos(resourceId: any) {
+    console.log(resourceId);
     return new Promise(resolve => {
       return this.database.getDocument(resourceId).then(resource => {
+        console.log("tadam");
         resolve({
           name: resource['name'],
           type: resource['type']

@@ -29,14 +29,18 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('toto');
     this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
       this.resource = resourceInfos;
+      console.log(this.resource);
     });
   }
 
   openRessource() {
-    this.resourcesService.getResourceData(this.resourceId, this.resource.name).then(ressource => {
-      console.log(ressource);
+    this.resourcesService.getResourceData(this.resourceId, "filename").then(ressource => {
+      const myUrl = URL.createObjectURL(ressource);
+      const win = window.open(myUrl, '_blank');
+      win.focus();
     });
   }
 
