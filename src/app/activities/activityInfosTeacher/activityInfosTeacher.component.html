@@ -22,6 +22,8 @@
     </button>
   </mat-menu>
 
+  <p>Etape actuelle : {{currentLoadedInfos?.name}}</p>
+
   <application-infos-teacher *ngFor="let app of currentLoadedInfos?.applicationList" [applicationId]="app">
   </application-infos-teacher>
 

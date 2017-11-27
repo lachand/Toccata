@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
+import {ActivityService} from "../../../services/activity.service";
 
 @Component({
   selector: 'postit-infos',
@@ -8,32 +9,29 @@ import {AppsService} from '../../../services/apps.service';
 
 export class PostitInfosComponent implements OnInit {
 
-  @Input() applicationId;
+  @Input() appId;
   application: any;
+  columns: any;
 
-  constructor(public appsService: AppsService) {
+  constructor(public appsService: AppsService,
+              public activityService: ActivityService) {
   }
 
   ngOnInit(): void {
-    this.appsService.changes.subscribe(change => {
-      if (this.applicationId === change.doc._id) {
-        this.application = change.doc;
+    this.appsService.getRessources(this.appId).then((res: Array<any>) => {
+      this.columns = [];
+      this.columns['Backlog'] = [];
+      this.columns['Backlog sprint'] = [];
+      this.columns['Réalisé'] = [];
+      this.columns['En cours'] = [];
+      for (const element of res['docs']) {
+        if (element.ressourceType === 'Postit') {
+          console.log(element.state);
+          this.columns[element.state].push(element);
+        }
       }
-    });
-    this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
+      console.log(this.columns);
     });
   }
 
-  openApplication() {
-    this.appsService.openApplication(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
-  }
-
-  switchStatus() {
-    this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
-  }
 }
