@@ -4,7 +4,8 @@ import {MatListItem} from "@angular/material";
 
 @Component({
   selector: 'chronometre-infos',
-  templateUrl: './chronometreInfos.component.html'
+  templateUrl: './chronometreInfos.component.html',
+  styleUrls: ['chronometreInfos.component.scss']
 })
 
 export class ChronometreInfosComponent implements OnInit {
