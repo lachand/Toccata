@@ -29,6 +29,18 @@ export class PostitComponent implements OnInit {
     element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML =
       '<span style="line-height: 23px; margin-left: 5px;">' + resource.name + '</span>';
   }
+
+  columnRenderer: any = (element: any, collapsedElement: any, column: any): void => {
+    if (element[0]) {
+      if (element[0].getElementsByClassName('jqx-kanban-column-header-title')[0].innerHTML !== 'Backlog') {
+        const buttonNew = element[0].getElementsByClassName('jqx-kanban-column-header-custom-button')[0];
+        buttonNew.parentElement.removeChild(buttonNew);
+      }
+      const buttonExpand = element[0].getElementsByClassName('jqx-kanban-column-header-button')[0];
+      buttonExpand.parentElement.removeChild(buttonExpand);
+    }
+  }
+
   resourcesAdapterFunc = (): any => {
     const resourcesSource = {
       localData: [
@@ -99,6 +111,7 @@ export class PostitComponent implements OnInit {
   myKanbanOnItemAttrClicked(event: any): void {
     const args = event.args;
     if (args.attribute === 'template') {
+      console.log(args);
       let id;
       if (isNullOrUndefined(args.item)) {
         id = this.myKanban.getItems()[args.itemId].id;
@@ -178,7 +191,8 @@ export class PostitComponent implements OnInit {
           const column = {
             text: element.name,
             iconClassName: this.getIconClassName(),
-            dataField: element.name
+            dataField: element.name,
+            collapsible: false
           };
           console.log(column);
           this.columns[element.position] = column;
