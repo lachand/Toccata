@@ -101,6 +101,8 @@ export class ChronometreComponent implements OnInit {
       document.getElementById('title').className = 'blink';
     } else if (m == '00' && s == '00') {
       document.getElementById('title').className = 'blink-fast';
+    } else {
+      document.getElementById('title').className = '';
     }
 
     return `${m}:${s}`;
