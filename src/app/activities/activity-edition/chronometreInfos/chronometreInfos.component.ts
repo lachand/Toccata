@@ -90,9 +90,9 @@ export class ChronometreInfosComponent implements OnInit {
     let absoluteSeconds = Math.floor(seconds);
     let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
-    if (m === '14' && s !== '00') {
+    if (m == '00' && s != '00') {
       document.getElementById('title').className = 'blink';
-    } else if (m === '14' && s === '00') {
+    } else if (m == '00' && s == '00') {
       document.getElementById('title').className = 'blink-fast';
     }
 
