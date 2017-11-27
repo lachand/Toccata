@@ -239,4 +239,8 @@ export class PostitComponent implements OnInit {
 
     this.title = 'Kanban';
   }
+
+  checkNull(elmt) {
+    return isNullOrUndefined(elmt);
+  }
 }

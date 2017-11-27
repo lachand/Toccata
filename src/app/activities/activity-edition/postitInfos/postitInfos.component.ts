@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {ActivityService} from "../../../services/activity.service";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'postit-infos',
@@ -34,4 +35,7 @@ export class PostitInfosComponent implements OnInit {
     });
   }
 
+  isNullorUndefined(elmt) {
+    return isNullOrUndefined(elmt);
+  }
 }

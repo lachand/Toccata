@@ -29,7 +29,10 @@ export class ActivityService {
         console.log(`there is a change ${change.type}`);
         if (change.type === 'Activity') {
           if (change.doc.type === 'Main') {
-            this.changes.emit({doc: change.doc, type: 'Main'});
+            if ((change.doc.master === false && userService.user.fonction !== 'Enseignant') ||
+              (change.doc.master === true )) {
+              this.changes.emit({doc: change.doc, type: 'Main'});
+            }
 
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
