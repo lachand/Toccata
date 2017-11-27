@@ -62,6 +62,7 @@ import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicate
 import {ActivityInfosTeacherComponent} from "./activities/activityInfosTeacher/activityInfosTeacher.component";
 import {ChronometreInfosComponent} from "./activities/activity-edition/chronometreInfos/chronometreInfos.component";
 import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component";
+import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/postitInfos.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -84,9 +85,11 @@ import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/ap
     ActivitySequenceEditComponent,
     ActivityResourcesComponent,
     ActivityInfosComponent,
-    ApplicationInfosTeacherComponent,
-    ChronometreInfosComponent,
     ActivityInfosTeacherComponent,
+    ApplicationInfosTeacherComponent,
+    ApplicationInfosComponent,
+    ChronometreInfosComponent,
+    PostitInfosComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
     ActivityNameComponent,
@@ -94,7 +97,6 @@ import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/ap
     ViewDuplicatesComponent,
     ChronometreComponent,
     ResourceInfosComponent,
-    ApplicationInfosComponent,
     jqxKanbanComponent,
     jqxSplitterComponent,
     PostitComponent,

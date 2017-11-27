@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
-import {MatListItem} from "@angular/material";
 
 @Component({
   selector: 'app-application-infos',
@@ -8,7 +7,7 @@ import {MatListItem} from "@angular/material";
   styleUrls: ['./applicationInfos.component.scss']
 })
 
-export class ApplicationInfosComponent implements OnInit {
+export class PostitInfosComponent implements OnInit {
 
   @Input() applicationId;
   application: any;
