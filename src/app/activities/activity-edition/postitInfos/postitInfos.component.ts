@@ -2,9 +2,8 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import {AppsService} from '../../../services/apps.service';
 
 @Component({
-  selector: 'app-application-infos',
-  templateUrl: './postitInfos.component.html',
-  styleUrls: ['./applicationInfos.component.scss']
+  selector: 'postit-infos',
+  templateUrl: './postitInfos.component.html'
 })
 
 export class PostitInfosComponent implements OnInit {
