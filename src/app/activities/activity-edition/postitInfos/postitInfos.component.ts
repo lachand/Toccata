@@ -4,7 +4,7 @@ import {MatListItem} from "@angular/material";
 
 @Component({
   selector: 'app-application-infos',
-  templateUrl: './applicationInfos.component.html',
+  templateUrl: './postitInfos.component.html',
   styleUrls: ['./applicationInfos.component.scss']
 })
 

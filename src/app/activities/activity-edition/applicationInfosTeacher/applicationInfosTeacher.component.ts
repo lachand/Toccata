@@ -3,15 +3,15 @@ import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
 
 @Component({
-  selector: 'app-application-infos',
-  templateUrl: './applicationInfos.component.html',
-  styleUrls: ['./applicationInfos.component.scss']
+  selector: 'application-infos-teacher',
+  templateUrl: './applicationInfosTeacher.component.html'
 })
 
-export class ApplicationInfosComponent implements OnInit {
+export class ApplicationInfosTeacherComponent implements OnInit {
 
   @Input() applicationId;
   application: any;
+  currentLoaded: any;
 
   constructor(public appsService: AppsService) {
   }
@@ -24,18 +24,7 @@ export class ApplicationInfosComponent implements OnInit {
     });
     this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
-    });
-  }
-
-  openApplication() {
-    this.appsService.openApplication(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
-  }
-
-  switchStatus() {
-    this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
+      console.log(this.application);
     });
   }
 }

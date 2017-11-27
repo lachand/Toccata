@@ -6,10 +6,10 @@
     <h3>
       <activity-name *ngIf="activityService.activityLoaded.type === 'Main'"
                      [activityId]="activityService.activityLoaded._id"
-                     (click)="loadAnActivity(activityService.activityLoaded._id)"></activity-name>
+      ></activity-name>
       <activity-name *ngIf="activityService.activityLoaded.type === 'Sequence'"
                      [activityId]="activityService.activityLoaded.parent"
-                     (click)="loadAnActivity(activityService.activityLoaded.parent)"></activity-name>
+      ></activity-name>
     </h3>
 
     <div>

@@ -12,10 +12,9 @@ import {isNullOrUndefined} from "util";
   encapsulation: ViewEncapsulation.None
 })
 
-export class PostitComponent {
+export class PostitComponent implements OnInit {
 
   @Input() appId;
-
   @ViewChild('myKanban') myKanban: jqxKanbanComponent;
 
   theme: any;
@@ -89,73 +88,16 @@ export class PostitComponent {
                   status: change.doc.state,
                   text: change.doc.label
                 });
-                console.log(this.myKanban.getItems());
               }
             }
           }
         }
       }
     );
-
-    this.appsService.getRessources(this.appId).then((res) => {
-      const appRessources = res;
-      console.log(res);
-      for (const element of appRessources['docs']) {
-        if (element.ressourceType === 'Column') {
-          const column = {
-            text: element.name,
-            iconClassName: this.getIconClassName(),
-            dataField: element.name
-          };
-          this.columns[element.position] = column;
-        } else if (element.ressourceType === 'Postit') {
-          const postit = {
-            id: element._id,
-            state: element.state,
-            label: element.label
-          };
-          if (this.source.localdata.indexOf(postit) === -1) {
-            this.source.localdata.push(postit);
-          }
-        }
-      }
-    });
-
-    this.fields = [
-      {name: 'id', type: 'string'},
-      {name: 'status', map: 'state', type: 'string'},
-      {name: 'text', map: 'label', type: 'string'},
-      {name: 'tags', type: 'string'},
-      {name: 'color', map: 'hex', type: 'string'},
-      {name: 'resourceId', type: 'number'}
-    ];
-
-    this.source = {
-      localData: [{}],
-      dataType: 'array',
-      dataFields: this.fields
-    };
-
-    this.dataAdapter = new jqx.dataAdapter(this.source);
-
-    this.columns = [];
-
-    this.template =
-      '<div class="jqx-kanban-item" id="">'
-      + '<div class="jqx-kanban-item-color-status"></div>'
-      + '<div style="display: none;" class="jqx-kanban-item-avatar"></div>'
-      + '<div class="jqx-icon jqx-icon-close jqx-kanban-item-template-content jqx-kanban-template-icon"></div>'
-      + '<div class="jqx-kanban-item-text"></div>'
-      + '<div style="display: none;" class="jqx-kanban-item-footer"></div>'
-      + '</div>';
-
-    this.title = 'Kanban';
-
   }
 
   myKanbanOnItemAttrClicked(event: any): void {
     const args = event.args;
-    console.log(args, event);
     if (args.attribute === 'template') {
       let id;
       if (isNullOrUndefined(args.item)) {
@@ -163,7 +105,6 @@ export class PostitComponent {
       } else {
         id = args.item.id;
       }
-      console.log(id);
       this.databaseService.removeDocument(id);
     }
   };
@@ -225,5 +166,63 @@ export class PostitComponent {
       postit['state'] = event.args.newColumn.text;
       this.databaseService.updateDocument(postit);
     });
+  }
+
+  ngOnInit(): void {
+
+    this.appsService.getRessources(this.appId).then((res) => {
+      const appRessources = res;
+      console.log(res);
+      for (const element of appRessources['docs']) {
+        if (element.ressourceType === 'Column' && element.application === this.appId) {
+          const column = {
+            text: element.name,
+            iconClassName: this.getIconClassName(),
+            dataField: element.name
+          };
+          console.log(column);
+          this.columns[element.position] = column;
+        } else if (element.ressourceType === 'Postit' && element.application === this.appId) {
+          const postit = {
+            id: element._id,
+            state: element.state,
+            label: element.label
+          };
+          if (this.source.localdata.indexOf(postit) === -1) {
+            this.source.localdata.push(postit);
+          }
+        }
+      }
+    });
+
+    this.fields = [
+      {name: 'id', type: 'string'},
+      {name: 'status', map: 'state', type: 'string'},
+      {name: 'text', map: 'label', type: 'string'},
+      {name: 'tags', type: 'string'},
+      {name: 'color', map: 'hex', type: 'string'},
+      {name: 'resourceId', type: 'number'}
+    ];
+
+    this.source = {
+      localData: [{}],
+      dataType: 'array',
+      dataFields: this.fields
+    };
+
+    this.dataAdapter = new jqx.dataAdapter(this.source);
+
+    this.columns = [];
+
+    this.template =
+      '<div class="jqx-kanban-item" id="">'
+      + '<div class="jqx-kanban-item-color-status"></div>'
+      + '<div style="display: none;" class="jqx-kanban-item-avatar"></div>'
+      + '<div class="jqx-icon jqx-icon-close jqx-kanban-item-template-content jqx-kanban-template-icon"></div>'
+      + '<div class="jqx-kanban-item-text"></div>'
+      + '<div style="display: none;" class="jqx-kanban-item-footer"></div>'
+      + '</div>';
+
+    this.title = 'Kanban';
   }
 }

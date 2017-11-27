@@ -236,4 +236,23 @@ export class AppsService {
         });
     });
   }
+
+  openApplication(appId: any) {
+    return new Promise(resolve => {
+      return this.databaseService.getDocument(appId).then(application => {
+          application['status'] = 'loaded';
+          return this.databaseService.updateDocument(application);
+        }
+      ).then(() => {
+        return this.getApplicationInfos(appId);
+      })
+        .then(appInfos => {
+          resolve(appInfos);
+        })
+        .catch(function (err) {
+          console.log(`Error in apps service whith call to openApplication : 
+          ${err}`);
+        });
+    });
+  }
 }

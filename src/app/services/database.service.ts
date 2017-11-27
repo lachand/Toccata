@@ -88,6 +88,7 @@ export class DatabaseService {
             this.dbList.push(databaseName);
             this.db.replicate.from(dbToAdd).on('complete', (info) => {
               this.db.sync(dbToAdd, tempOptions);
+              console.log(info);
               resolve(dbToAdd);
             });
           });
@@ -140,6 +141,7 @@ export class DatabaseService {
   getDocument(docId: string) {
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
+        console.log(res, docId);
       })
         .then(() => {
           return this.db.get(docId);

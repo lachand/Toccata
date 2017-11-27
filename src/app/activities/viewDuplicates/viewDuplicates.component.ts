@@ -26,12 +26,13 @@ export class ViewDuplicatesComponent {
     });
     this.activityService.getActivityInfos(this.activityId).then(infos => {
       this.activityInfo = infos;
-    })
-    this.activityService.getActivityDuplicate(this.activityId).then(list => {
-      this.duplicateList = list;
-      return Promise.all(this.duplicateList.map(duplicate => {
+    });
+    this.activityService.getActivityDuplicate(this.activityId).then((list: Array<any>) => {
+      return Promise.all(list.map(duplicate => {
         this.database.addDatabase(duplicate);
-      }));
+      })).then(() => {
+        this.duplicateList = list;
+      });
     });
   }
 }

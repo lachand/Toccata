@@ -39,6 +39,7 @@ export class ActivityViewComponent implements AfterViewInit {
    */
   ngAfterViewInit(): void {
     console.log('toto : ', this.stepper.selectedIndex);
+    console.log(this.activityService.activityLoaded.applicationList);
     const activityId = this.activityService.activityLoaded.currentLoaded;
     if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
       this.stepper.selectedIndex = this.steps.indexOf(activityId);

@@ -59,6 +59,9 @@ import {ChronometreComponent} from './applications/chronometre/chronometre.compo
 import {ActivityNameComponent} from './activities/activity-edition/activityName/activityName.component';
 import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/applicationLaunched/applicationLaunched.component';
 import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicates.component";
+import {ActivityInfosTeacherComponent} from "./activities/activityInfosTeacher/activityInfosTeacher.component";
+import {ChronometreInfosComponent} from "./activities/activity-edition/chronometreInfos/chronometreInfos.component";
+import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -81,6 +84,9 @@ import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicate
     ActivitySequenceEditComponent,
     ActivityResourcesComponent,
     ActivityInfosComponent,
+    ApplicationInfosTeacherComponent,
+    ChronometreInfosComponent,
+    ActivityInfosTeacherComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
     ActivityNameComponent,

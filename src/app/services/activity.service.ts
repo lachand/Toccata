@@ -223,8 +223,10 @@ export class ActivityService {
           image: activity['image'],
           dbName: activity['dbName'],
           master: activity['master'],
+          applicationList: activity['applicationList'],
           currentLoaded: activity['currentLoaded'],
-          subactivityList: activity['subactivityList']
+          subactivityList: activity['subactivityList'],
+          nameForTeacher: activity['nameForTeacher']
         });
       }).catch(err => {
         console.log(`Error in activity service whith call to getActivityInfos : 
@@ -252,7 +254,7 @@ export class ActivityService {
             applicationList: parent['applicationList'],
             parent: parent['_id'],
             type: 'Sequence',
-            subActivityList: [],
+            subactivityList: [],
             createdAt: Date.now(),
             dbName: parent['dbName'],
             documentType: 'Activity'
@@ -470,19 +472,20 @@ export class ActivityService {
           console.log(docs.docs);
           return Promise.all(docs.docs.map(row => {
             const doc = row;
+            console.log(row);
             doc.dbName = newDb;
             doc._id = `${doc._id}_duplicate_${guid}`;
             if (doc.documentType === 'Activity') {
-              let ressources = []
-              for (let resource of doc.resourceList) {
+              const ressources = [];
+              for (const resource of doc.resourceList) {
                 ressources.push(`${resource}_duplicate_${guid}`);
               }
-              let applications = []
-              for (let application of doc.applicationList) {
+              const applications = [];
+              for (const application of doc.applicationList) {
                 applications.push(`${application}_duplicate_${guid}`);
               }
-              let subactivities = [];
-              for (let subactivity of doc.subactivityList) {
+              const subactivities = [];
+              for (const subactivity of doc.subactivityList) {
                 subactivities.push(`${subactivity}_duplicate_${guid}`);
               }
               doc.userList = [this.userService.id];
@@ -493,7 +496,13 @@ export class ActivityService {
               doc.resourceList = ressources;
               doc.applicationList = applications;
               doc.subactivityList = subactivities;
-            } else if (doc.documentType === 'Resource application') {
+              if (!isNullOrUndefined(doc.parent)) {
+                doc.parent = `${doc.parent}_duplicate_${guid}`;
+              }
+              if (!isNullOrUndefined(doc.currentLoaded)) {
+                doc.doc.currentLoaded = `${doc.doc.currentLoaded}_duplicate_${guid}`;
+              }
+            } else if (doc.documentType === 'Ressource application') {
               doc.application = `${doc.application}_duplicate_${guid}`;
             } else if (doc.documentType === 'Resource') {
               doc.activity = `${doc.activity}_duplicate_${guid}`;
