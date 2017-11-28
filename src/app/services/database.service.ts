@@ -49,7 +49,7 @@ export class DatabaseService {
       return doc.dbName === 'userList';
     };
 
-    this.db.replicate.from(this.dbRemote).on('complete', (info) => {
+    this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
       this.db.sync(this.dbRemote, tempOptions);
 
       this.dbList.push(config.HOST + config.PORT + '/userList');
@@ -86,7 +86,7 @@ export class DatabaseService {
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
-            this.db.replicate.from(dbToAdd).on('complete', (info) => {
+            this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
               this.db.sync(dbToAdd, tempOptions);
               console.log(info);
               resolve(dbToAdd);
@@ -107,7 +107,7 @@ export class DatabaseService {
             return doc.dbName === `${databaseName}_${guid}`;
           };
           this.dbList.push(`${databaseName}_${guid}`);
-          this.db.replicate.from(dbToAdd).on('complete', (info) => {
+          this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
             this.db.sync(dbToAdd, tempOptions);
             resolve(dbToAdd);
           });

@@ -476,7 +476,6 @@ export class ActivityService {
           console.log(docs.docs);
           return Promise.all(docs.docs.map(row => {
             const doc = row;
-            console.log(row);
             doc.dbName = newDb;
             doc._id = `${doc._id}_duplicate_${guid}`;
             if (doc.documentType === 'Activity') {
@@ -504,7 +503,7 @@ export class ActivityService {
                 doc.parent = `${doc.parent}_duplicate_${guid}`;
               }
               if (!isNullOrUndefined(doc.currentLoaded)) {
-                doc.doc.currentLoaded = `${doc.doc.currentLoaded}_duplicate_${guid}`;
+                doc.currentLoaded = `${doc.currentLoaded}_duplicate_${guid}`;
               }
             } else if (doc.documentType === 'Ressource application') {
               doc.application = `${doc.application}_duplicate_${guid}`;
