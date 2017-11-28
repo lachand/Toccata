@@ -26,18 +26,17 @@ export class ActivityService {
               public appsService: AppsService) {
     this.database.changes.subscribe(
       (change) => {
-        console.log(`there is a change ${change.type}`);
+        console.log(`there is a change ${change}`);
         if (change.type === 'Activity') {
           if (change.doc.type === 'Main') {
-            if ((change.doc.master === false && userService.user.fonction !== 'Enseignant') ||
-              (change.doc.master === true )) {
+            /**if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
+             (change.doc.master === true )) {**/
               this.changes.emit({doc: change.doc, type: 'Main'});
-            }
+            //}
 
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
             }
-            console.log(this.activitiesList);
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
             }

@@ -34,6 +34,15 @@ export class ActivityInfosTeacherComponent implements OnInit {
       if (change.type === 'Main') {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
           this.activityInfos = activityInfos;
+          this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
+            this.currentLoadedInfos = currentLoadedInfos;
+          });
+        });
+      }
+      if (change.doc._id === this.activityInfos['currentLoaded']) {
+        this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
+          this.currentLoadedInfos = currentLoadedInfos;
+          console.log(this.currentLoadedInfos);
         });
       }
     });

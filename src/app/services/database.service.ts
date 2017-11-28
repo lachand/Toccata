@@ -18,6 +18,8 @@ export class DatabaseService {
 
   constructor() {
 
+    require('events').EventEmitter.defaultMaxListeners = 0;
+
     PouchDB.plugin(PouchdbFind);
 
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
@@ -64,6 +66,7 @@ export class DatabaseService {
    * @param change
    */
   handleChange(change) {
+    console.log(change.doc.documentType);
     this.changes.emit({type: change.doc.documentType, doc: change.doc});
   }
 
