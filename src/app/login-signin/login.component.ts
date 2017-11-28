@@ -17,6 +17,7 @@ import {ActivityService} from 'app/services/activity.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading: boolean;
+  errorUsernamePassword: boolean;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
               public activityService: ActivityService) {
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loading = false;
+    this.errorUsernamePassword = false;
     this.loginForm = this.formBuilder.group({
       username: '',
       password: ''
@@ -37,15 +39,14 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.loading = true;
       this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
-        console.log("debug - 1");
-        if (this.userService.isLoggedIn()) {
-          console.log("debug0");
+        console.log(result);
+        if (result['status'] === 401) {
+          this.errorUsernamePassword = true;
+        } else if (this.userService.isLoggedIn()) {
             return this.activityService.getActivities().then(res => {
-              console.log("debug 1");
               return this.userService.getAllUsers();
             })
               .then(() => {
-                console.log("debug 2");
                 this.router.navigate(['../activities']);
               });
           }

@@ -78,11 +78,12 @@ export class UserService {
             this.avatar = res['avatar'];
             this.fonction = res['fonct'];
             resolve(this.loggedIn);
+          })
+          .catch(function (err) {
+            resolve(err);
           });
       }
-    ).catch(function (err) {
-      console.log(err);
-    });
+    );
   }
 
   logout() {
