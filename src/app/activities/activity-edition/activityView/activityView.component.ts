@@ -17,16 +17,6 @@ export class ActivityViewComponent implements AfterViewInit {
 
   constructor(public activityService: ActivityService,
               public router: Router) {
-    /**
-     this.activityService.changes.subscribe(change => {
-        if (this.activityService.activityLoaded.type === 'Main') {
-          this.steps = this.activityService.activityLoadedChild;
-        } else {
-          this.steps = this.activityService.sisters;
-        }
-    });
-     **/
-
     if (this.activityService.activityLoaded.type === 'Main') {
       this.steps = this.activityService.activityLoadedChild;
     } else {
