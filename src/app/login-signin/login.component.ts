@@ -17,6 +17,7 @@ import {ActivityService} from 'app/services/activity.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading: boolean;
+  hide: boolean;
   errorUsernamePassword: boolean;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loading = false;
     this.errorUsernamePassword = false;
+    this.hide = true;
     this.loginForm = this.formBuilder.group({
       username: '',
       password: ''
