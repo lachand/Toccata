@@ -4,7 +4,7 @@
     <app-activity-infos [activityId]="activity"></app-activity-infos>
   </div>
 
-  <div fxFlex="32%" class="flex-card">
+  <div fxFlex="32%" class="flex-card" *ngIf="user.fonction === 'Enseignant'">
     <mat-card class="activity-card" (dbclick)="newActivity()">
       <div class="div-centered">
         <mat-icon class="icon-huge" (click)="newActivity()">add_circle</mat-icon>

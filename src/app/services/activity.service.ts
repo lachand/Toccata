@@ -37,6 +37,7 @@ export class ActivityService {
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
             }
+            console.log(this.activitiesList);
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
             }
