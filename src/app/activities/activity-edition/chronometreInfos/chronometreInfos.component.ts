@@ -50,6 +50,7 @@ export class ChronometreInfosComponent implements OnInit {
   }
 
   handleChange(change) {
+    this.timer.stop();
     const actualTime = Date.now();
     let timeChronometer;
     this.chronometre = change;
@@ -59,10 +60,10 @@ export class ChronometreInfosComponent implements OnInit {
     } else {
       timeChronometer = this.timeLeft;
     }
-    this.timer.reset(timeChronometer);
+    this.timer.reset(this.timeLeft);
     this.title = this.chronometre.timeLeft;
     if (this.chronometre.running) {
-      this.timer.start();
+      this.timerStart();
     } else {
       this.timer.stop();
     }
