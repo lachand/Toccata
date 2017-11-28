@@ -3,6 +3,7 @@ import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
 import {Stopwatch} from 'timer-stopwatch';
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-chronometre',
@@ -22,7 +23,7 @@ export class ChronometreComponent implements OnInit {
   timer: any;
   title: any;
 
-  constructor(public databaseService: DatabaseService, public appsService: AppsService) {
+  constructor(public databaseService: DatabaseService, public appsService: AppsService, public userService: UserService) {
   }
 
   ngOnInit(): void {
