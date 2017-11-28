@@ -1,5 +1,5 @@
 <h3>{{title}}</h3>
-<jqxKanban *ngIf="!isNullOrUndefined(columns) && columns.length > 0 && appId"
+<jqxKanban *ngIf="!checkNull(columns) && columns.length > 0 && appId"
            #myKanban
            (onItemMoved)="onItemMoved($event)"
            (onItemAttrClicked)="myKanbanOnItemAttrClicked($event)"
