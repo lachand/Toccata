@@ -4,20 +4,24 @@
 
     </div>
 
-    <!--<button mat-button routerLink="/">
-      <mat-icon>home</mat-icon>
-      ABCDE
-    </button>
-    -->
+    <button mat-button routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
+    <span class="spacer"></span>
+    <div *ngIf="userService.loggedIn" class="aligned-right">
+      <h6>{{userService.name}}
+        <button mat-button (click)="logout()" routerLink="/">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
+      </h6>
+    </div>
 
-    <span class="fill-remaining-space"></span>
-
+    <!--
     <button mat-button [matMenuTriggerFor]="menu" *ngIf="userService.loggedIn">Menu</button>
 
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
       <button mat-menu-item (click)="logout()" routerLink="/" *ngIf="userService.loggedIn">Déconnexion</button>
     </mat-menu>
+    -->
 
   </mat-toolbar>
 
