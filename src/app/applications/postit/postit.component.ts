@@ -26,8 +26,9 @@ export class PostitComponent implements OnInit {
   title: any;
 
   itemRenderer = (element: any, item: any, resource: any): void => {
-    element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML =
-      '<span style="line-height: 23px; margin-left: 5px;">' + resource.name + '</span>';
+    console.log(item);
+    element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML = item.text;
+    element[0].getElementsByClassName('jqx-kanban-item-text')[0].innerHTML = item.content;
   }
 
   columnRenderer: any = (element: any, collapsedElement: any, column: any): void => {
@@ -91,14 +92,21 @@ export class PostitComponent implements OnInit {
               for (const data of datas) {
                 if (data.id === change.doc._id) {
                   finded = true;
+                  this.myKanban.updateItem(change.doc._id, {
+                    content: change.doc.estimation,
+                    status: change.doc.state,
+                    text: change.doc.label
+                  });
                 }
               }
               if (!finded) {
                 this.myKanban.addItem({
+                  content: change.doc.estimation,
                   id: change.doc._id,
                   status: change.doc.state,
                   text: change.doc.label
                 });
+                console.log(this.myKanban);
               }
             }
           }
@@ -109,15 +117,42 @@ export class PostitComponent implements OnInit {
 
   myKanbanOnItemAttrClicked(event: any): void {
     const args = event.args;
+    let id = '';
+    if (isNullOrUndefined(args.item)) {
+      id = this.myKanban.getItems()[args.itemId].id;
+    } else {
+      id = args.item.id;
+    }
     if (args.attribute === 'template') {
-      console.log(args);
-      let id;
-      if (isNullOrUndefined(args.item)) {
-        id = this.myKanban.getItems()[args.itemId].id;
-      } else {
-        id = args.item.id;
-      }
       this.databaseService.removeDocument(id);
+    } else if (args.attribute === 'text') {
+      args.item.content = `<input placeholder="Estimation" style="width: 96%; margin-top:2px; border-radius: 3px;
+          'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${id} value= "" />`;
+      this.myKanban.updateItem(id, args.item);
+      const myInput = document.getElementById(id);
+
+      if (myInput !== null && myInput !== undefined) {
+        myInput.addEventListener('mousedown', (evt: any): void => {
+          evt.stopPropagation();
+        });
+
+        myInput.addEventListener('mouseup', (evt: any): void => {
+          evt.stopPropagation();
+        });
+
+        myInput.addEventListener('keydown', (evt: any): void => {
+          if (evt.keyCode === 13) {
+            const valueElement = `<span>${evt.target.value}</span>`;
+            this.databaseService.getDocument(id).then(postit => {
+              postit['estimation'] = valueElement;
+              this.databaseService.updateDocument(postit);
+            });
+            console.log(valueElement);
+          }
+        });
+
+        myInput.focus();
+      }
     }
   };
 
@@ -135,15 +170,19 @@ export class PostitComponent implements OnInit {
           'applicationType': 'Post-it',
           'ressourceType': 'Postit',
           'label': 'Nouveau Post-it',
+          'estimation': '0',
           'dbName': this.activityService.activityLoaded.dbName
         };
 
         this.myKanban.addItem({
           status: postit.state,
-          text: `<input placeholder="Noveau post-it" style="width: 96%; margin-top:2px; border-radius: 3px;
+          content: postit.estimation,
+          text: `<input placeholder="Nouveau post-it" style="width: 96%; margin-top:2px; border-radius: 3px;
           'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${postit._id} value= "" />`,
           id: postit._id
         });
+
+        console.log(this.myKanban);
 
         const id = postit._id;
         const myInput = document.getElementById(id);
@@ -184,7 +223,6 @@ export class PostitComponent implements OnInit {
 
     this.appsService.getRessources(this.appId).then((res) => {
       const appRessources = res;
-      console.log(res);
       for (const element of appRessources['docs']) {
         if (element.ressourceType === 'Column' && element.application === this.appId) {
           const column = {
@@ -193,35 +231,39 @@ export class PostitComponent implements OnInit {
             dataField: element.name,
             collapsible: false
           };
-          console.log(column);
           this.columns[element.position] = column;
         } else if (element.ressourceType === 'Postit' && element.application === this.appId) {
           const postit = {
+            content: element.estimation,
             id: element._id,
             state: element.state,
             label: element.label
           };
-          if (this.source.localdata.indexOf(postit) === -1) {
-            this.source.localdata.push(postit);
+          if (this.source.localData.indexOf(postit) === -1) {
+            this.source.localData.push(postit);
           }
         }
       }
+
+      console.log(this.source);
     });
 
     this.fields = [
+
+      {name: 'content', type: 'string'},
       {name: 'id', type: 'string'},
       {name: 'status', map: 'state', type: 'string'},
       {name: 'text', map: 'label', type: 'string'},
-      {name: 'tags', type: 'string'},
-      {name: 'color', map: 'hex', type: 'string'},
-      {name: 'resourceId', type: 'number'}
+      {name: 'color', map: 'hex', type: 'string'}
     ];
 
     this.source = {
-      localData: [{}],
+      localData: [],
       dataType: 'array',
       dataFields: this.fields
     };
+
+    console.log(this.source);
 
     this.dataAdapter = new jqx.dataAdapter(this.source);
 

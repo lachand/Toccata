@@ -24,12 +24,14 @@ export class MyActivitiesComponent {
 
   load_activity(activity_id) {
     this.activityService.load_activity(activity_id).then( res => {
+      console.log(this.router);
       this.router.navigate(['activity_apps/' + activity_id]);
     });
   }
 
   show_activity(activity_id) {
     this.activityService.load_activity(activity_id).then(res => {
+      console.log(this.router);
       this.router.navigate(['activity_view/' + activity_id]);
     });
   }
