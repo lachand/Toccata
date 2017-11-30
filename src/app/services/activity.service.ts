@@ -31,14 +31,16 @@ export class ActivityService {
           if (change.doc.type === 'Main') {
             /**if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
              (change.doc.master === true )) {**/
-              this.changes.emit({doc: change.doc, type: 'Main'});
+            this.changes.emit({doc: change.doc, type: 'Main'});
             //}
-
+            if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
+              (change.doc.master === true )) {
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
               this.activitiesList.push(change.doc._id);
             }
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
+            }
             }
           } else {
             this.changes.emit({doc: change.doc, type: 'Sequence'});
@@ -98,6 +100,7 @@ export class ActivityService {
    * @returns {Promise<any>}
    */
   public load_activity(activity_id) {
+    console.log('Load activity : ', activity_id);
     return new Promise(resolve => {
       this.database.getDocument(activity_id)
         .then((result) => {
@@ -135,7 +138,7 @@ export class ActivityService {
             parent['currentLoaded'] = doc['_id'];
             return this.database.updateDocument(parent).then(res => {
               resolve(res);
-            })
+            });
           });
         }
       });
@@ -206,7 +209,7 @@ export class ActivityService {
           resolve(this.activitiesList);
         })
         .catch(err => {
-          console.log(`Error in activity service whith call to getActivities : 
+          console.log(`Error in activity service whith call to getActivities :
           ${err}`);
         });
     });
@@ -232,7 +235,7 @@ export class ActivityService {
           nameForTeacher: activity['nameForTeacher']
         });
       }).catch(err => {
-        console.log(`Error in activity service whith call to getActivityInfos : 
+        console.log(`Error in activity service whith call to getActivityInfos :
           ${err}`);
       });
     });
@@ -277,7 +280,7 @@ export class ActivityService {
           resolve(subActivity);
         })
         .catch(err => {
-          console.log(`Error in activity service whith call to createSubActivity : 
+          console.log(`Error in activity service whith call to createSubActivity :
           ${err}`);
         });
     });
@@ -384,7 +387,7 @@ export class ActivityService {
           resolve(result);
         })
         .catch(err => {
-          console.log(`Error in user activity whith call to activityEdit : 
+          console.log(`Error in user activity whith call to activityEdit :
           ${err}`);
         });
     });
@@ -415,7 +418,7 @@ export class ActivityService {
           resolve(res);
         })
         .catch(err => {
-          console.log(`Error in user activity whith call to addUser : 
+          console.log(`Error in user activity whith call to addUser :
           ${err}`);
         });
     });
@@ -448,7 +451,7 @@ export class ActivityService {
           resolve(res);
         })
         .catch(err => {
-          console.log(`Error in user activity whith call to removeUser : 
+          console.log(`Error in user activity whith call to removeUser :
           ${err}`);
         });
     });
@@ -519,7 +522,7 @@ export class ActivityService {
           return this.database.updateDocument(activity);
         })
         .catch(err => {
-          console.log(`Error in activity service whith call to duplicateActivity : 
+          console.log(`Error in activity service whith call to duplicateActivity :
           ${err}`);
         });
     });
