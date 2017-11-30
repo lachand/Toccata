@@ -460,8 +460,9 @@ export class ActivityService {
    */
   duplicateActivity(activityId: any) {
     return new Promise(resolve => {
-      let dbName, guid, newDb;
-      return this.database.getDocument(activityId).then(activity => {
+      let dbName, guid, newDb, activity;
+      return this.database.getDocument(activityId).then(activityDoc => {
+        activity = activityDoc;
         dbName = activity['dbName'];
         guid = this.database.guid();
         newDb = `${dbName}_duplicate_${guid}`;
@@ -512,6 +513,10 @@ export class ActivityService {
             delete doc._rev;
             return this.database.addDocument(doc);
           }));
+        })
+        .then(() => {
+          activity['duplicateList'].push(newDb);
+          return this.database.updateDocument(activity);
         })
         .catch(err => {
           console.log(`Error in activity service whith call to duplicateActivity : 

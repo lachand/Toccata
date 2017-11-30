@@ -34,9 +34,6 @@ export class PostitComponent implements OnInit {
   columnRenderer: any = (element: any, collapsedElement: any, column: any): void => {
     if (element[0]) {
       if (element[0].getElementsByClassName('jqx-kanban-column-header-title')[0].innerHTML !== 'Backlog') {
-        //const buttonNew = element[0].getElementsByClassName('jqx-kanban-column-header-custom-button')[0];
-        //buttonNew.style.display = 'none';
-        //console.log(buttonNew);
       }
     }
   }

@@ -40,10 +40,8 @@
   -->
 
         <mat-progress-bar
-          mode="buffer"
           class="example-margin"
-          [value]="((activityInfos?.subactivityList.indexOf(activityInfos?.currentLoaded)/activityInfos?.subactivityList.length)*100)"
-          [bufferValue]="(((activityInfos?.subactivityList.indexOf(activityInfos?.currentLoaded)+1)/activityInfos?.subactivityList.length)*100)">
+          [value]="((activityInfos?.subactivityList.indexOf(activityInfos?.currentLoaded)/activityInfos?.subactivityList.length)*100)">
         >
         </mat-progress-bar>
       </mat-card>
