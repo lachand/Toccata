@@ -28,7 +28,7 @@ export class PostitComponent implements OnInit {
   itemRenderer = (element: any, item: any, resource: any): void => {
     console.log(item);
     element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML = item.text;
-    element[0].getElementsByClassName('jqx-kanban-item-text')[0].innerHTML = item.content;
+    element[0].getElementsByClassName('jqx-kanban-item-text')[0].innerHTML = `<div style=" margin-top: 2px; margin-left: 2px">${item.content}</div>`;
   }
 
   columnRenderer: any = (element: any, collapsedElement: any, column: any): void => {
