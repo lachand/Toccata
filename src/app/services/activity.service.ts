@@ -502,6 +502,7 @@ export class ActivityService {
               doc.resourceList = ressources;
               doc.applicationList = applications;
               doc.subactivityList = subactivities;
+              doc.duplicateList = [];
               if (!isNullOrUndefined(doc.parent)) {
                 doc.parent = `${doc.parent}_duplicate_${guid}`;
               }
