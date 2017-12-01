@@ -22,7 +22,12 @@ export class DatabaseService {
 
     PouchDB.plugin(PouchdbFind);
 
-    this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/userList`);
+    this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/user_list`, {
+      auth: {
+        username: "root",
+        password: "mdproot"
+      }
+    });
     this.db = new PouchDB('myLocalDatabase');
 
     this.db.changes({
@@ -31,14 +36,16 @@ export class DatabaseService {
       include_docs: true,
       retry: true
     }).on('change', change => {
-      console.log("changes", change);
+      console.log("changes: ", change);
       this.handleChange(change);
     }).on('paused', function (info) {
-      console.log(info);
+      console.log("pause: ", info);
     }).on('active', function (info) {
-      console.log(info);
+      console.log("active: ", info);
     }).on('error', function (err) {
-      console.log('activities', err);
+      console.log('activities: ', err);
+    }).catch(err => {
+      console.log(err);
     });
 
     this.options = {
@@ -48,13 +55,15 @@ export class DatabaseService {
     };
     const tempOptions = this.options;
     tempOptions.filter = function (doc) {
-      return doc.dbName === 'userList';
+      return doc.dbName === 'user_list';
     };
 
-    this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
-      this.db.sync(this.dbRemote, tempOptions);
+    this.dbRemote.compact().then(() => {
+      this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
+        this.db.sync(this.dbRemote, tempOptions);
 
-      this.dbList.push(config.HOST + config.PORT + '/userList');
+        this.dbList.push(config.HOST + config.PORT + '/user_list');
+      });
     });
 
     //this.db.replicate.from(this.dbRemote, tempOptions);
@@ -81,7 +90,12 @@ export class DatabaseService {
       if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
-        const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}`);
+        const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}`, {
+          auth: {
+            username: "root",
+            password: "mdproot"
+          }
+        });
         dbToAdd.info()
           .then(() => {
             const tempOptions = this.options;
@@ -89,10 +103,12 @@ export class DatabaseService {
               return doc.dbName === databaseName;
             };
             this.dbList.push(databaseName);
-            this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
+            dbToAdd.compact().then(() => {
+              this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
               this.db.sync(dbToAdd, tempOptions);
               console.log(info);
               resolve(dbToAdd);
+              });
             });
           });
       }
@@ -102,7 +118,12 @@ export class DatabaseService {
   createDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
       const guid = this.guid();
-      const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}_${guid}`);
+      const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}_${guid}`, {
+        auth: {
+          username: "root",
+          password: "mdproot"
+        }
+      });
       dbToAdd.info()
         .then(() => {
           const tempOptions = this.options;
@@ -110,9 +131,11 @@ export class DatabaseService {
             return doc.dbName === `${databaseName}_${guid}`;
           };
           this.dbList.push(`${databaseName}_${guid}`);
-          this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
-            this.db.sync(dbToAdd, tempOptions);
-            resolve(dbToAdd);
+          dbToAdd.compact().then(() => {
+            this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
+              this.db.sync(dbToAdd, tempOptions);
+              resolve(dbToAdd);
+            });
           });
         });
     });
@@ -142,6 +165,7 @@ export class DatabaseService {
    * @returns {Promise<any>}
    */
   getDocument(docId: string) {
+    console.log(docId);
     return new Promise(resolve => {
       return this.db.allDocs().then(res => {
         console.log(res, docId);
@@ -222,6 +246,7 @@ export class DatabaseService {
       }
     }).then(res => {
       return res;
-    });
+    })
+      ;
   }
 }

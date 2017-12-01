@@ -143,7 +143,7 @@ export class UserService {
    */
   getAllUsers() {
     return new Promise(resolve => {
-      return this.database.getDocument('userList').then(res => {
+      return this.database.getDocument('user_list').then(res => {
         this.allUsers = res['userList'];
         resolve(this.allUsers);
       })
