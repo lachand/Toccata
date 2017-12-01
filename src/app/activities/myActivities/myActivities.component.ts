@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
 import {DialogConfirmationComponent} from '../../dialogConfirmation/dialogConfirmation.component';
+import {DatabaseService} from "../../services/database.service";
 
 @Component({
   selector: 'app-my-activities',
@@ -18,7 +19,8 @@ export class MyActivitiesComponent {
   constructor(public user: UserService,
               public activityService: ActivityService,
               public router: Router,
-              dialog: MatDialog) {
+              dialog: MatDialog,
+              public databaseService: DatabaseService) {
     this.dialog = dialog;
   }
 

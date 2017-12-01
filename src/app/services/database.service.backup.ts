@@ -22,7 +22,7 @@ export class DatabaseService {
 
     PouchDB.plugin(PouchdbFind);
 
-    this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/abcde`, {
+    this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/user_list`, {
       auth: {
         username: "root",
         password: "mdproot"
@@ -55,18 +55,9 @@ export class DatabaseService {
       retry: true,
       continuous: true
     };
-    this.dbList.push('user_list');
-
     const tempOptions = this.options;
     tempOptions.filter = function (doc) {
-      for (const db of this.dbList) {
-        console.log(db);
-        if (doc.dbName === db) {
-          console.log("ok");
-          return true;
-        }
-      }
-      return false;
+      return doc.dbName === 'user_list';
     };
 
     this.dbRemote.compact().then(() => {
@@ -74,7 +65,10 @@ export class DatabaseService {
       });
     })
       .then(info => {
-        this.dbSync = this.db.sync(this.dbRemote, tempOptions);
+        return this.db.sync(this.dbRemote, tempOptions);
+      })
+      .then(() => {
+        this.dbList.push(config.HOST + config.PORT + '/user_list');
       })
       .catch(err => {
         console.log(`error with call to databaseService initialisation : ${err}`);
@@ -105,18 +99,29 @@ export class DatabaseService {
       if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
-        this.dbList.push(databaseName);
-        this.dbSync.filter = function (doc) {
-          for (const db of this.dbList) {
-            console.log(db);
-            if (doc.dbName === db) {
-              console.log("ok");
-              return true;
-            }
+        const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}`, {
+          auth: {
+            username: "root",
+            password: "mdproot"
           }
-          return false;
-        };
-        resolve(databaseName);
+        });
+        dbToAdd.info()
+          .then(() => {
+            const tempOptions = this.options;
+            tempOptions.filter = function (doc) {
+              return doc.dbName === databaseName;
+            };
+            console.log(tempOptions, databaseName);
+            this.dbList.push(databaseName);
+            dbToAdd.compact().then(() => {
+              return this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
+              });
+            })
+              .then(info => {
+                this.db.sync(dbToAdd, tempOptions);
+                resolve(dbToAdd);
+              });
+          });
       }
     });
   }
@@ -125,18 +130,28 @@ export class DatabaseService {
     return new Promise(resolve => {
       const guid = this.guid();
       const newDbName = `${databaseName}_${guid}`;
-      this.dbList.push(databaseName);
-      this.dbSync.filter = function (doc) {
-        for (const db of this.dbList) {
-          console.log(db);
-          if (doc.dbName === db) {
-            console.log("ok");
-            return true;
-          }
+      const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${newDbName}`, {
+        auth: {
+          username: "root",
+          password: "mdproot"
         }
-        return false;
-      };
-      resolve(newDbName);
+      });
+      dbToAdd.info()
+        .then(() => {
+          const tempOptions = this.options;
+          tempOptions.filter = function (doc) {
+            return doc.dbName === newDbName;
+          };
+          this.dbList.push(newDbName);
+          dbToAdd.compact().then(() => {
+            return this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
+            });
+          })
+            .then(info => {
+              this.db.sync(dbToAdd, tempOptions);
+              resolve(dbToAdd);
+            });
+        });
     });
   }
 
@@ -155,23 +170,6 @@ export class DatabaseService {
           console.log(`Error in database service whith call to addDocument:
           ${err}`);
         });
-    });
-  }
-
-  ereaseDatabase(dbName) {
-    return new Promise(resolve => {
-      return this.dbRemote.allDocs({include_docs: true}).then(docs => {
-        console.log(docs);
-        const promises = docs.rows.map(function (doc) {
-          if (doc.doc.dbName === dbName) {
-            console.log("deleted_doc :");
-            doc._deleted = true;
-          }
-        });
-        return Promise.all(promises);
-      }).then(res => {
-        resolve(res);
-      });
     });
   }
 
