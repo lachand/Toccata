@@ -72,6 +72,7 @@ export class DatabaseService {
       })
       .catch(err => {
         console.log(`error with call to databaseService initialisation : ${err}`);
+        this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
       });
 
     //this.db.replicate.from(this.dbRemote, tempOptions);

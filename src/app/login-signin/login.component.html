@@ -17,12 +17,15 @@
       <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" formControlName="password">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
       <mat-hint class="hint-red" *ngIf="errorUsernamePassword">Couple identifiant/mot de passe incorrect</mat-hint>
+      <mat-hint class="hint-red" *ngIf="errorConnexionImpossible">Problème de connexion, merci de réessayer</mat-hint>
     </mat-input-container>
   </div>
 
   <div>
-    <button mat-button type="submit" *ngIf="!loading || errorUsernamePassword">Connexion</button>
-    <mat-progress-bar mode="indeterminate" *ngIf="loading && !errorUsernamePassword"></mat-progress-bar>
+    <button mat-button type="submit" *ngIf="!loading || errorUsernamePassword || errorConnexionImpossible">Connexion
+    </button>
+    <mat-progress-bar mode="indeterminate"
+                      *ngIf="loading && !errorUsernamePassword && !errorConnexionImpossible"></mat-progress-bar>
   </div>
 </form>
     </mat-card>

@@ -8,6 +8,7 @@ PouchDB.plugin(require('pouchdb-authentication'));
 
 import { UserService } from '../services/user.service';
 import {ActivityService} from 'app/services/activity.service';
+import {DatabaseService} from "../services/database.service";
 
 @Component({
   selector: 'app-login',
@@ -19,18 +20,27 @@ export class LoginComponent implements OnInit {
   loading: boolean;
   hide: boolean;
   errorUsernamePassword: boolean;
+  errorConnexionImpossible: boolean
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
-              public activityService: ActivityService) {
+              public activityService: ActivityService,
+              public databaseService: DatabaseService) {
   }
 
   ngOnInit() {
     this.loading = false;
     this.errorUsernamePassword = false;
+    this.errorConnexionImpossible = false;
     this.hide = true;
     this.loginForm = this.formBuilder.group({
       username: '',
       password: ''
+    });
+    this.databaseService.changes.subscribe(changes => {
+      if (changes.type === 'CONNEXION_IMPOSSIBLE') {
+        this.errorConnexionImpossible = true;
+        this.loading = false;
+      }
     });
   }
 
