@@ -34,7 +34,9 @@ export class DatabaseService {
       since: 'now',
       live: true,
       include_docs: true,
-      retry: true
+      retry: true,
+      timeout: false,
+      heartbeat: false
     }).on('change', change => {
       console.log("changes: ", change);
       this.handleChange(change);
@@ -59,12 +61,18 @@ export class DatabaseService {
     };
 
     this.dbRemote.compact().then(() => {
-      this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
-        this.db.sync(this.dbRemote, tempOptions);
-
-        this.dbList.push(config.HOST + config.PORT + '/user_list');
+      return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
       });
-    });
+    })
+      .then(info => {
+        return this.db.sync(this.dbRemote, tempOptions);
+      })
+      .then(() => {
+        this.dbList.push(config.HOST + config.PORT + '/user_list');
+      })
+      .catch(err => {
+        console.log(`error with call to databaseService initialisation : ${err}`);
+      });
 
     //this.db.replicate.from(this.dbRemote, tempOptions);
     //this.db.replicate.to(this.dbRemote, tempOptions);
@@ -102,14 +110,16 @@ export class DatabaseService {
             tempOptions.filter = function (doc) {
               return doc.dbName === databaseName;
             };
+            console.log(tempOptions, databaseName);
             this.dbList.push(databaseName);
             dbToAdd.compact().then(() => {
-              this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
-              this.db.sync(dbToAdd, tempOptions);
-              console.log(info);
-              resolve(dbToAdd);
+              return this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
               });
-            });
+            })
+              .then(info => {
+                this.db.sync(dbToAdd, tempOptions);
+                resolve(dbToAdd);
+              });
           });
       }
     });
@@ -118,7 +128,8 @@ export class DatabaseService {
   createDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
       const guid = this.guid();
-      const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}_${guid}`, {
+      const newDbName = `${databaseName}_${guid}`;
+      const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${newDbName}`, {
         auth: {
           username: "root",
           password: "mdproot"
@@ -128,15 +139,17 @@ export class DatabaseService {
         .then(() => {
           const tempOptions = this.options;
           tempOptions.filter = function (doc) {
-            return doc.dbName === `${databaseName}_${guid}`;
+            return doc.dbName === newDbName;
           };
-          this.dbList.push(`${databaseName}_${guid}`);
+          this.dbList.push(newDbName);
           dbToAdd.compact().then(() => {
-            this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
+            return this.db.replicate.from(dbToAdd, {retry: true}).on('complete', (info) => {
+            });
+          })
+            .then(info => {
               this.db.sync(dbToAdd, tempOptions);
               resolve(dbToAdd);
             });
-          });
         });
     });
   }

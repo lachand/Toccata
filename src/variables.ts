@@ -1,2 +1,2 @@
-export const HOST = 'http://163.172.38.12';
-export const PORT = ':5984';
+export const HOST = 'http://37.59.63.190';
+export const PORT = ':8080';

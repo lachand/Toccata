@@ -3,6 +3,7 @@ import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {current} from "codelyzer/util/syntaxKind";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-activity-infos-teacher',
@@ -39,7 +40,7 @@ export class ActivityInfosTeacherComponent implements OnInit {
           });
         });
       }
-      if (change.doc._id === this.activityInfos['currentLoaded']) {
+      if (!isNullOrUndefined(this.activityInfos) && change.doc._id === this.activityInfos['currentLoaded']) {
         this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
           this.currentLoadedInfos = currentLoadedInfos;
           console.log(this.currentLoadedInfos);

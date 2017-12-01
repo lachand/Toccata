@@ -43,7 +43,7 @@ export class ChronometreComponent implements OnInit {
       this.timer = new Stopwatch(timeChronometer, {refreshRateMS: 1000});
       this.title = this.chronometre.timeLeft;
 
-      if (this.chronometre.running) {
+      if (this.chronometre.running && this.chronometre.timeleft > 0) {
         this.timerStart();
       }
 
@@ -68,7 +68,9 @@ export class ChronometreComponent implements OnInit {
     this.timer.reset(timeChronometer);
     this.title = this.chronometre.timeLeft;
     if (this.chronometre.running) {
-      this.timer.start();
+      if (this.chronometre.timeleft > 0) {
+        this.timer.start();
+      }
     } else {
       this.timer.stop();
     }
@@ -123,7 +125,9 @@ export class ChronometreComponent implements OnInit {
         this.appsService.updateApplication(chronometre);
       });
     }
-    this.timer.start();
+    if (this.chronometre.timeleft > 0) {
+      this.timer.start();
+    }
   }
 
   timerPause() {
