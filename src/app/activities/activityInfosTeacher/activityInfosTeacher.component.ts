@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
@@ -16,10 +16,11 @@ export class ActivityInfosTeacherComponent implements OnInit {
   @Input() activityId;
   activityInfos: any;
   currentLoadedInfos: any;
-
+  currentLoadedName: any;
   constructor(public user: UserService,
               public activityService: ActivityService,
-              public router: Router) {
+              public router: Router,
+              private ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -27,23 +28,26 @@ export class ActivityInfosTeacherComponent implements OnInit {
       this.activityInfos = activityInfos;
       this.activityService.getActivityInfos(activityInfos['currentLoaded']).then(currentLoadedInfos => {
         this.currentLoadedInfos = currentLoadedInfos;
-        console.log(this.currentLoadedInfos);
+        this.currentLoadedName = currentLoadedInfos['name'];
       });
     });
     this.activityService.changes.subscribe((change) => {
       console.log(change);
-      if (change.type === 'Main') {
+      if (change.type === 'Main' && change.doc._id === this.activityId) {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
           this.activityInfos = activityInfos;
           this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
             this.currentLoadedInfos = currentLoadedInfos;
+            this.currentLoadedName = currentLoadedInfos['name'];
+            this.ref.detectChanges();
           });
         });
       }
       if (!isNullOrUndefined(this.activityInfos) && change.doc._id === this.activityInfos['currentLoaded']) {
         this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
           this.currentLoadedInfos = currentLoadedInfos;
-          console.log(this.currentLoadedInfos);
+          this.currentLoadedName = currentLoadedInfos['name'];
+          this.ref.detectChanges();
         });
       }
     });

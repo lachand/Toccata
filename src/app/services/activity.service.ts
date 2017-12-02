@@ -28,6 +28,7 @@ export class ActivityService {
       (change) => {
         console.log(`there is a change ${change}`);
         if (change.type === 'Activity') {
+          console.log(change);
           if (change.doc.type === 'Main') {
             /**if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
              (change.doc.master === true )) {**/

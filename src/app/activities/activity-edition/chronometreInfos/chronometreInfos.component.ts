@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
 
@@ -17,7 +17,8 @@ export class ChronometreInfosComponent implements OnInit {
   timer: any;
   title: any;
 
-  constructor(public appsService: AppsService) {
+  constructor(public appsService: AppsService,
+              private ref: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -67,6 +68,7 @@ export class ChronometreInfosComponent implements OnInit {
     } else {
       this.timer.stop();
     }
+    this.ref.detectChanges();
   }
 
   /**
@@ -100,6 +102,7 @@ export class ChronometreInfosComponent implements OnInit {
       document.getElementById('title').className = '';
     }
 
+    this.ref.detectChanges();
     return `${m}:${s}`;
   }
 

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {ActivityService} from "../../../services/activity.service";
 import {isNullOrUndefined} from "util";
@@ -15,7 +15,8 @@ export class PostitInfosComponent implements OnInit {
   columns: any;
 
   constructor(public appsService: AppsService,
-              public activityService: ActivityService) {
+              public activityService: ActivityService,
+              private ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -27,12 +28,22 @@ export class PostitInfosComponent implements OnInit {
       this.columns['En cours'] = [];
       for (const element of res['docs']) {
         if (element.ressourceType === 'Postit') {
-          console.log(element.state);
           this.columns[element.state].push(element);
         }
       }
-      console.log(this.columns);
+      this.appsService.changes.subscribe(change => {
+        if (change.type === 'Postit' && this.appId === change.doc._id) {
+          this.handleChange(change.doc);
+        }
+      });
     });
+  }
+
+  handleChange(doc) {
+    if (doc.ressourceType === 'Postit') {
+      this.columns[doc.state].push(doc);
+      this.ref.detectChanges();
+    }
   }
 
   isNullorUndefined(elmt) {

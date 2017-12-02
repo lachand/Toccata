@@ -1,4 +1,4 @@
-import {Component, ViewChild, ViewEncapsulation, OnInit, Input} from '@angular/core';
+import {Component, ViewChild, ViewEncapsulation, OnInit, Input, ChangeDetectorRef} from '@angular/core';
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
@@ -23,7 +23,7 @@ export class ChronometreComponent implements OnInit {
   timer: any;
   title: any;
 
-  constructor(public databaseService: DatabaseService, public appsService: AppsService, public userService: UserService) {
+  constructor(public databaseService: DatabaseService, public appsService: AppsService, public userService: UserService, private ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -107,7 +107,7 @@ export class ChronometreComponent implements OnInit {
     } else {
       document.getElementById('title').className = '';
     }
-
+    this.ref.detectChanges();
     return `${m}:${s}`;
   }
 
