@@ -162,10 +162,11 @@ export class DatabaseService {
     return new Promise(resolve => {
       return this.dbRemote.allDocs({include_docs: true}).then(docs => {
         console.log(docs);
-        const promises = docs.rows.map(function (doc) {
+        const promises = docs.rows.map((doc) => {
           if (doc.doc.dbName === dbName) {
-            console.log("deleted_doc :");
-            doc._deleted = true;
+            console.log("deleted_doc :", doc.doc);
+            doc.doc._deleted = true;
+            return this.updateDocument(doc.doc);
           }
         });
         return Promise.all(promises);

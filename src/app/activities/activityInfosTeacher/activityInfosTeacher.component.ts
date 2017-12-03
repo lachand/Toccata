@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {current} from "codelyzer/util/syntaxKind";
 import {isNullOrUndefined} from "util";
+import {ViewRef_} from "@angular/core/src/view";
 
 @Component({
   selector: 'app-activity-infos-teacher',
@@ -39,7 +40,11 @@ export class ActivityInfosTeacherComponent implements OnInit {
           this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
             this.currentLoadedInfos = currentLoadedInfos;
             this.currentLoadedName = currentLoadedInfos['name'];
-            this.ref.detectChanges();
+            if (this.ref !== null &&
+              this.ref !== undefined &&
+              !(this.ref as ViewRef_).destroyed) {
+              this.ref.detectChanges();
+            }
           });
         });
       }
@@ -47,7 +52,11 @@ export class ActivityInfosTeacherComponent implements OnInit {
         this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
           this.currentLoadedInfos = currentLoadedInfos;
           this.currentLoadedName = currentLoadedInfos['name'];
-          this.ref.detectChanges();
+          if (this.ref !== null &&
+            this.ref !== undefined &&
+            !(this.ref as ViewRef_).destroyed) {
+            this.ref.detectChanges();
+          }
         });
       }
     });

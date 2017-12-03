@@ -42,7 +42,6 @@ export class PostitInfosComponent implements OnInit {
   handleChange(doc) {
     if (doc.ressourceType === 'Postit') {
       this.columns[doc.state].push(doc);
-      this.ref.detectChanges();
     }
   }
 

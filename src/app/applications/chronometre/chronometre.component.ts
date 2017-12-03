@@ -4,6 +4,7 @@ import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
 import {Stopwatch} from 'timer-stopwatch';
 import {UserService} from "../../services/user.service";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-chronometre',
@@ -34,15 +35,15 @@ export class ChronometreComponent implements OnInit {
       let timeChronometer;
       this.chronometre = chrono;
       this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
-
-      if (this.chronometre.running) {
+      if (this.chronometre.running && this.timeLeft > 0) {
         timeChronometer = this.timeLeft - ( actualTime - this.chronometre.startedAt);
-      } else {
+      } else if (!this.chronometre.running && this.timeLeft >= 0) {
         timeChronometer = this.timeLeft;
       }
       this.timer = new Stopwatch(timeChronometer, {refreshRateMS: 1000});
       this.title = this.chronometre.timeLeft;
 
+      console.log(this.timeLeft)
       if (this.chronometre.running && this.chronometre.timeleft > 0) {
         this.timerStart();
       }
@@ -67,12 +68,14 @@ export class ChronometreComponent implements OnInit {
     }
     this.timer.reset(timeChronometer);
     this.title = this.chronometre.timeLeft;
+    console.log(this.chronometre.timeLeft);
     if (this.chronometre.running) {
-      if (this.chronometre.timeleft > 0) {
         this.timer.start();
-      }
     } else {
       this.timer.stop();
+    }
+    if (this.timeLeft < 0) {
+      this.timerStop();
     }
   }
 
@@ -104,16 +107,23 @@ export class ChronometreComponent implements OnInit {
       document.getElementById('title').className = 'blink';
     } else if (m == '00' && s == '00') {
       document.getElementById('title').className = 'blink-fast';
+      this.timerStop();
     } else {
       document.getElementById('title').className = '';
     }
-    this.ref.detectChanges();
     return `${m}:${s}`;
   }
 
   timerStart() {
     this.timer.onTime((time) => {
       this.title = this.parseMillisecondsIntoReadableTime(time.ms);
+      if (this.timeLeft < 0) {
+        this.timerStop();
+      }
+      if (!isNullOrUndefined(this.ref['_viewContainerRef'])) {
+        this.ref.detectChanges();
+        console.log(this.ref['_viewContainerRef']);
+      }
     });
     if (!this.chronometre.running) {
       const startedAt = Date.now();
@@ -139,6 +149,14 @@ export class ChronometreComponent implements OnInit {
     });
   }
 
+  timerStop() {
+    this.appsService.getApplication(this.currentAppId).then(chronometre => {
+      chronometre['running'] = false;
+      chronometre['timeLeft'] = "00:00";
+      this.appsService.updateApplication(chronometre);
+    });
+  }
+
   timerReload() {
     console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
@@ -147,7 +165,6 @@ export class ChronometreComponent implements OnInit {
       this.appsService.updateApplication(chronometre);
     });
     this.timeLeft = this.timeInMiliSeconds(this.chronometre.initialTime);
-    //this.timer.reset(this.timeLeft);
   }
 
   timeInMiliSeconds(str) {

@@ -1,6 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'chronometre-infos',
@@ -63,12 +64,21 @@ export class ChronometreInfosComponent implements OnInit {
     }
     this.timer.reset(this.timeLeft);
     this.title = this.chronometre.timeLeft;
+
     if (this.chronometre.running) {
       this.timerStart();
-    } else {
-      this.timer.stop();
     }
-    this.ref.detectChanges();
+    if (this.timeLeft < 0) {
+      this.timerStop();
+    }
+  }
+
+  timerStop() {
+    this.appsService.getApplication(this.currentAppId).then(chronometre => {
+      chronometre['running'] = false;
+      chronometre['timeLeft'] = '00:00';
+      this.appsService.updateApplication(chronometre);
+    });
   }
 
   /**
@@ -98,17 +108,23 @@ export class ChronometreInfosComponent implements OnInit {
       document.getElementById('title').className = 'blink';
     } else if (m == '00' && s == '00') {
       document.getElementById('title').className = 'blink-fast';
+      this.timerStop();
     } else {
       document.getElementById('title').className = '';
     }
-
-    this.ref.detectChanges();
     return `${m}:${s}`;
   }
 
   timerStart() {
     this.timer.onTime((time) => {
       this.title = this.parseMillisecondsIntoReadableTime(time.ms);
+      if (this.timeLeft < 0) {
+        this.timerStop();
+      }
+      if (!isNullOrUndefined(this.ref['_viewContainerRef'])) {
+        this.ref.detectChanges();
+        console.log(this.ref['_viewContainerRef']);
+      }
     });
     if (!this.chronometre.running) {
       const startedAt = Date.now();

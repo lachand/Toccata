@@ -28,8 +28,13 @@ export class ActivityService {
       (change) => {
         console.log(`there is a change ${change}`);
         if (change.type === 'Activity') {
-          console.log(change);
-          if (change.doc.type === 'Main') {
+          let finded = false;
+          for (const user of change.doc.userList) {
+            if (user === this.userService.id) {
+              finded = true;
+            }
+          }
+          if (change.doc.type === 'Main' && finded) {
             /**if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
              (change.doc.master === true )) {**/
             this.changes.emit({doc: change.doc, type: 'Main'});
@@ -43,7 +48,7 @@ export class ActivityService {
               this.load_activity(change.doc._id);
             }
             }
-          } else {
+          } else if (finded) {
             this.changes.emit({doc: change.doc, type: 'Sequence'});
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
