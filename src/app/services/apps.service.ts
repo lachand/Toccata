@@ -15,6 +15,8 @@ export class AppsService {
         console.log(`there is a change ${change.type}`);
         if (change.type === 'Application') {
           this.changes.emit({doc: change.doc, type: change.doc.type});
+        } else if (change.type === 'Ressource application') {
+          this.changes.emit({doc: change.doc, type: change.doc.applicationType});
         }
       }
     );

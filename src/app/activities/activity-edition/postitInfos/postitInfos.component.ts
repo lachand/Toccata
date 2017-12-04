@@ -29,11 +29,12 @@ export class PostitInfosComponent implements OnInit {
       this.columns['En cours'] = [];
       for (const element of res['docs']) {
         if (element.ressourceType === 'Postit') {
-          this.columns[element.state].push(element);
+          this.columns[element.state].push(element._id);
         }
       }
       this.appsService.changes.subscribe(change => {
-        if (change.type === 'Postit' && this.appId === change.doc._id) {
+        console.log(change);
+        if (change.type === 'Post-it' && this.appId === change.doc.application) {
           this.handleChange(change.doc);
         }
       });
@@ -42,7 +43,9 @@ export class PostitInfosComponent implements OnInit {
 
   handleChange(doc) {
     if (doc.ressourceType === 'Postit') {
-      this.columns[doc.state].push(doc);
+      this.removeItem(doc);
+      this.columns[doc.state].push(doc._id);
+      console.log(this.columns);
     }
     if (this.ref !== null &&
       this.ref !== undefined &&
@@ -53,5 +56,29 @@ export class PostitInfosComponent implements OnInit {
 
   isNullorUndefined(elmt) {
     return isNullOrUndefined(elmt);
+  }
+
+  /**
+   * Only way for now to remove element (can't iterate from this.columns)
+   * @param doc
+   */
+  removeItem(doc) {
+    console.log(this.columns['Backlog']);
+    let index = this.columns['Backlog'].indexOf(doc._id);
+    if (index !== -1) {
+      this.columns['Backlog'].splice(index, 1);
+    }
+    index = this.columns['Backlog sprint'].indexOf(doc._id);
+    if (index !== -1) {
+      this.columns['Backlog sprint'].splice(index, 1);
+    }
+    index = this.columns['Réalisé'].indexOf(doc._id);
+    if (index !== -1) {
+      this.columns['Réalisé'].splice(index, 1);
+    }
+    index = this.columns['En cours'].indexOf(doc._id);
+    if (index !== -1) {
+      this.columns['En cours'].splice(index, 1);
+    }
   }
 }
