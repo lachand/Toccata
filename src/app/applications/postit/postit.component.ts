@@ -223,12 +223,10 @@ export class PostitComponent implements OnInit {
 
   changeEstimation(postit, event) {
     const id = postit._id;
-    console.log(event);
-    const args = event.args;
 
-    args.item.content = `<input placeholder="Estimation" style="width: 96%; margin-top:2px; border-radius: 3px;
+    postit.content = `<input placeholder="Estimation" style="width: 96%; margin-top:2px; border-radius: 3px;
           'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${id} value= "" />`;
-    this.myKanban.updateItem(id, args.item);
+    this.myKanban.updateItem(id, postit);
     const myInput = document.getElementById(id);
 
     if (myInput !== null && myInput !== undefined) {
