@@ -2,6 +2,7 @@ import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, 
 import {AppsService} from '../../../services/apps.service';
 import {ActivityService} from "../../../services/activity.service";
 import {isNullOrUndefined} from "util";
+import {ViewRef_} from "@angular/core/src/view";
 
 @Component({
   selector: 'postit-infos',
@@ -42,6 +43,11 @@ export class PostitInfosComponent implements OnInit {
   handleChange(doc) {
     if (doc.ressourceType === 'Postit') {
       this.columns[doc.state].push(doc);
+    }
+    if (this.ref !== null &&
+      this.ref !== undefined &&
+      !(this.ref as ViewRef_).destroyed) {
+      this.ref.detectChanges();
     }
   }
 

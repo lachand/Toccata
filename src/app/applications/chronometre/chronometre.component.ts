@@ -5,6 +5,7 @@ import {DatabaseService} from '../../services/database.service';
 import {Stopwatch} from 'timer-stopwatch';
 import {UserService} from "../../services/user.service";
 import {isNullOrUndefined} from "util";
+import {ViewRef_} from "@angular/core/src/view";
 
 @Component({
   selector: 'app-chronometre',
@@ -111,6 +112,11 @@ export class ChronometreComponent implements OnInit {
     } else {
       document.getElementById('title').className = '';
     }
+    if (this.ref !== null &&
+      this.ref !== undefined &&
+      !(this.ref as ViewRef_).destroyed) {
+      this.ref.detectChanges();
+    }
     return `${m}:${s}`;
   }
 
@@ -120,9 +126,10 @@ export class ChronometreComponent implements OnInit {
       if (this.timeLeft < 0) {
         this.timerStop();
       }
-      if (!isNullOrUndefined(this.ref['_viewContainerRef'])) {
+      if (this.ref !== null &&
+        this.ref !== undefined &&
+        !(this.ref as ViewRef_).destroyed) {
         this.ref.detectChanges();
-        console.log(this.ref['_viewContainerRef']);
       }
     });
     if (!this.chronometre.running) {

@@ -2,6 +2,7 @@ import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, 
 import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
 import {isNullOrUndefined} from "util";
+import {ViewRef_} from "@angular/core/src/view";
 
 @Component({
   selector: 'chronometre-infos',
@@ -121,9 +122,10 @@ export class ChronometreInfosComponent implements OnInit {
       if (this.timeLeft < 0) {
         this.timerStop();
       }
-      if (!isNullOrUndefined(this.ref['_viewContainerRef'])) {
+      if (this.ref !== null &&
+        this.ref !== undefined &&
+        !(this.ref as ViewRef_).destroyed) {
         this.ref.detectChanges();
-        console.log(this.ref['_viewContainerRef']);
       }
     });
     if (!this.chronometre.running) {
