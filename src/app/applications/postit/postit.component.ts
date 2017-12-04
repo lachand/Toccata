@@ -113,6 +113,7 @@ export class PostitComponent implements OnInit {
   }
 
   myKanbanOnItemAttrClicked(event: any): void {
+    console.log(event);
     const args = event.args;
     let id = '';
     if (isNullOrUndefined(args.item)) {
@@ -211,9 +212,47 @@ export class PostitComponent implements OnInit {
   onItemMoved(event): void {
     event.stopPropagation();
     this.databaseService.getDocument(event.args.itemData.id).then(postit => {
-      postit['state'] = event.args.newColumn.text;
-      this.databaseService.updateDocument(postit);
+      if (postit['state'] === event.args.newColumn.text) {
+        this.changeEstimation(postit, event);
+      } else {
+        postit['state'] = event.args.newColumn.text;
+        this.databaseService.updateDocument(postit);
+      }
     });
+  }
+
+  changeEstimation(postit, event) {
+    const id = postit._id;
+    console.log(event);
+    const args = event.args;
+
+    args.item.content = `<input placeholder="Estimation" style="width: 96%; margin-top:2px; border-radius: 3px;
+          'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${id} value= "" />`;
+    this.myKanban.updateItem(id, args.item);
+    const myInput = document.getElementById(id);
+
+    if (myInput !== null && myInput !== undefined) {
+      myInput.addEventListener('mousedown', (evt: any): void => {
+        evt.stopPropagation();
+      });
+
+      myInput.addEventListener('mouseup', (evt: any): void => {
+        evt.stopPropagation();
+      });
+
+      myInput.addEventListener('keydown', (evt: any): void => {
+        if (evt.keyCode === 13) {
+          const valueElement = `<span>${evt.target.value}</span>`;
+          this.databaseService.getDocument(id).then(newpostit => {
+            newpostit['estimation'] = valueElement;
+            this.databaseService.updateDocument(newpostit);
+          });
+          console.log(valueElement);
+        }
+      });
+
+      myInput.focus();
+    }
   }
 
   ngOnInit(): void {
