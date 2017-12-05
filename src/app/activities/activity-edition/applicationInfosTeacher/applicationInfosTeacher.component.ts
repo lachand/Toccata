@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
+import {ViewRef_} from "@angular/core/src/view";
 
 @Component({
   selector: 'application-infos-teacher',
@@ -13,7 +14,8 @@ export class ApplicationInfosTeacherComponent implements OnInit {
   application: any;
   currentLoaded: any;
 
-  constructor(public appsService: AppsService) {
+  constructor(public appsService: AppsService,
+              private ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -24,7 +26,6 @@ export class ApplicationInfosTeacherComponent implements OnInit {
     });
     this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
-      console.log(this.application);
     });
   }
 }

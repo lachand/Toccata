@@ -43,8 +43,10 @@ export class ActivityDescriptionEditComponent {
   }
 
   switchDescription() {
-    this.description = this.activityService.activityLoaded.description;
-    this.descriptionEdition = !this.descriptionEdition;
+    if (this.edit) {
+      this.description = this.activityService.activityLoaded.description;
+      this.descriptionEdition = !this.descriptionEdition;
+    }
   }
 
   /**

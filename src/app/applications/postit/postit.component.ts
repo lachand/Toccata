@@ -1,9 +1,10 @@
-import {Component, ViewChild, ViewEncapsulation, OnInit, Input} from '@angular/core';
+import {Component, ViewChild, ViewEncapsulation, OnInit, Input, ChangeDetectorRef} from '@angular/core';
 import {jqxKanbanComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxkanban';
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
 import {isNullOrUndefined} from "util";
+import {ViewRef_} from "@angular/core/src/view";
 
 @Component({
   selector: 'app-postit',
@@ -73,7 +74,8 @@ export class PostitComponent implements OnInit {
 
   constructor(public appsService: AppsService,
               public activityService: ActivityService,
-              public databaseService: DatabaseService) {
+              public databaseService: DatabaseService,
+              private ref: ChangeDetectorRef) {
 
     this.databaseService.changes.subscribe(
       (change) => {
@@ -103,10 +105,14 @@ export class PostitComponent implements OnInit {
                   status: change.doc.state,
                   text: change.doc.label
                 });
-                console.log(this.myKanban);
               }
             }
           }
+        }
+        if (this.ref !== null &&
+          this.ref !== undefined &&
+          !(this.ref as ViewRef_).destroyed) {
+          this.ref.detectChanges();
         }
       }
     );
