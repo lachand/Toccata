@@ -5,6 +5,8 @@ import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
 import {isNullOrUndefined} from "util";
 import {ViewRef_} from "@angular/core/src/view";
+import {CreateEditPostitComponent} from "../../activities/createEditPostit/createEditPostit.component";
+import {MatDialog} from "@angular/material";
 
 @Component({
   selector: 'app-postit',
@@ -28,7 +30,8 @@ export class PostitComponent implements OnInit {
 
   itemRenderer = (element: any, item: any, resource: any): void => {
     console.log(item);
-    element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML = item.text;
+    element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].innerHTML = `<div style=" padding-top: 5px; margin-left: 2px">${item.text}</div>`;
+    element[0].getElementsByClassName('jqx-kanban-item-color-status')[0].style.color = 'white';
     element[0].getElementsByClassName('jqx-kanban-item-text')[0].innerHTML = `<div style=" margin-top: 2px; margin-left: 2px">${item.content}</div>`;
   }
 
@@ -75,7 +78,8 @@ export class PostitComponent implements OnInit {
   constructor(public appsService: AppsService,
               public activityService: ActivityService,
               public databaseService: DatabaseService,
-              private ref: ChangeDetectorRef) {
+              private ref: ChangeDetectorRef,
+              public dialog: MatDialog) {
 
     this.databaseService.changes.subscribe(
       (change) => {
@@ -118,48 +122,6 @@ export class PostitComponent implements OnInit {
     );
   }
 
-  myKanbanOnItemAttrClicked(event: any): void {
-    console.log(event);
-    const args = event.args;
-    let id = '';
-    if (isNullOrUndefined(args.item)) {
-      id = this.myKanban.getItems()[args.itemId].id;
-    } else {
-      id = args.item.id;
-    }
-    if (args.attribute === 'template') {
-      this.databaseService.removeDocument(id);
-    } else if (args.attribute === 'text') {
-      args.item.content = `<input placeholder="Estimation" style="width: 96%; margin-top:2px; border-radius: 3px;
-          'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${id} value= "" />`;
-      this.myKanban.updateItem(id, args.item);
-      const myInput = document.getElementById(id);
-
-      if (myInput !== null && myInput !== undefined) {
-        myInput.addEventListener('mousedown', (evt: any): void => {
-          evt.stopPropagation();
-        });
-
-        myInput.addEventListener('mouseup', (evt: any): void => {
-          evt.stopPropagation();
-        });
-
-        myInput.addEventListener('keydown', (evt: any): void => {
-          if (evt.keyCode === 13) {
-            const valueElement = `<span>${evt.target.value}</span>`;
-            this.databaseService.getDocument(id).then(postit => {
-              postit['estimation'] = valueElement;
-              this.databaseService.updateDocument(postit);
-            });
-            console.log(valueElement);
-          }
-        });
-
-        myInput.focus();
-      }
-    }
-  };
-
   myKanbanonColumnAttrClicked(event: any): void {
     const args = event.args;
     if (args.attribute === 'button') {
@@ -178,85 +140,18 @@ export class PostitComponent implements OnInit {
           'dbName': this.activityService.activityLoaded.dbName
         };
 
-        this.myKanban.addItem({
-          status: postit.state,
-          content: postit.estimation,
-          text: `<input placeholder="Nouveau post-it" style="width: 96%; margin-top:2px; border-radius: 3px;
-          'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${postit._id} value= "" />`,
-          id: postit._id
-        });
-
-        console.log(this.myKanban);
-
-        const id = postit._id;
-        const myInput = document.getElementById(id);
-
-        if (myInput !== null && myInput !== undefined) {
-          myInput.addEventListener('mousedown', (evt: any): void => {
-            evt.stopPropagation();
-          });
-
-          myInput.addEventListener('mouseup', (evt: any): void => {
-            evt.stopPropagation();
-          });
-
-          myInput.addEventListener('keydown', (evt: any): void => {
-            if (evt.keyCode === 13) {
-              const valueElement = `<span>${evt.target.value}</span>`;
-              postit.label = valueElement;
-              this.myKanban.removeItem(postit._id);
-              this.databaseService.addDocument(postit);
-            }
-          });
-
-          myInput.focus();
-        }
+        this.createOrEdit(postit);
       }
     }
   };
 
   onItemMoved(event): void {
+    console.log("toto");
     event.stopPropagation();
+    console.log(event);
     this.databaseService.getDocument(event.args.itemData.id).then(postit => {
-      if (postit['state'] === event.args.newColumn.text) {
-        this.changeEstimation(postit, event);
-      } else {
-        postit['state'] = event.args.newColumn.text;
-        this.databaseService.updateDocument(postit);
-      }
+      this.createOrEdit(postit);
     });
-  }
-
-  changeEstimation(postit, event) {
-    const id = postit._id;
-
-    postit.content = `<input placeholder="Estimation" style="width: 96%; margin-top:2px; border-radius: 3px;
-          'border-color: #ddd; line-height:20px; height: 20px;" class="jqx-input" id=${id} value= "" />`;
-    this.myKanban.updateItem(id, postit);
-    const myInput = document.getElementById(id);
-
-    if (myInput !== null && myInput !== undefined) {
-      myInput.addEventListener('mousedown', (evt: any): void => {
-        evt.stopPropagation();
-      });
-
-      myInput.addEventListener('mouseup', (evt: any): void => {
-        evt.stopPropagation();
-      });
-
-      myInput.addEventListener('keydown', (evt: any): void => {
-        if (evt.keyCode === 13) {
-          const valueElement = `<span>${evt.target.value}</span>`;
-          this.databaseService.getDocument(id).then(newpostit => {
-            newpostit['estimation'] = valueElement;
-            this.databaseService.updateDocument(newpostit);
-          });
-          console.log(valueElement);
-        }
-      });
-
-      myInput.focus();
-    }
   }
 
   ngOnInit(): void {
@@ -313,15 +208,45 @@ export class PostitComponent implements OnInit {
       '<div class="jqx-kanban-item" id="">'
       + '<div class="jqx-kanban-item-color-status"></div>'
       + '<div style="display: none;" class="jqx-kanban-item-avatar"></div>'
-      + '<div class="jqx-icon jqx-icon-close jqx-kanban-item-template-content jqx-kanban-template-icon"></div>'
       + '<div class="jqx-kanban-item-text"></div>'
       + '<div style="display: none;" class="jqx-kanban-item-footer"></div>'
       + '</div>';
 
-    this.title = 'Kanban';
+    this.title = `Tableau d'estimations`;
   }
 
   checkNull(elmt) {
     return isNullOrUndefined(elmt);
+  }
+
+  updatePostit(postit) {
+    this.databaseService.getDocument(postit._id).then(result => {
+      result['estimation'] = postit['estimation'];
+      result['label'] = postit['label'];
+      this.databaseService.updateDocument(result);
+    })
+      .catch(err => {
+        console.log(err);
+        this.databaseService.addDocument(postit);
+      });
+  }
+
+  deletePostit(id) {
+    this.databaseService.getDocument(id).then(doc => {
+      doc['_deleted'] = true;
+      this.databaseService.updateDocument(doc);
+    });
+  }
+
+  createOrEdit(postit) {
+    const dialogRef = this.dialog.open(CreateEditPostitComponent, {data: {postit: postit}});
+    dialogRef.componentInstance.dialogRef = dialogRef;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.type === 'postit') {
+        this.updatePostit(result.value);
+      } else if (result.type === 'delete') {
+        this.deletePostit(result.value);
+      }
+    });
   }
 }

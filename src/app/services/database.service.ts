@@ -183,7 +183,7 @@ export class DatabaseService {
    */
   getDocument(docId: string) {
     console.log(docId);
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       return this.db.allDocs().then(res => {
         console.log(res, docId);
       })
@@ -196,6 +196,7 @@ export class DatabaseService {
         .catch(err => {
           console.log(`Error in database service whith call to getDocument:
           ${err}`);
+          reject(err);
         });
     });
   }
@@ -221,7 +222,7 @@ export class DatabaseService {
    * @param {any} doc
    */
   updateDocument(doc: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.db.put(doc)
         .then(res => {
           resolve(res);
@@ -229,6 +230,7 @@ export class DatabaseService {
         .catch(err => {
           console.log(`Error in database service whith call to updateDocument:
           ${err}`);
+          reject(err);
         });
     });
   }

@@ -1,0 +1,19 @@
+<script src="../../main.ts"></script>
+
+<form [formGroup]="formTask">
+  <h3>Postit</h3>
+
+  <mat-input-container>
+    <input matInput placeholder="Nom de la tâche" type="text" formControlName="taskName">
+  </mat-input-container>
+
+  <mat-input-container>
+    <input matInput placeholder="Estimation" type="number" formControlName="estimation">
+  </mat-input-container>
+
+  <div>
+    <button mat-button (click)="update()">Valider</button>
+    <button mat-button (click)="close()">Annuler</button>
+    <button mat-button (click)="deletePostit()" color="warn">Supprimer</button>
+  </div>
+</form>

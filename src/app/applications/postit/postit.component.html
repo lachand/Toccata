@@ -1,8 +1,9 @@
-<h3>{{title}}</h3>
+<mat-card-title>
+  {{title}}
+</mat-card-title>
 <jqxKanban *ngIf="!checkNull(columns) && columns.length > 0 && appId"
            #myKanban
            (onItemMoved)="onItemMoved($event)"
-           (onItemAttrClicked)="myKanbanOnItemAttrClicked($event)"
            (onColumnAttrClicked)="myKanbanonColumnAttrClicked($event)"
            [width]="'100%'"
            [height]="400" [template]="template" [source]="dataAdapter"

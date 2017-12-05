@@ -63,6 +63,7 @@ import {ActivityInfosTeacherComponent} from "./activities/activityInfosTeacher/a
 import {ChronometreInfosComponent} from "./activities/activity-edition/chronometreInfos/chronometreInfos.component";
 import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component";
 import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/postitInfos.component";
+import {CreateEditPostitComponent} from "./activities/createEditPostit/createEditPostit.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -92,6 +93,7 @@ import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/po
     PostitInfosComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
+    CreateEditPostitComponent,
     ActivityNameComponent,
     ApplicationLaunchedComponent,
     ViewDuplicatesComponent,
@@ -135,7 +137,7 @@ import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/po
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent],
+  entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent, CreateEditPostitComponent],
   providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService],
   bootstrap: [AppComponent]
 })
