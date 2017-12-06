@@ -1,0 +1,14 @@
+{
+  "name": "ABCDE",
+  "short_name": "ABCDE",
+  "start_url": "http://www.abcde-angular.herokuapp.com/#/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#fff",
+  "description": "ABCDE",
+  "related_applications": [
+    {
+      "platform": "web"
+    }
+  ]
+}
