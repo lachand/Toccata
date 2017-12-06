@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
+import {LoggerService} from "../../services/logger.service";
 
 @Component({
   selector: 'app-activity-infos',
@@ -16,7 +17,8 @@ export class ActivityInfosComponent implements OnInit {
 
   constructor(public user: UserService,
               public activityService: ActivityService,
-              public router: Router) {
+              public router: Router,
+              private logger: LoggerService) {
   }
 
   ngOnInit(): void {
@@ -38,6 +40,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   load_activity(activity_id) {
+    this.logger.log('OPEN', activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_apps/' + activity_id]);
     });
@@ -48,6 +51,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   show_activity(activity_id) {
+    this.logger.log('OPEN', activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_view/' + activity_id]);
     });
@@ -58,6 +62,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   edit_activity(activity_id) {
+    this.logger.log('OPEN', activity_id, 'open activity edition');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });
@@ -85,10 +90,12 @@ export class ActivityInfosComponent implements OnInit {
   }
 
   duplicate_activity(activityId) {
+    this.logger.log('CREATE', activityId, 'duplicate activity');
     this.activityService.duplicateActivity(activityId);
   }
 
   show_duplicates(activityId) {
+    this.logger.log('OPEN', activityId, 'open activity duplicates');
     this.router.navigate(['duplicates/' + activityId]);
   }
 }

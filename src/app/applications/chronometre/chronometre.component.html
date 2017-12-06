@@ -1,5 +1,6 @@
-<mat-card-title>Temps restant : <span id="title">{{title}}</span>
+<mat-card-title>Temps restant ({{step}}) : <span id="title">{{title}}</span>
   <mat-icon (click)="timerStart()">play_arrow</mat-icon>
   <mat-icon *ngIf="userService.fonction === 'Enseignant'" (click)="timerPause()">pause</mat-icon>
   <mat-icon *ngIf="userService.fonction === 'Enseignant'" (click)="timerReload()">replay</mat-icon>
 </mat-card-title>
+

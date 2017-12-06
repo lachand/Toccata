@@ -6,6 +6,7 @@ import {Stopwatch} from 'timer-stopwatch';
 import {UserService} from "../../services/user.service";
 import {isNullOrUndefined} from "util";
 import {ViewRef_} from "@angular/core/src/view";
+import {LoggerService} from "../../services/logger.service";
 
 @Component({
   selector: 'app-chronometre',
@@ -24,12 +25,14 @@ export class ChronometreComponent implements OnInit {
   timeLeft: any;
   timer: any;
   title: any;
+  step: any;
 
-  constructor(public databaseService: DatabaseService, public appsService: AppsService, public userService: UserService, private ref: ChangeDetectorRef) {
+  constructor(public databaseService: DatabaseService, public appsService: AppsService, public userService: UserService, private ref: ChangeDetectorRef, private logger: LoggerService) {
   }
 
   ngOnInit(): void {
     console.log(this.appId);
+    this.step = '';
     this.currentAppId = this.appId;
     const Stopwatch = require('timer-stopwatch');
     this.appsService.getApplication(this.currentAppId).then(chrono => {
@@ -110,7 +113,7 @@ export class ChronometreComponent implements OnInit {
     let absoluteSeconds = Math.floor(seconds);
     let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
-    if (m == '00' && s != '00') {
+    if (m == '05' && s != '00') {
       document.getElementById('title').className = 'blink';
     } else if (m == '00' && s == '00') {
       document.getElementById('title').className = 'blink-fast';
@@ -118,6 +121,13 @@ export class ChronometreComponent implements OnInit {
     } else {
       document.getElementById('title').className = '';
     }
+    for (const step of this.chronometre.steps) {
+      console.log(step, m, step.timeStart >= m, m > step.timeStop);
+      if (step.timeStart >= m && m >= step.timeStop) {
+        this.step = step.name;
+      }
+    }
+
     if (this.ref !== null &&
       this.ref !== undefined &&
       !(this.ref as ViewRef_).destroyed) {
@@ -127,6 +137,7 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerStart() {
+    this.logger.log('UPDATE', this.appId, 'timer started');
     this.timer.onTime((time) => {
       this.title = this.parseMillisecondsIntoReadableTime(time.ms);
       if (this.timeLeft < 0) {
@@ -157,6 +168,7 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerPause() {
+    this.logger.log('UPDATE', this.appId, 'timer paused');
     console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
       chronometre['running'] = false;
@@ -174,6 +186,7 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerReload() {
+    this.logger.log('UPDATE', this.appId, 'timer reloaded');
     console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
       chronometre['running'] = false;
@@ -194,5 +207,9 @@ export class ChronometreComponent implements OnInit {
     }
 
     return (s * 1000);
+  }
+
+  checkNullOrUndefined(elmt) {
+    return isNullOrUndefined(elmt);
   }
 }

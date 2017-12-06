@@ -1,17 +1,21 @@
 import {Injectable} from '@angular/core';
+import {UserService} from "./user.service";
 
 @Injectable()
 export class LoggerService {
   logFile: Storage;
   logName: number;
+  cpt: number;
 
-  constructor() {
+  constructor(private user: UserService) {
     this.logFile = window.localStorage;
     this.logName = Date.now();
+    this.cpt = 0;
   }
 
-  log(user, actionType, object, message) {
-    this.logFile.setItem(`${user}_${this.logName}`, `${Date.now()} ; ${user} ; ${actionType} ; ${object} ; ${message}`);
+  log(actionType, object, message) {
+    this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`, `${Date.now()} ; ${this.user.name} ; ${actionType} ; ${object} ; ${message}`);
+    this.cpt++;
   }
 
 }

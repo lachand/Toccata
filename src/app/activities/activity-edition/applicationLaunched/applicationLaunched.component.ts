@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {ViewRef_} from "@angular/core/src/view";
 import {isNullOrUndefined} from "util";
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'application-launched',
@@ -14,7 +15,8 @@ export class ApplicationLaunchedComponent implements OnInit {
   @Input() appId;
   application: any;
 
-  constructor(public appsService: AppsService, private ref: ChangeDetectorRef) {
+  constructor(public appsService: AppsService, private ref: ChangeDetectorRef,
+              private logger: LoggerService) {
     this.appsService.changes.subscribe(change => {
       console.log(change);
       if (this.appId === change.doc._id) {
@@ -36,6 +38,7 @@ export class ApplicationLaunchedComponent implements OnInit {
   }
 
   close() {
+    this.logger.log('CLOSE', this.appId, 'application closed');
     this.appsService.closeApplication(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
     });

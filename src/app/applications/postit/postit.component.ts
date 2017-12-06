@@ -7,6 +7,7 @@ import {isNullOrUndefined} from "util";
 import {ViewRef_} from "@angular/core/src/view";
 import {CreateEditPostitComponent} from "../../activities/createEditPostit/createEditPostit.component";
 import {MatDialog} from "@angular/material";
+import {LoggerService} from "../../services/logger.service";
 
 @Component({
   selector: 'app-postit',
@@ -79,7 +80,8 @@ export class PostitComponent implements OnInit {
               public activityService: ActivityService,
               public databaseService: DatabaseService,
               private ref: ChangeDetectorRef,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private logger: LoggerService) {
 
     this.databaseService.changes.subscribe(
       (change) => {
@@ -122,6 +124,10 @@ export class PostitComponent implements OnInit {
     );
   }
 
+  clicked(event) {
+    console.log(event);
+  }
+
   myKanbanonColumnAttrClicked(event: any): void {
     const args = event.args;
     if (args.attribute === 'button') {
@@ -146,12 +152,12 @@ export class PostitComponent implements OnInit {
   };
 
   onItemMoved(event): void {
-    console.log("toto");
     event.stopPropagation();
-    console.log(event);
-    this.databaseService.getDocument(event.args.itemData.id).then(postit => {
-      this.createOrEdit(postit);
-    });
+    if (event.args.newColumn === event.args.oldColumn) {
+      this.databaseService.getDocument(event.args.itemData.id).then(postit => {
+        this.createOrEdit(postit);
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -223,10 +229,11 @@ export class PostitComponent implements OnInit {
     this.databaseService.getDocument(postit._id).then(result => {
       result['estimation'] = postit['estimation'];
       result['label'] = postit['label'];
+      this.logger.log('UPDATE', postit._id, 'postit updated');
       this.databaseService.updateDocument(result);
     })
       .catch(err => {
-        console.log(err);
+        this.logger.log('CREATE', postit._id, 'postit created');
         this.databaseService.addDocument(postit);
       });
   }
@@ -245,6 +252,7 @@ export class PostitComponent implements OnInit {
       if (result.type === 'postit') {
         this.updatePostit(result.value);
       } else if (result.type === 'delete') {
+        this.logger.log('DELETE', postit.id, 'postit deleted');
         this.deletePostit(result.value);
       }
     });

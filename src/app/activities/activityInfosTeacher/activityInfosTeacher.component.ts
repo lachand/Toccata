@@ -5,6 +5,7 @@ import {UserService} from '../../services/user.service';
 import {current} from "codelyzer/util/syntaxKind";
 import {isNullOrUndefined} from "util";
 import {ViewRef_} from "@angular/core/src/view";
+import {LoggerService} from "../../services/logger.service";
 
 @Component({
   selector: 'app-activity-infos-teacher',
@@ -21,7 +22,8 @@ export class ActivityInfosTeacherComponent implements OnInit {
   constructor(public user: UserService,
               public activityService: ActivityService,
               public router: Router,
-              private ref: ChangeDetectorRef) {
+              private ref: ChangeDetectorRef,
+              private logger: LoggerService) {
   }
 
   ngOnInit(): void {
@@ -67,6 +69,7 @@ export class ActivityInfosTeacherComponent implements OnInit {
    * @param activity_id
    */
   show_activity(activity_id) {
+    this.logger.log('OPEN', activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_view/' + activity_id]);
     });
@@ -77,6 +80,7 @@ export class ActivityInfosTeacherComponent implements OnInit {
    * @param activity_id
    */
   edit_activity(activity_id) {
+    this.logger.log('OPEN', activity_id, 'open activity edition');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });

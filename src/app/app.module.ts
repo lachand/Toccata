@@ -64,6 +64,7 @@ import {ChronometreInfosComponent} from "./activities/activity-edition/chronomet
 import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component";
 import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/postitInfos.component";
 import {CreateEditPostitComponent} from "./activities/createEditPostit/createEditPostit.component";
+import {LoggerService} from "./services/logger.service";
 
 @NgModule({
   declarations: [AppComponent,
@@ -138,7 +139,7 @@ import {CreateEditPostitComponent} from "./activities/createEditPostit/createEdi
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent, CreateEditPostitComponent],
-  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService],
+  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService, LoggerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

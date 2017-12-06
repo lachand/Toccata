@@ -17,9 +17,9 @@ export class CreateEditPostitComponent {
               public dialog: MatDialog) {
     this.formTask = this.formBuilder.group({
       taskName: [data.postit.label, Validators.required],
-      estimation: [data.postit.estimation, Validators.required],
+      estimation: [data.postit.estimation, Validators.required]
     });
-
+    console.log(data.postit.estimation)
   }
 
   update() {

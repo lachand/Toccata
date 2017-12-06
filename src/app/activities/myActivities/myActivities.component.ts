@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
 import {DialogConfirmationComponent} from '../../dialogConfirmation/dialogConfirmation.component';
 import {DatabaseService} from "../../services/database.service";
+import {LoggerService} from "../../services/logger.service";
 
 @Component({
   selector: 'app-my-activities',
@@ -20,10 +21,11 @@ export class MyActivitiesComponent {
               public activityService: ActivityService,
               public router: Router,
               dialog: MatDialog,
-              public databaseService: DatabaseService) {
+              public databaseService: DatabaseService,
+              private logger: LoggerService) {
     this.dialog = dialog;
     this.databaseService.ereaseDatabase("activity_4fd6a8a7-a725-f811-3173-b6b1f42835ae_duplicate_02a054b3-b4e1-36e8-56da-33bf1c908d8b").then(res => {
-      console.log("done : ", res);
+      this.logger.log('OPEN', 'NA', 'open activities list');
     });
   }
 
@@ -35,6 +37,7 @@ export class MyActivitiesComponent {
   }
 
   show_activity(activity_id) {
+    this.logger.log('CREATE', activity_id, 'open activity view')
     this.activityService.load_activity(activity_id).then(res => {
       console.log(this.router);
       this.router.navigate(['activity_view/' + activity_id]);
@@ -42,6 +45,7 @@ export class MyActivitiesComponent {
   }
 
   edit_activity(activity_id) {
+    this.logger.log('CREATE', activity_id, 'open activity edition')
     this.activityService.load_activity(activity_id).then( res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });
@@ -50,6 +54,7 @@ export class MyActivitiesComponent {
   newActivity() {
     this.activityService.createActivity('Main')
       .then(res => {
+        this.logger.log('CREATE', res['id'], 'duplicate activity')
         /**console.log(res['id']);
       this.activityService.user.db.get(this.user.id).then( res2 => {
         res2.activites.push({
@@ -72,9 +77,11 @@ export class MyActivitiesComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {return this.activityService.delete_activity(activityId); }
     });
+    this.logger.log('DELETE', activityId, 'delete activity');
   }
 
   duplicate_activity(activityId) {
+    this.logger.log('CREATE', activityId, 'duplicate activity');
     this.activityService.duplicate(activityId);
 }
 

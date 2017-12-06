@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-application-infos',
@@ -13,7 +14,8 @@ export class ApplicationInfosComponent implements OnInit {
   @Input() applicationId;
   application: any;
 
-  constructor(public appsService: AppsService) {
+  constructor(public appsService: AppsService,
+              private logger: LoggerService) {
   }
 
   ngOnInit(): void {
@@ -28,6 +30,7 @@ export class ApplicationInfosComponent implements OnInit {
   }
 
   openApplication() {
+    this.logger.log('OPEN', this.applicationId, 'open application');
     this.appsService.openApplication(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
     });
