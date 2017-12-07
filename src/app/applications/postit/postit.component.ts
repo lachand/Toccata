@@ -105,12 +105,20 @@ export class PostitComponent implements OnInit {
                 }
               }
               if (!finded) {
-                this.myKanban.addItem({
+                const postit = {
                   content: change.doc.estimation,
                   id: change.doc._id,
                   status: change.doc.state,
                   text: change.doc.label
-                });
+                };
+                const postitTemp = {
+                  content: change.doc.estimation,
+                  id: change.doc._id,
+                  state: change.doc.state,
+                  label: change.doc.label
+                }
+                this.myKanban.addItem(postit);
+                this.ngOnInit();
               }
             }
           }
@@ -122,10 +130,6 @@ export class PostitComponent implements OnInit {
         }
       }
     );
-  }
-
-  clicked(event) {
-    console.log(event);
   }
 
   myKanbanonColumnAttrClicked(event: any): void {
@@ -151,8 +155,8 @@ export class PostitComponent implements OnInit {
     }
   };
 
-  onItemMoved(event): void {
-    event.stopPropagation();
+  itemMoved(event): void {
+    //event.stopPropagation();
     if (event.args.newColumn === event.args.oldColumn) {
       this.databaseService.getDocument(event.args.itemData.id).then(postit => {
         this.createOrEdit(postit);
@@ -186,7 +190,6 @@ export class PostitComponent implements OnInit {
         }
       }
 
-      console.log(this.source);
     });
 
     this.fields = [
@@ -203,8 +206,6 @@ export class PostitComponent implements OnInit {
       dataType: 'array',
       dataFields: this.fields
     };
-
-    console.log(this.source);
 
     this.dataAdapter = new jqx.dataAdapter(this.source);
 
