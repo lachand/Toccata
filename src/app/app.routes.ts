@@ -12,8 +12,8 @@ import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicate
 export const routes = [
 //  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
-  { path: '', redirectTo: '/login', pathMatch: 'full'},
-  { path: 'activities', component: MyActivitiesComponent, canActivate: [LoggedInGuard] },
+  {path: 'activities', component: MyActivitiesComponent},
+  {path: '', redirectTo: '/activities', pathMatch: 'full'},
   {path: 'duplicates/:id', component: ViewDuplicatesComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_edit/:id', component: ActivityEditComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_view/:id', component: ActivityViewComponent, canActivate: [LoggedInGuard]},

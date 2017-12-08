@@ -1,7 +1,7 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div fxFlex="100%" class="flex-card">
-  <mat-card>
+  <mat-card class="mat-card">
 
     <h3>
       <activity-name *ngIf="activityService.activityLoaded.type === 'Main'"
@@ -51,7 +51,7 @@
 
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 
-      <div fxFlex="33%">
+      <div fxFlex="30%">
 
         <div>
           <mat-card class="flex-card">
@@ -86,7 +86,7 @@
 
       </div>
 
-      <div fxFlex="66%">
+      <div fxFlex="70%">
         <application-launched *ngFor="let app of activityService.activityLoaded.applicationList"
                               [appId]="app"></application-launched>
       </div>

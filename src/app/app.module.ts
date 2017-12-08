@@ -65,6 +65,7 @@ import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/ap
 import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/postitInfos.component";
 import {CreateEditPostitComponent} from "./activities/createEditPostit/createEditPostit.component";
 import {LoggerService} from "./services/logger.service";
+import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 @NgModule({
   declarations: [AppComponent,
@@ -139,7 +140,10 @@ import {LoggerService} from "./services/logger.service";
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent, CreateEditPostitComponent],
-  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService, LoggerService],
+  providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService, LoggerService, {
+    provide: LocationStrategy,
+    useClass: HashLocationStrategy
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
