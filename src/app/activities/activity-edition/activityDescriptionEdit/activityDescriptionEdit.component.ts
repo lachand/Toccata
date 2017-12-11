@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-activity-description-edit',
@@ -13,7 +14,7 @@ export class ActivityDescriptionEditComponent {
   editorOptions: any;
   @Input() edit: boolean;
 
-  constructor(public activityService: ActivityService) {
+  constructor(public activityService: ActivityService, private logger: LoggerService) {
     this.descriptionEdition = false;
     if (this.activityService.activityLoaded.description !== 'Il n\'y a aucune description') {
       this.description = this.activityService.activityLoaded.description;
@@ -55,6 +56,7 @@ export class ActivityDescriptionEditComponent {
   changeTheDescription() {
     this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description)
       .then(() => {
+        this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.activityService.activityLoaded._id, 'activity description updated');
         this.switchDescription();
       });
   }

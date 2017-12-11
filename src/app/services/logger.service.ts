@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {UserService} from "./user.service";
+import {ActivityService} from "./activity.service";
 
 @Injectable()
 export class LoggerService {
@@ -13,8 +14,13 @@ export class LoggerService {
     this.cpt = 0;
   }
 
-  log(actionType, object, message) {
-    this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`, `${Date.now()} ; ${this.user.name} ; ${actionType} ; ${object} ; ${message}`);
+  initLog() {
+    this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`, `Time ; User ; Action ; Current activity ; Object ; Message`);
+    this.cpt++;
+  }
+
+  log(actionType, activity, object, message) {
+    this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`, `${Date.now()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message}`);
     this.cpt++;
   }
 

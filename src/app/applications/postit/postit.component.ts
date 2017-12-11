@@ -161,6 +161,8 @@ export class PostitComponent implements OnInit {
       this.databaseService.getDocument(event.args.itemData.id).then(postit => {
         this.createOrEdit(postit);
       });
+    } else {
+      this.logger.log('UPDATE', this.activityService.activityLoaded._id, event.args.itemData.id, 'postit moved');
     }
   }
 
@@ -230,11 +232,11 @@ export class PostitComponent implements OnInit {
     this.databaseService.getDocument(postit._id).then(result => {
       result['estimation'] = postit['estimation'];
       result['label'] = postit['label'];
-      this.logger.log('UPDATE', postit._id, 'postit updated');
+      this.logger.log('UPDATE', this.activityService.activityLoaded._id, postit._id, 'postit updated');
       this.databaseService.updateDocument(result);
     })
       .catch(err => {
-        this.logger.log('CREATE', postit._id, 'postit created');
+        this.logger.log('CREATE', this.activityService.activityLoaded._id, postit._id, 'postit created');
         this.databaseService.addDocument(postit);
       });
   }
@@ -253,7 +255,7 @@ export class PostitComponent implements OnInit {
       if (result.type === 'postit') {
         this.updatePostit(result.value);
       } else if (result.type === 'delete') {
-        this.logger.log('DELETE', postit.id, 'postit deleted');
+        this.logger.log('DELETE', this.activityService.activityLoaded._id, postit.id, 'postit deleted');
         this.deletePostit(result.value);
       }
     });

@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {AppsService} from '../../../services/apps.service';
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-activity-new-app',
@@ -21,7 +22,8 @@ import {AppsService} from '../../../services/apps.service';
   constructor(public activityService: ActivityService,
               public router: Router,
               public appsService: AppsService,
-              public formBuilder: FormBuilder) {
+              public formBuilder: FormBuilder,
+              private logger: LoggerService) {
     this.formNewApp = this.formBuilder.group({
       appName: ['', Validators.required],
       appType: ['', Validators.required],
@@ -54,7 +56,8 @@ import {AppsService} from '../../../services/apps.service';
     };
     console.log(this.formNewApp);
     this.activityService.getActivityInfos(this.activityService.activityLoaded._id).then(activity => {
-      this.appsService.createApp(appToAdd, this.activityService.activityLoaded._id, activity['dbName']).then(() => {
+      this.appsService.createApp(appToAdd, this.activityService.activityLoaded._id, activity['dbName']).then((app) => {
+        this.logger.log('CREATE', this.activityService.activityLoaded._id, app['_id'], 'application created');
         this.dialogRef.close();
       });
     });

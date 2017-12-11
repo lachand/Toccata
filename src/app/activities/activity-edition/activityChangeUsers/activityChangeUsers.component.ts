@@ -3,6 +3,7 @@ import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialogRef} from '@angular/material';
 import {UserService} from '../../../services/user.service';
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-activity-change-users',
@@ -17,7 +18,7 @@ export class ActivityChangeUsersComponent {
   usersToChange: Array<any>;
 
   constructor(public activityService: ActivityService, public router: Router,
-              public userService: UserService) {
+              public userService: UserService, private logger: LoggerService) {
     this.userChecked = [];
     this.userCheckedInitially = [];
     this.userService.getAllUsers().then((allUsers: Array<any>) => {
@@ -74,13 +75,14 @@ export class ActivityChangeUsersComponent {
             if (userSelected.checked) {
               return this.userService.addActivity(this.activityService.activityLoaded._id, user)
                 .then(() => {
+                  this.logger.log('UPDATE', this.activityService.activityLoaded._id, user, 'user added');
                   return this.activityService.addUser(user, this.activityService.activityLoaded._id);
                 });
-          }
-            else {
+            } else {
               console.log('remove activity');
               return this.userService.removeActivity(this.activityService.activityLoaded._id, user)
                 .then(() => {
+                  this.logger.log('UPDATE', this.activityService.activityLoaded._id, user, 'user removed');
                   return this.activityService.removeUser(user, this.activityService.activityLoaded._id);
                 });
             }

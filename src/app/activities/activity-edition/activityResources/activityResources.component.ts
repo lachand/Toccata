@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-activity-resources',
@@ -21,7 +22,8 @@ export class ActivityResourcesComponent {
 
   constructor(public activityService: ActivityService, public router: Router,
               public user: UserService, dialog: MatDialog,
-              public resourcesService: ResourcesService) {
+              public resourcesService: ResourcesService,
+              private logger: LoggerService) {
     this.dialog = dialog;
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
@@ -36,7 +38,9 @@ export class ActivityResourcesComponent {
   uploadResource() {
     const input = document.querySelector('input');
     const file = input.files[0];
-    this.resourcesService.createResource(file, this.activityService.activityLoaded._id);
+    this.resourcesService.createResource(file, this.activityService.activityLoaded._id).then(res => {
+      this.logger.log('CREATE', this.activityService.activityLoaded._id, res['_id'], 'resource created');
+    });
   }
 
 }

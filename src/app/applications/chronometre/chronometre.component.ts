@@ -27,7 +27,12 @@ export class ChronometreComponent implements OnInit {
   title: any;
   step: any;
 
-  constructor(public databaseService: DatabaseService, public appsService: AppsService, public userService: UserService, private ref: ChangeDetectorRef, private logger: LoggerService) {
+  constructor(public databaseService: DatabaseService,
+              public appsService: AppsService,
+              public userService: UserService,
+              private ref: ChangeDetectorRef,
+              private logger: LoggerService,
+              private activityService: ActivityService) {
   }
 
   ngOnInit(): void {
@@ -137,7 +142,7 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerStart() {
-    this.logger.log('UPDATE', this.appId, 'timer started');
+    this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.appId, 'timer started');
     this.timer.onTime((time) => {
       this.title = this.parseMillisecondsIntoReadableTime(time.ms);
       if (this.timeLeft < 0) {
@@ -168,7 +173,7 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerPause() {
-    this.logger.log('UPDATE', this.appId, 'timer paused');
+    this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.appId, 'timer paused');
     console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
       chronometre['running'] = false;
@@ -186,7 +191,7 @@ export class ChronometreComponent implements OnInit {
   }
 
   timerReload() {
-    this.logger.log('UPDATE', this.appId, 'timer reloaded');
+    this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.appId, 'timer reloaded');
     console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
       chronometre['running'] = false;

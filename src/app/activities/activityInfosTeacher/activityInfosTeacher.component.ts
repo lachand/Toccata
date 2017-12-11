@@ -69,7 +69,7 @@ export class ActivityInfosTeacherComponent implements OnInit {
    * @param activity_id
    */
   show_activity(activity_id) {
-    this.logger.log('OPEN', activity_id, 'open activity view');
+    this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_view/' + activity_id]);
     });
@@ -80,7 +80,7 @@ export class ActivityInfosTeacherComponent implements OnInit {
    * @param activity_id
    */
   edit_activity(activity_id) {
-    this.logger.log('OPEN', activity_id, 'open activity edition');
+    this.logger.log('OPEN', activity_id, activity_id, 'open activity edition');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });

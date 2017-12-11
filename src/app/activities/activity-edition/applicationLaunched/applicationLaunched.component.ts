@@ -3,6 +3,7 @@ import {AppsService} from '../../../services/apps.service';
 import {ViewRef_} from "@angular/core/src/view";
 import {isNullOrUndefined} from "util";
 import {LoggerService} from "../../../services/logger.service";
+import {ActivityService} from "../../../services/activity.service";
 
 @Component({
   selector: 'application-launched',
@@ -16,7 +17,7 @@ export class ApplicationLaunchedComponent implements OnInit {
   application: any;
 
   constructor(public appsService: AppsService, private ref: ChangeDetectorRef,
-              private logger: LoggerService) {
+              private logger: LoggerService, private activityService: ActivityService) {
     this.appsService.changes.subscribe(change => {
       console.log(change);
       if (this.appId === change.doc._id) {
@@ -38,7 +39,7 @@ export class ApplicationLaunchedComponent implements OnInit {
   }
 
   close() {
-    this.logger.log('CLOSE', this.appId, 'application closed');
+    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.appId, 'application closed');
     this.appsService.closeApplication(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
     });

@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import {AppsService} from '../../../services/apps.service';
 import {MatListItem} from "@angular/material";
 import {LoggerService} from "../../../services/logger.service";
+import {ActivityService} from "app/services/activity.service";
 
 @Component({
   selector: 'app-application-infos',
@@ -15,7 +16,8 @@ export class ApplicationInfosComponent implements OnInit {
   application: any;
 
   constructor(public appsService: AppsService,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private activityService: ActivityService) {
   }
 
   ngOnInit(): void {
@@ -30,7 +32,7 @@ export class ApplicationInfosComponent implements OnInit {
   }
 
   openApplication() {
-    this.logger.log('OPEN', this.applicationId, 'open application');
+    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.applicationId, 'open application');
     this.appsService.openApplication(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
     });

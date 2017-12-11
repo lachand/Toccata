@@ -1,5 +1,7 @@
 import {DatabaseService} from './database.service';
 import {Injectable} from '@angular/core';
+import {LoggerService} from './logger.service';
+import {ActivityService} from "app/services/activity.service";
 
 @Injectable()
 export class ResourcesService {
@@ -10,7 +12,7 @@ export class ResourcesService {
    * @param resourceId
    */AppsService
 
-  constructor(public database: DatabaseService) {
+  constructor(public database: DatabaseService, private logger: LoggerService) {
     this.resources = {};
   }
 

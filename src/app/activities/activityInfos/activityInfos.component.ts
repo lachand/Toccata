@@ -40,7 +40,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   load_activity(activity_id) {
-    this.logger.log('OPEN', activity_id, 'open activity view');
+    this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_apps/' + activity_id]);
     });
@@ -51,7 +51,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   show_activity(activity_id) {
-    this.logger.log('OPEN', activity_id, 'open activity view');
+    this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_view/' + activity_id]);
     });
@@ -62,7 +62,7 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   edit_activity(activity_id) {
-    this.logger.log('OPEN', activity_id, 'open activity edition');
+    this.logger.log('OPEN', activity_id, activity_id, 'open activity edition');
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });
@@ -90,12 +90,12 @@ export class ActivityInfosComponent implements OnInit {
   }
 
   duplicate_activity(activityId) {
-    this.logger.log('CREATE', activityId, 'duplicate activity');
+    this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
     this.activityService.duplicateActivity(activityId);
   }
 
   show_duplicates(activityId) {
-    this.logger.log('OPEN', activityId, 'open activity duplicates');
+    this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
     this.router.navigate(['duplicates/' + activityId]);
   }
 }
