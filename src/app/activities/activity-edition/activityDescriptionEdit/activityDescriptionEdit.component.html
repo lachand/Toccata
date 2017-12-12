@@ -10,6 +10,10 @@
 <div *ngIf="descriptionEdition" class="name-edition">
   <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
   --><ckeditor [config]="editorOptions" [(ngModel)]="description"></ckeditor>
-  <mat-icon class="aligned-with-text" (click)="changeTheDescription()">done</mat-icon>
-  <mat-icon class="aligned-with-text" (click)="switchDescription()">close</mat-icon>
+  <button mat-button (click)="changeTheDescription()">
+    <mat-icon class="aligned-with-text">done</mat-icon>
+  </button>
+  <button mat-button (click)="switchDescription()">
+    <mat-icon class="aligned-with-text">close</mat-icon>
+  </button>
 </div>
