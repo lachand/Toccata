@@ -2,7 +2,7 @@
   "name": "ABCDE",
   "short_name": "ABCDE",
   "start_url": "http://www.abcde-angular.herokuapp.com/#/",
-  "display": "standalone",
+  "display": "browser",
   "orientation": "landscape",
   "background_color": "#fff",
   "description": "ABCDE",
