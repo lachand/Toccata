@@ -27,9 +27,7 @@ export class MyActivitiesComponent {
       this.router.navigate(['login']);
     }
     this.dialog = dialog;
-    this.databaseService.ereaseDatabase("activity_4fd6a8a7-a725-f811-3173-b6b1f42835ae_duplicate_02a054b3-b4e1-36e8-56da-33bf1c908d8b").then(res => {
-      this.logger.log('OPEN', 'NA', 'NA', 'open activities list');
-    });
+    this.logger.log('OPEN', 'NA', 'NA', 'open activities list');
   }
 
   load_activity(activity_id) {
