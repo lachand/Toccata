@@ -102,6 +102,7 @@ export class PostitComponent implements OnInit {
                     status: change.doc.state,
                     text: change.doc.label
                   });
+                  this.ngOnInit();
                 }
               }
               if (!finded) {
