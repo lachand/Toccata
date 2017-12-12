@@ -165,9 +165,11 @@ export class PostitComponent implements OnInit {
     } else {
       this.logger.log('UPDATE', this.activityService.activityLoaded._id, event.args.itemData.id, 'postit moved');
       this.databaseService.getDocument(event.args.itemData.id).then(postit => {
-        postit['state'] = event.args.newColumn;
+        console.log(postit);
+        postit['state'] = event.args.newColumn.text;
+        console.log(postit);
         this.databaseService.updateDocument(postit);
-      })
+      });
     }
   }
 
