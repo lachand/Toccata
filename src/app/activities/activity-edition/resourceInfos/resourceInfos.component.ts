@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
+import {AppsService} from "app/services/apps.service";
 
 @Component({
   selector: 'app-resource-infos',
@@ -21,7 +22,7 @@ export class ResourceInfosComponent implements OnInit {
   video: RegExp;
   audio: RegExp;
 
-  constructor(public resourcesService: ResourcesService) {
+  constructor(public resourcesService: ResourcesService, public appsService: AppsService) {
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
     this.video = /video\/(?:.*)/i;
@@ -37,11 +38,23 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   openRessource() {
+    this.resourcesService.openResource(this.resourceId).then(resourceInfos => {
+      this.resource = resourceInfos;
+    });
+  }
+
+  /*switchStatus() {
+    this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
+      this.application = applicationInfos;
+    });
+  }*/
+
+  /*openRessource() {
     this.resourcesService.getResourceData(this.resourceId, "filename").then(ressource => {
       const myUrl = URL.createObjectURL(ressource);
       const win = window.open(myUrl, '_blank');
       win.focus();
     });
   }
-
+  */
 }

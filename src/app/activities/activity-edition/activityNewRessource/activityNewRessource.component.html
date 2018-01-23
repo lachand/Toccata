@@ -1,0 +1,21 @@
+<script src="../../main.ts"></script>
+
+<form [formGroup]="formNewUrl" (ngSubmit)="newUrl()">
+  <h3>Nouveau lien</h3>
+
+  <div>
+    <mat-input-container>
+      <input matInput placeholder="Nom de la ressource" type="text" formControlName="name">
+    </mat-input-container>
+  </div>
+  <div>
+    <mat-input-container>
+      <input matInput placeholder="Lien de la ressource" type="url" formControlName="url">
+    </mat-input-container>
+  </div>
+
+  <div>
+    <button mat-button type="submit">Ajouter</button>
+    <button mat-button (click)="close()">Retour</button>
+  </div>
+</form>

@@ -89,7 +89,10 @@
       <div fxFlex="70%">
         <application-launched *ngFor="let app of activityService.activityLoaded.applicationList"
                               [appId]="app"></application-launched>
+        <resource-opened *ngFor="let resource of activityService.activityLoaded.resourceList"
+                         [resourceId]="resource"></resource-opened>
       </div>
+
     </div>
 
   </mat-card>

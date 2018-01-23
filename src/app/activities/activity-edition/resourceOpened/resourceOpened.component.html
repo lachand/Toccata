@@ -1,0 +1,8 @@
+<mat-card class="flex-card" *ngIf="resource?.status === 'loaded'">
+  <button class="menu-right-align" mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <div>
+    <iframe class="iframe_resource" id="iframe_{{resourceId}}" [src]="myUrl" scrolling="no" (load)="resizeIframe(this)" ></iframe>
+  </div>
+</mat-card>

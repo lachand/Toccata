@@ -1,7 +1,7 @@
 {
-  "name": "ABCDE",
-  "short_name": "ABCDE",
-  "start_url": "http://www.abcde-angular.herokuapp.com/#/",
+  "name": "Toccata",
+  "short_name": "Toccata",
+  "start_url": "http://www.toccata.herokuapp.com/#/",
   "display": "standalone",
   "orientation": "landscape",
   "background_color": "#fff",

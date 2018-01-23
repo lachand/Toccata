@@ -5,6 +5,8 @@ import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
 import {LoggerService} from "../../../services/logger.service";
+import {DialogNewRessourceComponent} from "../dialogNewRessource/dialognewRessource.component";
+import {ActivityNewRessourceComponent} from "../activityNewRessource/activityNewRessource.component";
 
 @Component({
   selector: 'app-activity-resources',
@@ -32,7 +34,18 @@ export class ActivityResourcesComponent {
   }
 
   newResource() {
-    document.getElementById('hiddenfile').click();
+    const dialogRef = this.dialog.open(DialogNewRessourceComponent);
+    dialogRef.componentInstance.dialogRef = dialogRef;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        dialogRef.close();
+        document.getElementById('hiddenfile').click();
+      } else {
+        dialogRef.close();
+        const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent);
+        dialogRefUrl.componentInstance.dialogRef = dialogRefUrl;
+      };
+    });
   }
 
   uploadResource() {

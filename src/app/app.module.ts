@@ -66,6 +66,9 @@ import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/po
 import {CreateEditPostitComponent} from "./activities/createEditPostit/createEditPostit.component";
 import {LoggerService} from "./services/logger.service";
 import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {ResourceOpenedComponent} from "./activities/activity-edition/resourceOpened/resourceOpened.component";
+import {DialogNewRessourceComponent} from "app/activities/activity-edition/dialogNewRessource/dialognewRessource.component";
+import {ActivityNewRessourceComponent} from "./activities/activity-edition/activityNewRessource/activityNewRessource.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -98,6 +101,7 @@ import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/co
     CreateEditPostitComponent,
     ActivityNameComponent,
     ApplicationLaunchedComponent,
+    ResourceOpenedComponent,
     ViewDuplicatesComponent,
     ChronometreComponent,
     ResourceInfosComponent,
@@ -106,6 +110,8 @@ import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/co
     PostitComponent,
     ParticipantInfosComponent,
     DialogConfirmationComponent,
+    ActivityNewRessourceComponent,
+    DialogNewRessourceComponent,
     MenuComponent,
     OrderBy],
   imports: [
@@ -139,7 +145,7 @@ import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/co
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent, CreateEditPostitComponent],
+  entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent, ActivityNewRessourceComponent, DialogNewRessourceComponent, CreateEditPostitComponent],
   providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService, LoggerService, {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
