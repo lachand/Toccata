@@ -66,7 +66,7 @@
     "mocha": "^3.5.0",
     "moment": "^2.18.1",
     "morgan": "^1.8.2",
-    "ng2-ckeditor": "^1.1.9",
+    "ng2-ckeditor": "1.1.9",
     "ng2-scroll-to": "^1.0.7",
     "ngx-auto-scroll": "^1.0.15",
     "pouchdb": "^6.3.4",
