@@ -40,12 +40,10 @@ export class ResourceOpenedComponent implements OnInit {
   resizeIframe(obj) {
     const iframe = document.getElementById(`iframe_${this.resourceId}`);
     console.log(iframe);
-    const ratio = (iframe.offsetHeight/iframe.offsetWidth)*100;
+    const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
     console.log(ratio);
     if (this.resource.type = 'application/pdf') {
       iframe.style.height = '88vw';
-    } else if (this.resource.type = 'url') {
-      iframe.setAttribute('scrolling', 'yes');
     }
   }
 

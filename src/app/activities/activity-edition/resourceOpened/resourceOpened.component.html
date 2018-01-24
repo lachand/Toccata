@@ -1,4 +1,5 @@
 <mat-card class="flex-card" *ngIf="resource?.status === 'loaded'">
+  <h3>{{resource?.name}}</h3>
   <button class="menu-right-align" mat-icon-button (click)="close()">
     <mat-icon>close</mat-icon>
   </button>
