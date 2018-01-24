@@ -34,6 +34,7 @@
     "@angular/flex-layout": "git+https://github.com/angular/flex-layout-builds.git",
     "@angular/forms": "^5.2.1",
     "@angular/http": "^5.2.1",
+    "@angular/cli": "^1.6.5",
     "@angular/material": "^2.0.0-beta.12",
     "@angular/platform-browser": "^5.2.1",
     "@angular/platform-browser-dynamic": "^5.2.1",
