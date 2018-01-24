@@ -16,8 +16,8 @@ import { RouterModule } from '@angular/router';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { routes } from './app.routes';
 import {ScrollToModule} from 'ng2-scroll-to';
-import {jqxKanbanComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxkanban';
-import {jqxSplitterComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxsplitter';
+import {jqxKanbanComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxkanban';
+import {jqxSplitterComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxsplitter';
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './applications/chat/chat.component';

@@ -1,5 +1,5 @@
 import {Component, ViewChild, ViewEncapsulation, OnInit, Input, ChangeDetectorRef} from '@angular/core';
-import {jqxKanbanComponent} from 'jqwidgets-framework/jqwidgets-ts/angular_jqxkanban';
+import {jqxKanbanComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxkanban';
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';

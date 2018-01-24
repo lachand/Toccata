@@ -224,10 +224,8 @@ export class DatabaseService {
    */
   updateDocument(doc: any) {
     return new Promise((resolve, reject) => {
-      console.log("toto");
       this.db.put(doc)
         .then(res => {
-          console.log("test");
           resolve(res);
         })
         .catch(err => {

@@ -137,7 +137,9 @@ export class ActivityService {
       return this.database.getDocument(activityId).then(doc => {
         if (doc['type'] === 'Main') {
           doc['currentLoaded'] = doc['_id'];
-          return this.database.updateDocument(doc);
+          return this.database.updateDocument(doc).then(res => {
+            resolve(res);
+          });
         } else {
           console.log(doc);
           return this.database.getDocument(doc['parent']).then(parent => {
