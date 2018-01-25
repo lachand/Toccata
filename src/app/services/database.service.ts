@@ -28,7 +28,7 @@ export class DatabaseService {
         password: "mdproot"
       }
     });
-    this.dbRemote.compact({revs_limit: 2}).then(res => { console.log(res);});
+    this.dbRemote.compact();
     this.db = new PouchDB('myLocalDatabase');
 
     this.db.changes({
@@ -66,6 +66,8 @@ export class DatabaseService {
         if (doc.dbName === db) {
           console.log("ok");
           return true;
+        } else {
+          console.log("nok");
         }
       }
       return false;
