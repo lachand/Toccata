@@ -71,7 +71,8 @@ export class DatabaseService {
       return false;
     };
 
-    this.dbRemote.compact().then(() => {
+    this.dbRemote.compact().then((res) => {
+      console.log(res);
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
       });
     })
