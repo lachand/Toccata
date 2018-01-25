@@ -61,32 +61,34 @@ export class DatabaseService {
       });
     })
       .then(infos => {
-        this.db.changes({
-          since: 'now',
-          filter: 'filter/filter_user_list',
-          live: true,
-          include_docs: true,
-          retry: true,
-          timeout: false,
-          heartbeat: false
-        }).on('change', change => {
-          console.log("changes: ", change);
-          this.handleChange(change);
-        }).on('paused', function (info) {
-          console.log("pause: ", info);
-        }).on('active', function (info) {
-          console.log("active: ", info);
-        }).on('error', function (err) {
-          console.log('activities: ', err);
-        }).catch(err => {
-          console.log(err);
-        });
+        console.log(this.db);
         this.dbSync = this.db.sync(this.dbRemote, tempOptions);
       })
       .catch(err => {
         console.log(`error with call to databaseService initialisation : ${err}`);
         this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
       });
+
+    this.db.changes({
+      since: 'now',
+      filter: 'filter/filter_user_list',
+      live: true,
+      include_docs: true,
+      retry: true,
+      timeout: false,
+      heartbeat: false
+    }).on('change', change => {
+      console.log("changes: ", change);
+      this.handleChange(change);
+    }).on('paused', function (info) {
+      console.log("pause: ", info);
+    }).on('active', function (info) {
+      console.log("active: ", info);
+    }).on('error', function (err) {
+      console.log('activities: ', err);
+    }).catch(err => {
+      console.log(err);
+    });
 
     //this.db.replicate.from(this.dbRemote, tempOptions);
     //this.db.replicate.to(this.dbRemote, tempOptions);
