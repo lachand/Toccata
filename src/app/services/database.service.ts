@@ -28,7 +28,7 @@ export class DatabaseService {
         password: "mdproot"
       }
     });
-    this.dbRemote.compact();
+    this.dbRemote.compact({revs_limit: 2}).then(res => { console.log(res);});
     this.db = new PouchDB('myLocalDatabase');
 
     this.db.changes({
