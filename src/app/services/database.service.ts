@@ -31,47 +31,8 @@ export class DatabaseService {
     this.dbRemote.compact();
     this.db = new PouchDB('myLocalDatabase');
 
-    this.dbList.push('user_list');
-
-    this.options = {
-      live: true,
-      retry: true,
-      continuous: true,
-      revs_limit: 2,
-      filter: 'filter/filter_user_list'
-    };
-
-    const tempOptions = this.options;
-    /*tempOptions.filter = function (doc) {
-      for (const db of this.dbList) {
-        console.log(db);
-        if (doc.dbName === db) {
-          console.log("ok");
-          return true;
-        } else {
-          console.log("nok");
-        }
-      }
-      return false;
-    };*/
-
-    this.dbRemote.compact().then((res) => {
-      console.log(res);
-      return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
-      });
-    })
-      .then(infos => {
-        console.log(this.db);
-        this.dbSync = this.db.sync(this.dbRemote, tempOptions);
-      })
-      .catch(err => {
-        console.log(`error with call to databaseService initialisation : ${err}`);
-        this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
-      });
-
     this.db.changes({
       since: 'now',
-      filter: 'filter/filter_user_list',
       live: true,
       include_docs: true,
       retry: true,
@@ -90,8 +51,40 @@ export class DatabaseService {
       console.log(err);
     });
 
-    //this.db.replicate.from(this.dbRemote, tempOptions);
-    //this.db.replicate.to(this.dbRemote, tempOptions);
+    this.dbList.push('user_list');
+
+    this.options = {
+      live: true,
+      retry: true,
+      continuous: true,
+      revs_limit: 2,
+    };
+
+    const tempOptions = this.options;
+    tempOptions.filter = function (doc) {
+      for (const db of this.dbList) {
+        console.log(db);
+        if (doc.dbName === db) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("nok");
+        }
+      }
+      return false;
+    };
+
+    this.dbRemote.compact().then((res) => {
+      return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
+      });
+    })
+      .then(info => {
+        this.dbSync = this.db.sync(this.dbRemote, tempOptions);
+      })
+      .catch(err => {
+        console.log(`error with call to databaseService initialisation : ${err}`);
+        this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
+      });
   }
 
   /**
