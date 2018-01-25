@@ -54,7 +54,8 @@ export class DatabaseService {
     this.options = {
       live: true,
       retry: true,
-      continuous: true
+      continuous: true,
+      revs_limit: 2
     };
     this.dbList.push('user_list');
 
