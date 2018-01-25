@@ -31,26 +31,6 @@ export class DatabaseService {
     this.dbRemote.compact();
     this.db = new PouchDB('myLocalDatabase');
 
-    this.db.changes({
-      since: 'now',
-      live: true,
-      include_docs: true,
-      retry: true,
-      timeout: false,
-      heartbeat: false
-    }).on('change', change => {
-      console.log("changes: ", change);
-      this.handleChange(change);
-    }).on('paused', function (info) {
-      console.log("pause: ", info);
-    }).on('active', function (info) {
-      console.log("active: ", info);
-    }).on('error', function (err) {
-      console.log('activities: ', err);
-    }).catch(err => {
-      console.log(err);
-    });
-
     this.dbList.push('user_list');
 
     this.options = {
@@ -80,7 +60,27 @@ export class DatabaseService {
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
       });
     })
-      .then(info => {
+      .then(infos => {
+        this.db.changes({
+          since: 'now',
+          filter: 'filter/filter_user_list',
+          live: true,
+          include_docs: true,
+          retry: true,
+          timeout: false,
+          heartbeat: false
+        }).on('change', change => {
+          console.log("changes: ", change);
+          this.handleChange(change);
+        }).on('paused', function (info) {
+          console.log("pause: ", info);
+        }).on('active', function (info) {
+          console.log("active: ", info);
+        }).on('error', function (err) {
+          console.log('activities: ', err);
+        }).catch(err => {
+          console.log(err);
+        });
         this.dbSync = this.db.sync(this.dbRemote, tempOptions);
       })
       .catch(err => {
