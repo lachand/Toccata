@@ -51,16 +51,18 @@ export class DatabaseService {
       console.log(err);
     });
 
+    this.dbList.push('user_list');
+
     this.options = {
       live: true,
       retry: true,
       continuous: true,
-      revs_limit: 2
+      revs_limit: 2,
+      filter: 'filter/filter_user_list'
     };
-    this.dbList.push('user_list');
 
     const tempOptions = this.options;
-    tempOptions.filter = function (doc) {
+    /*tempOptions.filter = function (doc) {
       for (const db of this.dbList) {
         console.log(db);
         if (doc.dbName === db) {
@@ -71,7 +73,7 @@ export class DatabaseService {
         }
       }
       return false;
-    };
+    };*/
 
     this.dbRemote.compact().then((res) => {
       console.log(res);
