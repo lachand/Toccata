@@ -53,10 +53,10 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.loading = true;
       this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
-        console.log(result);
         if (result['status'] === 401) {
           this.errorUsernamePassword = true;
         } else if (this.userService.isLoggedIn()) {
+          console.log(this.userService.user);
             return this.activityService.getActivities().then(res => {
               return this.userService.getAllUsers();
             })

@@ -69,6 +69,7 @@ export class UserService {
           return this.database.addDatabase(`user_${username}`);
         })
           .then(() => {
+          console.log(username);
             return this.database.getDocument(username);
           })
           .then((res) => {
@@ -77,6 +78,7 @@ export class UserService {
             this.id = res['_id'];
             this.avatar = res['avatar'];
             this.fonction = res['fonct'];
+            console.log(this);
             resolve(this.loggedIn);
           })
           .catch(function (err) {

@@ -26,13 +26,53 @@ export class DatabaseService {
       auth: {
         username: "root",
         password: "mdproot"
-      }
+      },
     });
+
     this.dbRemote.compact();
     this.db = new PouchDB('myLocalDatabase');
 
+    this.dbList.push('user_list');
+
+    this.options = {
+      live: true,
+      retry: true,
+      continuous: true,
+      revs_limit: 2,
+      filter: 'appFilters/by_db_name',
+      query_params: { 'dbNames': ['user_list'] }
+    };
+
+    const tempOptions = this.options;
+    //tempOptions.filter = 'filter/filter_user_list';
+    /*tempOptions.filter = function (doc) {
+      for (const db of this.dbList) {
+        console.log(db);
+        if (doc.dbName === db) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("nok");
+        }
+      }
+      return false;
+    };
+    */
+
+    this.dbRemote.compact().then((res) => {
+      return this.db.replicate.from(this.dbRemote, this.options).on('change', change => {
+        if (change.docs[0].dbName === 'user_list') {
+          this.dbSync = this.db.sync(this.dbRemote, tempOptions);
+        }
+      });
+
+      })
+      .catch(err => {
+        console.log(`error with call to databaseService initialisation : ${err}`);
+        this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
+      });
+
     this.db.changes({
-      since: 'now',
       live: true,
       include_docs: true,
       retry: true,
@@ -50,44 +90,10 @@ export class DatabaseService {
     }).catch(err => {
       console.log(err);
     });
-
-    this.dbList.push('user_list');
-
-    this.options = {
-      live: true,
-      retry: true,
-      continuous: true,
-      revs_limit: 2,
-    };
-
-    const tempOptions = this.options;
-    tempOptions.filter = function (doc) {
-      for (const db of this.dbList) {
-        console.log(db);
-        if (doc.dbName === db) {
-          console.log("ok");
-          return true;
-        } else {
-          console.log("nok");
-        }
-      }
-      return false;
-    };
-
-    this.dbRemote.compact().then((res) => {
-      return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', (info) => {
-      });
-    })
-      .then(info => {
-        this.dbSync = this.db.sync(this.dbRemote, tempOptions);
-      })
-      .catch(err => {
-        console.log(`error with call to databaseService initialisation : ${err}`);
-        this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
-      });
   }
 
   /**
+   *
    * Handle changes
    * @param change
    */
@@ -104,21 +110,22 @@ export class DatabaseService {
    */
   addDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
+      console.log('adding database');
       if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
         this.dbList.push(databaseName);
-        this.dbSync.filter = function (doc) {
-          for (const db of this.dbList) {
-            console.log(db);
-            if (doc.dbName === db) {
-              console.log("ok");
-              return true;
+        this.options.query_params.dbNames.push(databaseName);
+         console.log(this.options);
+        this.db.replicate.from(this.dbRemote, this.options)
+          .on('change', change => {
+            console.log(change);
+            if (change.docs[0].dbName === databaseName) {
+              this.dbSync.cancel();
+              this.dbSync = this.db.sync(this.dbRemote, this.options);
+              resolve(databaseName);
             }
-          }
-          return false;
-        };
-        resolve(databaseName);
+          });
       }
     });
   }
@@ -132,7 +139,6 @@ export class DatabaseService {
         for (const db of this.dbList) {
           console.log(db);
           if (doc.dbName === db) {
-            console.log("ok");
             return true;
           }
         }

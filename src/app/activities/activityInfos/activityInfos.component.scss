@@ -11,6 +11,19 @@
   margin: auto;
 }
 
+.div-centered {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.activity-card {
+  cursor: pointer;
+  height: 210px;
+}
+
+
 .activity-description{
   flex-wrap: wrap;
   height: 165px;

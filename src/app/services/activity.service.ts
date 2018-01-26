@@ -204,6 +204,7 @@ export class ActivityService {
       return Promise.resolve(this.activitiesList);
     }
     return new Promise(resolve => {
+      console.log(this.user);
       this.database.getDocument(`${this.user.id}`)
         .then(userDoc => {
           this.activitiesList = userDoc['activityList'];

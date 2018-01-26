@@ -3,6 +3,7 @@ import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {LoggerService} from "../../services/logger.service";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-activity-infos',
@@ -97,5 +98,9 @@ export class ActivityInfosComponent implements OnInit {
   show_duplicates(activityId) {
     this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
     this.router.navigate(['duplicates/' + activityId]);
+  }
+
+  isNull(elmt){
+    return isNullOrUndefined(elmt);
   }
 }

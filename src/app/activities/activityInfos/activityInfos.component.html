@@ -1,11 +1,11 @@
 <mat-card class="activity-card" (dblclick)="show_activity(activityId)">
-  <!--
-  <img mat-card-image src="http://163.172.38.12:5984/activites/{{activityId}}/{{activityInfos?.image}}"
-       alt="http://163.172.38.12:5984/{{activityId}}/{{activityInfos?.image}}">
--->
-  <!--
-  <div class="header-card-actions"><button mat-button *ngIf="user.fonction === 'Enseignant'" (click)="delete_activity(activity._id)">x</button></div>
--->
+
+  <div *ngIf="isNull(activityInfos) " class="div-centered activity-card">
+    <mat-spinner style="margin:0 auto;"></mat-spinner>
+    <p>Chargement de l'activité</p>
+  </div>
+
+  <div *ngIf="!isNull(activityInfos)">
 
   <h3 mat-line>{{activityInfos?.name}}
     <button class="menu-right-align" mat-icon-button [matMenuTriggerFor]="menu">
@@ -32,16 +32,10 @@
 
   <div [innerHTML]="activityInfos?.description" class="activity-description"></div>
 
-  <!--
-  <mat-card-actions class="centered">
-          <mat-icon class="icon-huge">play_arrow</mat-icon>
-          <mat-icon class="icon-huge">pause</mat-icon>
-  </mat-card-actions>
-  -->
-
         <mat-progress-bar
           class="example-margin"
           [value]="((activityInfos?.subactivityList.indexOf(activityInfos?.currentLoaded)/activityInfos?.subactivityList.length)*100)">
         >
         </mat-progress-bar>
-      </mat-card>
+  </div>
+</mat-card>
