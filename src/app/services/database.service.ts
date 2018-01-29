@@ -10,6 +10,7 @@ export class DatabaseService {
   dbRemote: any;
   dbList: Array<any> = [];
   options: any;
+  optionsReplication: any;
   dbSync: any;
   changes: EventEmitter<any> = new EventEmitter();
 
@@ -43,6 +44,10 @@ export class DatabaseService {
       query_params: { 'dbNames': ['user_list'] }
     };
 
+    this.optionsReplication = this.options;
+    this.optionsReplication.live = false;
+    this.optionsReplication.continuous = false;
+
     const tempOptions = this.options;
     //tempOptions.filter = 'filter/filter_user_list';
     /*tempOptions.filter = function (doc) {
@@ -60,12 +65,9 @@ export class DatabaseService {
     */
 
     this.dbRemote.compact().then((res) => {
-      return this.db.replicate.from(this.dbRemote, this.options).on('change', change => {
-        if (change.docs[0].dbName === 'user_list') {
-          this.dbSync = this.db.sync(this.dbRemote, tempOptions);
-        }
+      return this.db.replicate.from(this.dbRemote, this.optionsReplication).on('complete', () => {
+        this.dbSync = this.db.sync(this.dbRemote, this.options);
       });
-
       })
       .catch(err => {
         console.log(`error with call to databaseService initialisation : ${err}`);
@@ -116,8 +118,9 @@ export class DatabaseService {
       } else {
         this.dbList.push(databaseName);
         this.options.query_params.dbNames.push(databaseName);
-         console.log(this.options);
-        this.db.replicate.from(this.dbRemote, this.options)
+        this.optionsReplication.query_params.dbNames.push(databaseName);
+         console.log(this.optionsReplication);
+        this.db.replicate.from(this.dbRemote, this.optionsReplication)
           .on('change', change => {
             console.log(change);
             if (change.docs[0].dbName === databaseName) {
@@ -125,6 +128,11 @@ export class DatabaseService {
               this.dbSync = this.db.sync(this.dbRemote, this.options);
               resolve(databaseName);
             }
+          })
+          .on('complete', () => {
+            this.dbSync.cancel();
+            this.dbSync = this.db.sync(this.dbRemote, this.options);
+            resolve(databaseName);
           });
       }
     });
