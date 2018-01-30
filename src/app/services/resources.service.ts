@@ -37,7 +37,12 @@ export class ResourcesService {
       return this.database.getDocument(activityId)
         .then(activity => {
           this.resources = activity['resourceList'];
-          resolve(this.resources);
+          this.database.getDocument(activityId).then( act => {
+            this.database.getDocument( act['dbName']).then( parent => {
+              this.resources = this.resources.concat(parent['resourceListList']);
+              resolve(this.resources);
+            });
+          });
         });
     });
   }

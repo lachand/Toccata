@@ -32,13 +32,9 @@ export class AppsService {
       return this.databaseService.getDocument(activityId)
         .then(activity => {
           this.applications = activity['applicationList'];
-          console.log(this.applications);
           this.databaseService.getDocument(activityId).then( act => {
-            console.log(act);
             this.databaseService.getDocument( act['dbName']).then( parent => {
-              console.log(parent['applicationList']);
               this.applications = this.applications.concat(parent['applicationList']);
-              console.log(this.applications);
               resolve(this.applications);
             });
           });
