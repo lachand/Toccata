@@ -3,6 +3,7 @@ import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatStepper} from "@angular/material";
 import {isNullOrUndefined} from "util";
+import {AppsService} from "../../../services/apps.service";
 
 @Component({
   selector: 'app-activity-edit',
@@ -16,7 +17,8 @@ export class ActivityViewComponent implements AfterViewInit {
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(public activityService: ActivityService,
-              public router: Router) {
+              public router: Router,
+              public appsService: AppsService) {
     if (this.activityService.activityLoaded.type === 'Main') {
       this.steps = this.activityService.activityLoadedChild;
     } else {

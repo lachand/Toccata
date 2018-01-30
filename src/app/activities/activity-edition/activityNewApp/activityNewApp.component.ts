@@ -17,7 +17,7 @@ import {LoggerService} from "../../../services/logger.service";
   dialogRef: MatDialogRef<ActivityNewAppComponent>;
   formNewApp: FormGroup;
 
-  appsType = ['Chat', 'Feuille de calcul', 'Editeur de texte', 'Post-it', 'Chronomètre', 'Externe'];
+  appsType = ['Post-it', 'Chronomètre', 'Editeur de texte', 'Externe'];
 
   constructor(public activityService: ActivityService,
               public router: Router,
@@ -54,7 +54,6 @@ import {LoggerService} from "../../../services/logger.service";
       name: this.formNewApp.value.appName,
       options: options
     };
-    console.log(this.formNewApp);
     this.activityService.getActivityInfos(this.activityService.activityLoaded._id).then(activity => {
       this.appsService.createApp(appToAdd, this.activityService.activityLoaded._id, activity['dbName']).then((app) => {
         this.logger.log('CREATE', this.activityService.activityLoaded._id, app['_id'], 'application created');

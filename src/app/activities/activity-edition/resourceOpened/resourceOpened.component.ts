@@ -42,8 +42,12 @@ export class ResourceOpenedComponent implements OnInit {
     console.log(iframe);
     const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
     console.log(ratio);
-    if (this.resource.type = 'application/pdf') {
-      iframe.style.height = '88vw';
+    if (this.resource.type === 'application/pdf') {
+      iframe.style.height = '70vw';
+    } else if (this.resource.type === 'url') {
+      iframe.style.height = '70vw';
+    } else if (this.resource.type.split('video').length > 0) {
+      iframe.style.height = '30vw';
     }
   }
 

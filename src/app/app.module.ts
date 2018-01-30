@@ -56,6 +56,7 @@ import {ParticipantInfosComponent} from './activities/activity-edition/participa
 import {ApplicationInfosComponent} from './activities/activity-edition/applicationInfos/applicationInfos.component';
 import {PostitComponent} from './applications/postit/postit.component';
 import {ChronometreComponent} from './applications/chronometre/chronometre.component';
+import {TextEditorComponent} from "./applications/textEditor/textEditor.component";
 import {ActivityNameComponent} from './activities/activity-edition/activityName/activityName.component';
 import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/applicationLaunched/applicationLaunched.component';
 import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicates.component";
@@ -95,6 +96,8 @@ import {ActivityNewRessourceComponent} from "./activities/activity-edition/activ
     ApplicationInfosTeacherComponent,
     ApplicationInfosComponent,
     ChronometreInfosComponent,
+    TextEditorComponent,
+    TextEditorComponent,
     PostitInfosComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,

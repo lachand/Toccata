@@ -19,7 +19,6 @@ export class ApplicationLaunchedComponent implements OnInit {
   constructor(public appsService: AppsService, private ref: ChangeDetectorRef,
               private logger: LoggerService, private activityService: ActivityService) {
     this.appsService.changes.subscribe(change => {
-      console.log(change);
       if (this.appId === change.doc._id) {
         this.application = change.doc;
         this.application.id = change.doc._id;

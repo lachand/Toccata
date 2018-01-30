@@ -3,7 +3,8 @@
     <mat-icon>close</mat-icon>
   </button>
   <div>
-  <app-chronometre *ngIf="application?.type === 'Chronomètre'" [appId]="application?.id"></app-chronometre>
-  <app-postit *ngIf="application?.type === 'Post-It'" [appId]="application?.id"></app-postit>
+    <app-chronometre *ngIf="application?.type === 'Chronomètre'" [appId]="application?.id"></app-chronometre>
+    <app-postit *ngIf="application?.type === 'Post-It'" [appId]="application?.id"></app-postit>
+    <app-text-editor *ngIf="application?.type === 'Editeur de texte'" [appId]="application?.id"></app-text-editor>
 </div>
 </mat-card>

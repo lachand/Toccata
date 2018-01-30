@@ -87,7 +87,7 @@
       </div>
 
       <div fxFlex="70%">
-        <application-launched *ngFor="let app of activityService.activityLoaded.applicationList"
+        <application-launched *ngFor="let app of appsService.applications"
                               [appId]="app"></application-launched>
         <resource-opened *ngFor="let resource of activityService.activityLoaded.resourceList"
                          [resourceId]="resource"></resource-opened>
