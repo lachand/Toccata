@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
-import {MatListItem} from "@angular/material";
 import {LoggerService} from "../../../services/logger.service";
 import {ActivityService} from "app/services/activity.service";
 
@@ -29,6 +28,10 @@ export class ApplicationInfosComponent implements OnInit {
     this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
     });
+  }
+
+  deleteApp() {
+    return this.appsService.deleteApp(this.applicationId);
   }
 
   openApplication() {

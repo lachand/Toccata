@@ -124,7 +124,9 @@ export class AppsService {
   }
 
   public deleteApp(appId) {
-    return 0;
+    return new Promise( resolve => {
+      return this.databaseService.removeDocument(appId);
+    });
   }
 
   remove_activity(activityId) {

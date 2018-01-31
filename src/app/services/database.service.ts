@@ -258,15 +258,45 @@ export class DatabaseService {
   removeDocument(documentId) {
     return new Promise(resolve => {
       this.db.get(documentId).then(document => {
-        document._deleted = true;
-        this.db.put(document).then(res => {
-          resolve(res);
-          console.log(res);
-        })
-          .catch(err => {
-            console.log(`Error in database service whith call to deleteDocument:
-          ${err}`);
+        if (document.documentType === 'Resource' || document.documentType === 'Application') {
+          const changes = [];
+          this.db.find({
+            selector: {documentType: 'Activity', dbName: document.dbName},
+            sort: ['_id']
+          }).then(function (result) {
+            for (const element of result.docs){
+              console.log(element);
+              if (document.documentType === 'Resource') {
+                const index1 = element.resourceList.indexOf(document._id);
+                if (index1 !== -1) {
+                  element.resourceList.splice(index1, 1);
+                  changes.push(element);
+                }
+              } else if (document.documentType === 'Application') {
+                const index2 = element.applicationList.indexOf(document._id);
+                if (index2 !== -1) {
+                  element.applicationList.splice(index2, 1);
+                  changes.push(element);
+                }
+              }
+            }
+            console.log(changes);
+          }).catch(function (err) {
+            console.log(err);
           });
+          this.db.bulkDocs(changes).then( () => {
+            document._deleted = true;
+
+            this.db.put(document).then(res => {
+              resolve(res);
+              console.log(res);
+            })
+              .catch(err => {
+                console.log(`Error in database service whith call to deleteDocument:
+          ${err}`);
+              });
+          });
+        }
         //this.db.remove(document).then(res => {
         //  resolve(res);
         //});
