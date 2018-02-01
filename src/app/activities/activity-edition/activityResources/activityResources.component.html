@@ -4,7 +4,7 @@
   <mat-nav-list>
 
     <div *ngFor="let resourceId of resourcesService?.resources">
-      <app-resource-infos [resourceId]="resourceId"></app-resource-infos>
+      <app-resource-infos *ngIf="resourceId !== 'resource_'" [resourceId]="resourceId"></app-resource-infos>
     </div>
 
     <mat-list-item *ngIf="edit===true" (click)="newResource()">

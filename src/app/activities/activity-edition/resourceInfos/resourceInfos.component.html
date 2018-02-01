@@ -3,6 +3,8 @@
   <mat-icon mat-list-icon *ngIf="text.test(resource?.type)">description</mat-icon>
   <mat-icon mat-list-icon *ngIf="video.test(resource?.type)">videocam</mat-icon>
   <mat-icon mat-list-icon *ngIf="audio.test(resource?.type)">audiotrack</mat-icon>
+  <mat-icon mat-list-icon *ngIf="document.test(resource?.type)">insert_drive_file</mat-icon>
+  <mat-icon mat-list-icon *ngIf="resource?.type === 'url'">language</mat-icon>
   <p mat-line> {{resource?.name}} </p>
   <button mat-icon-button (click)="deleteResource();$event.stopPropagation()"><mat-icon>delete</mat-icon></button>
 </mat-list-item>

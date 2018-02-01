@@ -21,12 +21,14 @@ export class ResourceInfosComponent implements OnInit {
   text: RegExp;
   video: RegExp;
   audio: RegExp;
+  document: RegExp;
 
   constructor(public resourcesService: ResourcesService, public appsService: AppsService) {
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
     this.video = /video\/(?:.*)/i;
     this.audio = /audio\/(?:.*)/i;
+    this.document = /application\/pdf/i;
   }
 
   ngOnInit(): void {
