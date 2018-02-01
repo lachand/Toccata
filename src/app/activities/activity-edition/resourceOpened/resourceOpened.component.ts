@@ -19,12 +19,14 @@ export class ResourceOpenedComponent implements OnInit {
   resource: any;
   myUrl;
   el: HTMLFrameElement;
+  reloaded: boolean;
 
   constructor(private ref: ChangeDetectorRef,
               private logger: LoggerService, private activityService: ActivityService, private resourcesService: ResourcesService,
               private sanitizer: DomSanitizer) {
     this.resourcesService.changes.subscribe(change => {
       console.log(change);
+      this.reloaded = false;
       if (this.resourceId === change.doc._id) {
         this.resource = change.doc;
         this.resource.id = change.doc._id;
@@ -38,16 +40,21 @@ export class ResourceOpenedComponent implements OnInit {
   }
 
   resizeIframe(obj) {
-    const iframe = document.getElementById(`iframe_${this.resourceId}`);
-    console.log(iframe);
-    const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
-    console.log(ratio);
-    if (this.resource.type === 'application/pdf') {
-      iframe.style.height = '70vw';
-    } else if (this.resource.type === 'url') {
-      iframe.style.height = '70vw';
-    } else if (this.resource.type.split('video').length > 0) {
-      iframe.style.height = '30vw';
+    if (!this.reloaded) {
+      const iframe = document.getElementById(`iframe_${this.resourceId}`);
+      console.log(iframe);
+      const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
+      console.log(ratio);
+      if (this.resource.type === 'application/pdf') {
+        iframe.style.height = '70vw';
+      } else if (this.resource.type === 'url') {
+        iframe.style.height = '70vw';
+        iframe.setAttribute('scrolling', 'yes');
+        iframe.setAttribute('src', iframe.getAttribute('src'));
+        this.reloaded = true;
+      } else if (this.resource.type.split('video').length > 0) {
+        iframe.style.height = '30vw';
+      }
     }
   }
 
