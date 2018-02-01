@@ -12,7 +12,6 @@ export class AppsService {
   constructor(@Inject(Http) public http: Http, public databaseService: DatabaseService) {
     this.databaseService.changes.subscribe(
       (change) => {
-        console.log(`there is a change ${change.type}`);
         if (change.type === 'Application') {
           this.changes.emit({doc: change.doc, type: change.doc.type});
         } else if (change.type === 'Ressource application') {
@@ -34,7 +33,9 @@ export class AppsService {
           this.applications = activity['applicationList'];
           this.databaseService.getDocument(activityId).then( act => {
             this.databaseService.getDocument( act['dbName']).then( parent => {
-              this.applications = this.applications.concat(parent['applicationList']);
+              if (parent['applicationList'].length > 0) {
+                this.applications = this.applications.concat(parent['applicationList']);
+              }
               resolve(this.applications);
             });
           });

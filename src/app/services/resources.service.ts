@@ -19,7 +19,6 @@ export class ResourcesService {
     this.resources = {};
     this.database.changes.subscribe(
       (change) => {
-        console.log(`there is a change ${change.type}`);
         if (change.type === 'Resource') {
           this.changes.emit({doc: change.doc, type: change.doc.type});
         }
@@ -39,7 +38,9 @@ export class ResourcesService {
           this.resources = activity['resourceList'];
           this.database.getDocument(activityId).then( act => {
             this.database.getDocument( act['dbName']).then( parent => {
-              this.resources = this.resources.concat(parent['resourceListList']);
+              if (parent['resourceList'].length > 0) {
+                this.resources = this.resources.concat(parent['resourceList']);
+              }
               resolve(this.resources);
             });
           });
@@ -128,12 +129,9 @@ export class ResourcesService {
     });
   }
 
-  deleteResource(resource) {
-    return new Promise(resolve => {
-      return this.database.getDocument(resource).then(res => {
-        console.log(res);
-        resolve(res);
-      });
+  deleteResource(resourceId) {
+    return new Promise( resolve => {
+      return this.database.removeDocument(resourceId);
     });
   }
 

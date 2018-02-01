@@ -4,4 +4,5 @@
   <mat-icon mat-list-icon *ngIf="video.test(resource?.type)">videocam</mat-icon>
   <mat-icon mat-list-icon *ngIf="audio.test(resource?.type)">audiotrack</mat-icon>
   <p mat-line> {{resource?.name}} </p>
+  <button mat-icon-button (click)="deleteResource();$event.stopPropagation()"><mat-icon>delete</mat-icon></button>
 </mat-list-item>

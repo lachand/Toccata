@@ -81,7 +81,6 @@ export class DatabaseService {
       timeout: false,
       heartbeat: false
     }).on('change', change => {
-      console.log("changes: ", change);
       this.handleChange(change);
     }).on('paused', function (info) {
       console.log("pause: ", info);
@@ -100,7 +99,6 @@ export class DatabaseService {
    * @param change
    */
   handleChange(change) {
-    console.log(change.doc.documentType);
     this.changes.emit({type: change.doc.documentType, doc: change.doc});
   }
 

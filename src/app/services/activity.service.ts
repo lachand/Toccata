@@ -26,7 +26,6 @@ export class ActivityService {
               public appsService: AppsService) {
     this.database.changes.subscribe(
       (change) => {
-        console.log(`there is a change ${change}`);
         if (change.type === 'Activity') {
           let finded = false;
           for (const user of change.doc.userList) {
@@ -35,10 +34,7 @@ export class ActivityService {
             }
           }
           if (change.doc.type === 'Main' && finded) {
-            /**if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
-             (change.doc.master === true )) {**/
             this.changes.emit({doc: change.doc, type: 'Main'});
-            //}
             if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
               (change.doc.master === true )) {
             if (this.activitiesList.indexOf(change.doc._id) === -1) {
@@ -204,7 +200,6 @@ export class ActivityService {
       return Promise.resolve(this.activitiesList);
     }
     return new Promise(resolve => {
-      console.log(this.user);
       this.database.getDocument(`${this.user.id}`)
         .then(userDoc => {
           this.activitiesList = userDoc['activityList'];

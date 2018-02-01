@@ -43,6 +43,10 @@ export class ResourceInfosComponent implements OnInit {
     });
   }
 
+  deleteResource() {
+    return this.resourcesService.deleteResource(this.resourceId);
+  }
+
   /*switchStatus() {
     this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
       this.application = applicationInfos;
