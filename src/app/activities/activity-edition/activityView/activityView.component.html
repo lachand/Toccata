@@ -4,12 +4,18 @@
   <mat-card class="mat-card">
 
     <h3>
-      <activity-name *ngIf="activityService.activityLoaded.type === 'Main'"
-                     [activityId]="activityService.activityLoaded._id"
+      <div *ngIf="activityService.activityLoaded.type === 'Main'">
+      <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
+      <activity-name [activityId]="activityService.activityLoaded._id"
       ></activity-name>
-      <activity-name *ngIf="activityService.activityLoaded.type === 'Sequence'"
-                     [activityId]="activityService.activityLoaded.parent"
-      ></activity-name>
+      </div>
+      <div *ngIf="activityService.activityLoaded.type === 'Sequence'">
+        <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
+        <activity-name [activityId]="activityService.activityLoaded.parent"
+        ></activity-name> :
+        <activity-name [activityId]="activityService.activityLoaded._id"
+        ></activity-name>
+      </div>
     </h3>
 
     <div>

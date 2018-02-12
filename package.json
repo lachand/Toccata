@@ -28,13 +28,14 @@
   "dependencies": {
     "@angular/animations": "^5.2.1",
     "@angular/cdk": "^2.0.0-beta.12",
+    "@angular/cli": "^1.6.5",
     "@angular/common": "^5.2.1",
     "@angular/compiler": "^5.2.1",
+    "@angular/compiler-cli": "^5.2.1",
     "@angular/core": "^5.2.1",
     "@angular/flex-layout": "git+https://github.com/angular/flex-layout-builds.git",
     "@angular/forms": "^5.2.1",
     "@angular/http": "^5.2.1",
-    "@angular/cli": "^1.6.5",
     "@angular/material": "^2.0.0-beta.12",
     "@angular/platform-browser": "^5.2.1",
     "@angular/platform-browser-dynamic": "^5.2.1",
@@ -70,6 +71,7 @@
     "ng2-ckeditor": "1.1.9",
     "ng2-scroll-to": "^1.0.7",
     "ngx-auto-scroll": "^1.0.15",
+    "ngx-flip": "^1.0.0",
     "pouchdb": "^6.3.4",
     "pouchdb-authentication": "^0.5.5",
     "pouchdb-find": "^6.3.4",
@@ -82,11 +84,10 @@
     "timer-stopwatch": "^0.2.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
+    "typescript": "2.4.2",
     "typings": "^2.1.1",
     "webpack": "^3.6.0",
-    "zone.js": "^0.8.18",
-    "typescript": "2.4.2",
-    "@angular/compiler-cli": "^5.2.1"
+    "zone.js": "^0.8.18"
   },
   "devDependencies": {
     "@angular/cli": "^1.6.5",

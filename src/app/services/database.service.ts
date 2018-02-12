@@ -110,17 +110,14 @@ export class DatabaseService {
    */
   addDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
-      console.log('adding database');
       if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
         this.dbList.push(databaseName);
         this.options.query_params.dbNames.push(databaseName);
         this.optionsReplication.query_params.dbNames.push(databaseName);
-         console.log(this.optionsReplication);
         this.db.replicate.from(this.dbRemote, this.optionsReplication)
           .on('change', change => {
-            console.log(change);
             if (change.docs[0].dbName === databaseName) {
               this.dbSync.cancel();
               this.dbSync = this.db.sync(this.dbRemote, this.options);
@@ -196,10 +193,8 @@ export class DatabaseService {
    * @returns {Promise<any>}
    */
   getDocument(docId: string) {
-    console.log(docId);
     return new Promise((resolve, reject) => {
       return this.db.allDocs().then(res => {
-        console.log(res, docId);
       })
         .then(() => {
           return this.db.get(docId);

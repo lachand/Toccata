@@ -102,7 +102,6 @@ export class ActivityService {
    * @returns {Promise<any>}
    */
   public load_activity(activity_id) {
-    console.log('Load activity : ', activity_id);
     return new Promise(resolve => {
       this.database.getDocument(activity_id)
         .then((result) => {
@@ -118,6 +117,7 @@ export class ActivityService {
           return this.userService.getParticipants(this.activityLoaded._id);
         })
         .then(() => {
+            this.changes.emit({doc:this.activityLoaded, type: 'ChangeActivity'});
             resolve(this.activityLoaded);
           }
         )
@@ -137,7 +137,6 @@ export class ActivityService {
             resolve(res);
           });
         } else {
-          console.log(doc);
           return this.database.getDocument(doc['parent']).then(parent => {
             parent['currentLoaded'] = doc['_id'];
             return this.database.updateDocument(parent).then(res => {
@@ -309,7 +308,6 @@ export class ActivityService {
           if (res.parent !== null) {
             this.db.get(res.parent).then(parent => {
               parent.child.splice(parent.child.indexOf(activityId), 1);
-              console.log(parent);
               this.db.put(parent);
             });
           }
@@ -408,7 +406,6 @@ export class ActivityService {
         .then(activity => {
           activity['userList'].push(userName);
           const subactivities = activity['subactivityList'];
-          console.log(subactivities);
           if (!isNullOrUndefined(subactivities)) {
             return Promise.all(subactivities.map(function (subactivity) {
               return tempThis.addUser(userName, subactivity);
@@ -473,7 +470,6 @@ export class ActivityService {
         dbName = activity['dbName'];
         guid = this.database.guid();
         newDb = `${dbName}_duplicate_${guid}`;
-        console.log(newDb);
         return this.database.addDatabase(newDb);
       })
         .then(() => {
@@ -536,7 +532,6 @@ export class ActivityService {
   getActivityDuplicate(activityId: any) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
-        console.log(activity);
         resolve(activity['duplicateList']);
       });
     });

@@ -1,4 +1,13 @@
 <div class="container body-container" layout="column" flex id="abcde">
-  <app-menu></app-menu>
-  <router-outlet></router-outlet>
+  <mat-sidenav-container class="container">
+    <!--<mat-sidenav id="sidenav" #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+                 (closed)="events.push('close!')">
+    </mat-sidenav>-->
+
+    <mat-sidenav-content>
+      <app-menu></app-menu>
+      <router-outlet></router-outlet>
+      <!--<p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p>-->
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

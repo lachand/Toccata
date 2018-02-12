@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit {
         if (result['status'] === 401) {
           this.errorUsernamePassword = true;
         } else if (this.userService.isLoggedIn()) {
-          console.log(this.userService.user);
             return this.activityService.getActivities().then(res => {
               return this.userService.getAllUsers();
             })

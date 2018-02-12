@@ -7,7 +7,7 @@ import {ActivityAppsComponent} from './activities/activityApps/activityApps.comp
 import {ExternalAppComponent} from './applications/external/externalApp.component';
 import {ActivityEditComponent} from './activities/activity-edition/activityEdit/activityEdit.component';
 import {ActivityViewComponent} from './activities/activity-edition/activityView/activityView.component';
-import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicates.component";
+import {ViewDuplicatesComponent} from './activities/viewDuplicates/viewDuplicates.component';
 
 export const routes = [
 //  { path: '', component: HomeComponent, pathMatch: 'full' },

@@ -138,7 +138,6 @@ export class ResourcesService {
   getResource(resource) {
     return new Promise(resolve => {
       return this.database.getDocument(resource).then(res => {
-        console.log(res);
         resolve(res);
       });
     });
@@ -146,9 +145,7 @@ export class ResourcesService {
 
   getResourceData(resourceId: any, attachmentId: any) {
     return new Promise(resolve => {
-      console.log(resourceId, attachmentId);
       return this.database.db.getAttachment(resourceId, attachmentId).then(res => {
-        console.log(res);
         resolve(res);
       });
     });

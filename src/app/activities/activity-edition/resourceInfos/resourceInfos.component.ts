@@ -35,7 +35,6 @@ export class ResourceInfosComponent implements OnInit {
     console.log('toto');
     this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
       this.resource = resourceInfos;
-      console.log(this.resource);
     });
   }
 

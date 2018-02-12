@@ -69,16 +69,13 @@ export class UserService {
           return this.database.addDatabase(`user_${username}`);
         })
           .then(() => {
-          console.log(username);
             return this.database.getDocument(username);
           })
           .then((res) => {
-            console.log(res);
             this.name = res['name'];
             this.id = res['_id'];
             this.avatar = res['avatar'];
             this.fonction = res['fonct'];
-            console.log(this);
             resolve(this.loggedIn);
           })
           .catch(function (err) {
@@ -129,7 +126,6 @@ export class UserService {
           return this.database.addDocument(document);
         })
         .then(res => {
-          console.log(res);
           resolve(res);
         })
         .catch(err => {
@@ -187,7 +183,6 @@ export class UserService {
    */
   getParticipantInfos(participantId: any) {
     return new Promise(resolve => {
-      console.log(participantId);
       return this.database.getDocument(participantId)
         .then(participant => {
           resolve(participant);
@@ -229,12 +224,8 @@ export class UserService {
    */
   removeActivity(activityId, userName) {
     return new Promise(resolve => {
-      console.log(`going to add a database: user_${userName}`);
       return this.database.addDatabase(`user_${userName}`).then(() => {
-        console.log('database added');
         return this.database.getDocument(userName).then(user => {
-          console.log('get user : ', userName);
-          console.log(user['activityList'].indexOf(activityId));
           user['activityList'].splice(user['activityList'].indexOf(activityId), 1);
           return this.database.addDocument(user);
         })

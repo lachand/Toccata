@@ -25,7 +25,6 @@ export class ActivityInfosComponent implements OnInit {
   ngOnInit(): void {
     this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
       this.activityInfos = activityInfos;
-      console.log(activityInfos);
     });
     this.activityService.changes.subscribe((change) => {
       if (change.type === 'Main') {
@@ -74,7 +73,6 @@ export class ActivityInfosComponent implements OnInit {
    * @param activityId
    */
   view_or_edit(activityId) {
-    console.log(this.user.fonction);
     if (this.user.fonction === 'Enseignant') {
       this.edit_activity(activityId);
     } else {
@@ -100,7 +98,7 @@ export class ActivityInfosComponent implements OnInit {
     this.router.navigate(['duplicates/' + activityId]);
   }
 
-  isNull(elmt){
+  isNull(elmt) {
     return isNullOrUndefined(elmt);
   }
 }
