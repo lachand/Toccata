@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import {ActivityService} from '../services/activity.service';
 import {Location} from '@angular/common';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-menu',
@@ -11,12 +12,20 @@ import {Location} from '@angular/common';
 })
 export class MenuComponent {
   constructor(public userService: UserService, public router: Router,
-              public activityService: ActivityService,
-              private _location: Location) {
+              public activityService: ActivityService) {
+    console.log(this.userService);
   }
 
   logout() {
     this.activityService.logout();
+  }
+
+  isNullOrUndefined(elmt) {
+    return isNullOrUndefined(elmt);
+  }
+
+  goToActivities() {
+    this.router.navigate(['/activities']);
   }
 
 }

@@ -1,7 +1,22 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div *ngIf="!nameEdition" class="name-edition">
-  <h3 (dblclick)="switch()">{{activityService.activityLoaded.name}}</h3>
+  <h3>
+    <div>
+      <div>
+        <activity-name class="activity-name" [activityId]="activityService.activityLoaded._id"></activity-name>
+      </div>
+      <div>
+        <mat-chip-list class="chip-list">
+          <mat-chip class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityView()">
+            <mat-icon>visibility</mat-icon>
+            {{viewActivity}}
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+  </h3>
+  <!--<h3 (dblclick)="switch()">{{activityService.activityLoaded.name}}</h3>-->
 </div>
 
 <div *ngIf="nameEdition" class="name-edition">

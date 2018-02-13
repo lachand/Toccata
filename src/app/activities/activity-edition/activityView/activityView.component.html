@@ -5,16 +5,36 @@
 
     <h3>
       <div *ngIf="activityService.activityLoaded.type === 'Main'">
+        <div class="activity-name">
       <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
       <activity-name [activityId]="activityService.activityLoaded._id"
       ></activity-name>
+        </div>
+        <div>
+        <mat-chip-list class="chip-list">
+          <mat-chip  *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event)" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
+            <mat-icon>edit</mat-icon>
+            {{editActivity}}
+          </mat-chip>
+        </mat-chip-list>
+      </div>
       </div>
       <div *ngIf="activityService.activityLoaded.type === 'Sequence'">
+        <div class="activity-name">
         <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
         <activity-name [activityId]="activityService.activityLoaded.parent"
         ></activity-name> :
         <activity-name [activityId]="activityService.activityLoaded._id"
         ></activity-name>
+        </div>
+        <div>
+        <mat-chip-list class="chip-list">
+          <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
+            <mat-icon>edit</mat-icon>
+            {{editActivity}}
+          </mat-chip>
+        </mat-chip-list>
+        </div>
       </div>
     </h3>
 

@@ -1,10 +1,12 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
-import {MatStepper} from "@angular/material";
+import {MatChip, MatStepper} from "@angular/material";
 import {isNullOrUndefined} from "util";
 import {AppsService} from "../../../services/apps.service";
 import {Location} from '@angular/common';
+import {LoggerService} from "../../../services/logger.service";
+import {UserService} from "app/services/user.service";
 
 @Component({
   selector: 'app-activity-edit',
@@ -15,13 +17,18 @@ import {Location} from '@angular/common';
 export class ActivityViewComponent implements AfterViewInit, OnInit {
 
   steps: any;
+  editActivity: any;
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('chip') chip: MatChip;
 
   constructor(public activityService: ActivityService,
               public router: Router,
               public appsService: AppsService,
               private _location: Location,
-              private ref: ChangeDetectorRef) {
+              private ref: ChangeDetectorRef,
+              private logger: LoggerService,
+              private user: UserService) {
+    this.editActivity = '';
     if (this.activityService.activityLoaded.type === 'Main') {
       this.steps = this.activityService.activityLoadedChild;
     } else {
@@ -88,4 +95,18 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     });
   }
 
+  onHovering($event: Event) {
+    this.editActivity = "Editer l'activité";
+  }
+
+  onUnovering($event: Event) {
+    this.editActivity = '';
+  }
+
+  activityEdit() {
+    this.logger.log('OPEN', this.activityService.activityLoaded.parent, this.activityService.activityLoaded.parent, 'open activity edition');
+    this.activityService.load_activity(this.activityService.activityLoaded.parent).then(res => {
+      this.router.navigate(['activity_edit/' + this.activityService.activityLoaded.parent]);
+    });
+  }
 }

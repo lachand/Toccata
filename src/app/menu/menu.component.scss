@@ -4,16 +4,29 @@ button.mat-menu-item {
 }
 
 .example-container {
-  width: 500px;
-  height: 300px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
 }
 
-.example-sidenav-content {
+.sidenav-content {
   display: flex;
   height: 100%;
-  align-items: center;
-  justify-content: center;
+  width: 20%;
+}
+
+.fullDiv {
+  width: 100%;
+}
+
+.userInfos {
+  padding-top: 20px;
+  padding-left: 20px;
+  width: 100%;
+}
+
+.userAvatar {
+  float: left;
+  padding-right: 10px;
 }
 
 .example-sidenav {

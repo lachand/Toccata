@@ -1,9 +1,19 @@
-.name-edition{
-  padding: 10px;
-}
-
 .material-icons{
   cursor: pointer;
+}
+
+.chip {
+  cursor: pointer !important;
+}
+
+.activity-name {
+  float: left;
+  padding-right: 15px;
+  padding-top: 5px;
+}
+
+.name-edition {
+  margin-top: -25px;
 }
 
 .aligned-with-text{

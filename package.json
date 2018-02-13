@@ -27,7 +27,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.1",
-    "@angular/cdk": "^2.0.0-beta.12",
+    "@angular/cdk": "^5.2.1",
     "@angular/cli": "^1.6.5",
     "@angular/common": "^5.2.1",
     "@angular/compiler": "^5.2.1",
@@ -36,7 +36,7 @@
     "@angular/flex-layout": "git+https://github.com/angular/flex-layout-builds.git",
     "@angular/forms": "^5.2.1",
     "@angular/http": "^5.2.1",
-    "@angular/material": "^2.0.0-beta.12",
+    "@angular/material": "^5.2.1",
     "@angular/platform-browser": "^5.2.1",
     "@angular/platform-browser-dynamic": "^5.2.1",
     "@angular/platform-server": "^5.2.1",

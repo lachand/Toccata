@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserService} from '../../../services/user.service';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-participant-infos',
@@ -16,8 +17,10 @@ export class ParticipantInfosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.participantId);
     this.userService.getParticipantInfos(this.participantId).then(participant => {
         this.participant = participant;
+        console.log(participant);
       }
     );
   }

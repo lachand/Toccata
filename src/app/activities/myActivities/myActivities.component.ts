@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
 import {DialogConfirmationComponent} from '../../dialogConfirmation/dialogConfirmation.component';
-import {DatabaseService} from "../../services/database.service";
-import {LoggerService} from "../../services/logger.service";
+import {DatabaseService} from '../../services/database.service';
+import {LoggerService} from '../../services/logger.service';
 
 @Component({
   selector: 'app-my-activities',

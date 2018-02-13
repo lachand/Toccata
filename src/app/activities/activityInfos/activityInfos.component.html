@@ -8,11 +8,14 @@
   <div *ngIf="!isNull(activityInfos)">
 
   <h3 mat-line>{{activityInfos?.name}}
+    <!--
     <button class="menu-right-align" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
+    -->
   </h3>
 
+    <!--
   <mat-menu #menu="matMenu">
     <button mat-menu-item *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activityId)">
       <span>Editer</span>
@@ -29,6 +32,7 @@
       <span>Voir les groupes</span>
     </button>
   </mat-menu>
+  -->
 
   <div [innerHTML]="activityInfos?.description" class="activity-description"></div>
 
