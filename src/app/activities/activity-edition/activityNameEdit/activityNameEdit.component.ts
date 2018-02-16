@@ -13,6 +13,7 @@ export class ActivityNameEditComponent {
   nameEdition: boolean;
   appName: String = '';
   viewActivity: any;
+  viewGroup: any;
   @Input() edit: boolean;
 
   constructor(public activityService: ActivityService, private logger: LoggerService, private router: Router) {
@@ -44,11 +45,30 @@ export class ActivityNameEditComponent {
     this.viewActivity = '';
   }
 
+  onHoveringGroupView($event: Event) {
+    this.viewGroup = "Voir les groupes";
+  }
+
+  onUnoveringGroupView($event: Event) {
+    this.viewGroup = '';
+  }
+
   activityView() {
-    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.activityService.activityLoaded._id, 'open activity edition');
+    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.activityService.activityLoaded._id, 'open activity view');
     this.activityService.load_activity(this.activityService.activityLoaded._id).then(res => {
       this.router.navigate(['activity_view/' + this.activityService.activityLoaded._id]);
     });
+  }
+
+  activityGroupView() {
+    let activityId = '';
+    if (this.activityService.activityLoaded.type === 'Main') {
+      activityId = this.activityService.activityLoaded._id;
+    } else {
+      activityId = this.activityService.activityLoaded.parent;
+    }
+    this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
+    this.router.navigate(['duplicates/' + activityId]);
   }
 
 }

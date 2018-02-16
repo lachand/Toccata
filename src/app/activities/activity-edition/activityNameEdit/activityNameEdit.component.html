@@ -12,6 +12,10 @@
             <mat-icon>visibility</mat-icon>
             {{viewActivity}}
           </mat-chip>
+          <mat-chip class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+            <mat-icon>group</mat-icon>
+            {{viewGroup}}
+          </mat-chip>
         </mat-chip-list>
       </div>
     </div>

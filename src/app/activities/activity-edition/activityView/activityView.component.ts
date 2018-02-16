@@ -18,6 +18,8 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
 
   steps: any;
   editActivity: any;
+  viewGroup: any;
+  shareActivity: string;
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('chip') chip: MatChip;
 
@@ -29,6 +31,8 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
               private logger: LoggerService,
               private user: UserService) {
     this.editActivity = '';
+    this.viewGroup = '';
+    this.shareActivity = '';
     if (this.activityService.activityLoaded.type === 'Main') {
       this.steps = this.activityService.activityLoadedChild;
     } else {
@@ -37,6 +41,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
+    if (this.activityService.activityLoaded.master === true) {
+      this.ref.detectChanges();
+    }
     this.activityService.changes.subscribe(changes => {
       if (changes.type === 'ChangeActivity') {
         this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
@@ -95,12 +102,38 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     });
   }
 
+  activityGroupShare() {
+    return -1;
+  }
+
+  activityGroupView() {
+    const activityId = this.activityService.activityLoaded.parent;
+    this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
+    this.router.navigate(['duplicates/' + activityId]);
+  }
+
   onHovering($event: Event) {
     this.editActivity = "Editer l'activité";
   }
 
   onUnovering($event: Event) {
     this.editActivity = '';
+  }
+
+  onHoveringGroupView($event: Event) {
+    this.viewGroup = "Voir les groupes";
+  }
+
+  onUnoveringGroupView($event: Event) {
+    this.viewGroup = '';
+  }
+
+  onHoveringShare($event: Event) {
+    this.shareActivity = "Partager l'activité";
+  }
+
+  onUnoveringShare($event: Event) {
+    this.shareActivity = '';
   }
 
   activityEdit() {

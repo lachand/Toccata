@@ -10,6 +10,8 @@
         <mat-nav-list>
           <mat-divider></mat-divider>
           <mat-list-item (click)="sidenav.toggle();goToActivities();">Mes activités</mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item (click)="logout()"><mat-icon>power_settings_new</mat-icon>Déconnexion</mat-list-item>
         </mat-nav-list>
       </div>
       </div>
@@ -27,6 +29,7 @@
     <button mat-button routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
     -->
     <span class="spacer"></span>
+    <!--
     <div *ngIf="userService.loggedIn" class="aligned-right">
       <h6>{{userService.name}}
         <button mat-button (click)="logout()" routerLink="/">
