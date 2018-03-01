@@ -2,7 +2,7 @@
 
   <div *ngIf="isNull(activityInfos) " class="div-centered activity-card">
     <mat-spinner style="margin:0 auto;"></mat-spinner>
-    <p>Chargement de l'activité</p>
+    <p i18n="@@activityLoading">Chargement de l'activité</p>
   </div>
 
   <div *ngIf="!isNull(activityInfos)">

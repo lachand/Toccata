@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node server && pouchdb-server -p 5984 -o 0.0.0.0",
-    "heroku-postbuild": "ng build --aot -prod",
+    "heroku-postbuild": "ng build --aot -prod --i18nFile=src/locale/messages.en.xlf --i18nFormat=xlf --locale=en",
     "build:nodeserver": "ng build && cp nodeserver/* dist",
     "build:nodeserver-prod": "ng build -prod && cp nodeserver/* dist",
     "serve-build": "npm run build:nodeserver && cd dist && node index.js",

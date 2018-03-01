@@ -1,7 +1,7 @@
 <script src="../../main.ts"></script>
 
 <form [formGroup]="formTask">
-  <h3>Tâche</h3>
+  <h3 i18n="@@task">Tâche</h3>
 
   <mat-input-container>
     <input matInput placeholder="Nom de la tâche" type="text" formControlName="taskName">
@@ -12,8 +12,8 @@
   </mat-input-container>
 
   <div>
-    <button mat-button (click)="update()">Valider</button>
-    <button mat-button (click)="close()">Annuler</button>
-    <button mat-button (click)="deletePostit()" color="warn">Supprimer</button>
+    <button mat-button (click)="update()" i18n="@@validate">Valider</button>
+    <button mat-button (click)="close()" i18n="@@cancel">Annuler</button>
+    <button mat-button (click)="deletePostit()" color="warn" i18n="@@delete">Supprimer</button>
   </div>
 </form>

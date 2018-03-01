@@ -22,7 +22,7 @@
     </button>
   </mat-menu>
 
-  <div *ngIf="currentLoadedName">Etape actuelle : {{currentLoadedName}}</div>
+  <div *ngIf="currentLoadedName" i18n="@@currentStep">Etape actuelle : {{currentLoadedName}}</div>
 
   <application-infos-teacher *ngFor="let app of currentLoadedInfos?.applicationList" [applicationId]="app">
   </application-infos-teacher>

@@ -1,7 +1,7 @@
 <script src="../../main.ts"></script>
 
 <form (ngSubmit)="changeUsers()">
-  <h3>Utilisateurs de l'application</h3>
+  <h3 i18n="@@usersApp">Utilisateurs de l'application</h3>
 
   <div *ngFor="let participant of userChecked">
     <mat-slide-toggle class="example-margin"
@@ -13,7 +13,7 @@
   </div>
 
   <div>
-    <button mat-button type="submit">Valider</button>
-    <button mat-button mat-dialog-close="Close">Annuler</button>
+    <button mat-button type="submit" i18n="@@validate">Valider</button>
+    <button mat-button mat-dialog-close="Close" i18n="@@cancel">Annuler</button>
   </div>
 </form>

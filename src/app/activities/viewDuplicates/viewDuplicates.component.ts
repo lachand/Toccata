@@ -78,4 +78,15 @@ export class ViewDuplicatesComponent {
       this.router.navigate(['activity_edit/' + activityId]);
     });
   }
+
+  duplicate_activity() {
+    let activityId;
+    if(this.activityService.activityLoaded.type === 'Main'){
+      activityId = this.activityService.activityLoaded._id;
+    } else {
+      activityId = this.activityService.activityLoaded.parent;
+    }
+    this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
+    this.activityService.duplicate(activityId);
+  }
 }

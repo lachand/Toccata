@@ -3,7 +3,8 @@
     <div class="title">
   <button mat-button (click)="backClicked();">
     <mat-icon>arrow_back</mat-icon>
-  </button> Groupes pour l'activité {{activityInfo?.name}}
+  </button>
+      <p i18n="@@activityGroups">Groupes pour l'activité {{activityInfo?.name}}</p>
     </div>
     <div>
   <mat-chip-list class="chip-list">
@@ -21,8 +22,17 @@
 </h3>
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
   <br>
-  <div *ngFor="let activity of duplicateList" fxFlex="33%"
+  <div *ngFor="let activity of duplicateList" fxFlex="32%"
        class="flex-card">
     <app-activity-infos-teacher [activityId]="activity"></app-activity-infos-teacher>
+  </div>
+
+  <div front fxFlex="32%" class="flex-card" *ngIf="user.fonction === 'Enseignant'">
+    <mat-card class="activity-card" (click)="duplicateActivity()">
+      <div class="div-centered">
+        <mat-icon class="icon-huge" (click)="duplicateActivity()">add_circle</mat-icon>
+        <p i18n="@@newGroup">Ajouter un groupe</p>
+      </div>
+    </mat-card>
   </div>
 </div>

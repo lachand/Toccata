@@ -1,7 +1,7 @@
 <script src="../../main.ts"></script>
 
 <form [formGroup]="formNewApp" (ngSubmit)="newApp()">
-  <h3>Nouvelle application</h3>
+  <h3 i18n="@@newApp">Nouvelle application</h3>
 
   <mat-form-field>
     <mat-select matInput placeholder="Type d'application" formControlName="appType" ngDefaultControl>
@@ -32,6 +32,6 @@
   </div>
 
   <div>
-    <button mat-button type="submit">Ajouter</button>
+    <button mat-button type="submit" i18n="@@add">Ajouter</button>
   </div>
 </form>

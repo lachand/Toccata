@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="existingApps" datatype="html">
+        <source>Applications disponibles</source>
+        <target>Available apps</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/appLoading/appLoading.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="connexion" datatype="html">
+        <source>Connexion</source>
+        <target>Connexion</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login-signin/login.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login-signin/login.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="errorPswd" datatype="html">
+        <source>Couple identifiant/mot de passe incorrect</source>
+        <target>Wrong password or username</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login-signin/login.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="errorNetwork" datatype="html">
+        <source>Problème de connexion, merci de réessayer</source>
+        <target>Network failure, please retry</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login-signin/login.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="isTeacher" datatype="html">
+        <source>Je suis un enseignant</source>
+        <target>I am a teacher</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login-signin/signin.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="signin" datatype="html">
+        <source>Inscription</source>
+        <target>Signup</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login-signin/signin.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="yes" datatype="html">
+        <source>Oui</source>
+        <target>Yes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dialogConfirmation/dialogConfirmation.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="no" datatype="html">
+        <source>Non</source>
+        <target>No</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dialogConfirmation/dialogConfirmation.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="resources" datatype="html">
+        <source>Ressources</source>
+        <target>Resources</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityEdit/activityEdit.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityView/activityView.component.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="applications" datatype="html">
+        <source>Applications</source>
+        <target>Apps</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityEdit/activityEdit.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityView/activityView.component.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="steps" datatype="html">
+        <source>Etapes</source>
+        <target>Steps</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityEdit/activityEdit.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newApp" datatype="html">
+        <source>Nouvelle application</source>
+        <target>New app</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityNewApp/activityNewApp.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityAppsEdit/activityAppsEdit.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="add" datatype="html">
+        <source>Ajouter</source>
+        <target>Add</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityNewApp/activityNewApp.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityNewRessource/activityNewRessource.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="usersApp" datatype="html">
+        <source>Utilisateurs de l&apos;application</source>
+        <target>App's users</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityChangeUsers/activityChangeUsers.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="validate" datatype="html">
+        <source>Valider</source>
+        <target>Validate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityChangeUsers/activityChangeUsers.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/createEditPostit/createEditPostit.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cancel" datatype="html">
+        <source>Annuler</source>
+        <target>Cancel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityChangeUsers/activityChangeUsers.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/createEditPostit/createEditPostit.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="addResource" datatype="html">
+        <source>Ajout d&apos;une ressource</source>
+        <target>Add a resource</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/dialogNewRessource/dialognewRessource.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fileOrLink" datatype="html">
+        <source>Voulez vous ajouter un fichier ou un lien ?</source>
+        <target>Do you whant to add a file or a link</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/dialogNewRessource/dialognewRessource.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="file" datatype="html">
+        <source>Fichier</source>
+        <target>File</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/dialogNewRessource/dialognewRessource.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="link" datatype="html">
+        <source>Lien</source>
+        <target>Link</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/dialogNewRessource/dialognewRessource.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="back" datatype="html">
+        <source>Retour</source>
+        <target>Back</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityNewRessource/activityNewRessource.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newResource" datatype="html">
+        <source>Nouvelle ressource</source>
+        <target>New resource</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityResources/activityResources.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="activityLoading" datatype="html">
+        <source>Chargement de l&apos;activité</source>
+        <target>Activity loading</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activityInfos/activityInfos.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="currentStep" datatype="html">
+        <source>Etape actuelle : <x id="INTERPOLATION" equiv-text="{{currentLoadedName}}"/></source>
+        <target>Current step: <x id="INTERPOLATION" equiv-text="{{currentLoadedName}}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activityInfosTeacher/activityInfosTeacher.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="task" datatype="html">
+        <source>Tâche</source>
+        <target>Task</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/createEditPostit/createEditPostit.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="delete" datatype="html">
+        <source>Supprimer</source>
+        <target>Delete</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/createEditPostit/createEditPostit.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="activityGroups" datatype="html">
+        <source>Groupes pour l&apos;activité <x id="INTERPOLATION" equiv-text="{{activityInfo?.name}}"/></source>
+        <target>Groups for activity <x id="INTERPOLATION" equiv-text="{{activityInfo?.name}}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/viewDuplicates/viewDuplicates.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newGroup" datatype="html">
+        <source>Ajouter un groupe</source>
+        <target>Add a group</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/viewDuplicates/viewDuplicates.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="myActivities" datatype="html">
+        <source>Mes activités</source>
+        <target>My activities</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu/menu.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="logout" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>power_settings_new<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Déconnexion</source>
+        <target><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>power_settings_new<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Logout</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu/menu.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
