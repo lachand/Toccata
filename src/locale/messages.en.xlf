@@ -64,6 +64,7 @@
       </trans-unit>
       <trans-unit id="newActivity" datatype="html">
         <source>Ajouter une activité</source>
+        <target>New activity</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/activities/myActivities/myActivities.component.ts</context>
           <context context-type="linenumber">11</context>
@@ -143,6 +144,7 @@
       </trans-unit>
       <trans-unit id="instructions" datatype="html">
         <source>Consignes</source>
+        <target>Instructions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/activities/activity-edition/activityDescriptionEdit/activityDescriptionEdit.component.ts</context>
           <context context-type="linenumber">3</context>
