@@ -62,6 +62,13 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="newActivity" datatype="html">
+        <source>Ajouter une activité</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/myActivities/myActivities.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="no" datatype="html">
         <source>Non</source>
         <target>No</target>
@@ -132,6 +139,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/activities/activity-edition/activityChangeUsers/activityChangeUsers.component.ts</context>
           <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="instructions" datatype="html">
+        <source>Consignes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/activities/activity-edition/activityDescriptionEdit/activityDescriptionEdit.component.ts</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="validate" datatype="html">
