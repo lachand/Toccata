@@ -56,20 +56,20 @@ import {ParticipantInfosComponent} from './activities/activity-edition/participa
 import {ApplicationInfosComponent} from './activities/activity-edition/applicationInfos/applicationInfos.component';
 import {PostitComponent} from './applications/postit/postit.component';
 import {ChronometreComponent} from './applications/chronometre/chronometre.component';
-import {TextEditorComponent} from "./applications/textEditor/textEditor.component";
+import {TextEditorComponent} from './applications/textEditor/textEditor.component';
 import {ActivityNameComponent} from './activities/activity-edition/activityName/activityName.component';
 import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/applicationLaunched/applicationLaunched.component';
-import {ViewDuplicatesComponent} from "./activities/viewDuplicates/viewDuplicates.component";
-import {ActivityInfosTeacherComponent} from "./activities/activityInfosTeacher/activityInfosTeacher.component";
-import {ChronometreInfosComponent} from "./activities/activity-edition/chronometreInfos/chronometreInfos.component";
-import {ApplicationInfosTeacherComponent} from "./activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component";
-import {PostitInfosComponent} from "./activities/activity-edition/postitInfos/postitInfos.component";
-import {CreateEditPostitComponent} from "./activities/createEditPostit/createEditPostit.component";
-import {LoggerService} from "./services/logger.service";
-import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
-import {ResourceOpenedComponent} from "./activities/activity-edition/resourceOpened/resourceOpened.component";
-import {DialogNewRessourceComponent} from "app/activities/activity-edition/dialogNewRessource/dialognewRessource.component";
-import {ActivityNewRessourceComponent} from "./activities/activity-edition/activityNewRessource/activityNewRessource.component";
+import {ViewDuplicatesComponent} from './activities/viewDuplicates/viewDuplicates.component';
+import {ActivityInfosTeacherComponent} from './activities/activityInfosTeacher/activityInfosTeacher.component';
+import {ChronometreInfosComponent} from './activities/activity-edition/chronometreInfos/chronometreInfos.component';
+import {ApplicationInfosTeacherComponent} from './activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component';
+import {PostitInfosComponent} from './activities/activity-edition/postitInfos/postitInfos.component';
+import {CreateEditPostitComponent} from './activities/createEditPostit/createEditPostit.component';
+import {LoggerService} from './services/logger.service';
+import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {ResourceOpenedComponent} from './activities/activity-edition/resourceOpened/resourceOpened.component';
+import {DialogNewRessourceComponent} from 'app/activities/activity-edition/dialogNewRessource/dialognewRessource.component';
+import {ActivityNewRessourceComponent} from './activities/activity-edition/activityNewRessource/activityNewRessource.component';
 
 @NgModule({
   declarations: [AppComponent,

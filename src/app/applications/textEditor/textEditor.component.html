@@ -2,7 +2,7 @@
 
 <div class="name-edition" *ngIf="resource">
   <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
-  --><ckeditor [config]="editorOptions" [(ngModel)]="resource.text" id="myTextEditor" (paste)="paste(evt)">
+  --><ckeditor [config]="editorOptions" [(ngModel)]="resource.text" id="myTextEditor" (paste)="paste($evt)">
   <ckbutton [name]="'saveButton'"
             [command]="'saveCmd'"
             (click)="save($event)"

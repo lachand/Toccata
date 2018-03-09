@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
-import {LoggerService} from "../../../services/logger.service";
-import {Router} from "@angular/router";
+import {LoggerService} from '../../../services/logger.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-activity-name-edit',
@@ -38,7 +38,7 @@ export class ActivityNameEditComponent {
   }
 
   onHovering($event: Event) {
-    this.viewActivity = "Voir l'activité";
+    this.viewActivity = 'Voir l\'activité';
   }
 
   onUnovering($event: Event) {
@@ -46,7 +46,7 @@ export class ActivityNameEditComponent {
   }
 
   onHoveringGroupView($event: Event) {
-    this.viewGroup = "Voir les groupes";
+    this.viewGroup = 'Voir les groupes';
   }
 
   onUnoveringGroupView($event: Event) {

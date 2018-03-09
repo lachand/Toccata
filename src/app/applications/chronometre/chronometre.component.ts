@@ -3,10 +3,10 @@ import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
 import {Stopwatch} from 'timer-stopwatch';
-import {UserService} from "../../services/user.service";
-import {isNullOrUndefined} from "util";
-import {ViewRef_} from "@angular/core/src/view";
-import {LoggerService} from "../../services/logger.service";
+import {UserService} from '../../services/user.service';
+import {isNullOrUndefined} from 'util';
+import {ViewRef_} from '@angular/core/src/view';
+import {LoggerService} from '../../services/logger.service';
 
 @Component({
   selector: 'app-chronometre',
@@ -75,13 +75,11 @@ export class ChronometreComponent implements OnInit {
   handleChange(change) {
     this.timer.stop();
     const actualTime = Date.now();
-    let timeChronometer;
+    const timeChronometer;
     this.chronometre = change;
     this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
     if (this.chronometre.running) {
-      timeChronometer = this.timeLeft - ( actualTime - this.chronometre.startedAt);
     } else {
-      timeChronometer = this.timeLeft;
     }
     this.timer.reset(this.timeLeft);
     this.title = this.chronometre.timeLeft;
@@ -104,19 +102,19 @@ export class ChronometreComponent implements OnInit {
    */
   parseMillisecondsIntoReadableTime(milliseconds) {
     //Get hours from milliseconds
-    let hours = milliseconds / (1000 * 60 * 60);
-    let absoluteHours = Math.floor(hours);
-    let h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
+    const hours = milliseconds / (1000 * 60 * 60);
+    const absoluteHours = Math.floor(hours);
+    const h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
 
     //Get remainder from hours and convert to minutes
-    let minutes = (hours - absoluteHours) * 60;
-    let absoluteMinutes = Math.floor(minutes);
-    let m = absoluteMinutes > 9 ? absoluteMinutes : '0' + absoluteMinutes;
+    const minutes = (hours - absoluteHours) * 60;
+    const absoluteMinutes = Math.floor(minutes);
+    const m = absoluteMinutes > 9 ? absoluteMinutes : '0' + absoluteMinutes;
 
     //Get remainder from minutes and convert to seconds
-    let seconds = (minutes - absoluteMinutes) * 60;
-    let absoluteSeconds = Math.floor(seconds);
-    let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+    const seconds = (minutes - absoluteMinutes) * 60;
+    const absoluteSeconds = Math.floor(seconds);
+    const s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
     if (m == '05' && s != '00') {
       document.getElementById('title').className = 'blink';
@@ -202,8 +200,8 @@ export class ChronometreComponent implements OnInit {
   }
 
   timeInMiliSeconds(str) {
-    const p = str.split(':')
-    let s = 0
+    const p = str.split(':');
+    let s = 0;
     let m = 1;
 
     while (p.length > 0) {

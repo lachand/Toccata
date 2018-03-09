@@ -4,9 +4,9 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
-import {LoggerService} from "../../../services/logger.service";
-import {DialogNewRessourceComponent} from "../dialogNewRessource/dialognewRessource.component";
-import {ActivityNewRessourceComponent} from "../activityNewRessource/activityNewRessource.component";
+import {LoggerService} from '../../../services/logger.service';
+import {DialogNewRessourceComponent} from '../dialogNewRessource/dialognewRessource.component';
+import {ActivityNewRessourceComponent} from '../activityNewRessource/activityNewRessource.component';
 
 @Component({
   selector: 'app-activity-resources',
@@ -44,7 +44,7 @@ export class ActivityResourcesComponent {
         dialogRef.close();
         const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent);
         dialogRefUrl.componentInstance.dialogRef = dialogRefUrl;
-      };
+      }
     });
   }
 

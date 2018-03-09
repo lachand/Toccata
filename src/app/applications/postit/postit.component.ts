@@ -3,11 +3,11 @@ import {jqxKanbanComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxkanb
 import {AppsService} from '../../services/apps.service';
 import {ActivityService} from '../../services/activity.service';
 import {DatabaseService} from '../../services/database.service';
-import {isNullOrUndefined} from "util";
-import {ViewRef_} from "@angular/core/src/view";
-import {CreateEditPostitComponent} from "../../activities/createEditPostit/createEditPostit.component";
-import {MatDialog} from "@angular/material";
-import {LoggerService} from "../../services/logger.service";
+import {isNullOrUndefined} from 'util';
+import {ViewRef_} from '@angular/core/src/view';
+import {CreateEditPostitComponent} from '../../activities/createEditPostit/createEditPostit.component';
+import {MatDialog} from '@angular/material';
+import {LoggerService} from '../../services/logger.service';
 
 @Component({
   selector: 'app-postit',
@@ -67,7 +67,6 @@ export class PostitComponent implements OnInit {
       case 'ui-le-frog':
       case 'metrodark':
       case 'orange':
-      case 'darkblue':
       case 'highcontrast':
       case 'ui-sunny':
       case 'ui-darkness':
@@ -117,7 +116,7 @@ export class PostitComponent implements OnInit {
                   id: change.doc._id,
                   state: change.doc.state,
                   label: change.doc.label
-                }
+                };
                 this.myKanban.addItem(postit);
                 this.ngOnInit();
               }

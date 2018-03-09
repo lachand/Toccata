@@ -4,9 +4,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
 import {DialogConfirmationComponent} from '../../dialogConfirmation/dialogConfirmation.component';
-import {DatabaseService} from "../../services/database.service";
-import {Location} from "@angular/common";
-import {LoggerService} from "../../services/logger.service";
+import {DatabaseService} from '../../services/database.service';
+import {Location} from '@angular/common';
+import {LoggerService} from '../../services/logger.service';
 
 @Component({
   selector: 'view-duplicates',
@@ -56,7 +56,7 @@ export class ViewDuplicatesComponent {
   }
 
   onHovering($event: Event) {
-    this.editActivity = "Editer l'activité";
+    this.editActivity = 'Editer l\'activité';
   }
 
   onUnovering($event: Event) {
@@ -64,7 +64,7 @@ export class ViewDuplicatesComponent {
   }
 
   onHoveringView($event: Event) {
-    this.viewActivity = "Voir l'activité";
+    this.viewActivity = 'Voir l\'activité';
   }
 
   onUnoveringView($event: Event) {
@@ -81,7 +81,7 @@ export class ViewDuplicatesComponent {
 
   duplicate_activity() {
     let activityId;
-    if(this.activityService.activityLoaded.type === 'Main'){
+    if (this.activityService.activityLoaded.type === 'Main'){
       activityId = this.activityService.activityLoaded._id;
     } else {
       activityId = this.activityService.activityLoaded.parent;

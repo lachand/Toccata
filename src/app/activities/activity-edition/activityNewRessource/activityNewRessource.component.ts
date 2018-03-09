@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {AppsService} from '../../../services/apps.service';
-import {LoggerService} from "../../../services/logger.service";
-import {ResourcesService} from "../../../services/resources.service";
+import {LoggerService} from '../../../services/logger.service';
+import {ResourcesService} from '../../../services/resources.service';
 
 @Component({
   selector: 'app-activity-new-ressource',

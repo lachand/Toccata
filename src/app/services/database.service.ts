@@ -25,8 +25,8 @@ export class DatabaseService {
 
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/abcde`, {
       auth: {
-        username: "root",
-        password: "mdproot"
+        username: 'root',
+        password: 'mdproot'
       },
     });
 
@@ -83,9 +83,9 @@ export class DatabaseService {
     }).on('change', change => {
       this.handleChange(change);
     }).on('paused', function (info) {
-      console.log("pause: ", info);
+      console.log('pause: ', info);
     }).on('active', function (info) {
-      console.log("active: ", info);
+      console.log('active: ', info);
     }).on('error', function (err) {
       console.log('activities: ', err);
     }).catch(err => {
@@ -175,7 +175,7 @@ export class DatabaseService {
         console.log(docs);
         const promises = docs.rows.map((doc) => {
           if (doc.doc.dbName === dbName) {
-            console.log("deleted_doc :", doc.doc);
+            console.log('deleted_doc :', doc.doc);
             doc.doc._deleted = true;
             return this.updateDocument(doc.doc);
           }

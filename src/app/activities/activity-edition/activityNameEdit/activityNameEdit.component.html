@@ -4,7 +4,7 @@
   <h3>
     <div>
       <div>
-        <activity-name class="activity-name" [activityId]="activityService.activityLoaded._id"></activity-name>
+        <activity-name class="activity-name" [activityId]="activityService.activityLoaded._id" (dblclick)="switch()"></activity-name>
       </div>
       <div>
         <mat-chip-list class="chip-list">

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserService} from '../../../services/user.service';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-participant-infos',

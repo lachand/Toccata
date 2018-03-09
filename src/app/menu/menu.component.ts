@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import {ActivityService} from '../services/activity.service';
 import {Location} from '@angular/common';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-menu',

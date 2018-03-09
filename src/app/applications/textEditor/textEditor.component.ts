@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ResourcesService} from "../../services/resources.service";
-import {AppsService} from "../../services/apps.service";
-import {LoggerService} from "../../services/logger.service";
-import {DatabaseService} from "../../services/database.service";
-import {ActivityService} from "app/services/activity.service";
+import {ResourcesService} from '../../services/resources.service';
+import {AppsService} from '../../services/apps.service';
+import {LoggerService} from '../../services/logger.service';
+import {DatabaseService} from '../../services/database.service';
+import {ActivityService} from 'app/services/activity.service';
 
 @Component({
   selector: 'app-text-editor',

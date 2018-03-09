@@ -5,7 +5,7 @@ import * as config from '../../variables';
 import {AppsService} from './apps.service';
 import {DatabaseService} from './database.service';
 import {ResourcesService} from './resources.service';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class ActivityService {
@@ -117,7 +117,7 @@ export class ActivityService {
           return this.userService.getParticipants(this.activityLoaded._id);
         })
         .then(() => {
-            this.changes.emit({doc:this.activityLoaded, type: 'ChangeActivity'});
+            this.changes.emit({doc: this.activityLoaded, type: 'ChangeActivity'});
             resolve(this.activityLoaded);
           }
         )
@@ -155,8 +155,8 @@ export class ActivityService {
   public createActivity(activityType) {
     let dbName = '';
     return new Promise((resolve, reject) => {
-      this.database.createDatabase('activity').then(newDatabase => {
-        dbName = newDatabase['name'].replace(`${config.HOST}${config.PORT}/`, '');
+      this.database.createDatabase('activity').then((newDatabase: string) => {
+        dbName = newDatabase;
         const activityToCreate = {
           _id: dbName,
           type: activityType,
@@ -290,7 +290,7 @@ export class ActivityService {
   }
 
   deleteActivity(activityId) {
-    console.log("delete activity");
+    console.log('delete activity');
   }
 
   getParticipants(activityId) {

@@ -7,8 +7,8 @@
       <div *ngIf="activityService.activityLoaded.type === 'Main'">
         <div class="activity-name">
       <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
-      <activity-name [activityId]="activityService.activityLoaded._id"
-      ></activity-name>
+      <app-activity-name-edit
+      ></app-activity-name-edit>
         </div>
         <div>
         <mat-chip-list class="chip-list">

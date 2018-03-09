@@ -8,8 +8,8 @@ PouchDB.plugin(require('pouchdb-authentication'));
 
 import { UserService } from '../services/user.service';
 import {ActivityService} from 'app/services/activity.service';
-import {DatabaseService} from "../services/database.service";
-import {LoggerService} from "../services/logger.service";
+import {DatabaseService} from '../services/database.service';
+import {LoggerService} from '../services/logger.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   loading: boolean;
   hide: boolean;
   errorUsernamePassword: boolean;
-  errorConnexionImpossible: boolean
+  errorConnexionImpossible: boolean;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
               public activityService: ActivityService,

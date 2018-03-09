@@ -1,7 +1,7 @@
 import {DatabaseService} from './database.service';
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {LoggerService} from './logger.service';
-import {ActivityService} from "app/services/activity.service";
+import {ActivityService} from 'app/services/activity.service';
 
 @Injectable()
 export class ResourcesService {
@@ -13,7 +13,7 @@ export class ResourcesService {
   /**
    * Get informations about a specific resource
    * @param resourceId
-   */AppsService
+   */AppsService;
 
   constructor(public database: DatabaseService, private logger: LoggerService) {
     this.resources = {};
@@ -58,7 +58,7 @@ export class ResourcesService {
       let activity;
       let resourceToAdd;
       return this.database.getDocument(activityId).then(res => {
-        activity = res
+        activity = res;
         if (resource.type === 'url') {
           resourceToAdd = {
             _id: `resource_${resource.name}`,

@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {ActivityNewAppComponent} from '../activityNewApp/activityNewApp.component';
 import {UserService} from '../../../services/user.service';
-import {ResourcesService} from "../../../services/resources.service";
+import {ResourcesService} from '../../../services/resources.service';
 
 @Component({
   selector: 'app-activity-resource-view',

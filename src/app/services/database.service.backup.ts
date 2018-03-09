@@ -24,8 +24,8 @@ export class DatabaseService {
 
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/user_list`, {
       auth: {
-        username: "root",
-        password: "mdproot"
+        username: 'root',
+        password: 'mdproot'
       }
     });
     this.db = new PouchDB('myLocalDatabase');
@@ -38,12 +38,12 @@ export class DatabaseService {
       timeout: false,
       heartbeat: false
     }).on('change', change => {
-      console.log("changes: ", change);
+      console.log('changes: ', change);
       this.handleChange(change);
     }).on('paused', function (info) {
-      console.log("pause: ", info);
+      console.log('pause: ', info);
     }).on('active', function (info) {
-      console.log("active: ", info);
+      console.log('active: ', info);
     }).on('error', function (err) {
       console.log('activities: ', err);
     }).catch(err => {
@@ -101,8 +101,8 @@ export class DatabaseService {
       } else {
         const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${databaseName}`, {
           auth: {
-            username: "root",
-            password: "mdproot"
+            username: 'root',
+            password: 'mdproot'
           }
         });
         dbToAdd.info()
@@ -132,8 +132,8 @@ export class DatabaseService {
       const newDbName = `${databaseName}_${guid}`;
       const dbToAdd = new PouchDB(`${config.HOST}${config.PORT}/${newDbName}`, {
         auth: {
-          username: "root",
-          password: "mdproot"
+          username: 'root',
+          password: 'mdproot'
         }
       });
       dbToAdd.info()

@@ -1,12 +1,12 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
-import {MatChip, MatStepper} from "@angular/material";
-import {isNullOrUndefined} from "util";
-import {AppsService} from "../../../services/apps.service";
+import {MatChip, MatStepper} from '@angular/material';
+import {isNullOrUndefined} from 'util';
+import {AppsService} from '../../../services/apps.service';
 import {Location} from '@angular/common';
-import {LoggerService} from "../../../services/logger.service";
-import {UserService} from "app/services/user.service";
+import {LoggerService} from '../../../services/logger.service';
+import {UserService} from 'app/services/user.service';
 
 @Component({
   selector: 'app-activity-edit',
@@ -113,7 +113,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   onHovering($event: Event) {
-    this.editActivity = "Editer l'activité";
+    this.editActivity = 'Editer l\'activité';
   }
 
   onUnovering($event: Event) {
@@ -121,7 +121,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   onHoveringGroupView($event: Event) {
-    this.viewGroup = "Voir les groupes";
+    this.viewGroup = 'Voir les groupes';
   }
 
   onUnoveringGroupView($event: Event) {
@@ -129,7 +129,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   onHoveringShare($event: Event) {
-    this.shareActivity = "Partager l'activité";
+    this.shareActivity = 'Partager l\'activité';
   }
 
   onUnoveringShare($event: Event) {

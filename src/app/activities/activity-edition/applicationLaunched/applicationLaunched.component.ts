@@ -1,9 +1,9 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
-import {ViewRef_} from "@angular/core/src/view";
-import {isNullOrUndefined} from "util";
-import {LoggerService} from "../../../services/logger.service";
-import {ActivityService} from "../../../services/activity.service";
+import {ViewRef_} from '@angular/core/src/view';
+import {isNullOrUndefined} from 'util';
+import {LoggerService} from '../../../services/logger.service';
+import {ActivityService} from '../../../services/activity.service';
 
 @Component({
   selector: 'application-launched',

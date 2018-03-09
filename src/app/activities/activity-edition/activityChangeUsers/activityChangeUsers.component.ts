@@ -3,7 +3,7 @@ import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialogRef} from '@angular/material';
 import {UserService} from '../../../services/user.service';
-import {LoggerService} from "../../../services/logger.service";
+import {LoggerService} from '../../../services/logger.service';
 
 @Component({
   selector: 'app-activity-change-users',

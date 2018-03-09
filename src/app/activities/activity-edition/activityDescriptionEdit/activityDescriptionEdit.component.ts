@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
-import {LoggerService} from "../../../services/logger.service";
+import {LoggerService} from '../../../services/logger.service';
 
 @Component({
   selector: 'app-activity-description-edit',

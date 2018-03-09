@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
-import {AppsService} from "app/services/apps.service";
+import {AppsService} from 'app/services/apps.service';
 
 @Component({
   selector: 'app-resource-infos',

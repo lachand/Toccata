@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
-import {LoggerService} from "../../services/logger.service";
-import {isNullOrUndefined} from "util";
+import {LoggerService} from '../../services/logger.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-activity-infos',

@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog} from '@angular/material';
-import {DialogConfirmationComponent} from "../../dialogConfirmation/dialogConfirmation.component";
+import {DialogConfirmationComponent} from '../../dialogConfirmation/dialogConfirmation.component';
 
 @Component({
   selector: 'create-edit-postit',

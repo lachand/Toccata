@@ -1,11 +1,11 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
-import {ViewRef_} from "@angular/core/src/view";
-import {isNullOrUndefined} from "util";
-import {LoggerService} from "../../../services/logger.service";
-import {ActivityService} from "../../../services/activity.service";
-import {ResourcesService} from "../../../services/resources.service";
-import {DomSanitizer} from "@angular/platform-browser";
+import {ViewRef_} from '@angular/core/src/view';
+import {isNullOrUndefined} from 'util';
+import {LoggerService} from '../../../services/logger.service';
+import {ActivityService} from '../../../services/activity.service';
+import {ResourcesService} from '../../../services/resources.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'resource-opened',
@@ -70,7 +70,7 @@ export class ResourceOpenedComponent implements OnInit {
       if (this.resource.type === 'url') {
         this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.resource.url);
       } else {
-        this.resourcesService.getResourceData(this.resourceId, "filename").then(ressource => {
+        this.resourcesService.getResourceData(this.resourceId, 'filename').then(ressource => {
           this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(ressource));
           //const iframe = document.getElementById(`iframe_${this.resourceId}`);
           //console.log(iframe.document.document.body.scrollWidth/iframe.contentWindow.document.body.scrollHeight);

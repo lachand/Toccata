@@ -1,8 +1,8 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
-import {ActivityService} from "../../../services/activity.service";
-import {isNullOrUndefined} from "util";
-import {ViewRef_} from "@angular/core/src/view";
+import {ActivityService} from '../../../services/activity.service';
+import {isNullOrUndefined} from 'util';
+import {ViewRef_} from '@angular/core/src/view';
 
 @Component({
   selector: 'postit-infos',

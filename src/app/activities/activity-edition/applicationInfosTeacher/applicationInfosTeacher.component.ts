@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
-import {MatListItem} from "@angular/material";
-import {ViewRef_} from "@angular/core/src/view";
+import {MatListItem} from '@angular/material';
+import {ViewRef_} from '@angular/core/src/view';
 
 @Component({
   selector: 'application-infos-teacher',
