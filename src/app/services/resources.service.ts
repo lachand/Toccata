@@ -5,16 +5,17 @@ import {ActivityService} from 'app/services/activity.service';
 
 @Injectable()
 export class ResourcesService {
+
   resources: any;
 
   @Output()
   changes = new EventEmitter();
 
   /**
-   * Get informations about a specific resource
-   * @param resourceId
-   */AppsService;
-
+   * Construct the service to edit resources
+   * @param {DatabaseService} The database where resources are
+   * @param {LoggerService} A logger for research purpose
+   */
   constructor(public database: DatabaseService, private logger: LoggerService) {
     this.resources = {};
     this.database.changes.subscribe(
@@ -28,7 +29,7 @@ export class ResourcesService {
 
   /**
    * Get all resources of the current activity
-   * @param activityId
+   * @param activityId The Id of the activity to get resources
    * @returns {Promise<any>}
    */
   public getResources(activityId) {
@@ -50,8 +51,8 @@ export class ResourcesService {
 
   /**
    * Create a new resource and upload it
-   * @param resource
-   * @param activityId
+   * @param resource The resource content to create
+   * @param activityId The activity where to add the resource
    */
   createResource(resource, activityId) {
     return new Promise(resolve => {
@@ -101,7 +102,7 @@ export class ResourcesService {
 
   /**
    * Get informations about a specific resource
-   * @param resourceId
+   * @param resourceId The resource to get
    */
   getResourceInfos(resourceId: any) {
     return new Promise(resolve => {
@@ -129,12 +130,22 @@ export class ResourcesService {
     });
   }
 
+  /**
+   * Delete a specified resource
+   * @param resourceId The Id of the resource to delete
+   * @returns {Promise<any>}
+   */
   deleteResource(resourceId) {
     return new Promise( resolve => {
       return this.database.removeDocument(resourceId);
     });
   }
 
+  /**
+   * Get a resource
+   * @param resource The resource to get from the database
+   * @returns {Promise<any>} The resource obtained
+   */
   getResource(resource) {
     return new Promise(resolve => {
       return this.database.getDocument(resource).then(res => {
@@ -143,6 +154,12 @@ export class ResourcesService {
     });
   }
 
+  /**
+   * Get data of a specified resource
+   * @param resourceId The resource Id of data to get
+   * @param attachmentId The attachement Id linked to resource
+   * @returns {Promise<any>} The raw attachement of a resource
+   */
   getResourceData(resourceId: any, attachmentId: any) {
     return new Promise(resolve => {
       return this.database.db.getAttachment(resourceId, attachmentId).then(res => {
@@ -153,8 +170,8 @@ export class ResourcesService {
 
   /**
    * Open a specified resource
-   * @param resourceId
-   * @returns {Promise<any>}
+   * @param resourceId The Id of the resource to open
+   * @returns {Promise<any>} The opened resource
    */
   openResource(resourceId: any) {
     return new Promise(resolve => {
@@ -177,8 +194,8 @@ export class ResourcesService {
 
   /**
    * Close a specified resource
-   * @param resourceId
-   * @returns {Promise<any>}
+   * @param resourceId The resource to close
+   * @returns {Promise<any>} The closed resource
    */
   closeResource(resourceId: any) {
     return new Promise(resolve => {
@@ -199,4 +216,3 @@ export class ResourcesService {
     });
   }
 }
-

@@ -75,7 +75,7 @@ export class ChronometreComponent implements OnInit {
   handleChange(change) {
     this.timer.stop();
     const actualTime = Date.now();
-    const timeChronometer;
+    let timeChronometer;
     this.chronometre = change;
     this.timeLeft = this.timeInMiliSeconds(this.chronometre.timeLeft);
     if (this.chronometre.running) {
