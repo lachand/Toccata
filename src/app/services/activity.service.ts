@@ -19,6 +19,14 @@ export class ActivityService {
 
   @Output() changes = new EventEmitter();
 
+  /**
+   * Construct the activity service for activity management
+   * @param {UserService} userService The user logged-in
+   * @param {AppsService} apps The service for applications management
+   * @param {ResourcesService} resourcesService The service for resources management
+   * @param {DatabaseService} database The service for database management
+   * @param {AppsService} appsService The service for applications management >DUPLICATE TO DELETE<
+   */
   constructor(public userService: UserService,
               public apps: AppsService,
               public resourcesService: ResourcesService,
@@ -59,6 +67,12 @@ export class ActivityService {
     this.activityLoadedChild = [];
   }
 
+  /**
+   * Get index of document in an array
+   * @param document The document to retrieve index
+   * @param array The arry of documents
+   * @returns {number} The index of the document
+   */
   getIndexOf(document, array) {
     let i = 0;
     for (const element of array) {
@@ -70,6 +84,10 @@ export class ActivityService {
     return -1;
   }
 
+  /**
+   * List all activities of user
+   * @returns {any} All activities of user
+   */
   public getUserActivities() {
 
     const name = this.user.id;
@@ -89,6 +107,9 @@ export class ActivityService {
     }).catch(console.log.bind(console));
   }
 
+  /**
+   * Unload the current activity
+   */
   public unloadActivity() {
     this.activityLoaded = null;
     this.activitiesList = [];
@@ -98,8 +119,8 @@ export class ActivityService {
 
   /**
    * Load an activity
-   * @param activity_id
-   * @returns {Promise<any>}
+   * @param activity_id The activity to load
+   * @returns {Promise<any>} The activity loaded
    */
   public load_activity(activity_id) {
     return new Promise(resolve => {
@@ -128,6 +149,11 @@ export class ActivityService {
     });
   }
 
+  /**
+   * Change the current activity
+   * @param activityId The activity to load
+   * @returns {Promise<any>} The activity loaded
+   */
   setCurrentActivity(activityId) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(doc => {
@@ -149,8 +175,8 @@ export class ActivityService {
   }
 
   /**
-   * Create a new activity empty activity
-   * @returns {Promise<any>}
+   * Create a new empty activity
+   * @returns {Promise<any>} The activity created
    */
   public createActivity(activityType) {
     let dbName = '';
@@ -191,7 +217,7 @@ export class ActivityService {
 
   /**
    * Get list of activities and connect to databases
-   * @returns {any}
+   * @returns {any} List of activities
    */
   public getActivities() {
     const name = this.user.id;
@@ -220,8 +246,8 @@ export class ActivityService {
 
   /**
    * Get informations about an activity
-   * @param activityId
-   * @returns {Promise<any>}
+   * @param activityId The activity to retrieve informations
+   * @returns {Promise<any>} Informations about activity
    */
   public getActivityInfos(activityId) {
     return new Promise(resolve => {
@@ -246,8 +272,8 @@ export class ActivityService {
 
   /**
    * Create an activity which is a child of the current activity
-   * @param parentId
-   * @returns {Promise<any>}
+   * @param parentId The parent activity
+   * @returns {Promise<any>} The created activity
    */
   public createSubActivity(parentId) {
     return new Promise(resolve => {
@@ -289,14 +315,28 @@ export class ActivityService {
     });
   }
 
+  /**
+   * Delete a specified activity
+   * @param activityId The Id of the activity to delete
+   */
   deleteActivity(activityId) {
     console.log('delete activity');
   }
 
+  /**
+   * Get all participants of an activity
+   * @param activityId The activity to retrieve participants
+   * @returns {any | Promise<any>} List of participants
+   */
   getParticipants(activityId) {
     return this.user.getParticipants(activityId);
   }
 
+  /**
+   * Delete a specified activity
+   * @param activityId The activity to delete
+   * @returns {Promise<any>} The deleted activity
+   */
   public delete_activity(activityId: any) {
     const childs = [];
     let deletedActivity;
@@ -342,6 +382,11 @@ export class ActivityService {
     });
   }
 
+  /**
+   * Duplicate an activity
+   * @param activityId The activity to duplicate
+   * @returns {Promise<any>} The duplicated activity
+   */
   duplicate(activityId) {
     return new Promise((resolve, reject) => {
       let newActivityCreated;
@@ -368,6 +413,9 @@ export class ActivityService {
     });
   }
 
+  /**
+   * Unload activity before user logout
+   */
   logout() {
     this.unloadActivity();
     this.user.logout();
@@ -375,8 +423,8 @@ export class ActivityService {
 
   /**
    * Change the value corresponding of a key in an activity
-   * @param {string} key
-   * @param {String} value
+   * @param {string} key The key of change
+   * @param {String} value The new value
    */
   activityEdit(activityId: string, key: string, value: String) {
     return new Promise(resolve => {
@@ -397,7 +445,8 @@ export class ActivityService {
 
   /**
    * Add a specific user to the specified activity
-   * @param userName
+   * @param userName The user to add
+   * @param activityId The Id of the activity where change occurs
    */
   addUser(userName: any, activityId: any) {
     const tempThis = this;
@@ -427,7 +476,8 @@ export class ActivityService {
 
   /**
    * Remove a specific user to the specified activity
-   * @param userName
+   * @param userName The user to remove
+   * @param activityId The Id of the activity where change occurs
    */
   removeUser(userName: any, activityId: any) {
     let subactivities;
@@ -460,7 +510,7 @@ export class ActivityService {
 
   /**
    * Duplicate a specified activity in a new database
-   * @param activityId
+   * @param activityId The activity to duplicate
    */
   duplicateActivity(activityId: any) {
     return new Promise(resolve => {
@@ -529,6 +579,11 @@ export class ActivityService {
     });
   }
 
+  /**
+   * List all duplicates of an activity
+   * @param activityId The activity to list duplicates
+   * @returns {Promise<any>} The list of duplicates
+   */
   getActivityDuplicate(activityId: any) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
@@ -537,4 +592,3 @@ export class ActivityService {
     });
   }
 }
-

@@ -21,9 +21,9 @@ export class UserService {
 
   /**
    * Create new user in database
-   * @param {string} username
-   * @param {string} password
-   * @returns {Promise<any>}
+   * @param {string} username The username of the user
+   * @param {string} password The password of the user
+   * @returns {Promise<any>} The confirmation of creation
    */
   signup(username: string, password: string) {
     return new Promise((resolve, reject) => {
@@ -48,9 +48,9 @@ export class UserService {
 
   /**
    * Login an user
-   * @param username
-   * @param password
-   * @returns {Promise<any>}
+   * @param username The username to connect
+   * @param password The password of the user
+   * @returns {Promise<any>} The confirmation of connection
    */
   public login(username, password) {
     return new Promise((resolve, reject) => {
@@ -85,6 +85,9 @@ export class UserService {
     );
   }
 
+  /**
+   * Disconnect an user
+   */
   logout() {
     this.loggedIn = false;
     this.name = null;
@@ -94,18 +97,22 @@ export class UserService {
     this.participants = null;
   }
 
+  /**
+   * Check if an user is connected
+   * @returns {boolean} Whether the user is connected (true) or not (false)
+   */
   isLoggedIn() {
     return this.loggedIn;
   }
 
   /**
    * Create an user
-   * @param {string} username
-   * @param {string} name
-   * @param {string} surname
-   * @param {string} avatar
-   * @param isTeacher
-   * @returns {Promise<any>}
+   * @param {string} username The username of the user
+   * @param {string} name The name of the user
+   * @param {string} surname The surname of the user
+   * @param {string} avatar The avatar of the user
+   * @param isTeacher Whether the user is a teacher or not
+   * @returns {Promise<any>} The created user
    */
   createUser(username: string, name: string, surname: string, avatar: string, isTeacher: any) {
     return new Promise(resolve => {
@@ -137,7 +144,7 @@ export class UserService {
 
   /**
    * Get all available users
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} The list of users
    */
   getAllUsers() {
     return new Promise(resolve => {
@@ -154,8 +161,8 @@ export class UserService {
 
   /**
    * Get participants of a specific activity
-   * @param activityId
-   * @returns {Promise<any>}
+   * @param activityId The activity
+   * @returns {Promise<any>} The list of all participants of the activity
    */
   getParticipants(activityId) {
     return new Promise(resolve => {
@@ -179,7 +186,7 @@ export class UserService {
 
   /**
    * Get information about a specific participant
-   * @param participantId
+   * @param participantId The participant Id
    */
   getParticipantInfos(participantId: any) {
     return new Promise(resolve => {
@@ -196,7 +203,7 @@ export class UserService {
 
   /**
    * Add an activity to a specific user
-   * @param activityId
+   * @param activityId The activity Id to add
    */
   addActivity(activityId, userName) {
     return new Promise(resolve => {
@@ -220,7 +227,7 @@ export class UserService {
 
   /**
    * Remove an activity to a specific user
-   * @param activityId
+   * @param activityId The activity Id to remove
    */
   removeActivity(activityId, userName) {
     return new Promise(resolve => {

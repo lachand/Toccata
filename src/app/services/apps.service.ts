@@ -9,6 +9,11 @@ export class AppsService {
   @Output()
   changes = new EventEmitter();
 
+  /**
+   * Construct the service for applications management
+   * @param {Http} http
+   * @param {DatabaseService} databaseService The service for database management
+   */
   constructor(@Inject(Http) public http: Http, public databaseService: DatabaseService) {
     this.databaseService.changes.subscribe(
       (change) => {
@@ -23,8 +28,8 @@ export class AppsService {
 
   /**
    * Get all applications of the current activity
-   * @param activityId
-   * @returns {Promise<any>}
+   * @param activityId The activity Id
+   * @returns {Promise<any>} The list of all application of the activity
    */
   public getApplications(activityId) {
     return new Promise(resolve => {
@@ -45,9 +50,9 @@ export class AppsService {
 
   /**
    * Create an application to add to the current activity
-   * @param app
-   * @param dbName
-   * @returns {Promise<any>}
+   * @param app The application to ceate
+   * @param dbName The name of the activity database
+   * @returns {Promise<any>} The created applications
    */
   public createApp(app, activityId, dbName) {
     console.log('debug : ', app, dbName);
@@ -93,7 +98,7 @@ export class AppsService {
 
   /**
    * Get informations about a specific application
-   * @param applicationId
+   * @param applicationId The application Id
    */
   getApplicationInfos(applicationId: any) {
     console.log(applicationId);
@@ -112,40 +117,74 @@ export class AppsService {
     });
   }
 
+  /**
+   * Unload a specified application
+   * @param appId The application to unload
+   * @returns {number}
+   */
   public unloadApp(appId) {
     return 0;
   }
 
+  /**
+   * Load a specified application
+   * @param appId The application to load
+   * @returns {number}
+   */
   public loadApp(appId) {
     return 0;
   }
 
+  /**
+   * Get an application
+   * @param appId The application to get
+   * @returns {number}
+   */
   public getApp(appId) {
     return 0;
   }
 
+  /**
+   * Delete a specified application
+   * @param appId The application to delete
+   * @returns {Promise<any>} The dleted application
+   */
   public deleteApp(appId) {
     return new Promise( resolve => {
       return this.databaseService.removeDocument(appId);
     });
   }
 
+  /**
+   * Remove an activity
+   * @param activityId The activity to remove
+   * @returns {number}
+   */
   remove_activity(activityId) {
     return 0;
   }
 
+  /**
+   * Duplicate all application from an activity
+   * @param inputActivity The input activity
+   * @param outputActivity The output activity
+   * @returns {number}
+   */
   duplicateAppsFromActivity(inputActivity, outputActivity) {
     return 0;
   }
 
+  /**
+   * Flush applications when user disconnect
+   */
   logout() {
     this.applications = [];
   }
 
   /**
    * Get ressources of an application
-   * @param appId
-   * @returns {Promise<any>}
+   * @param appId Application Id
+   * @returns {Promise<any>} The list of resources
    */
   getRessources(appId) {
     return new Promise(resolve => {
@@ -165,7 +204,7 @@ export class AppsService {
 
   /**
    * Switch the status of the application
-   * @param applicationId
+   * @param applicationId The application Id
    */
   switchApplicationStatus(applicationId: any) {
     return new Promise(resolve => {
@@ -194,8 +233,8 @@ export class AppsService {
 
   /**
    * Get a specified application
-   * @param appId
-   * @returns {Promise<any>}
+   * @param appId The application Id
+   * @returns {Promise<any>} The retreived application
    */
   getApplication(appId: any) {
     console.log(appId);
@@ -212,8 +251,8 @@ export class AppsService {
 
   /**
    * update a specified application
-   * @param app
-   * @returns {Promise<any>}
+   * @param app The application to update
+   * @returns {Promise<any>} The updated application
    */
   updateApplication(app: any) {
     return new Promise(resolve => {
@@ -227,6 +266,11 @@ export class AppsService {
     });
   }
 
+  /**
+   * Close a specified application
+   * @param appId The application to close
+   * @returns {Promise<any>} The closed application
+   */
   closeApplication(appId: any) {
     return new Promise(resolve => {
       return this.databaseService.getDocument(appId).then(application => {
@@ -246,6 +290,11 @@ export class AppsService {
     });
   }
 
+  /**
+   * Open a specified application
+   * @param appId The application to open
+   * @returns {Promise<any>} The opened application
+   */
   openApplication(appId: any) {
     return new Promise(resolve => {
       return this.databaseService.getDocument(appId).then(application => {

@@ -17,6 +17,9 @@ export class DatabaseService {
   @Output()
   change = new EventEmitter();
 
+  /**
+   * Construct the service to communicate with the local and remote database
+   */
   constructor() {
 
     require('events').EventEmitter.defaultMaxListeners = 0;
@@ -96,7 +99,7 @@ export class DatabaseService {
   /**
    *
    * Handle changes
-   * @param change
+   * @param change change that occurs
    */
   handleChange(change) {
     this.changes.emit({type: change.doc.documentType, doc: change.doc});
@@ -104,9 +107,9 @@ export class DatabaseService {
 
   /**
    * Add a new external database to the local databse
-   * @param {string} databaseName
-   * @param {any} options
-   * @returns {Promise<any>}
+   * @param {string} databaseName The new database to add
+   * @param {any} options Options of replication
+   * @returns {Promise<any>} Return the database
    */
   addDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
@@ -133,6 +136,12 @@ export class DatabaseService {
     });
   }
 
+  /**
+   * Create a new database
+   * @param {string} databaseName The name of the database to create
+   * @param {any} options Otpions of replication
+   * @returns {Promise<any>} The created database
+   */
   createDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
       const guid = this.guid();
@@ -153,8 +162,8 @@ export class DatabaseService {
 
   /**
    * add document to a database
-   * @param document
-   * @returns {Promise<any>}
+   * @param document The document to add
+   * @returns {Promise<any>} The document added
    */
   addDocument(document: any) {
     return new Promise(resolve => {
@@ -169,6 +178,11 @@ export class DatabaseService {
     });
   }
 
+  /**
+   * Erase a database
+   * @param dbName The database to erase
+   * @returns {Promise<any>} The cofirmation of database deletion
+   */
   ereaseDatabase(dbName) {
     return new Promise(resolve => {
       return this.dbRemote.allDocs({include_docs: true}).then(docs => {
@@ -189,8 +203,8 @@ export class DatabaseService {
 
   /**
    * Get a document from a database
-   * @param {string} docId
-   * @returns {Promise<any>}
+   * @param {string} docId The Id of the document to retrieve
+   * @returns {Promise<any>} The document
    */
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
@@ -228,7 +242,7 @@ export class DatabaseService {
 
   /**
    * Update an existing document
-   * @param {any} doc
+   * @param {any} doc The document to update
    */
   updateDocument(doc: any) {
     return new Promise((resolve, reject) => {
@@ -246,7 +260,7 @@ export class DatabaseService {
 
   /**
    * Remove the specified document
-   * @param id
+   * @param id The document to remove
    */
   removeDocument(documentId) {
     return new Promise(resolve => {
@@ -297,6 +311,10 @@ export class DatabaseService {
     });
   }
 
+  /**
+   * Retrieve all documents of database
+   * @param dbName The name of the database where to retrieve al documents
+   */
   getAllDocs(dbName) {
     return this.db.find({
       selector: {
