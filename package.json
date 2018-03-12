@@ -1,6 +1,6 @@
 {
-  "name": "abcde.angular",
-  "version": "0.0.0",
+  "name": "Toccata",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "start": "node server && pouchdb-server -p 5984 -o 0.0.0.0",
@@ -19,7 +19,8 @@
     "ng": "ng",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "init": "npm install"
+    "init": "npm install",
+    "compodoc": "./node_modules/.bin/compodoc -p src/tsconfig.app.json"
   },
   "engines": {
     "node": "6.11.3"
