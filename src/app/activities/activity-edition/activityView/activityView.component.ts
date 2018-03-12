@@ -7,6 +7,7 @@ import {AppsService} from '../../../services/apps.service';
 import {Location} from '@angular/common';
 import {LoggerService} from '../../../services/logger.service';
 import {UserService} from 'app/services/user.service';
+import {ResourcesService} from '../../../services/resources.service';
 
 @Component({
   selector: 'app-activity-edit',
@@ -26,6 +27,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   constructor(public activityService: ActivityService,
               public router: Router,
               public appsService: AppsService,
+              public resourcesService: ResourcesService,
               private _location: Location,
               private ref: ChangeDetectorRef,
               private logger: LoggerService,

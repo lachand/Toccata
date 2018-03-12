@@ -69,7 +69,11 @@ export class DatabaseService {
 
     this.dbRemote.compact().then((res) => {
       return this.db.replicate.from(this.dbRemote, this.optionsReplication).on('complete', () => {
-        this.dbSync = this.db.sync(this.dbRemote, this.options);
+        console.log("begin sync");
+        return this.db.replicate.to(this.dbRemote).on('complete', () => {
+          console.log("sync complete");
+          this.dbSync = this.db.sync(this.dbRemote, this.options);
+        });
       });
       })
       .catch(err => {
@@ -217,7 +221,7 @@ export class DatabaseService {
           resolve(result);
         })
         .catch(err => {
-          console.log(`Error in database service whith call to getDocument:
+          console.log(`Error in database service whith call to getDocument ${docId}:
           ${err}`);
           reject(err);
         });

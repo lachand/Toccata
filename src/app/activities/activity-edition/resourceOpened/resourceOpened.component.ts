@@ -21,11 +21,18 @@ export class ResourceOpenedComponent implements OnInit {
   el: HTMLFrameElement;
   reloaded: boolean;
 
+  /**
+   * Construction of resource page
+   * @param {ChangeDetectorRef} ref Detects changes on resource
+   * @param {LoggerService} logger Logger for research purpose
+   * @param {ActivityService} activityService Service for activity management
+   * @param {ResourcesService} resourcesService Service for resources management
+   * @param {DomSanitizer} sanitizer Sanitizer for creating url
+   */
   constructor(private ref: ChangeDetectorRef,
               private logger: LoggerService, private activityService: ActivityService, private resourcesService: ResourcesService,
               private sanitizer: DomSanitizer) {
     this.resourcesService.changes.subscribe(change => {
-      console.log(change);
       this.reloaded = false;
       if (this.resourceId === change.doc._id) {
         this.resource = change.doc;
@@ -33,12 +40,16 @@ export class ResourceOpenedComponent implements OnInit {
         if (this.ref !== null &&
           this.ref !== undefined &&
           !(this.ref as ViewRef_).destroyed) {
-          this.ref.detectChanges();
+          //this.ref.detectChanges();
         }
       }
     });
   }
 
+  /**
+   * Resize an iframe
+   * @param obj The iframe to resize
+   */
   resizeIframe(obj) {
     if (!this.reloaded) {
       const iframe = document.getElementById(`iframe_${this.resourceId}`);
@@ -58,17 +69,29 @@ export class ResourceOpenedComponent implements OnInit {
     }
   }
 
+  /**
+   * Change element of iframe at loading
+   * @param {Event} ev
+   */
   onload(ev: Event) {
     this.el = <HTMLFrameElement>ev.srcElement;
     console.log(ev.target);
     console.log(ev.target);
   }
 
+  /**
+   * Get informations about resource and create a page for the resource
+   */
   ngOnInit(): void {
+    console.log(this.resourceId);
     this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
+      console.log(resourceInfos);
       this.resource = resourceInfos;
+      console.log(this.resource.status);
       if (this.resource.type === 'url') {
         this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.resource.url);
+        console.log(this.myUrl);
+        this.ref.detectChanges();
       } else {
         this.resourcesService.getResourceData(this.resourceId, 'filename').then(ressource => {
           this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(ressource));
@@ -79,6 +102,9 @@ export class ResourceOpenedComponent implements OnInit {
     });
   }
 
+  /**
+   * Close the resource
+   */
   close() {
     this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.resourceId, 'resource closed');
     this.resourcesService.closeResource(this.resourceId).then(resourceInfos => {
@@ -86,6 +112,11 @@ export class ResourceOpenedComponent implements OnInit {
     });
   }
 
+  /**
+   * Check if an element is null or undefined
+   * @param elmt The element to check
+   * @returns {boolean} return if an element is null or undefined (true) or not (false)
+   */
   isNullOrUndefined(elmt) {
     return isNullOrUndefined(elmt);
   }
