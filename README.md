@@ -2,6 +2,19 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.2.
 
+## Installation
+
+### Requirements
+
+You need to have node and npm install on your computer
+```sh
+# Debian based
+sudo apt install node
+
+# Fedora based
+sudo dnf install node
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
