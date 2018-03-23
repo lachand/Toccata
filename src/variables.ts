@@ -2,12 +2,12 @@
  * Host of the couchdb server
  * @type {string} Host of the couchdb server
  */
-export const HOST = 'http://37.59.63.190';
+export const HOST = '';
 /**
  * Port of the couchdb server
  * @type {string} Port of the couchdb server
  */
-export const PORT = ':8080';
+export const PORT = '';
 /**
  * Username of the couchdb server
  * @type {string} Username of the couchdb server
