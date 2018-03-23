@@ -6,7 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Requirements
 
-You need to have at least node 6.9 and npm install on your computer
+You need to have at least node 6.9 and npm installed on your computer
 ```sh
 # Debian based (no root needed)
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
@@ -14,6 +14,13 @@ export NVM_DIR="$HOME/.nvm"
 nvm install node
 npm install -g @angular/cli
 ```
+
+You also need to have a CHouchDB installed on your computer
+[http://docs.couchdb.org/en/2.1.1/install/unix.html]
+
+##?Connection between CouchDB and Toccata
+
+You need to change values in variables.ts according to your CouchDB configuration (host,port,root username and user password)
 
 ## Development server
 

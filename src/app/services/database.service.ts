@@ -28,8 +28,8 @@ export class DatabaseService {
 
     this.dbRemote = new PouchDB(`${config.HOST}${config.PORT}/abcde`, {
       auth: {
-        username: 'root',
-        password: 'mdproot'
+        username: `${config.USERNAME}`,
+        password: `${config.PASSWORD}`
       },
     });
 
