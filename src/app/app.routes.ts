@@ -10,7 +10,6 @@ import {ActivityViewComponent} from './activities/activity-edition/activityView/
 import {ViewDuplicatesComponent} from './activities/viewDuplicates/viewDuplicates.component';
 
 export const routes = [
-//  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
   {path: 'activities', component: MyActivitiesComponent},
   {path: '', redirectTo: '/activities', pathMatch: 'full'},
