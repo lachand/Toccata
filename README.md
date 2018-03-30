@@ -1,6 +1,6 @@
 # Toccata
 
-This project is a research project financed buy the REPI project [http://www.repi-recherche.com/]
+This project is a research project financed buy the REPI project http://www.repi-recherche.com/
 
 ## Screenshots
 ![Teacher view during activity scripting](https://raw.githubusercontent.com/lachand/Toccata/master/images/edit.png)
@@ -23,12 +23,11 @@ nvm install node
 npm install -g @angular/cli
 ```
 
-You also need to have a CHouchDB installed on your computer
-[http://docs.couchdb.org/en/2.1.1/install/unix.html]
+You also need to have a CHouchDB installed on your computer http://docs.couchdb.org/en/2.1.1/install/unix.html
 
 ### CouchDB database
 
-You need to have a working CouchDB [http://docs.couchdb.org/en/2.1.1/install/index.html] with two database :
+You need to have a working CouchDB http://docs.couchdb.org/en/2.1.1/install/index.html with two database :
 - One named 'abcde' for data storage
 - One named 'user_list' for username storage
 
