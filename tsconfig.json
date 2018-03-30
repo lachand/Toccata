@@ -16,5 +16,8 @@
       "es2016",
       "dom"
     ]
-  }
+  },
+  "include": [ "src/**/*.ts" ],
+  "files" : ["node_modules/jqwidgets-scripts/jqwidgets-ts/angular_jqxkanban.ts",
+    "node_modules/jqwidgets-scripts/jqwidgets-ts/angular_jqxsplitter.ts"]
 }
