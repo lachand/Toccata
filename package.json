@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
+    "config": "ts-node ./scripts/set-env.ts",
     "start": "node server.js",
-    "build": "ng build",
+    "build": "npm run config -- --environment=prod && ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
