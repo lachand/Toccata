@@ -1,6 +1,14 @@
 # Toccata
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.2.
+This project is a research project financed buy the REPI project [http://www.repi-recherche.com/]
+
+## Screenshots
+
+## Publications
+Here is the list of publications related to our work in the REPI project :
+![Teacher view during activity scripting][images/edit.png]
+![Student view during activity conduction][images/conduct.png]
+![Teacher overview of groups][images/manage.png]
 
 ## Installation
 
@@ -18,15 +26,25 @@ npm install -g @angular/cli
 You also need to have a CHouchDB installed on your computer
 [http://docs.couchdb.org/en/2.1.1/install/unix.html]
 
-##?Connection between CouchDB and Toccata
+### CouchDB database
 
-You need to change values in variables.ts according to your CouchDB configuration (host,port,root username and user password)
+You need to have a working CouchDB [http://docs.couchdb.org/en/2.1.1/install/index.html] with two database :
+- One named 'abcde' for data storage
+- One named 'user_list' for username storage
+
+###Connection between CouchDB and Toccata
+
+You need to create the following environment variables in your system according to your CouchDB configuration :
+- URL_DB
+- PORT_DB
+- USERNAME_DB
+- PASSWORD_DB
 
 ## Development server
 
 Run `npm install --dev` to install all dependencies
 
-Run `ng serve --aot` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
