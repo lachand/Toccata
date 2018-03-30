@@ -3,12 +3,12 @@
 This project is a research project financed buy the REPI project [http://www.repi-recherche.com/]
 
 ## Screenshots
-
-## Publications
-Here is the list of publications related to our work in the REPI project :
 ![Teacher view during activity scripting](https://raw.githubusercontent.com/lachand/Toccata/master/images/edit.png)
 ![Student view during activity conduction](https://raw.githubusercontent.com/lachand/Toccata/master/images/conduct.png)
 ![Teacher overview of groups](https://raw.githubusercontent.com/lachand/Toccata/master/images/manage.png)
+
+## Publications
+Here is the list of publications related to our work in the REPI project :
 
 ## Installation
 
