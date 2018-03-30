@@ -26,6 +26,8 @@ export class DatabaseService {
 
     PouchDB.plugin(PouchdbFind);
 
+    console.log(process.env);
+
     this.dbRemote = new PouchDB(`${process.env.HOST}${process.env.PORT}/abcde`, {
       auth: {
         username: `${process.env.USERNAME}`,
