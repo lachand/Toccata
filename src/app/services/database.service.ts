@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import * as config from 'variables';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
+import {environment} from "environments/environment.prod";
 
 @Injectable()
 export class DatabaseService {
@@ -26,12 +26,12 @@ export class DatabaseService {
 
     PouchDB.plugin(PouchdbFind);
 
-    console.log(process.env);
+    console.log(environment);
 
-    this.dbRemote = new PouchDB(`${process.env.HOST}${process.env.PORT}/abcde`, {
+    this.dbRemote = new PouchDB(`${environment.URL_DB}${environment.PORT_DB}/abcde`, {
       auth: {
-        username: `${process.env.USERNAME}`,
-        password: `${process.env.PASSWORD}`
+        username: `${environment.USERNAME_DB}`,
+        password: `${environment.PASSWORD_DB}`
       },
     });
 

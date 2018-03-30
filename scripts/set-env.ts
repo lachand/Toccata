@@ -15,10 +15,10 @@ const targetPath = `./src/environments/environment.${environment}.ts`;
 const envConfigFile = `
 export const environment = {
   production: ${isProd},
-  URL: "${process.env.URL}",
-  PORT: "${process.env.PORT}",
-  USERNAME: "${process.env.USERNAME}",
-  PASSWORD: "${process.env.PASSWORD}"
+  URL_DB: "${process.env.URL_DB}",
+  PORT_DB: "${process.env.PORT_DB}",
+  USERNAME_DB: "${process.env.USERNAME_DB}",
+  PASSWORD_DB: "${process.env.PASSWORD_DB}"
 };
 `
 writeFile(targetPath, envConfigFile, function (err) {

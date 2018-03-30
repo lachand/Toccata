@@ -1,7 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {UserService} from './user.service';
 
-import * as config from '../../variables';
 import {AppsService} from './apps.service';
 import {DatabaseService} from './database.service';
 import {ResourcesService} from './resources.service';
