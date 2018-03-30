@@ -31,7 +31,7 @@ You need to have a working CouchDB http://docs.couchdb.org/en/2.1.1/install/inde
 - One named 'abcde' for data storage
 - One named 'user_list' for username storage
 
-###Connection between CouchDB and Toccata
+### Connection between CouchDB and Toccata
 
 You need to create the following environment variables in your system according to your CouchDB configuration :
 - URL_DB
