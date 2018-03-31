@@ -23,13 +23,19 @@ nvm install node
 npm install -g @angular/cli
 ```
 
-You also need to have a CHouchDB installed on your computer http://docs.couchdb.org/en/2.1.1/install/unix.html
+You also need to have a CouchDB installed on your computer http://docs.couchdb.org/en/2.1.1/install/unix.html
 
 ### CouchDB database
 
 You need to have a working CouchDB http://docs.couchdb.org/en/2.1.1/install/index.html with two database :
 - One named 'abcde' for data storage
 - One named 'user_list' for username storage
+
+## Development server
+
+Run `npm install --dev` to install all dependencies
+
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ### Connection between CouchDB and Toccata
 
@@ -38,12 +44,6 @@ You need to create the following environment variables in your system according 
 - PORT_DB
 - USERNAME_DB
 - PASSWORD_DB
-
-## Development server
-
-Run `npm install --dev` to install all dependencies
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
