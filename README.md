@@ -29,7 +29,6 @@ You also need to have a CouchDB installed on your computer http://docs.couchdb.o
 
 You need to have a working CouchDB http://docs.couchdb.org/en/2.1.1/install/index.html with two database :
 - One named 'abcde' for data storage
-- One named 'user_list' for username storage
 
 ## Development server
 

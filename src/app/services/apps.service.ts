@@ -1,5 +1,5 @@
 import {EventEmitter, Inject, Injectable, Output} from '@angular/core';
-import {Http} from '@angular/http';
+//import {Http} from '@angular/http';
 import {DatabaseService} from './database.service';
 
 @Injectable()
@@ -14,7 +14,8 @@ export class AppsService {
    * @param {Http} http
    * @param {DatabaseService} databaseService The service for database management
    */
-  constructor(@Inject(Http) public http: Http, public databaseService: DatabaseService) {
+  constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService) {
+
     this.databaseService.changes.subscribe(
       (change) => {
         if (change.type === 'Application') {
@@ -24,6 +25,7 @@ export class AppsService {
         }
       }
     );
+
   }
 
   /**
@@ -37,12 +39,16 @@ export class AppsService {
         .then(activity => {
           this.applications = activity['applicationList'];
           this.databaseService.getDocument(activityId).then( act => {
-            this.databaseService.getDocument( act['dbName']).then( parent => {
-              if (parent['applicationList'].length > 0) {
-                this.applications = this.applications.concat(parent['applicationList']);
-              }
-              resolve(this.applications);
-            });
+            if (act['dbName'] !== act['_id]'] ) {
+              this.databaseService.getDocument(act['dbName']).then(parent => {
+                if (parent['applicationList'].length > 0) {
+                  this.applications = this.applications.concat(parent['applicationList']);
+                  this.applications = this.applications.filter(this.onlyUnique);
+                  console.log(this.applications);
+                }
+              });
+            }
+            resolve(this.applications);
           });
         });
     });
@@ -80,8 +86,13 @@ export class AppsService {
       application.url = `https://annuel2.framapad.org/p/${guid}`;
     }
 
+    this.applications.push(app._id);
+
     return new Promise(resolve => {
       return this.databaseService.getDocument(activityId).then(activity => {
+        if (activity['applicationList'].indexOf(application._id) > -1) {
+          resolve("error");
+        }
         activity['applicationList'].push(application._id);
         return this.databaseService.addDocument(activity);
       })
@@ -312,5 +323,9 @@ export class AppsService {
           ${err}`);
         });
     });
+  }
+
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
   }
 }

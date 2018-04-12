@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
@@ -19,7 +19,8 @@ export class ActivityInfosComponent implements OnInit {
   constructor(public user: UserService,
               public activityService: ActivityService,
               public router: Router,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -31,6 +32,10 @@ export class ActivityInfosComponent implements OnInit {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
           this.activityInfos = activityInfos;
         });
+      }
+      console.log("change ref");
+      if (!this.ref['destroyed']) {
+        this.ref.markForCheck();
       }
     });
   }

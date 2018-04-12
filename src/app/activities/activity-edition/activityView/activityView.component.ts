@@ -35,7 +35,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';
-    if (this.activityService.activityLoaded.type === 'Main') {
+    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activitiesList.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
     } else {
       this.steps = this.activityService.sisters;
@@ -59,12 +59,14 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * Set the current step to 'undefined' if the current activity is the main activity
    */
   ngAfterViewInit(): void {
-    const activityId = this.activityService.activityLoaded.currentLoaded;
-    if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
-      this.stepper.selectedIndex = this.steps.indexOf(activityId);
-      this.activityService.load_activity(activityId).then(res => {
-        this.router.navigate(['activity_view/' + activityId]);
-      });
+    if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded)) {
+      const activityId = this.activityService.activityLoaded.currentLoaded;
+      if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
+        this.stepper.selectedIndex = this.steps.indexOf(activityId);
+        this.activityService.load_activity(activityId).then(res => {
+          this.router.navigate(['activity_view/' + activityId]);
+        });
+      }
     }
   }
 
@@ -139,9 +141,13 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   activityEdit() {
-    this.logger.log('OPEN', this.activityService.activityLoaded.parent, this.activityService.activityLoaded.parent, 'open activity edition');
-    this.activityService.load_activity(this.activityService.activityLoaded.parent).then(res => {
-      this.router.navigate(['activity_edit/' + this.activityService.activityLoaded.parent]);
-    });
+    if (this.activityService.activityLoaded.type === 'Main') {
+      this.router.navigate(['activity_edit/' + this.activityService.activityLoaded._id]);
+    } else {
+      this.logger.log('OPEN', this.activityService.activityLoaded.parent, this.activityService.activityLoaded.parent, 'open activity edition');
+      this.activityService.load_activity(this.activityService.activityLoaded.parent).then(res => {
+        this.router.navigate(['activity_edit/' + this.activityService.activityLoaded.parent]);
+      });
+    }
   }
 }

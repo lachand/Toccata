@@ -35,13 +35,13 @@ export class ActivityResourcesComponent {
 
   newResource() {
     const dialogRef = this.dialog.open(DialogNewRessourceComponent);
-    dialogRef.componentInstance.dialogRef = dialogRef;
+    //dialogRef.componentInstance.dialogRef = dialogRef;
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        dialogRef.close();
+      if (result === 'File') {
+        //dialogRef.close();
         document.getElementById('hiddenfile').click();
-      } else {
-        dialogRef.close();
+      } else if (result === 'Link') {
+        //dialogRef.close();
         const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent);
         dialogRefUrl.componentInstance.dialogRef = dialogRefUrl;
       }

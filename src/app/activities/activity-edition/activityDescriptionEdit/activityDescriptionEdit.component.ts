@@ -41,6 +41,14 @@ export class ActivityDescriptionEditComponent {
       disableNativeSpellChecker: false,
       uiColor: '#FAFAFA',
     };
+
+    this.activityService.changes.subscribe(change => {
+      //console.log('doc : ', change.doc);
+      //console.log('previous : ', this.activityService.activityLoaded);
+      if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded._id) {
+        this.description = change.doc.description;
+      }
+    });
   }
 
   switchDescription() {

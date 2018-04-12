@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -22,7 +22,16 @@ export class MyActivitiesComponent {
               public router: Router,
               dialog: MatDialog,
               public databaseService: DatabaseService,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private ref: ChangeDetectorRef) {
+    this.activityService.changes.subscribe(change => {
+      if (change.type === 'Activity') {
+        ("changes in activity");
+        if (!this.ref['destroyed']) {
+          this.ref.markForCheck();
+        }
+      }
+    });
     if (!user.loggedIn) {
       this.router.navigate(['login']);
     }
@@ -55,7 +64,7 @@ export class MyActivitiesComponent {
   newActivity() {
     this.activityService.createActivity('Main')
       .then(res => {
-        this.logger.log('CREATE', this.activityService.activityLoaded._id, res['id'], 'duplicate activity');
+        this.logger.log('CREATE', 'na', res['id'], 'duplicate activity');
         /**console.log(res['id']);
       this.activityService.user.db.get(this.user.id).then( res2 => {
         res2.activites.push({

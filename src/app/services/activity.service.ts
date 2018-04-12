@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {ChangeDetectorRef, EventEmitter, Injectable, Output} from '@angular/core';
 import {UserService} from './user.service';
 
 import {AppsService} from './apps.service';
@@ -27,29 +27,35 @@ export class ActivityService {
    * @param {AppsService} appsService The service for applications management >DUPLICATE TO DELETE<
    */
   constructor(public userService: UserService,
-              public apps: AppsService,
               public resourcesService: ResourcesService,
               public database: DatabaseService,
               public appsService: AppsService) {
     this.database.changes.subscribe(
       (change) => {
+        console.log("debug");
         if (change.type === 'Activity') {
           let finded = false;
+          console.log(change.doc);
           for (const user of change.doc.userList) {
             if (user === this.userService.id) {
+              console.log(user, this.userService);
               finded = true;
             }
           }
+          // DEBUG
+          finded = true;
+          console.log(finded);
           if (change.doc.type === 'Main' && finded) {
             this.changes.emit({doc: change.doc, type: 'Main'});
             if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
               (change.doc.master === true )) {
-            if (this.activitiesList.indexOf(change.doc._id) === -1) {
-              this.activitiesList.push(change.doc._id);
-            }
-            if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
-              this.load_activity(change.doc._id);
-            }
+              if (this.activitiesList.indexOf(change.doc._id) === -1) {
+                this.activitiesList.push(change.doc._id);
+              }
+              console.log(this.activityLoaded._id, change.doc._id);
+              if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
+                this.load_activity(change.doc._id);
+              }
             }
           } else if (finded) {
             this.changes.emit({doc: change.doc, type: 'Sequence'});
@@ -57,6 +63,7 @@ export class ActivityService {
               this.load_activity(change.doc._id);
             }
           }
+          this.changes.emit({doc: change.doc, type: 'Activity'});
         }
       }
     );
@@ -113,7 +120,7 @@ export class ActivityService {
     this.activityLoaded = null;
     this.activitiesList = [];
     this.activityLoadedChild = [];
-    this.apps.logout();
+    this.appsService.logout();
   }
 
   /**
@@ -123,6 +130,7 @@ export class ActivityService {
    */
   public load_activity(activity_id) {
     return new Promise(resolve => {
+      console.log("reloading the activity");
       this.database.getDocument(activity_id)
         .then((result) => {
           this.sisters = this.activityLoadedChild;
@@ -138,6 +146,7 @@ export class ActivityService {
         })
         .then(() => {
             this.changes.emit({doc: this.activityLoaded, type: 'ChangeActivity'});
+            console.log(this.activityLoaded);
             resolve(this.activityLoaded);
           }
         )
@@ -190,6 +199,7 @@ export class ActivityService {
           userList: [this.user.id],
           subactivityList: [],
           resourceList: [],
+          currentLoaded: dbName,
           applicationList: [],
           createdAt: Date.now(),
           dbName: dbName,
@@ -202,10 +212,14 @@ export class ActivityService {
         })
         .then(userDoc => {
           userDoc['activityList'].push(dbName);
+          console.log('here');
           return this.database.updateDocument(userDoc);
         })
         .then(res => {
-          resolve(res);
+          console.log('resolved');
+          console.log(dbName, res);
+          this.activitiesList.push(dbName);
+          resolve(dbName);
         })
         .catch(err => {
           console.log(`Error in activity service whith call to createActivity:
@@ -305,6 +319,7 @@ export class ActivityService {
           return this.database.updateDocument(parent);
         })
         .then(() => {
+        this.activityLoadedChild.push(subActivity._id);
           resolve(subActivity);
         })
         .catch(err => {
@@ -341,18 +356,18 @@ export class ActivityService {
     let deletedActivity;
 
     return new Promise((resolve, reject) => {
-      this.db.get(activityId)
+      this.database.db.get(activityId)
         .then(res => {
           // A Nettoyer
           if (res.parent !== null) {
-            this.db.get(res.parent).then(parent => {
+            this.database.db.get(res.parent).then(parent => {
               parent.child.splice(parent.child.indexOf(activityId), 1);
-              this.db.put(parent);
+              this.database.db.put(parent);
             });
           }
           res._deleted = true;
           deletedActivity = res;
-          return this.db.query('byParent/by-parent',
+          return this.database.db.query('byParent/by-parent',
             {startkey: res._id, endkey: res._id});
         })
         .then(activityChilds => {
@@ -362,10 +377,10 @@ export class ActivityService {
           return this.user.remove_activity(activityId);
         })
         .then(res1 => {
-          return this.apps.remove_activity(activityId);
+          return this.appsService.remove_activity(activityId);
         })
         .then(res2 => {
-          return this.db.put(deletedActivity);
+          return this.database.db.put(deletedActivity);
         })
         .then(activityDeleted => {
           if (childs.length > 0) {
@@ -389,16 +404,16 @@ export class ActivityService {
   duplicate(activityId) {
     return new Promise((resolve, reject) => {
       let newActivityCreated;
-      this.db.get(activityId).then(res => {
+      this.database.db.get(activityId).then(res => {
         const newActivity = {
           'name': 'Copie de ' + res.name,
           'participants': [this.user.id]
         };
-        return this.db.post(newActivity);
+        return this.database.db.post(newActivity);
       })
         .then(activityCreated => {
           newActivityCreated = activityCreated;
-          return this.apps.duplicateAppsFromActivity(activityId, activityCreated.id);
+          return this.appsService.duplicateAppsFromActivity(activityId, activityCreated.id);
         })
         .then(() => {
           return this.user.addActivity(newActivityCreated.id, this.user.id);

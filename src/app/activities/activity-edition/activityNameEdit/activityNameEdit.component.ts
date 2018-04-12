@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
@@ -16,7 +16,14 @@ export class ActivityNameEditComponent {
   viewGroup: any;
   @Input() edit: boolean;
 
-  constructor(public activityService: ActivityService, private logger: LoggerService, private router: Router) {
+  constructor(public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef) {
+    this.activityService.changes.subscribe(change => {
+      if (change.type === 'Activity'){
+        if (!this.ref['destroyed']) {
+          this.ref.markForCheck();
+        }
+      }
+    });
     this.nameEdition = false;
     this.appName = '';
     this.viewActivity = '';

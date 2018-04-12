@@ -29,6 +29,6 @@ export class ActivityAppsEditComponent {
   }
 
   private deleteApplication(appId) {
-    this.activityService.apps.deleteApp(appId);
+    this.activityService.appsService.deleteApp(appId);
   }
 }

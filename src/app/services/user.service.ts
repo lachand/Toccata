@@ -130,11 +130,18 @@ export class UserService {
 
       return this.database.addDatabase(document.dbName)
         .then(databaseCreated => {
-          return this.database.addDocument(document);
-        })
+          return this.database.addDocument(document); })
         .then(res => {
-          resolve(res);
+          return this.database.getDocument('user_list');
         })
+        .then(user_list => {
+          console.log(user_list);
+          if (user_list['userList'].indexOf(document._id) === -1) {
+            user_list['userList'].push(document._id);
+          }
+          return this.database.updateDocument(user_list);
+        } )
+        .then( () => {resolve (document._id); })
         .catch(err => {
           console.log(`Error in user service whith call to createUser : 
         ${err}`);
@@ -182,6 +189,29 @@ export class UserService {
         ${err}`);
         });
     });
+  }
+
+  /**
+   * Delete a specified user
+   * @param userId The user to delete
+   */
+  deleteUser(userId) {
+    return new Promise(resolve => {
+      console.log("begin deletion");
+      return this.database.removeDocument(userId).then( () => {
+        console.log("doc deleted");
+        return this.database.getDocument('user_list');
+      })
+        .then( res => {
+          console.log("user list loaded");
+          res['userList'].splice( res['userList'].indexOf(userId), 1 );
+          return this.database.updateDocument(res);
+        })
+        .then( deletion => {
+          resolve(deletion);
+        });
+    });
+
   }
 
   /**

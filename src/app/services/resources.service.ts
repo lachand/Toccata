@@ -18,6 +18,7 @@ export class ResourcesService {
    */
   constructor(public database: DatabaseService, private logger: LoggerService) {
     this.resources = {};
+
     this.database.changes.subscribe(
       (change) => {
         if (change.type === 'Resource') {
@@ -38,12 +39,15 @@ export class ResourcesService {
         .then(activity => {
           this.resources = activity['resourceList'];
           this.database.getDocument(activityId).then( act => {
-            this.database.getDocument( act['dbName']).then( parent => {
-              if (parent['resourceList'].length > 0) {
-                this.resources = this.resources.concat(parent['resourceList']);
-              }
-              resolve(this.resources);
-            });
+            if (act['dbName'] !== act['_id']) {
+              this.database.getDocument(act['dbName']).then(parent => {
+                if (parent['resourceList'].length > 0) {
+                  this.resources = this.resources.concat(parent['resourceList']);
+                  this.resources = this.resources.filter(this.onlyUnique);
+                }
+              });
+            }
+            resolve(this.resources);
           });
         });
     });
@@ -60,6 +64,9 @@ export class ResourcesService {
       let resourceToAdd;
       return this.database.getDocument(activityId).then(res => {
         activity = res;
+        if (activity['resourceList'].indexOf(resource.name) > -1) {
+          resolve('error');
+        } else {
         if (resource.type === 'url') {
           resourceToAdd = {
             _id: `resource_${resource.name}`,
@@ -87,9 +94,10 @@ export class ResourcesService {
           };
         }
         return this.database.addDocument(resourceToAdd);
-      })
+      }})
         .then(res => {
           activity['resourceList'].push(`resource_${resource.name}`);
+          this.resources.push(`resource_${resource.name}`);
           return this.database.updateDocument(activity);
         })
         .then(() => resolve(resourceToAdd))
@@ -214,5 +222,9 @@ export class ResourcesService {
           ${err}`);
         });
     });
+  }
+
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
   }
 }

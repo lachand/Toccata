@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../../services/user.service';
@@ -14,7 +14,16 @@ export class ActivitySequenceEditComponent {
 
   constructor(public activityService: ActivityService,
               public userService: UserService,
-              public router: Router) {
+              public router: Router,
+              private ref: ChangeDetectorRef) {
+
+    this.activityService.changes.subscribe((change) => {
+      if (change.type === 'Sequence') {
+        if (!this.ref['destroyed']) {
+          this.ref.markForCheck();
+        }
+      }
+    });
   }
 
   newSubactivity() {
