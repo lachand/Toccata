@@ -4,7 +4,7 @@
     <mat-sidenav #sidenav mode="over" class="sidenav-content">
       <div class="fullDiv">
       <div class="userInfos">
-      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos><h3>{{userService.name}}</h3>
+      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos><h3>{{userService.name}}</h3><h4>{{databaseService.room}}</h4>
       </div>
       <div>
         <mat-nav-list>

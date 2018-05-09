@@ -13,7 +13,8 @@ export class DatabaseService {
   optionsReplication: any;
   dbSync: any;
   changes: EventEmitter<any> = new EventEmitter();
-  dbNames: Array<string> = []
+  dbNames: Array<string> = [];
+  room: string;
 
   @Output()
   change = new EventEmitter();
@@ -28,7 +29,7 @@ export class DatabaseService {
     PouchDB.plugin(PouchdbFind);
     PouchDB.plugin(require('pouchdb-authentication'));
 
-    console.log(environment.ROOM);
+    this.room = environment.ROOM;
 
     this.dbRemote = new PouchDB(`${environment.URL_DB}${environment.PORT_DB}/abcde`, {
       auth: {

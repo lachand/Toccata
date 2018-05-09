@@ -12,7 +12,7 @@ import {isNullOrUndefined} from 'util';
 })
 export class MenuComponent {
   constructor(public userService: UserService, public router: Router,
-              public activityService: ActivityService) {
+              public activityService: ActivityService, public databaseService: DatabaseService) {
     console.log(this.userService);
   }
 
