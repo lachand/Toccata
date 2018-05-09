@@ -15,7 +15,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serve": "npm run config -- --environment=prod && ng serve --port 4200",
-    "postinstall": "ng build --aot -prod",
+    "postinstall": "npm run config -- --environment=prod && ng build --aot -prod",
     "init": "npm install",
     "compodoc": "./node_modules/.bin/compodoc -p src/tsconfig.app.json"
   },
