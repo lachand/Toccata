@@ -4,6 +4,7 @@ import { UserService } from '../services/user.service';
 import {ActivityService} from '../services/activity.service';
 import {Location} from '@angular/common';
 import {isNullOrUndefined} from 'util';
+import {DatabaseService} from "../services/database.service";
 
 @Component({
   selector: 'app-menu',
