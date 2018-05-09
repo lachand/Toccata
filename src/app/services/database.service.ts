@@ -28,6 +28,8 @@ export class DatabaseService {
     PouchDB.plugin(PouchdbFind);
     PouchDB.plugin(require('pouchdb-authentication'));
 
+    console.log(environment.ROOM);
+
     this.dbRemote = new PouchDB(`${environment.URL_DB}${environment.PORT_DB}/abcde`, {
       auth: {
         username: `${environment.USERNAME_DB}`,
