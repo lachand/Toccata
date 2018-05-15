@@ -1,9 +1,18 @@
+<div id="div_{{resourceId}}">
 <mat-card class="flex-card" *ngIf="resource?.status==='loaded'">
+  <div class="name">
   <h3>{{resource?.name}}</h3>
+  </div>
+  <div class="buttons">
+  <button class="menu-right-align" mat-icon-button (click)="fullscreen()">
+    <mat-icon>fullscreen</mat-icon>
+  </button>
   <button class="menu-right-align" mat-icon-button (click)="close()">
     <mat-icon>close</mat-icon>
   </button>
+  </div>
   <div>
     <iframe class="iframe_resource" id="iframe_{{resourceId}}" [src]="myUrl" scrolling="no" (load)="resizeIframe(this)" ></iframe>
   </div>
 </mat-card>
+</div>

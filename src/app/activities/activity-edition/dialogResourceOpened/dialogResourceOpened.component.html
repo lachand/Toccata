@@ -1,0 +1,13 @@
+<div class="fullscreen-div" id="div_{{resourceId}}" *ngIf="resource?.status==='loaded'">
+  <div class="name">
+    <h3>{{resource?.name}}</h3>
+  </div>
+  <div class="buttons">
+  <button class="menu-right-align" mat-icon-button (click)="fullscreen_exit()">
+    <mat-icon>fullscreen_exit</mat-icon>
+  </button>
+  </div>
+  <div>
+    <iframe class="iframe_resource" id="iframe_{{resourceId}}" [src]="myUrl"></iframe>
+  </div>
+</div>

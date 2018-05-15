@@ -1,20 +1,13 @@
-<div id="div_{{appId}}">
-<mat-card class="flex-card" *ngIf="application?.status === 'loaded'">
-  <div class="name">
+ <div class="name">
   <h3>{{application?.name}}</h3>
   </div>
   <div class="buttons">
-    <button class="menu-right-align" mat-icon-button (click)="fullscreen()">
-      <mat-icon>fullscreen</mat-icon>
+    <button class="menu-right-align" mat-icon-button (click)="fullscreen_exit()">
+      <mat-icon>fullscreen_exit</mat-icon>
     </button>
-  <button class="menu-right-align" mat-icon-button (click)="close()">
-    <mat-icon>close</mat-icon>
-  </button>
   </div>
   <div class="apps">
     <app-chronometre *ngIf="application?.type === 'Chronomètre'" [appId]="application?.id"></app-chronometre>
     <app-postit *ngIf="application?.type === 'Post-It'" [appId]="application?.id"></app-postit>
     <app-text-editor *ngIf="application?.type === 'Editeur de texte'" [appId]="application?.id"></app-text-editor>
-</div>
-</mat-card>
 </div>

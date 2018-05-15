@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, Input, OnInit} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {ViewRef_} from '@angular/core/src/view';
 import {isNullOrUndefined} from 'util';
@@ -6,22 +6,22 @@ import {LoggerService} from '../../../services/logger.service';
 import {ActivityService} from '../../../services/activity.service';
 import {ResourcesService} from '../../../services/resources.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {MatDialog, MatDialogRef} from '@angular/material';
-import {DialogResourceOpenedComponent} from '../dialogResourceOpened/dialogResourceOpened.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
-  selector: 'resource-opened',
-  templateUrl: './resourceOpened.component.html',
-  styleUrls: ['./resourceOpened.component.scss']
+  selector: 'dialog-resource-opened',
+  templateUrl: './dialogResourceOpened.component.html',
+  styleUrls: ['./dialogResourceOpened.component.scss']
 })
 
-export class ResourceOpenedComponent implements OnInit {
+export class DialogResourceOpenedComponent implements OnInit {
 
-  @Input() resourceId;
+  resourceId: any;
   resource: any;
   myUrl;
   el: HTMLFrameElement;
   reloaded: boolean;
+  dialogRef: MatDialogRef<DialogResourceOpenedComponent>;
 
   /**
    * Construction of resource page
@@ -32,8 +32,13 @@ export class ResourceOpenedComponent implements OnInit {
    * @param {DomSanitizer} sanitizer Sanitizer for creating url
    */
   constructor(private ref: ChangeDetectorRef,
-              private logger: LoggerService, private activityService: ActivityService, private resourcesService: ResourcesService,
-              private sanitizer: DomSanitizer, private dialog: MatDialog) {
+              private logger: LoggerService,
+              private activityService: ActivityService,
+              private resourcesService: ResourcesService,
+              private sanitizer: DomSanitizer,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+
+    this.resourceId = data.resourceId;
 
     this.resourcesService.changes.subscribe(change => {
       this.reloaded = false;
@@ -50,35 +55,11 @@ export class ResourceOpenedComponent implements OnInit {
   }
 
   /**
-   * Resize an iframe
-   * @param obj The iframe to resize
-   */
-  resizeIframe(obj) {
-    if (!this.reloaded) {
-      const iframe = document.getElementById(`iframe_${this.resourceId}`);
-      console.log(iframe);
-      const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
-      console.log(ratio);
-      if (this.resource.type === 'application/pdf') {
-        iframe.style.height = '70vw';
-      } else if (this.resource.type === 'url') {
-        iframe.style.height = '70vw';
-        iframe.setAttribute('scrolling', 'yes');
-        iframe.setAttribute('src', iframe.getAttribute('src'));
-        this.reloaded = true;
-      } else if (this.resource.type.split('video').length > 0) {
-        iframe.style.height = '30vw';
-      }
-    }
-  }
-
-  /**
    * Change element of iframe at loading
    * @param {Event} ev
    */
   onload(ev: Event) {
     this.el = <HTMLFrameElement>ev.srcElement;
-    console.log(ev.target);
     console.log(ev.target);
   }
 
@@ -106,30 +87,10 @@ export class ResourceOpenedComponent implements OnInit {
   }
 
   /**
-   * Close the resource
+   * Close the fullscreen mode
    */
-  close() {
-    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.resourceId, 'resource closed');
-    this.resourcesService.closeResource(this.resourceId).then(resourceInfos => {
-      this.resource = resourceInfos;
-    });
-  }
-
-  /**
-   * Open the resource in fullscreen mode
-   */
-  fullscreen() {
-
-    console.log(this.resourceId);
-
-    const dialogRef = this.dialog.open(DialogResourceOpenedComponent, {
-      width: '100%',
-      height: '100%',
-      data: {
-          resourceId: this.resourceId
-        }
-    });
-    dialogRef.componentInstance.dialogRef = dialogRef;
+  fullscreen_exit() {
+    this.dialogRef.close();
   }
 
   /**

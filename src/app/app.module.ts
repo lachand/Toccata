@@ -9,7 +9,8 @@ import {
   MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
   MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
-  MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule, MatDividerModule, MatChipsModule
+  MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule, MatDividerModule, MatChipsModule,
+  MAT_DIALOG_DEFAULT_OPTIONS
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -70,6 +71,8 @@ import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/co
 import {ResourceOpenedComponent} from './activities/activity-edition/resourceOpened/resourceOpened.component';
 import {DialogNewRessourceComponent} from 'app/activities/activity-edition/dialogNewRessource/dialognewRessource.component';
 import {ActivityNewRessourceComponent} from './activities/activity-edition/activityNewRessource/activityNewRessource.component';
+import {DialogResourceOpenedComponent} from "./activities/activity-edition/dialogResourceOpened/dialogResourceOpened.component";
+import {DialogApplicationLaunchedComponent} from "./activities/activity-edition/dialogApplicationLaunched/dialogApplicationLaunched.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -116,7 +119,9 @@ import {ActivityNewRessourceComponent} from './activities/activity-edition/activ
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,
     MenuComponent,
-    OrderBy],
+    OrderBy,
+    DialogResourceOpenedComponent,
+ DialogApplicationLaunchedComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -150,7 +155,16 @@ import {ActivityNewRessourceComponent} from './activities/activity-edition/activ
     ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  entryComponents: [ActivityInfosComponent, AppLoadingComponent, ActivityNewAppComponent, ActivityChangeUsersComponent, DialogConfirmationComponent, ActivityNewRessourceComponent, DialogNewRessourceComponent, CreateEditPostitComponent],
+  entryComponents: [ActivityInfosComponent,
+    AppLoadingComponent,
+    ActivityNewAppComponent,
+    ActivityChangeUsersComponent,
+    DialogConfirmationComponent,
+    ActivityNewRessourceComponent,
+    DialogNewRessourceComponent,
+    CreateEditPostitComponent,
+    DialogResourceOpenedComponent,
+    DialogApplicationLaunchedComponent],
   providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService, LoggerService, {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
