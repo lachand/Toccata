@@ -41,16 +41,24 @@ export class MyActivitiesComponent {
 
   load_activity(activity_id) {
     this.activityService.load_activity(activity_id).then( res => {
-      console.log(this.router);
-      this.router.navigate(['activity_apps/' + activity_id]);
+      if (this.activityService.activityLoaded.subactivityList.length > 0) {
+        console.log(this.router);
+        this.router.navigate(['activity_apps/' + activity_id]);
+      } else {
+
+      }
     });
   }
 
   show_activity(activity_id) {
     this.logger.log('CREATE', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
-      console.log(this.router);
-      this.router.navigate(['activity_view/' + activity_id]);
+      if (this.activityService.activityLoaded.subactivityList.length > 0) {
+        console.log(this.router);
+        this.router.navigate(['activity_view/' + activity_id]);
+      } else {
+        this.edit_activity(activity_id);
+      }
     });
   }
 
@@ -65,6 +73,7 @@ export class MyActivitiesComponent {
     this.activityService.createActivity('Main')
       .then(res => {
         this.logger.log('CREATE', 'na', res['id'], 'duplicate activity');
+        this.edit_activity(res['id']);
         /**console.log(res['id']);
       this.activityService.user.db.get(this.user.id).then( res2 => {
         res2.activites.push({

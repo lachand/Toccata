@@ -55,6 +55,7 @@
     "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-htmlfile-reporter": "^0.3.5",
     "lite-server": "^2.3.0",
+    "material-design-icons": "^3.0.1",
     "mocha": "^3.5.0",
     "moment": "^2.22.0",
     "morgan": "^1.8.2",
