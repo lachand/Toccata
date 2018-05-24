@@ -7,7 +7,7 @@
       <div *ngIf="activityService.activityLoaded.type === 'Main'">
         <div class="activity-name">
       <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
-      <app-activity-name-edit
+      <app-activity-name-edit class="right"
       ></app-activity-name-edit>
         </div>
         <div>
@@ -22,10 +22,12 @@
       <div *ngIf="activityService.activityLoaded.type === 'Sequence'">
         <div class="activity-name">
         <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
+          <div class="right">
         <activity-name [activityId]="activityService.activityLoaded.parent"
         ></activity-name> :
         <activity-name [activityId]="activityService.activityLoaded._id"
         ></activity-name>
+          </div>
         </div>
         <div>
         <mat-chip-list class="chip-list">
@@ -44,7 +46,7 @@
       </div>
     </h3>
 
-    <div>
+    <div *ngIf="steps.length > 0">
       <mat-horizontal-stepper [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
         <mat-step *ngFor="let step of steps" [completed]="false">
           <ng-template matStepLabel>

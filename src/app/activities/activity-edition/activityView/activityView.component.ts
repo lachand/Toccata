@@ -35,11 +35,15 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';
-    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activitiesList.length > 0) {
+    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
     } else {
       this.steps = this.activityService.sisters;
     }
+    if (this.steps.length === 0) {
+      this.steps = [this.activityService.activityLoaded._id];
+    }
+    console.log(this.steps);
   }
 
   ngOnInit(): void {

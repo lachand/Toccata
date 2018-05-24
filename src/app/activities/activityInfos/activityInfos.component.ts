@@ -47,11 +47,11 @@ export class ActivityInfosComponent implements OnInit {
   load_activity(activity_id) {
     this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
-      if (this.activityService.activityLoaded.subactivityList.length > 0) {
+      //if (this.activityService.activityLoaded.subactivityList.length > 0) {
         this.router.navigate(['activity_apps/' + activity_id]);
-      } else {
-        this.router.navigate(['activity_view/' + activity_id]);
-      }
+      //} else {
+      //  this.router.navigate(['activity_view/' + activity_id]);
+      //}
     });
   }
 
@@ -62,11 +62,11 @@ export class ActivityInfosComponent implements OnInit {
   show_activity(activity_id) {
     this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
-      if (this.activityService.activityLoaded.subactivityList.length > 0) {
+      //if (this.activityService.activityLoaded.subactivityList.length > 0) {
         this.router.navigate(['activity_view/' + activity_id]);
-      } else {
-        this.router.navigate(['activity_edit/' + activity_id]);
-      }
+      //} else {
+      //  this.router.navigate(['activity_edit/' + activity_id]);
+      //}
     });
   }
 
