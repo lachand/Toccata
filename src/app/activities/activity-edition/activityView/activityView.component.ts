@@ -35,6 +35,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';
+    console.log(this.activityService);
     if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
     } else {

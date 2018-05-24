@@ -133,10 +133,19 @@ export class ActivityService {
       console.log("reloading the activity");
       this.database.getDocument(activity_id)
         .then((result) => {
+        if (result['type'] === 'Main') {
           this.sisters = this.activityLoadedChild;
           this.activityLoaded = result;
           this.activityLoadedChild = result['subactivityList'];
           return this.resourcesService.getResources(this.activityLoaded._id);
+        } else {
+          this.database.getDocument(result['parent']).then(res => {
+            this.sisters = res['subactivityList'];
+            this.activityLoaded = result;
+            this.activityLoadedChild = result['subactivityList'];
+            return this.resourcesService.getResources(this.activityLoaded._id);
+          });
+        }
         })
         .then(() => {
           return this.appsService.getApplications(this.activityLoaded._id);
