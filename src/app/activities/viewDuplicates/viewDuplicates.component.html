@@ -4,7 +4,7 @@
   <button mat-button (click)="backClicked();">
     <mat-icon>arrow_back</mat-icon>
   </button>
-      <p class="aligned-with-text" i18n="@@activityGroups">Groupes pour l'activité {{activityInfo?.name}}</p>
+      <p class="aligned-with-text" i18n="@@activityGroups">Groupes : {{activityInfo?.name}}</p>
     </div>
     <div>
   <mat-chip-list class="chip-list">
@@ -22,7 +22,7 @@
 </h3>
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
   <br>
-  <div *ngFor="let activity of duplicateList" fxFlex="30%"
+  <div *ngFor="let activity of duplicateList" fxFlex="30%" flex-gt-sm="30" flex-sm="100"
        class="flex-card">
     <app-activity-infos-teacher [activityId]="activity"></app-activity-infos-teacher>
   </div>
