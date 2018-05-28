@@ -42,7 +42,6 @@ export class MyActivitiesComponent {
   load_activity(activity_id) {
     this.activityService.load_activity(activity_id).then( res => {
       if (this.activityService.activityLoaded.subactivityList.length > 0) {
-        console.log(this.router);
         this.router.navigate(['activity_apps/' + activity_id]);
       } else {
 
@@ -54,7 +53,6 @@ export class MyActivitiesComponent {
     this.logger.log('CREATE', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       if (this.activityService.activityLoaded.subactivityList.length > 0) {
-        console.log(this.router);
         this.router.navigate(['activity_view/' + activity_id]);
       } else {
         this.edit_activity(activity_id);
@@ -101,7 +99,7 @@ export class MyActivitiesComponent {
 
   duplicate_activity(activityId) {
     this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
-    this.activityService.duplicate(activityId);
+    this.activityService.duplicate(activityId, '');
 }
 
   view_or_edit(activityId) {

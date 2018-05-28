@@ -56,9 +56,7 @@ export class ResourceOpenedComponent implements OnInit {
   resizeIframe(obj) {
     if (!this.reloaded) {
       const iframe = document.getElementById(`iframe_${this.resourceId}`);
-      console.log(iframe);
       const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
-      console.log(ratio);
       if (this.resource.type === 'application/pdf') {
         iframe.style.height = '70vw';
       } else if (this.resource.type === 'url') {
@@ -78,22 +76,16 @@ export class ResourceOpenedComponent implements OnInit {
    */
   onload(ev: Event) {
     this.el = <HTMLFrameElement>ev.srcElement;
-    console.log(ev.target);
-    console.log(ev.target);
   }
 
   /**
    * Get informations about resource and create a page for the resource
    */
   ngOnInit(): void {
-    console.log(this.resourceId);
     this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
-      console.log(resourceInfos);
       this.resource = resourceInfos;
-      console.log(this.resource.status);
       if (this.resource.type === 'url') {
         this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.resource.url);
-        console.log(this.myUrl);
         this.ref.detectChanges();
       } else {
         this.resourcesService.getResourceData(this.resourceId, 'filename').then(ressource => {
@@ -119,8 +111,6 @@ export class ResourceOpenedComponent implements OnInit {
    * Open the resource in fullscreen mode
    */
   fullscreen() {
-
-    console.log(this.resourceId);
 
     const dialogRef = this.dialog.open(DialogResourceOpenedComponent, {
       width: '100%',

@@ -49,7 +49,6 @@ export class ChatComponent {
   }
 
   deleteMessage(message) {
-    console.log('Fausse suppression');
   }
 
 }

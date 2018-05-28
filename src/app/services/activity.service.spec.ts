@@ -99,13 +99,9 @@ describe('UserService', () => {
   }, 1000000);
 
   it('Should create a new activity', done => {
-    console.log('create activity');
     activityService.createActivity('Main').then((res) => {
-      console.log(res);
       activityId = res;
-      console.log('id : ', activityId);
       databaseService.getDocument(activityId).then(activity => {
-        console.log(activity);
         expect(activity['userList'].indexOf(`usertest`)).toBeGreaterThanOrEqual(0);
         done();
       });
@@ -115,7 +111,6 @@ describe('UserService', () => {
   it('Should delete a new activity', done => {
     activityService.delete_activity(activityId).then((activity) => {
       databaseService.getDocument(activityId).then(res => {
-        console.log(`debug ${res}`);
         expect(res['ok']).toBe(false);
         done();
       });

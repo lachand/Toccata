@@ -23,7 +23,6 @@ export class ActivityChangeUsersComponent {
     this.userCheckedInitially = [];
     this.userService.getAllUsers().then((allUsers: Array<any>) => {
         this.userService.getParticipants(this.activityService.activityLoaded._id).then((participants: Array<any>) => {
-          console.log(allUsers, participants);
           for (const user of allUsers) {
             if (participants.includes(user)) {
               this.userChecked.push({'user': user, 'checked': true});
@@ -52,7 +51,6 @@ export class ActivityChangeUsersComponent {
       this.userChecked = [];
       this.userCheckedInitially = [];
       for (const user of this.activityService.user.allUsers) {
-        console.log(user.activites.indexOf(this.activityService.activityLoaded._id));
         if (user.activites.indexOf(this.activityService.activityLoaded._id) !== -1) {
           this.userChecked.push({'user': user, 'checked': true});
           this.userCheckedInitially.push({'user': user, 'checked': true});
@@ -70,7 +68,6 @@ export class ActivityChangeUsersComponent {
     return Promise.all(this.userChecked.map(userSelected => {
         for (let i = 0; i < this.userCheckedInitially.length; i++) {
           if (userSelected.user === this.userCheckedInitially[i].user && userSelected.checked !== this.userCheckedInitially[i].checked) {
-            console.log(userSelected, this.userCheckedInitially[i]);
             const user = userSelected.user;
             if (userSelected.checked) {
               return this.userService.addActivity(this.activityService.activityLoaded._id, user)

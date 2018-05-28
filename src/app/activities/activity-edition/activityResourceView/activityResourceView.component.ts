@@ -21,7 +21,6 @@ export class ActivityResourceViewComponent {
   showResource(resourceId, attachmentId) {
     this.resourceService.getResourceData(resourceId, attachmentId).then(resource => {
       this.resourceUrl = URL.createObjectURL(resource);
-      console.log(this.resourceUrl);
     });
   }
 }

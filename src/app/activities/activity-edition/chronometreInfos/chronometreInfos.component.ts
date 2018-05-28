@@ -24,7 +24,6 @@ export class ChronometreInfosComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.applicationId);
     this.currentAppId = this.applicationId;
     const Stopwatch = require('timer-stopwatch');
     this.appsService.getApplication(this.currentAppId).then(chrono => {
@@ -135,11 +134,9 @@ export class ChronometreInfosComponent implements OnInit {
     });
     if (!this.chronometre.running) {
       const startedAt = Date.now();
-      console.log(this.currentAppId);
       this.appsService.getApplication(this.currentAppId).then(chronometre => {
         chronometre['startedAt'] = startedAt;
         chronometre['running'] = true;
-        console.log(chronometre);
         this.appsService.updateApplication(chronometre);
       });
       if (this.ref !== null &&

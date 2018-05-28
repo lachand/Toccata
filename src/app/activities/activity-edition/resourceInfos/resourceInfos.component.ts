@@ -32,7 +32,6 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('toto');
     this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
       this.resource = resourceInfos;
     });

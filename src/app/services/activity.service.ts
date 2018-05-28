@@ -32,19 +32,15 @@ export class ActivityService {
               public appsService: AppsService) {
     this.database.changes.subscribe(
       (change) => {
-        console.log("debug");
         if (change.type === 'Activity') {
           let finded = false;
-          console.log(change.doc);
           for (const user of change.doc.userList) {
             if (user === this.userService.id) {
-              console.log(user, this.userService);
               finded = true;
             }
           }
           // DEBUG
           finded = true;
-          console.log(finded);
           if (change.doc.type === 'Main' && finded) {
             this.changes.emit({doc: change.doc, type: 'Main'});
             if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
@@ -408,9 +404,10 @@ export class ActivityService {
   /**
    * Duplicate an activity
    * @param activityId The activity to duplicate
+   * @param duplicateName Name of the duplicate
    * @returns {Promise<any>} The duplicated activity
    */
-  duplicate(activityId) {
+  duplicate(activityId, duplicateName) {
     return new Promise((resolve, reject) => {
       let newActivityCreated;
       this.database.db.get(activityId).then(res => {
@@ -534,8 +531,9 @@ export class ActivityService {
   /**
    * Duplicate a specified activity in a new database
    * @param activityId The activity to duplicate
+   * @param duplicateName The name of the duplicate
    */
-  duplicateActivity(activityId: any) {
+  duplicateActivity(activityId: any, duplicateName: any) {
     return new Promise(resolve => {
       let dbName, guid, newDb, activity;
       return this.database.getDocument(activityId).then(activityDoc => {
@@ -554,6 +552,7 @@ export class ActivityService {
             const doc = row;
             doc.dbName = newDb;
             doc._id = `${doc._id}_duplicate_${guid}`;
+            doc.nameForTeacher = duplicateName;
             if (doc.documentType === 'Activity') {
               const ressources = [];
               for (const resource of doc.resourceList) {
@@ -592,6 +591,9 @@ export class ActivityService {
           }));
         })
         .then(() => {
+          if (!isNullOrUndefined(activity['duplicateList'])) {
+            activity['duplicateList'] = [];
+          }
           activity['duplicateList'].push(newDb);
           return this.database.updateDocument(activity);
         })

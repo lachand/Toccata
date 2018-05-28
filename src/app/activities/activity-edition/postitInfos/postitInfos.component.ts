@@ -33,7 +33,6 @@ export class PostitInfosComponent implements OnInit {
         }
       }
       this.appsService.changes.subscribe(change => {
-        console.log(change);
         if (change.type === 'Post-it' && this.appId === change.doc.application) {
           this.handleChange(change.doc);
         }
@@ -45,7 +44,6 @@ export class PostitInfosComponent implements OnInit {
     if (doc.ressourceType === 'Postit') {
       this.removeItem(doc);
       this.columns[doc.state].push(doc._id);
-      console.log(this.columns);
     }
     if (this.ref !== null &&
       this.ref !== undefined &&
@@ -63,7 +61,6 @@ export class PostitInfosComponent implements OnInit {
    * @param doc
    */
   removeItem(doc) {
-    console.log(this.columns['Backlog']);
     let index = this.columns['Backlog'].indexOf(doc._id);
     if (index !== -1) {
       this.columns['Backlog'].splice(index, 1);

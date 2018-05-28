@@ -14,7 +14,6 @@ import {DatabaseService} from "../services/database.service";
 export class MenuComponent {
   constructor(public userService: UserService, public router: Router,
               public activityService: ActivityService, public databaseService: DatabaseService) {
-    console.log(this.userService);
   }
 
   logout() {

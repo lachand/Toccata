@@ -36,7 +36,6 @@ export class ChronometreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.appId);
     this.step = '';
     this.currentAppId = this.appId;
     const Stopwatch = require('timer-stopwatch');
@@ -125,7 +124,6 @@ export class ChronometreComponent implements OnInit {
       document.getElementById('title').className = '';
     }
     for (const step of this.chronometre.steps) {
-      console.log(step, m, step.timeStart >= m, m > step.timeStop);
       if (step.timeStart >= m && m >= step.timeStop) {
         this.step = step.name;
       }
@@ -154,11 +152,9 @@ export class ChronometreComponent implements OnInit {
     });
     if (!this.chronometre.running) {
       const startedAt = Date.now();
-      console.log(this.currentAppId);
       this.appsService.getApplication(this.currentAppId).then(chronometre => {
         chronometre['startedAt'] = startedAt;
         chronometre['running'] = true;
-        console.log(chronometre);
         this.appsService.updateApplication(chronometre);
       });
       if (this.ref !== null &&
@@ -172,7 +168,6 @@ export class ChronometreComponent implements OnInit {
 
   timerPause() {
     this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.appId, 'timer paused');
-    console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
       chronometre['running'] = false;
       chronometre['timeLeft'] = this.parseMillisecondsIntoReadableTime(this.timeLeft - ( Date.now() - chronometre['startedAt']));
@@ -190,7 +185,6 @@ export class ChronometreComponent implements OnInit {
 
   timerReload() {
     this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.appId, 'timer reloaded');
-    console.log(this.currentAppId);
     this.appsService.getApplication(this.currentAppId).then(chronometre => {
       chronometre['running'] = false;
       chronometre['timeLeft'] = chronometre['initialTime'];

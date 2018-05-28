@@ -35,7 +35,6 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';
-    console.log(this.activityService);
     if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
     } else {
@@ -44,7 +43,6 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     if (this.steps.length === 0) {
       this.steps = [this.activityService.activityLoaded._id];
     }
-    console.log(this.steps);
   }
 
   ngOnInit(): void {
@@ -54,7 +52,6 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.activityService.changes.subscribe(changes => {
       if (changes.type === 'ChangeActivity') {
         this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
-        console.log(this.stepper.selectedIndex);
         this.ref.detectChanges();
       }
     });
@@ -80,7 +77,6 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * @param $event
    */
   loadActivity($event) {
-    console.log(this.stepper, $event.selectedIndex);
     const activityId = this.steps[$event.selectedIndex];
     this.loadAnActivity(activityId);
   }

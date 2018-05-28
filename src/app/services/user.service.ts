@@ -60,7 +60,6 @@ export class UserService {
               console.log('name or password incorrect');
               reject(err);
             } else {
-              console.log(err);
               reject(err);
             }
           }
@@ -135,7 +134,6 @@ export class UserService {
           return this.database.getDocument('user_list');
         })
         .then(user_list => {
-          console.log(user_list);
           if (user_list['userList'].indexOf(document._id) === -1) {
             user_list['userList'].push(document._id);
           }

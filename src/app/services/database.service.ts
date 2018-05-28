@@ -239,7 +239,6 @@ export class DatabaseService {
   ereaseDatabase(dbName) {
     return new Promise(resolve => {
       return this.dbRemote.allDocs({include_docs: true}).then(docs => {
-        console.log(docs);
         const promises = docs.rows.map((doc) => {
           if (doc.doc.dbName === dbName) {
             console.log('deleted_doc :', doc.doc);
@@ -262,7 +261,6 @@ export class DatabaseService {
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
       return this.db.allDocs().then(res => {
-        console.log(res);
       })
         .then(() => {
           return this.db.get(docId);
@@ -324,7 +322,6 @@ export class DatabaseService {
       return tmp_this.db.put(doc);
     }).catch(function (err) {
       if (err.status === 409) {
-        console.log('retry');
         return tmp_this.updateDocument(doc);
       } else { // new doc
         return tmp_this.db.put(doc);
@@ -346,7 +343,6 @@ export class DatabaseService {
             sort: ['_id']
           }).then(function (result) {
             for (const element of result.docs){
-              console.log(element);
               if (document.documentType === 'Resource') {
                 const index1 = element.resourceList.indexOf(document._id);
                 if (index1 !== -1) {
@@ -361,16 +357,13 @@ export class DatabaseService {
                 }
               }
             }
-            console.log(changes);
           }).catch(function (err) {
-            console.log(err);
           });
           this.db.bulkDocs(changes).then( () => {
             document._deleted = true;
 
             this.db.put(document).then(res => {
               resolve(res);
-              console.log(res);
             })
               .catch(err => {
                 console.log(`Error in database service whith call to deleteDocument:

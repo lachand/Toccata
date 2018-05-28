@@ -19,7 +19,6 @@ export class CreateEditPostitComponent {
       taskName: [data.postit.label, Validators.required],
       estimation: [data.postit.estimation, Validators.required]
     });
-    console.log(data.postit.estimation);
   }
 
   update() {

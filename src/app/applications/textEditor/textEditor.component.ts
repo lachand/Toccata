@@ -48,8 +48,6 @@ export class TextEditorComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log(this.appId);
-
     this.applicationService.getRessources(this.appId).then( res => {
       if (res['docs'].length === 0) {
         const text = {
@@ -65,7 +63,6 @@ export class TextEditorComponent implements OnInit {
         this.resource = text;
       } else {
         this.resource = res['docs'][0];
-        console.log(res);
       }
     });
   }

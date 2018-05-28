@@ -33,7 +33,6 @@ export class ActivityInfosComponent implements OnInit {
           this.activityInfos = activityInfos;
         });
       }
-      console.log("change ref");
       if (!this.ref['destroyed']) {
         this.ref.markForCheck();
       }
@@ -103,7 +102,7 @@ export class ActivityInfosComponent implements OnInit {
 
   duplicate_activity(activityId) {
     this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
-    this.activityService.duplicateActivity(activityId);
+    this.activityService.duplicateActivity(activityId, '');
   }
 
   show_duplicates(activityId) {
