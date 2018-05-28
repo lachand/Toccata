@@ -3,10 +3,10 @@ import {ActivityService} from '../../services/activity.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
-import {DialogConfirmationComponent} from '../../dialogConfirmation/dialogConfirmation.component';
 import {DatabaseService} from '../../services/database.service';
 import {Location} from '@angular/common';
 import {LoggerService} from '../../services/logger.service';
+import {DialogDuplicateNameComponent} from "./dialogDuplicateName/dialogDuplicateName.component";
 
 @Component({
   selector: 'view-duplicates',
@@ -27,6 +27,7 @@ export class ViewDuplicatesComponent {
               private route: ActivatedRoute,
               private _location: Location,
               private logger: LoggerService,
+              private dialog: MatDialog,
               private router: Router) {
     this.editActivity = '';
     this.viewActivity = '';
@@ -79,14 +80,23 @@ export class ViewDuplicatesComponent {
     });
   }
 
-  duplicate_activity() {
+  duplicateActivity() {
     let activityId;
+
     if (this.activityService.activityLoaded.type === 'Main'){
       activityId = this.activityService.activityLoaded._id;
     } else {
       activityId = this.activityService.activityLoaded.parent;
     }
-    this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
-    this.activityService.duplicate(activityId);
+
+    const dialogRef = this.dialog.open(DialogDuplicateNameComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.type === 'validate') {
+        this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
+        this.activityService.duplicateActivity(activityId, result.value);
+      }
+    });
+
   }
 }

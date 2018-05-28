@@ -1,0 +1,20 @@
+<script src="../../main.ts"></script>
+<div layout="row" >
+  <div>
+    <h2 mat-dialog-title>Nom du groupe</h2>
+    <mat-dialog-content>
+      <div>
+        <form [formGroup]="groupNameForm">
+        <mat-input-container>
+          <input matInput placeholder="Nom du groupe" type="text" formControlName="groupname">
+          <mat-hint class="hint-red" *ngIf="errorGroupName" i18n="@@errorGrpName">Merci de rentrer un nom de groupe</mat-hint>
+        </mat-input-container>
+        </form>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button (click)="validate()" i18n="@@validate">Valider</button>
+      <button mat-button (click)="close_dialog()" i18n="@@cancel">Annuler</button>
+    </mat-dialog-actions>
+  </div>
+</div>

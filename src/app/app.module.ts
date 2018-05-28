@@ -61,6 +61,7 @@ import {TextEditorComponent} from './applications/textEditor/textEditor.componen
 import {ActivityNameComponent} from './activities/activity-edition/activityName/activityName.component';
 import {ApplicationLaunchedComponent} from 'app/activities/activity-edition/applicationLaunched/applicationLaunched.component';
 import {ViewDuplicatesComponent} from './activities/viewDuplicates/viewDuplicates.component';
+import {DialogDuplicateNameComponent} from "./activities/viewDuplicates/dialogDuplicateName/dialogDuplicateName.component";
 import {ActivityInfosTeacherComponent} from './activities/activityInfosTeacher/activityInfosTeacher.component';
 import {ChronometreInfosComponent} from './activities/activity-edition/chronometreInfos/chronometreInfos.component';
 import {ApplicationInfosTeacherComponent} from './activities/activity-edition/applicationInfosTeacher/applicationInfosTeacher.component';
@@ -118,6 +119,7 @@ import {DialogApplicationLaunchedComponent} from "./activities/activity-edition/
     DialogConfirmationComponent,
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,
+    DialogDuplicateNameComponent,
     MenuComponent,
     OrderBy,
     DialogResourceOpenedComponent,
@@ -160,6 +162,7 @@ import {DialogApplicationLaunchedComponent} from "./activities/activity-edition/
     ActivityNewAppComponent,
     ActivityChangeUsersComponent,
     DialogConfirmationComponent,
+    DialogDuplicateNameComponent,
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,
     CreateEditPostitComponent,
