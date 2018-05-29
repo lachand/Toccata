@@ -33,6 +33,7 @@ export class ActivityService {
     this.database.changes.subscribe(
       (change) => {
         if (change.type === 'Activity') {
+          this.changes.emit({doc: change.doc, type: 'Main'});
           let finded = false;
           for (const user of change.doc.userList) {
             if (user === this.userService.id) {
@@ -591,11 +592,14 @@ export class ActivityService {
           }));
         })
         .then(() => {
-          if (!isNullOrUndefined(activity['duplicateList'])) {
+          if (isNullOrUndefined(activity['duplicateList'])) {
             activity['duplicateList'] = [];
           }
           activity['duplicateList'].push(newDb);
-          return this.database.updateDocument(activity);
+          this.database.updateDocument(activity).then( res => {
+            console.log(res);
+            resolve(res);
+          });
         })
         .catch(err => {
           console.log(`Error in activity service whith call to duplicateActivity :

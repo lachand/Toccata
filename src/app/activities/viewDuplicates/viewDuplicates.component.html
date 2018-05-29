@@ -23,8 +23,17 @@
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
   <br>
   <div *ngFor="let activity of duplicateList" fxFlex="30%" flex-gt-sm="30" flex-sm="100"
-       class="flex-card">
+       class="flex-card activity-card">
     <app-activity-infos-teacher [activityId]="activity"></app-activity-infos-teacher>
+  </div>
+
+  <div front fxFlex="30%" class="flex-card" *ngIf="user.fonction === 'Enseignant' && creation === true">
+    <mat-card class="activity-card">
+      <div class="div-centered">
+        <mat-spinner style="margin:0 auto;"></mat-spinner>
+        <p>Création du groupe ...</p>
+      </div>
+    </mat-card>
   </div>
 
   <div front fxFlex="30%" class="flex-card" *ngIf="user.fonction === 'Enseignant'">

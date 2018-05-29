@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -20,6 +20,7 @@ export class ViewDuplicatesComponent {
   activityInfo;
   editActivity: string;
   viewActivity: string;
+  creation: any;
 
   constructor(public user: UserService,
               public activityService: ActivityService,
@@ -28,7 +29,9 @@ export class ViewDuplicatesComponent {
               private _location: Location,
               private logger: LoggerService,
               private dialog: MatDialog,
-              private router: Router) {
+              private router: Router,
+              private ref: ChangeDetectorRef) {
+    this.creation = false;
     this.editActivity = '';
     this.viewActivity = '';
     this.route.params.subscribe(result => {
@@ -43,6 +46,16 @@ export class ViewDuplicatesComponent {
       })).then(() => {
         this.duplicateList = list;
       });
+    });
+
+    this.activityService.changes.subscribe(change => {
+      console.log(change);
+      if (change.type === 'Activity') {
+        console.log("changes in activity");
+        if (!this.ref['destroyed']) {
+          this.ref.markForCheck();
+        }
+      }
     });
   }
 
@@ -83,7 +96,7 @@ export class ViewDuplicatesComponent {
   duplicateActivity() {
     let activityId;
 
-    if (this.activityService.activityLoaded.type === 'Main'){
+    if (this.activityService.activityLoaded.type === 'Main') {
       activityId = this.activityService.activityLoaded._id;
     } else {
       activityId = this.activityService.activityLoaded.parent;
@@ -93,8 +106,23 @@ export class ViewDuplicatesComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.type === 'validate') {
+        this.creation = true;
         this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
-        this.activityService.duplicateActivity(activityId, result.value);
+        this.activityService.duplicateActivity(activityId, result.value).then( () => {
+
+          this.activityService.getActivityDuplicate(this.activityId).then((list: Array<any>) => {
+            return Promise.all(list.map(duplicate => {
+              this.database.addDatabase(duplicate);
+            })).then(() => {
+              this.duplicateList = list;
+            });
+          });
+
+          if (!this.ref['destroyed']) {
+            this.ref.markForCheck();
+          }
+          this.creation = false;
+        });
       }
     });
 
