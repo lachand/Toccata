@@ -204,6 +204,7 @@ export class ActivityService {
           description: `Nouvelle description`,
           userList: [this.user.id],
           subactivityList: [],
+          duplicateList : [],
           resourceList: [],
           currentLoaded: dbName,
           applicationList: [],
@@ -592,9 +593,6 @@ export class ActivityService {
           }));
         })
         .then(() => {
-          if (isNullOrUndefined(activity['duplicateList'])) {
-            activity['duplicateList'] = [];
-          }
           activity['duplicateList'].push(newDb);
           this.database.updateDocument(activity).then( res => {
             console.log(res);
