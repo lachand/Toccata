@@ -1,7 +1,7 @@
 <mat-card class="activity-card" (click)="show_activity(activityId)">
 
   <div *ngIf="isNull(activityInfos) " class="div-centered activity-card">
-    <mat-spinner style="margin:0 auto;"></mat-spinner>
+    <mat-spinner></mat-spinner>
     <p i18n="@@activityLoading">Chargement de l'activité</p>
   </div>
 

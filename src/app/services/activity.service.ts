@@ -9,10 +9,10 @@ import {isNullOrUndefined} from 'util';
 @Injectable()
 export class ActivityService {
   db: any;
-  activityLoaded: any;
-  sisters: any;
+  activityLoaded: any ;
+  sisters: Array<any>;
   activitiesList: Array<any>;
-  activityLoadedChild: any;
+  activityLoadedChild: Array<any>;
   user: any;
   userActivitiesListId: Array<any> = [];
 
@@ -30,6 +30,7 @@ export class ActivityService {
               public resourcesService: ResourcesService,
               public database: DatabaseService,
               public appsService: AppsService) {
+
     this.database.changes.subscribe(
       (change) => {
         if (change.type === 'Activity') {
@@ -46,6 +47,7 @@ export class ActivityService {
             this.changes.emit({doc: change.doc, type: 'Main'});
             if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
               (change.doc.master === true )) {
+              console.log(change);
               if (this.activitiesList.indexOf(change.doc._id) === -1) {
                 this.activitiesList.push(change.doc._id);
               }
