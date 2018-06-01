@@ -304,7 +304,7 @@ export class ActivityService {
         .then(parent => {
           subActivity = {
             _id: `activity_${this.database.guid()}`,
-            name: 'nouvelle activité',
+            name: 'nouvelle étape',
             description: 'Il n\'y a aucune description',
             userList: parent['userList'],
             resourceList: parent['resourceList'],
