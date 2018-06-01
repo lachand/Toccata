@@ -112,7 +112,12 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   activityGroupView() {
-    const activityId = this.activityService.activityLoaded.parent;
+    let activityId;
+    if (this.activityService.activityLoaded.type === 'Sequence') {
+      activityId = this.activityService.activityLoaded.parent.split('_duplicate')[0];
+    } else {
+      activityId = this.activityService.activityLoaded._id('_duplicate')[0];
+    }
     this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
     this.router.navigate(['duplicates/' + activityId]);
   }
