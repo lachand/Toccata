@@ -24,8 +24,11 @@
 </div>
 
 <div *ngIf="nameEdition" class="name-edition">
-  <mat-input-container>
+  <mat-input-container *ngIf="activityService.activityLoaded.type === 'Main'">
     <input matInput placeholder="Nom de l'activité" type="text" name="appName" [(ngModel)]="appName">
+  </mat-input-container>
+  <mat-input-container *ngIf="activityService.activityLoaded.type === 'Sequence'">
+    <input matInput placeholder="Nom de l'étape" type="text" name="appName" [(ngModel)]="appName">
   </mat-input-container>
   <mat-icon class="aligned-with-text" (click)="changeTheName()">done</mat-icon>
   <mat-icon class="aligned-with-text" (click)="switch()">close</mat-icon>
