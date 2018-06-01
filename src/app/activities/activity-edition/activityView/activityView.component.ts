@@ -41,7 +41,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
       this.steps = this.activityService.sisters;
     }
     if (this.steps.length === 0) {
-      this.steps = [this.activityService.activityLoaded._id];
+      //this.steps = [this.activityService.activityLoaded._id];
     }
   }
 
@@ -51,7 +51,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     }
     this.activityService.changes.subscribe(changes => {
       if (changes.type === 'ChangeActivity') {
-        this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
+        if (!isNullOrUndefined(this.stepper)) {
+          this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
+        }
         this.ref.detectChanges();
       }
     });
@@ -61,10 +63,17 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * Set the current step to 'undefined' if the current activity is the main activity
    */
   ngAfterViewInit(): void {
-    if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded)) {
-      const activityId = this.activityService.activityLoaded.currentLoaded;
+    if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded) && this.steps.length > 0) {
+      let activityId = this.activityService.activityLoaded.currentLoaded;
+
       if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
         this.stepper.selectedIndex = this.steps.indexOf(activityId);
+        this.activityService.load_activity(activityId).then(res => {
+          this.router.navigate(['activity_view/' + activityId]);
+        });
+      } else if (this.activityService.activityLoaded.type === 'Main' && isNullOrUndefined(activityId)) {
+        this.stepper.selectedIndex = 0;
+        activityId = this.steps[0];
         this.activityService.load_activity(activityId).then(res => {
           this.router.navigate(['activity_view/' + activityId]);
         });
