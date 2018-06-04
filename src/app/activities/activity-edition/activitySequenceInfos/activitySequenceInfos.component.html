@@ -1,6 +1,13 @@
 <mat-card class="activity-card" (dblclick)="viewOrEdit(activityId)">
 
-  <h3 mat-line>{{activityInfos?.name}}</h3>
+  <h3 mat-line><div class="sequence-name">{{activityInfos?.name}}</div>
+    <div>
+    <mat-chip-list>
+      <mat-chip><mat-icon>visibility</mat-icon></mat-chip>
+      <mat-chip><mat-icon>lock_open</mat-icon></mat-chip>
+    </mat-chip-list>
+    </div>
+  </h3>
   <div [innerHTML]="activityInfos?.description" class="activity-description"></div>
 
 </mat-card>

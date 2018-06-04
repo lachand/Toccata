@@ -43,6 +43,10 @@ export class ResourceInfosComponent implements OnInit {
     });
   }
 
+  editResource() {
+    return 0;
+  }
+
   deleteResource() {
     return this.resourcesService.deleteResource(this.resourceId);
   }
