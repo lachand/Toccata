@@ -37,7 +37,6 @@
         ></activity-name>
           </div>
         </div>
-        <div>
         <mat-chip-list class="chip-list">
           <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
             <mat-icon>edit</mat-icon>
@@ -51,11 +50,10 @@
 
         </mat-chip-list>
         </div>
-      </div>
     </h3>
 
-    <div *ngIf="steps.length > 0">
-      <mat-horizontal-stepper [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
+    <div *ngIf="steps.length > 0" class="left-aligned">
+      <mat-horizontal-stepper class="stepperLeft" [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
         <mat-step *ngFor="let step of steps" [completed]="false">
           <ng-template matStepLabel>
             <activity-name [activityId]="step"></activity-name>

@@ -136,7 +136,7 @@ export class ActivityService {
           this.activityLoaded = result;
           this.activityLoadedChild = [];
           result['subactivityList'].map(elmt => {
-            if (elmt['visible'] === true) {
+            if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
               this.activityLoadedChild.push(elmt['stepId']);
             }
           });
@@ -147,7 +147,7 @@ export class ActivityService {
             //this.sisters = res['subactivityList'];
             this.sisters = [];
             res['subactivityList'].map(elmt => {
-              if (elmt['visible'] === true) {
+              if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
                 this.sisters.push(elmt['stepId']);
               }
             });
@@ -155,7 +155,7 @@ export class ActivityService {
             this.activityLoaded = result;
             //this.activityLoadedChild = result['subactivityList'];
             result['subactivityList'].map(elmt => {
-              if (elmt['visible'] === true) {
+              if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
                 this.activityLoadedChild.push(elmt['stepId']);
               }
             });
@@ -301,7 +301,9 @@ export class ActivityService {
           applicationList: activity['applicationList'],
           currentLoaded: activity['currentLoaded'],
           subactivityList: activity['subactivityList'],
-          nameForTeacher: activity['nameForTeacher']
+          nameForTeacher: activity['nameForTeacher'],
+          visible: activity['visible'],
+          blocked: activity['blocked']
         });
       }).catch(err => {
         console.log(`Error in activity service whith call to getActivityInfos :
@@ -636,6 +638,74 @@ export class ActivityService {
       return this.database.getDocument(activityId).then(activity => {
         resolve(activity['duplicateList']);
       });
+    });
+  }
+
+  /**
+   * Change the value of the state of the step
+   * @param activityId The activity to change the value
+   */
+  switchLock(activityId) {
+    return new Promise(resolve => {
+      let state;
+      let activityToSwitch;
+      return this.database.getDocument(activityId)
+        .then(activity => {
+          state = !activity['blocked'];
+          activityToSwitch = activity;
+          activity['blocked'] = state;
+        return this.database.updateDocument(activity);
+        })
+        .then(res => {
+          if (activityToSwitch['parent'] === 'Sequence') {
+            return this.database.getDocument(activityToSwitch['parent]']);
+          } else {
+            resolve(res);
+          }
+        })
+        .then(parent => {
+          parent['blocked'] = state;
+          return this.database.updateDocument(parent);
+        })
+        .then(doc => {
+          resolve(doc);
+        });
+      });
+    }
+
+  /**
+   * Change the value of the visibility of the step
+   * @param activityId The activity to change the value
+   */
+  switchVisibility(activityId) {
+    return new Promise(resolve => {
+      let state;
+      let activityToSwitch;
+      return this.database.getDocument(activityId)
+        .then(activity => {
+          state = !activity['visible'];
+          activity['visible'] = state;
+          activityToSwitch = activity;
+          return this.database.updateDocument(activity);
+        })
+        .then(res => {
+          if (activityToSwitch['type'] === 'Sequence') {
+            return this.database.getDocument(activityToSwitch['parent']);
+          } else {
+            resolve(res);
+          }
+        })
+        .then(parent => {
+          parent['subactivityList'].map(elmt => {
+            if (elmt['stepId'] === activityToSwitch['_id']) {
+              elmt['visible'] = state;
+            }
+          });
+          return this.database.updateDocument(parent);
+        })
+        .then(doc => {
+          resolve(doc);
+        });
     });
   }
 }

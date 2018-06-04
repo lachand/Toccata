@@ -57,6 +57,20 @@ export class ActivitySequenceInfosComponent implements OnInit {
     }
   }
 
+  /**
+   * Change the value of the state of the step
+   */
+  switchLock() {
+    this.activityService.switchLock(this.activityId);
+  }
+
+  /**
+   * Change the value of the visibility of the step
+   */
+  switchVisibility() {
+    this.activityService.switchVisibility(this.activityId);
+  }
+
   deleteSubactivity(activityId) {
     this.activityService.deleteActivity(activityId);
   }
