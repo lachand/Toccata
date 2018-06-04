@@ -129,19 +129,36 @@ export class ActivityService {
    */
   public load_activity(activity_id) {
     return new Promise(resolve => {
-      console.log("reloading the activity");
       this.database.getDocument(activity_id)
         .then((result) => {
         if (result['type'] === 'Main') {
-          this.sisters = this.activityLoadedChild;
+          //this.sisters = this.activityLoadedChild;
           this.activityLoaded = result;
-          this.activityLoadedChild = result['subactivityList'];
+          this.activityLoadedChild = [];
+          result['subactivityList'].map(elmt => {
+            if (elmt['visible'] === true) {
+              this.activityLoadedChild.push(elmt['stepId']);
+            }
+          });
+          //this.activityLoadedChild = result['subactivityList'];
           return this.resourcesService.getResources(this.activityLoaded._id);
         } else {
           this.database.getDocument(result['parent']).then(res => {
-            this.sisters = res['subactivityList'];
+            //this.sisters = res['subactivityList'];
+            this.sisters = [];
+            res['subactivityList'].map(elmt => {
+              if (elmt['visible'] === true) {
+                this.sisters.push(elmt['stepId']);
+              }
+            });
+            this.activityLoadedChild = [];
             this.activityLoaded = result;
-            this.activityLoadedChild = result['subactivityList'];
+            //this.activityLoadedChild = result['subactivityList'];
+            result['subactivityList'].map(elmt => {
+              if (elmt['visible'] === true) {
+                this.activityLoadedChild.push(elmt['stepId']);
+              }
+            });
             return this.resourcesService.getResources(this.activityLoaded._id);
           });
         }
@@ -154,7 +171,6 @@ export class ActivityService {
         })
         .then(() => {
             this.changes.emit({doc: this.activityLoaded, type: 'ChangeActivity'});
-            console.log(this.activityLoaded);
             resolve(this.activityLoaded);
           }
         )
@@ -208,6 +224,8 @@ export class ActivityService {
           subactivityList: [],
           duplicateList : [],
           resourceList: [],
+          visible: true,
+          blocked: false,
           currentLoaded: dbName,
           applicationList: [],
           createdAt: Date.now(),
