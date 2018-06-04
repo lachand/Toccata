@@ -664,7 +664,11 @@ export class ActivityService {
           }
         })
         .then(parent => {
-          parent['blocked'] = state;
+          parent['subactivityList'].map(elmt => {
+            if (elmt['stepId'] === activityToSwitch['_id']) {
+              elmt['blocked'] = state;
+            }
+          });
           return this.database.updateDocument(parent);
         })
         .then(doc => {
