@@ -123,6 +123,7 @@ export class DatabaseService {
    * @param change change that occurs
    */
   handleChange(change) {
+    console.log(change.doc);
     this.changes.emit({type: change.doc.documentType, doc: change.doc});
   }
 

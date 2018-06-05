@@ -11,6 +11,7 @@ export class ActivityService {
   db: any;
   activityLoaded: any ;
   sisters: Array<any>;
+  blocked: Array<any>;
   activitiesList: Array<any>;
   activityLoadedChild: Array<any>;
   user: any;
@@ -146,9 +147,13 @@ export class ActivityService {
           this.database.getDocument(result['parent']).then(res => {
             //this.sisters = res['subactivityList'];
             this.sisters = [];
+            this.blocked = [];
             res['subactivityList'].map(elmt => {
               if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
                 this.sisters.push(elmt['stepId']);
+              }
+              if (elmt['blocked'] === true || this.userService.fonction !== 'Enseignant') {
+                this.blocked.push(elmt['stepId']);
               }
             });
             this.activityLoadedChild = [];
@@ -652,13 +657,13 @@ export class ActivityService {
       return this.database.getDocument(activityId)
         .then(activity => {
           state = !activity['blocked'];
-          activityToSwitch = activity;
           activity['blocked'] = state;
-        return this.database.updateDocument(activity);
+          activityToSwitch = activity;
+          return this.database.updateDocument(activity);
         })
         .then(res => {
-          if (activityToSwitch['parent'] === 'Sequence') {
-            return this.database.getDocument(activityToSwitch['parent]']);
+          if (activityToSwitch['type'] === 'Sequence') {
+            return this.database.getDocument(activityToSwitch['parent']);
           } else {
             resolve(res);
           }
@@ -674,8 +679,8 @@ export class ActivityService {
         .then(doc => {
           resolve(doc);
         });
-      });
-    }
+    });
+  }
 
   /**
    * Change the value of the visibility of the step

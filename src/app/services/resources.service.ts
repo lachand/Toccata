@@ -227,4 +227,18 @@ export class ResourcesService {
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
+
+  /**
+   * Change the name of the resource
+   * @param resourceId The resource to edit
+   * @param name The new name
+   */
+  editName(resourceId: any, name: any) {
+    return this.getResource(resourceId).then( (res) => {
+      console.log(res);
+        res['name'] = name;
+        return this.database.updateDocument(res);
+      }
+    );
+  }
 }
