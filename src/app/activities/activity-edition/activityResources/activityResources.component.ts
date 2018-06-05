@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, ElementRef, Input, Renderer, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -25,7 +25,8 @@ export class ActivityResourcesComponent {
   constructor(public activityService: ActivityService, public router: Router,
               public user: UserService, dialog: MatDialog,
               public resourcesService: ResourcesService,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private eleRef: ElementRef) {
     this.dialog = dialog;
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
@@ -35,13 +36,12 @@ export class ActivityResourcesComponent {
 
   newResource() {
     const dialogRef = this.dialog.open(DialogNewRessourceComponent);
-    //dialogRef.componentInstance.dialogRef = dialogRef;
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'File') {
-        //dialogRef.close();
-        document.getElementById('hiddenfile').click();
+        const hiddenFile = this.eleRef.nativeElement.querySelector('#hiddenFile');
+        hiddenFile.dispatchEvent(new Event('click'));
       } else if (result === 'Link') {
-        //dialogRef.close();
         const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent);
         dialogRefUrl.componentInstance.dialogRef = dialogRefUrl;
       }

@@ -9,7 +9,7 @@
 
     <mat-list-item *ngIf="edit===true" (click)="newResource()">
       <mat-icon mat-list-icon>add_circle</mat-icon>
-      <input type="file" id="hiddenfile" style="display:none" (change)="uploadResource()"/>
+      <input type="file" id="hiddenFile" #hiddenFile style="display:none" (change)="uploadResource()"/>
       <p mat-line i18n="@@newResource">Nouvelle ressource</p>
     </mat-list-item>
   </mat-nav-list>
