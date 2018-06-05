@@ -74,6 +74,7 @@ import {DialogNewRessourceComponent} from 'app/activities/activity-edition/dialo
 import {ActivityNewRessourceComponent} from './activities/activity-edition/activityNewRessource/activityNewRessource.component';
 import {DialogResourceOpenedComponent} from "./activities/activity-edition/dialogResourceOpened/dialogResourceOpened.component";
 import {DialogApplicationLaunchedComponent} from "./activities/activity-edition/dialogApplicationLaunched/dialogApplicationLaunched.component";
+import {DialogResourceEditionComponent} from "./activities/activity-edition/resourceInfos/dialogResourceEdition/dialogResourceEdition.component";
 
 @NgModule({
   declarations: [AppComponent,
@@ -123,7 +124,9 @@ import {DialogApplicationLaunchedComponent} from "./activities/activity-edition/
     MenuComponent,
     OrderBy,
     DialogResourceOpenedComponent,
- DialogApplicationLaunchedComponent],
+    DialogResourceEditionComponent,
+    DialogApplicationLaunchedComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -167,7 +170,9 @@ import {DialogApplicationLaunchedComponent} from "./activities/activity-edition/
     DialogNewRessourceComponent,
     CreateEditPostitComponent,
     DialogResourceOpenedComponent,
-    DialogApplicationLaunchedComponent],
+    DialogApplicationLaunchedComponent,
+    DialogResourceEditionComponent
+  ],
   providers: [UserService, ActivityService, ResourcesService, LoggedInGuard, AppsService, DatabaseService, LoggerService, {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
