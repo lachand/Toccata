@@ -54,7 +54,7 @@
 
     <div *ngIf="steps.length > 0" class="left-aligned">
       <mat-horizontal-stepper class="stepperLeft" [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
-        <mat-step *ngFor="let step of steps" [completed]="false">
+        <mat-step *ngFor="let step of steps" [completed]="false" [editable]="true">
           <ng-template matStepLabel>
             <activity-name [activityId]="step"></activity-name>
           </ng-template>

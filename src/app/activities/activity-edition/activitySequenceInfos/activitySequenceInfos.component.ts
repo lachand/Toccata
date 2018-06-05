@@ -61,6 +61,7 @@ export class ActivitySequenceInfosComponent implements OnInit {
    * Change the value of the state of the step
    */
   switchLock() {
+    this.activityInfos.blocked = !this.activityInfos.blocked;
     this.activityService.switchLock(this.activityId);
   }
 
@@ -68,6 +69,7 @@ export class ActivitySequenceInfosComponent implements OnInit {
    * Change the value of the visibility of the step
    */
   switchVisibility() {
+    this.activityInfos.visible = !this.activityInfos.visible;
     this.activityService.switchVisibility(this.activityId);
   }
 

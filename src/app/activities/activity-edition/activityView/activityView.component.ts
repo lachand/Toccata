@@ -20,6 +20,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   steps: any;
   editActivity: any;
   viewGroup: any;
+  editable: Array<any>;
   shareActivity: string;
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('chip') chip: MatChip;
@@ -35,6 +36,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';
+    this.editable = [];
     if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
     } else {
@@ -43,6 +45,13 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     if (this.steps.length === 0) {
       //this.steps = [this.activityService.activityLoaded._id];
     }
+    this.steps.map(elmt => {
+      if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
+        this.editable['elmt'] = false;
+      } else {
+        this.editable['elmt'] = true;
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -63,6 +72,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * Set the current step to 'undefined' if the current activity is the main activity
    */
   ngAfterViewInit(): void {
+    console.log(this.stepper._steps);
     if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded) && this.steps.length > 0) {
       let activityId = this.activityService.activityLoaded.currentLoaded;
 
