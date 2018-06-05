@@ -1,10 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
 import {AppsService} from 'app/services/apps.service';
+import {DialogResourceEditionComponent} from "./dialogResourceEdition/dialogResourceEdition.component";
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-resource-infos',
@@ -23,7 +25,11 @@ export class ResourceInfosComponent implements OnInit {
   audio: RegExp;
   document: RegExp;
 
-  constructor(public resourcesService: ResourcesService, public appsService: AppsService) {
+  constructor(public resourcesService: ResourcesService,
+              public appsService: AppsService,
+              private dialog: MatDialog,
+              private logger: LoggerService,
+              private ref: ChangeDetectorRef) {
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
     this.video = /video\/(?:.*)/i;
@@ -44,25 +50,23 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   editResource() {
-    return 0;
+
+    const dialogRef = this.dialog.open(DialogResourceEditionComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.type === 'validate') {
+        this.logger.log('UPDATE', this.resourceId, this.resourceId, 'change resource name');
+        this.resourcesService.editName(this.resourceId, result.value).then( () =>
+        {
+          if (!this.ref['destroyed']) {
+            this.ref.markForCheck();
+          }
+        });
+      }
+    });
   }
 
   deleteResource() {
     return this.resourcesService.deleteResource(this.resourceId);
   }
-
-  /*switchStatus() {
-    this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
-  }*/
-
-  /*openRessource() {
-    this.resourcesService.getResourceData(this.resourceId, "filename").then(ressource => {
-      const myUrl = URL.createObjectURL(ressource);
-      const win = window.open(myUrl, '_blank');
-      win.focus();
-    });
-  }
-  */
 }
