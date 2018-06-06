@@ -55,7 +55,7 @@ export class ResourceOpenedComponent implements OnInit {
    */
   resizeIframe(obj) {
     if (!this.reloaded) {
-      const iframe = document.getElementById(`iframe_${this.resourceId}`);
+      const iframe = document.getElementById(`iframe_${this.resourceId}`) as HTMLIFrameElement;
       const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
       if (this.resource.type === 'application/pdf') {
         iframe.style.height = '70vw';
@@ -64,8 +64,13 @@ export class ResourceOpenedComponent implements OnInit {
         iframe.setAttribute('scrolling', 'yes');
         iframe.setAttribute('src', iframe.getAttribute('src'));
         this.reloaded = true;
-      } else if (this.resource.type.split('video').length > 0) {
+      } else if (this.resource.type.indexOf('video') !== -1) {
         iframe.style.height = '30vw';
+      } else if (this.resource.type.indexOf('image') !== -1) {
+        let doc = iframe.contentDocument || iframe.contentWindow.document ;
+        iframe.style.height = '30vw';
+        doc.querySelector('img').style.height = '100%';
+        doc.querySelector('img').style.maxWidth = '100%';
       }
     }
   }

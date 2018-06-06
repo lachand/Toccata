@@ -4,8 +4,9 @@
     <h2 mat-dialog-title i18n="@@addResource">Ajout d'une ressource</h2>
     <mat-dialog-content i18n="@@fileOrLink">Voulez vous ajouter un fichier ou un lien ?</mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button [mat-dialog-close]="'File'" i18n="@@file">Fichier</button>
-      <button mat-button [mat-dialog-close]="'Link'" i18n="@@link">Lien</button>
+      <button mat-button i18n="@@file" (click)="clickFile($event)">Fichier</button>
+      <button mat-button [mat-dialog-close]="{type: 'Link'}" i18n="@@link">Lien</button>
     </mat-dialog-actions>
+    <input type="file" id="hiddenFile" #hiddenFile style="display:none" (change)="uploadFile()"/>
   </div>
 </div>
