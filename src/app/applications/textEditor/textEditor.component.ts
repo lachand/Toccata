@@ -44,6 +44,7 @@ export class TextEditorComponent implements OnInit {
       disableNativeSpellChecker: false,
       uiColor: '#FAFAFA',
     };
+    const autosave = setInterval( () => {this.save();} , 30000);
   }
 
   ngOnInit(): void {
@@ -67,7 +68,8 @@ export class TextEditorComponent implements OnInit {
     });
   }
 
-  save(event) {
+  save() {
+    console.log('autosave');
     this.databaseService.getDocument(this.resource._id).then( res => {
       res['text'] = this.resource.text;
       this.databaseService.updateDocument(res);
