@@ -49,6 +49,7 @@ export class ActivityDescriptionEditComponent {
         this.description = change.doc.description;
       }
     });
+    const autosave = setInterval( () => {this.changeTheDescription();} , 30000);
   }
 
   switchDescription() {
