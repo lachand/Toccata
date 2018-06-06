@@ -349,7 +349,12 @@ export class ActivityService {
           return this.database.getDocument(parentId);
         })
         .then(parent => {
-          parent['subactivityList'].push(subActivity._id);
+          parent['subactivityList'].push(
+            {
+              "stepId": subActivity._id,
+              "visible": true,
+              "blocked": false
+            });
           return this.database.updateDocument(parent);
         })
         .then(() => {
