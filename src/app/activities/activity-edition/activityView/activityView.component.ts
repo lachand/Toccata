@@ -42,8 +42,8 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     } else {
       this.steps = this.activityService.sisters;
     }
-    if (this.steps.length === 0) {
-      //this.steps = [this.activityService.activityLoaded._id];
+    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
+      this.steps = [];
     }
     this.steps.map(elmt => {
       if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
