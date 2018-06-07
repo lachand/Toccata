@@ -2,6 +2,7 @@ import {DatabaseService} from './database.service';
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {LoggerService} from './logger.service';
 import {ActivityService} from 'app/services/activity.service';
+import {UserService} from "./user.service";
 
 @Injectable()
 export class ResourcesService {
@@ -16,7 +17,7 @@ export class ResourcesService {
    * @param {DatabaseService} The database where resources are
    * @param {LoggerService} A logger for research purpose
    */
-  constructor(public database: DatabaseService, private logger: LoggerService) {
+  constructor(public database: DatabaseService, private logger: LoggerService, private userService: UserService) {
     this.resources = {};
 
     this.database.changes.subscribe(
@@ -75,6 +76,7 @@ export class ResourcesService {
             documentType: 'Resource',
             type: resource.type,
             url: resource.value,
+            creator: this.userService.id,
             dbName: activity['dbName']
           };
         } else {
@@ -84,6 +86,7 @@ export class ResourcesService {
             activity: activityId,
             documentType: 'Resource',
             type: resource.type,
+            creator: this.userService.id,
             dbName: activity['dbName'],
             _attachments: {
               filename: {

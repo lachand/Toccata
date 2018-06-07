@@ -1,6 +1,7 @@
 import {EventEmitter, Inject, Injectable, Output} from '@angular/core';
 //import {Http} from '@angular/http';
 import {DatabaseService} from './database.service';
+import {UserService} from "./user.service";
 
 @Injectable()
 export class AppsService {
@@ -14,7 +15,7 @@ export class AppsService {
    * @param {Http} http
    * @param {DatabaseService} databaseService The service for database management
    */
-  constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService) {
+  constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService, private userService: UserService) {
 
     this.databaseService.changes.subscribe(
       (change) => {
@@ -70,6 +71,7 @@ export class AppsService {
       type: app.type,
       status: 'unloaded',
       url: '',
+      creator: this.userService.id,
       dbName: dbName,
     };
 
