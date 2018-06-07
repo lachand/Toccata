@@ -118,9 +118,9 @@ export class ActivityService {
    */
   public unloadActivity() {
     this.activityLoaded = null;
-    this.activitiesList = [];
     this.activityLoadedChild = [];
-    this.appsService.logout();
+    this.sisters = [];
+    this.blocked = [];
   }
 
   /**
@@ -129,6 +129,7 @@ export class ActivityService {
    * @returns {Promise<any>} The activity loaded
    */
   public load_activity(activity_id) {
+    this.unloadActivity();
     return new Promise(resolve => {
       this.database.getDocument(activity_id)
         .then((result) => {

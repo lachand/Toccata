@@ -7,6 +7,7 @@ import {ResourcesService} from '../../../services/resources.service';
 import {AppsService} from 'app/services/apps.service';
 import {DialogResourceEditionComponent} from "./dialogResourceEdition/dialogResourceEdition.component";
 import {LoggerService} from "../../../services/logger.service";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-resource-infos',
@@ -29,7 +30,8 @@ export class ResourceInfosComponent implements OnInit {
               public appsService: AppsService,
               private dialog: MatDialog,
               private logger: LoggerService,
-              private ref: ChangeDetectorRef) {
+              private ref: ChangeDetectorRef,
+              public userService: UserService) {
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
     this.video = /video\/(?:.*)/i;

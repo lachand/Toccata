@@ -121,14 +121,16 @@ export class ResourcesService {
             id: resource['_id'],
             type: resource['type'],
             status: resource['status'],
-            url: resource['url']
+            url: resource['url'],
+            creator: resource['creator']
           });
         } else {
           resolve({
             name: resource['name'],
             id: resource['_id'],
             type: resource['type'],
-            status: resource['status']
+            status: resource['status'],
+            creator: resource['creator']
           });
         }
       }).catch(err => {

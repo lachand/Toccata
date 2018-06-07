@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import {AppsService} from '../../../services/apps.service';
 import {LoggerService} from '../../../services/logger.service';
 import {ActivityService} from 'app/services/activity.service';
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-application-infos',
@@ -16,7 +17,8 @@ export class ApplicationInfosComponent implements OnInit {
 
   constructor(public appsService: AppsService,
               private logger: LoggerService,
-              private activityService: ActivityService) {
+              private activityService: ActivityService,
+              public userService: UserService) {
   }
 
   ngOnInit(): void {
