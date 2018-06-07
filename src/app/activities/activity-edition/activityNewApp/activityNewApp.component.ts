@@ -27,7 +27,7 @@ import {LoggerService} from '../../../services/logger.service';
     this.formNewApp = this.formBuilder.group({
       appName: ['', Validators.required],
       appType: ['', Validators.required],
-      serviceName: '',
+      //serviceName: '',
       chronometreValue: '',
       url: ''
     });
@@ -44,15 +44,19 @@ import {LoggerService} from '../../../services/logger.service';
   newApp() {
     // Case Chronometer
     const options = {};
+    let url = '';
     if (this.formNewApp.value.appType === 'Chronomètre') {
       options['time'] = this.formNewApp.value.chronometreValue;
+    } else if (this.formNewApp.value.appType === 'External') {
+      url = this.formNewApp.value.url;
     }
 
     const appToAdd = {
       type: this.formNewApp.value.appType,
       provider: this.formNewApp.value.appType,
       name: this.formNewApp.value.appName,
-      options: options
+      options: options,
+      url: url
     };
     this.activityService.getActivityInfos(this.activityService.activityLoaded._id).then(activity => {
       this.appsService.createApp(appToAdd, this.activityService.activityLoaded._id, activity['dbName']).then((app) => {

@@ -119,7 +119,8 @@ export class AppsService {
           name: application['name'],
           id: application['_id'],
           type: application['type'],
-          status: application['status']
+          status: application['status'],
+          url: application['url']
         });
       }).catch(err => {
         console.log(`Error in apps service whith call to getApplicationInfos : 

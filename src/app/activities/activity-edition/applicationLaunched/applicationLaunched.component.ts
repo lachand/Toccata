@@ -6,6 +6,7 @@ import {LoggerService} from '../../../services/logger.service';
 import {ActivityService} from '../../../services/activity.service';
 import {MatDialog} from "@angular/material";
 import {DialogApplicationLaunchedComponent} from "../dialogApplicationLaunched/dialogApplicationLaunched.component";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'application-launched',
@@ -17,10 +18,11 @@ export class ApplicationLaunchedComponent implements OnInit {
 
   @Input() appId;
   application: any;
+  url: any;
 
   constructor(public appsService: AppsService, private ref: ChangeDetectorRef,
               private logger: LoggerService, private activityService: ActivityService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog, private sanitizer: DomSanitizer) {
     this.appsService.changes.subscribe(change => {
       if (this.appId === change.doc._id) {
         this.application = change.doc;
@@ -37,6 +39,8 @@ export class ApplicationLaunchedComponent implements OnInit {
   ngOnInit(): void {
     this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.application.url);
+      console.log(this.url);
     });
   }
 

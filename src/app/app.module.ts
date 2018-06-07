@@ -125,7 +125,7 @@ import {DialogResourceEditionComponent} from "./activities/activity-edition/reso
     OrderBy,
     DialogResourceOpenedComponent,
     DialogResourceEditionComponent,
-    DialogApplicationLaunchedComponent
+    DialogApplicationLaunchedComponent,
   ],
   imports: [
     BrowserModule,

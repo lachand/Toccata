@@ -10,4 +10,5 @@
     <app-chronometre *ngIf="application?.type === 'Chronomètre'" [appId]="application?.id"></app-chronometre>
     <app-postit *ngIf="application?.type === 'Post-It'" [appId]="application?.id"></app-postit>
     <app-text-editor *ngIf="application?.type === 'Editeur de texte'" [appId]="application?.id"></app-text-editor>
-</div>
+    <iframe *ngIf="application?.type === 'Externe'" class="iframe_application" id="iframe_{{application?.id}}" [src]="url" scrolling="no" style="width:100%; height:80vh;"></iframe>
+  </div>
