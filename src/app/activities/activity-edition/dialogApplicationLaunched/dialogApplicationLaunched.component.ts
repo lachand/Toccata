@@ -5,6 +5,7 @@ import {isNullOrUndefined} from 'util';
 import {LoggerService} from '../../../services/logger.service';
 import {ActivityService} from '../../../services/activity.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'dialog-application-launched',
@@ -15,11 +16,13 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 export class DialogApplicationLaunchedComponent implements OnInit {
 
   appId: any;
+  url: any;
   application: any;
   dialogRef: MatDialogRef<DialogApplicationLaunchedComponent>;
 
   constructor(public appsService: AppsService, private ref: ChangeDetectorRef,
               private logger: LoggerService, private activityService: ActivityService,
+              private sanitizer: DomSanitizer,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.appId = data.appId;
@@ -47,6 +50,8 @@ export class DialogApplicationLaunchedComponent implements OnInit {
   ngOnInit(): void {
     this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.application.url);
+      console.log(this.url);
     });
   }
 

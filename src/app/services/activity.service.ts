@@ -337,6 +337,8 @@ export class ActivityService {
             parent: parent['_id'],
             type: 'Sequence',
             subactivityList: [],
+            visible: true,
+            blocked: false,
             createdAt: Date.now(),
             dbName: parent['dbName'],
             documentType: 'Activity'
