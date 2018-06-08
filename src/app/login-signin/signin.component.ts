@@ -19,7 +19,7 @@ export class SigninComponent implements OnInit {
 
   signinForm: FormGroup;
   teacher: any;
-  error = Array<any>;
+  error: Array<any>;
 
   constructor(public user: UserService,
               public router: Router,
