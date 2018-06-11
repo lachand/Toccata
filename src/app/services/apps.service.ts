@@ -89,8 +89,6 @@ export class AppsService {
       application.url = `https://annuel2.framapad.org/p/${guid}`;
     }
 
-    this.applications.push(app._id);
-
     return new Promise(resolve => {
       return this.databaseService.getDocument(activityId).then(activity => {
         if (activity['applicationList'].indexOf(application._id) > -1) {
@@ -102,6 +100,7 @@ export class AppsService {
         .then(() => {
           return this.databaseService.addDocument(application).then(res => {
             this.logger.log('CREATE', application['dbName'], `application_${app.provider}_${guid}`, 'create application');
+            this.applications.push(app._id);
             resolve(res);
           });
         }).catch(err => {
