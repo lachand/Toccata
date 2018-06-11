@@ -64,7 +64,7 @@ export class ActivityInfosComponent implements OnInit {
     this.activityService.load_activity(activity_id).then(res => {
       console.log(this.activityService.activityLoaded);
       //if (this.activityService.activityLoaded.subactivityList.length > 0) {
-        this.router.navigate(['activity_view/' + activity_id);
+        this.router.navigate(['activity_view/' + activity_id]);
       //} else {
       //  this.router.navigate(['activity_edit/' + activity_id]);
       //}
