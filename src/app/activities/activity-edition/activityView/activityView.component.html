@@ -4,11 +4,11 @@
   <mat-card class="mat-card">
 
     <h3>
-      <div *ngIf="activityService.activityLoaded.type === 'Main'">
+      <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
         <div class="activity-name">
           <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
           <div class="right">
-            <activity-name [activityId]="activityService.activityLoaded._id"></activity-name>
+            <activity-name [activityId]="activityService?.activityLoaded?._id"></activity-name>
           </div>
         </div>
         <div>
@@ -27,13 +27,13 @@
         </div>
       </div>
 
-      <div *ngIf="activityService.activityLoaded.type === 'Sequence'">
+      <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
         <div class="activity-name">
         <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
           <div class="right">
-        <activity-name [activityId]="activityService.activityLoaded.parent"
+        <activity-name [activityId]="activityService?.activityLoaded?.parent"
         ></activity-name> :
-        <activity-name [activityId]="activityService.activityLoaded._id"
+        <activity-name [activityId]="activityService?.activityLoaded?._id"
         ></activity-name>
           </div>
         </div>

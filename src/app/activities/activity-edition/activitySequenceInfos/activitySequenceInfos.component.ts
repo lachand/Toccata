@@ -46,6 +46,7 @@ export class ActivitySequenceInfosComponent implements OnInit {
   }
 
   editActivity(activity_id) {
+    console.log(activity_id);
     this.activityService.load_activity(activity_id).then(res => {
       this.router.navigate(['activity_edit/' + activity_id]);
     });

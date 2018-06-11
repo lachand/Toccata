@@ -36,6 +36,8 @@ export class AppsService {
    * @returns {Promise<any>} The list of all application of the activity
    */
   public getApplications(activityId) {
+    this.applications = [];
+    console.log(activityId);
     return new Promise(resolve => {
       return this.databaseService.getDocument(activityId)
         .then(activity => {
@@ -63,7 +65,7 @@ export class AppsService {
    * @returns {Promise<any>} The created applications
    */
   public createApp(app, activityId, dbName) {
-    console.log('debug : ', app, dbName);
+    console.log('debug : ', app, dbName, activityId);
     const guid = this.databaseService.guid();
     const application = {
       _id: `application_${app.provider}_${guid}`,
@@ -115,7 +117,6 @@ export class AppsService {
    * @param applicationId The application Id
    */
   getApplicationInfos(applicationId: any) {
-    console.log(applicationId);
     return new Promise(resolve => {
       return this.databaseService.getDocument(applicationId).then(application => {
         resolve({

@@ -33,7 +33,7 @@
           </mat-card>
         </div>
 
-        <div *ngIf="activityService.activityLoaded.type ==='Main'">
+        <div *ngIf="activityService?.activityLoaded.type ==='Main'">
           <mat-card class="flex-card">
             <app-activity-participants-edit [edit]="true"></app-activity-participants-edit>
           </mat-card>
@@ -43,7 +43,7 @@
 
       <div fxFlex="63%">
 
-        <div *ngIf="activityService.activityLoaded.type ==='Main'">
+        <div *ngIf="activityService?.activityLoaded.type ==='Main'">
           <mat-card class="flex-card">
             <mat-card-header>
               <h3 mat-line i18n="@@steps">Etapes</h3>

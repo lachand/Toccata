@@ -55,6 +55,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.activityService.activityLoaded);
     if (this.activityService.activityLoaded.master === true) {
       this.ref.detectChanges();
     }
@@ -96,6 +97,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * @param $event
    */
   loadActivity($event) {
+    console.log(this.steps);
+    console.log(this.steps[$event.selectedIndex]);
+    console.log($event.selectedIndex);
     const activityId = this.steps[$event.selectedIndex];
     this.loadAnActivity(activityId);
   }
@@ -119,6 +123,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * @param activityId
    */
   loadAnActivity(activityId) {
+    console.log(activityId);
     this.activityService.setCurrentActivity(activityId).then(() => {
       this.activityService.load_activity(activityId).then(res => {
         this.router.navigate(['activity_view/' + activityId]);
@@ -166,12 +171,13 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   activityEdit() {
+    console.log(this.activityService.activityLoaded);
     if (this.activityService.activityLoaded.type === 'Main') {
       this.router.navigate(['activity_edit/' + this.activityService.activityLoaded._id]);
     } else {
       this.logger.log('OPEN', this.activityService.activityLoaded.parent, this.activityService.activityLoaded.parent, 'open activity edition');
       this.activityService.load_activity(this.activityService.activityLoaded.parent).then(res => {
-        this.router.navigate(['activity_edit/' + this.activityService.activityLoaded.parent]);
+        this.router.navigate(['activity_edit/' + this.activityService.activityLoaded._id]);
       });
     }
   }

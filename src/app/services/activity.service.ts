@@ -138,10 +138,13 @@ export class ActivityService {
    * @returns {Promise<any>} The activity loaded
    */
   public load_activity(activity_id) {
+    console.log(activity_id);
     this.unloadActivity();
     return new Promise(resolve => {
       this.database.getDocument(activity_id)
         .then((result) => {
+          console.log(result);
+          this.activityLoaded = result;
         if (result['type'] === 'Main') {
           if (result['_id'].indexOf('duplicate') !== -1 && this.user.fonction === 'Enseignant') {
             this.logger.log('OPEN', result['_id'], result['_id'], 'load activity duplicate');
@@ -149,7 +152,7 @@ export class ActivityService {
             this.logger.log('OPEN', result['_id'], result['_id'], 'load activity');
           }
           //this.sisters = this.activityLoadedChild;
-          this.activityLoaded = result;
+          console.log(result);
           this.activityLoadedChild = [];
           result['subactivityList'].map(elmt => {
             if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
@@ -173,7 +176,7 @@ export class ActivityService {
               }
             });
             this.activityLoadedChild = [];
-            this.activityLoaded = result;
+            console.log(result);
             //this.activityLoadedChild = result['subactivityList'];
             result['subactivityList'].map(elmt => {
               if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
@@ -185,9 +188,12 @@ export class ActivityService {
         }
         })
         .then(() => {
+          console.log("get apps");
+          console.log(this.activityLoaded);
           return this.appsService.getApplications(this.activityLoaded._id);
         })
         .then(() => {
+          console.log(this.appsService.applications);
           return this.userService.getParticipants(this.activityLoaded._id);
         })
         .then(() => {
@@ -541,16 +547,7 @@ export class ActivityService {
           return this.database.updateDocument(res);
         })
         .then(result => {
-          let tmpThis = this;
-            return Promise.all(duplicateList.map(function (duplicate) {
-              tmpThis.database.getDocument(duplicate)
-                .then(dupl => {
-                  dupl[key] = value;
-                  return tmpThis.database.updateDocument(dupl);
-                });
-            })).then( () => {
               resolve(result);
-            })
         })
         .catch(err => {
           console.log(`Error in user activity whith call to activityEdit :
