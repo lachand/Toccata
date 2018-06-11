@@ -63,14 +63,15 @@ export class ResourcesService {
     return new Promise(resolve => {
       let activity;
       let resourceToAdd;
+      const guid = this.database.guid();
       return this.database.getDocument(activityId).then(res => {
         activity = res;
-        if (activity['resourceList'].indexOf(resource.name) > -1) {
+        if (activity['resourceList'].indexOf(`resource_${resource.name}_${guid}`) > -1) {
           resolve('error');
         } else {
         if (resource.type === 'url') {
           resourceToAdd = {
-            _id: `resource_${resource.name}`,
+            _id: `resource_${resource.name}_${guid}`,
             name: resource.name,
             activity: activityId,
             documentType: 'Resource',
@@ -81,7 +82,7 @@ export class ResourcesService {
           };
         } else {
           resourceToAdd = {
-            _id: `resource_${resource.name}`,
+            _id: `resource_${resource.name}_${guid}`,
             name: resource.name,
             activity: activityId,
             documentType: 'Resource',
@@ -96,12 +97,12 @@ export class ResourcesService {
             }
           };
         }
-        this.logger.log('CREATE', activityId, `resource_${resource.name}`, 'create ressource');
+        this.logger.log('CREATE', activityId, `resource_${resource.name}_${guid}`, 'create ressource');
         return this.database.addDocument(resourceToAdd);
       }})
         .then(res => {
-          activity['resourceList'].push(`resource_${resource.name}`);
-          this.resources.push(`resource_${resource.name}`);
+          activity['resourceList'].push(`resource_${resource.name}_${guid}`);
+          this.resources.push(`resource_${resource.name}_${guid}`);
           return this.database.updateDocument(activity);
         })
         .then(() => resolve(resourceToAdd))
