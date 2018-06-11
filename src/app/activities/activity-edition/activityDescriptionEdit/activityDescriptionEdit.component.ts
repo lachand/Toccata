@@ -67,7 +67,14 @@ export class ActivityDescriptionEditComponent {
    * Save the description
    */
   saveDescription() {
-    return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description);
+    if (this.descriptionEdition) {
+      return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description);
+    }
+    else {
+      return new Promise( resolve => {
+        resolve(0);
+      });
+    }
   }
 
   /**
