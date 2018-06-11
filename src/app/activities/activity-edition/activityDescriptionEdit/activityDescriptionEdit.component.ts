@@ -66,9 +66,9 @@ export class ActivityDescriptionEditComponent {
   /**
    * Save the description
    */
-  saveDescription() {
+  saveDescription(system: boolean = true) {
     if (this.descriptionEdition) {
-      return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description);
+      return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description, system);
     }
     else {
       return new Promise( resolve => {
@@ -81,7 +81,7 @@ export class ActivityDescriptionEditComponent {
    * Change the description of an activity
    */
   changeTheDescription() {
-    this.saveDescription()
+    this.saveDescription(false)
       .then(() => {
         this.switchDescription();
       });

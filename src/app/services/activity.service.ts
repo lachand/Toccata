@@ -531,15 +531,26 @@ export class ActivityService {
    * @param {String} value The new value
    */
   activityEdit(activityId: string, key: string, value: String, system: boolean = false) {
-    this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`);
+    this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`, system);
+    let duplicateList = [];
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
         .then(res => {
           res[key] = value;
+          duplicateList = res['duplicateList'];
           return this.database.updateDocument(res);
         })
         .then(result => {
-          resolve(result);
+          let tmpThis = this;
+            return Promise.all(duplicateList.map(function (duplicate) {
+              tmpThis.database.getDocument(duplicate)
+                .then(dupl => {
+                  dupl[key] = value;
+                  return tmpThis.database.updateDocument(dupl);
+                });
+            })).then( () => {
+              resolve(result);
+            })
         })
         .catch(err => {
           console.log(`Error in user activity whith call to activityEdit :

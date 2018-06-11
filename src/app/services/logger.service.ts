@@ -22,24 +22,28 @@ export class LoggerService {
       _id: this.logDocument,
       name: `Log : ${this.logDocument}`,
       dbName: this.logDocument,
-      log: `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ; User ; Action ; Current activity ; Object ; Message
+      log: `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ; User ; Action ; Current activity ; Object ; Message ; Initiated by
       `,
       documentType: 'Log'
     }
     this.database.addDocument(doc).then( () => {
-      this.logFile.setItem(`${this.logDocument}_${this.cpt}`, `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message`);
+      this.logFile.setItem(`${this.logDocument}_${this.cpt}`, `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message ; Initiated by`);
     })
     this.cpt++;
   }
 
-  log(actionType, activity, object, message) {
+  log(actionType, activity, object, message, system: boolean = false) {
+    let initiatedBy = 'User';
+    if (system) {
+      initiatedBy = 'System';
+    }
     const date = new Date();
     this.database.getDocument(this.logDocument).then( res => {
-      res['log'] = res['log'] + `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message}
+      res['log'] = res['log'] + `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}
       `;
       this.database.updateDocument(res).then( () => {
         this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`,
-          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message}`);
+          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}`);
         this.cpt++;
       });
     });
