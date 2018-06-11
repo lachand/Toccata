@@ -530,7 +530,7 @@ export class ActivityService {
    * @param {string} key The key of change
    * @param {String} value The new value
    */
-  activityEdit(activityId: string, key: string, value: String) {
+  activityEdit(activityId: string, key: string, value: String, system: boolean = false) {
     this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`);
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
