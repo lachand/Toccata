@@ -48,6 +48,7 @@ export class DialogApplicationLaunchedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.appId, 'close application fullscreen');
     this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.application.url);

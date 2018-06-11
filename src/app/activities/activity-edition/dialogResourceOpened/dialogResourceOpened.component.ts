@@ -90,6 +90,7 @@ export class DialogResourceOpenedComponent implements OnInit {
    * Close the fullscreen mode
    */
   fullscreen_exit() {
+    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.resourceId, 'close resource fullscreen');
     this.dialogRef.close();
   }
 

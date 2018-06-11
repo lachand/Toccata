@@ -96,6 +96,7 @@ export class ResourcesService {
             }
           };
         }
+        this.logger.log('CREATE', activityId, `resource_${resource.name}`, 'create ressource');
         return this.database.addDocument(resourceToAdd);
       }})
         .then(res => {
@@ -118,7 +119,7 @@ export class ResourcesService {
   getResourceInfos(resourceId: any) {
     return new Promise(resolve => {
       return this.database.getDocument(resourceId).then(resource => {
-        if (resource['type'] === 'url'){
+        if (resource['type'] === 'url') {
           resolve({
             name: resource['name'],
             id: resource['_id'],
@@ -150,6 +151,7 @@ export class ResourcesService {
    */
   deleteResource(resourceId) {
     return new Promise( resolve => {
+      this.logger.log('DELETE', 'na', `resource_${resourceId}`, 'delete ressource');
       return this.database.removeDocument(resourceId);
     });
   }
@@ -196,6 +198,7 @@ export class ResourcesService {
         return this.getResourceInfos(resourceId);
       })
         .then(resourceInfos => {
+          this.logger.log('OPEN', resourceInfos['dbName'], `resource_${resourceId}`, 'open ressource');
           resolve(resourceInfos);
         })
         .catch(function (err) {
@@ -220,6 +223,7 @@ export class ResourcesService {
         return this.getResourceInfos(resourceId);
       })
         .then(resourceInfos => {
+          this.logger.log('CLOSE', resourceInfos['dbName'], `resource_${resourceId}`, 'close ressource');
           resolve(resourceInfos);
         })
         .catch(function (err) {
@@ -242,6 +246,7 @@ export class ResourcesService {
     return this.getResource(resourceId).then( (res) => {
       console.log(res);
         res['name'] = name;
+        this.logger.log('EDIT', 'na', `resource_${resourceId}`, 'edit ressource');
         return this.database.updateDocument(res);
       }
     );

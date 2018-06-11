@@ -1,27 +1,48 @@
 import {Injectable} from '@angular/core';
 import {UserService} from './user.service';
+import {DatabaseService} from "./database.service";
 
 @Injectable()
 export class LoggerService {
   logFile: Storage;
   logName: number;
   cpt: number;
+  logDocument: any;
+  doc: any;
 
-  constructor(private user: UserService) {
+  constructor(private user: UserService, private database: DatabaseService) {
     this.logFile = window.localStorage;
-    this.logName = Date.now();
-    this.cpt = 0;
   }
 
   initLog() {
-    this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`, `Time ; User ; Action ; Current activity ; Object ; Message`);
+    this.logName = Date.now();
+    this.logDocument = `Log_${this.user.name}_${this.logName}`;
+    this.cpt = 0;
+    let doc = {
+      _id: this.logDocument,
+      name: `Log : ${this.logDocument}`,
+      dbName: this.logDocument,
+      log: `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ; User ; Action ; Current activity ; Object ; Message
+      `,
+      documentType: 'Log'
+    }
+    this.database.addDocument(doc).then( () => {
+      this.logFile.setItem(`${this.logDocument}_${this.cpt}`, `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message`);
+    })
     this.cpt++;
   }
 
   log(actionType, activity, object, message) {
-    this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`,
-      `${Date.now()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message}`);
-    this.cpt++;
+    const date = new Date();
+    this.database.getDocument(this.logDocument).then( res => {
+      res['log'] = res['log'] + `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message}
+      `;
+      this.database.updateDocument(res).then( () => {
+        this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`,
+          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message}`);
+        this.cpt++;
+      });
+    });
   }
 
 }

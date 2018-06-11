@@ -5,6 +5,7 @@ import {AppsService} from './apps.service';
 import {DatabaseService} from './database.service';
 import {ResourcesService} from './resources.service';
 import {isNullOrUndefined} from 'util';
+import {LoggerService} from "./logger.service";
 
 @Injectable()
 export class ActivityService {
@@ -30,7 +31,8 @@ export class ActivityService {
   constructor(public userService: UserService,
               public resourcesService: ResourcesService,
               public database: DatabaseService,
-              public appsService: AppsService) {
+              public appsService: AppsService,
+              public logger: LoggerService) {
 
     this.database.changes.subscribe(
       (change) => {
@@ -117,10 +119,17 @@ export class ActivityService {
    * Unload the current activity
    */
   public unloadActivity() {
-    this.activityLoaded = null;
-    this.activityLoadedChild = [];
-    this.sisters = [];
-    this.blocked = [];
+    if (!isNullOrUndefined(this.activityLoaded)) {
+      if (this.activityLoaded['_id'].indexOf('duplicate') !== -1 && this.user.fonction === 'Enseignant') {
+        this.logger.log('CLOSE', this.activityLoaded._id, this.activityLoaded._id, 'close activity duplicate');
+      } else {
+        this.logger.log('CLOSE', this.activityLoaded._id, this.activityLoaded._id, 'close activity');
+      }
+      this.activityLoaded = null;
+      this.activityLoadedChild = [];
+      this.sisters = [];
+      this.blocked = [];
+    }
   }
 
   /**
@@ -134,6 +143,11 @@ export class ActivityService {
       this.database.getDocument(activity_id)
         .then((result) => {
         if (result['type'] === 'Main') {
+          if (result['_id'].indexOf('duplicate') !== -1 && this.user.fonction === 'Enseignant') {
+            this.logger.log('OPEN', result['_id'], result['_id'], 'load activity duplicate');
+          } else {
+            this.logger.log('OPEN', result['_id'], result['_id'], 'load activity');
+          }
           //this.sisters = this.activityLoadedChild;
           this.activityLoaded = result;
           this.activityLoadedChild = [];
@@ -145,6 +159,7 @@ export class ActivityService {
           //this.activityLoadedChild = result['subactivityList'];
           return this.resourcesService.getResources(this.activityLoaded._id);
         } else {
+          this.logger.log('OPEN', result['_id'], result['_id'], 'load step');
           this.database.getDocument(result['parent']).then(res => {
             //this.sisters = res['subactivityList'];
             this.sisters = [];
@@ -238,6 +253,7 @@ export class ActivityService {
           dbName: dbName,
           documentType: 'Activity'
         };
+        this.logger.log('CREATE', dbName, dbName, 'create activity');
         return this.database.addDocument(activityToCreate);
       })
         .then(() => {
@@ -330,7 +346,7 @@ export class ActivityService {
         .then(parent => {
           subActivity = {
             _id: `activity_${this.database.guid()}`,
-            name: 'nouvelle étape',
+            name: 'Nouvelle étape',
             description: 'Il n\'y a aucune description',
             userList: parent['userList'],
             resourceList: parent['resourceList'],
@@ -344,6 +360,7 @@ export class ActivityService {
             dbName: parent['dbName'],
             documentType: 'Activity'
           };
+            this.logger.log('CREATE', this.activityLoaded._id, subActivity['_id'], 'create step');
         })
         .then(() => {
           return this.database.addDocument(subActivity);
@@ -484,6 +501,7 @@ export class ActivityService {
    * @param {String} value The new value
    */
   activityEdit(activityId: string, key: string, value: String) {
+    this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`);
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
         .then(res => {

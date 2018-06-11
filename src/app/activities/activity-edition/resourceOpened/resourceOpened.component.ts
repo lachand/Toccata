@@ -106,7 +106,7 @@ export class ResourceOpenedComponent implements OnInit {
    * Close the resource
    */
   close() {
-    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.resourceId, 'resource closed');
+    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.resourceId, 'close resource');
     this.resourcesService.closeResource(this.resourceId).then(resourceInfos => {
       this.resource = resourceInfos;
     });
@@ -116,7 +116,7 @@ export class ResourceOpenedComponent implements OnInit {
    * Open the resource in fullscreen mode
    */
   fullscreen() {
-
+    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.resourceId, 'open resource fullscreen');
     const dialogRef = this.dialog.open(DialogResourceOpenedComponent, {
       width: '100%',
       height: '100%',

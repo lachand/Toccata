@@ -2,6 +2,7 @@ import {EventEmitter, Inject, Injectable, Output} from '@angular/core';
 //import {Http} from '@angular/http';
 import {DatabaseService} from './database.service';
 import {UserService} from "./user.service";
+import {LoggerService} from "./logger.service";
 
 @Injectable()
 export class AppsService {
@@ -15,7 +16,7 @@ export class AppsService {
    * @param {Http} http
    * @param {DatabaseService} databaseService The service for database management
    */
-  constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService, private userService: UserService) {
+  constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService, private userService: UserService, public logger: LoggerService) {
 
     this.databaseService.changes.subscribe(
       (change) => {
@@ -100,6 +101,7 @@ export class AppsService {
       })
         .then(() => {
           return this.databaseService.addDocument(application).then(res => {
+            this.logger.log('CREATE', application['dbName'], `application_${app.provider}_${guid}`, 'create application');
             resolve(res);
           });
         }).catch(err => {
@@ -165,6 +167,7 @@ export class AppsService {
    * @returns {Promise<any>} The dleted application
    */
   public deleteApp(appId) {
+    this.logger.log('DELETE', 'na', appId, 'delete application');
     return new Promise( resolve => {
       return this.databaseService.removeDocument(appId);
     });
@@ -272,6 +275,7 @@ export class AppsService {
   updateApplication(app: any) {
     return new Promise(resolve => {
       this.databaseService.updateDocument(app).then(res => {
+        this.logger.log('UPDATE', res['dbName'], res['_id'], 'update application');
         resolve(res);
       })
         .catch(function (err) {
@@ -290,6 +294,7 @@ export class AppsService {
     return new Promise(resolve => {
       return this.databaseService.getDocument(appId).then(application => {
           application['status'] = 'unloaded';
+        this.logger.log('CLOSE', application['dbName'], application['_id'], 'close application');
           return this.databaseService.updateDocument(application);
         }
       ).then(() => {
@@ -314,6 +319,7 @@ export class AppsService {
     return new Promise(resolve => {
       return this.databaseService.getDocument(appId).then(application => {
           application['status'] = 'loaded';
+        this.logger.log('OPEN', application['dbName'], application['_id'], 'open application');
           return this.databaseService.updateDocument(application);
         }
       ).then(() => {

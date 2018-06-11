@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../../services/user.service';
+import {LoggerService} from "../../../services/logger.service";
 
 @Component({
   selector: 'app-activity-sequence-infos',
@@ -15,7 +16,8 @@ export class ActivitySequenceInfosComponent implements OnInit {
 
   constructor(public activityService: ActivityService,
               public userService: UserService,
-              public router: Router) {
+              public router: Router,
+              public logger: LoggerService) {
   }
 
   ngOnInit(): void {
@@ -62,6 +64,11 @@ export class ActivitySequenceInfosComponent implements OnInit {
    */
   switchLock() {
     this.activityInfos.blocked = !this.activityInfos.blocked;
+    if (!this.activityInfos.blocked) {
+      this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.activityInfos['_id'], 'unlock step');
+    } else {
+      this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.activityInfos['_id'], 'lock step');
+    }
     this.activityService.switchLock(this.activityId);
   }
 
@@ -70,6 +77,11 @@ export class ActivitySequenceInfosComponent implements OnInit {
    */
   switchVisibility() {
     this.activityInfos.visible = !this.activityInfos.visible;
+    if (this.activityInfos.visible) {
+      this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.activityInfos['_id'], 'show step');
+    } else {
+      this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.activityInfos['_id'], 'hide step');
+    }
     this.activityService.switchVisibility(this.activityId);
   }
 

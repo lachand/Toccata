@@ -42,6 +42,7 @@ export class MyActivitiesComponent {
   load_activity(activity_id) {
     this.activityService.load_activity(activity_id).then( res => {
       if (this.activityService.activityLoaded.subactivityList.length > 0) {
+        this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
         this.router.navigate(['activity_apps/' + activity_id]);
       } else {
 
@@ -50,7 +51,6 @@ export class MyActivitiesComponent {
   }
 
   show_activity(activity_id) {
-    this.logger.log('CREATE', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       if (this.activityService.activityLoaded.subactivityList.length > 0) {
         this.router.navigate(['activity_view/' + activity_id]);
@@ -61,8 +61,8 @@ export class MyActivitiesComponent {
   }
 
   edit_activity(activity_id) {
-    this.logger.log('CREATE', activity_id, activity_id, 'open activity edition');
     this.activityService.load_activity(activity_id).then( res => {
+      this.logger.log('OPEN', activity_id, activity_id, 'open activity edition');
       this.router.navigate(['activity_edit/' + activity_id]);
     });
   }

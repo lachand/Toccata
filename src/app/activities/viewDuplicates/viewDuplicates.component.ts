@@ -65,7 +65,7 @@ export class ViewDuplicatesComponent {
 
   activityView() {
     const activityId = this.activityService.activityLoaded._id;
-    this.logger.log('OPEN', activityId, activityId, 'open activity');
+    this.logger.log('OPEN', activityId, activityId, 'open activity view');
     this.router.navigate(['activity_view/' + activityId]);
   }
 

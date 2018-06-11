@@ -48,6 +48,7 @@ export class ApplicationLaunchedComponent implements OnInit {
    * Open the resource in fullscreen mode
    */
   fullscreen() {
+    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.appId, 'open application fullscreen');
     const dialogRef = this.dialog.open(DialogApplicationLaunchedComponent, {
       width: '100%',
       height: '100%',
@@ -59,7 +60,7 @@ export class ApplicationLaunchedComponent implements OnInit {
   }
 
   close() {
-    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.appId, 'application closed');
+    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.appId, 'close application');
     this.appsService.closeApplication(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
     });

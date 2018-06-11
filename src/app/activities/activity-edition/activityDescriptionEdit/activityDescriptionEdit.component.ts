@@ -46,12 +46,16 @@ export class ActivityDescriptionEditComponent {
       //console.log('doc : ', change.doc);
       //console.log('previous : ', this.activityService.activityLoaded);
       if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded._id) {
+        console.log(change.doc._id, this.activityService.activityLoaded._id);
         this.description = change.doc.description;
       }
     });
-    const autosave = setInterval( () => {this.changeTheDescription();} , 30000);
+    const autosave = setInterval( () => {this.saveDescription();} , 30000);
   }
 
+  /**
+   * Open or close text editor
+   */
   switchDescription() {
     if (this.edit) {
       this.description = this.activityService.activityLoaded.description;
@@ -60,12 +64,18 @@ export class ActivityDescriptionEditComponent {
   }
 
   /**
+   * Save the description
+   */
+  saveDescription() {
+    return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description);
+  }
+
+  /**
    * Change the description of an activity
    */
   changeTheDescription() {
-    this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description)
+    this.saveDescription()
       .then(() => {
-        this.logger.log('UPDATE', this.activityService.activityLoaded._id, this.activityService.activityLoaded._id, 'activity description updated');
         this.switchDescription();
       });
   }
