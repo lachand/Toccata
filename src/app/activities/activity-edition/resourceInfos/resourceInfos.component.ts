@@ -28,6 +28,7 @@ export class ResourceInfosComponent implements OnInit {
 
   constructor(public resourcesService: ResourcesService,
               public appsService: AppsService,
+              private activityService: ActivityService,
               private dialog: MatDialog,
               private logger: LoggerService,
               private ref: ChangeDetectorRef,
@@ -69,6 +70,6 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   deleteResource() {
-    return this.resourcesService.deleteResource(this.resourceId);
+    return this.activityService.deleteResource(this.resourceId);
   }
 }

@@ -397,6 +397,36 @@ export class ActivityService {
   }
 
   /**
+   * Delete an application
+   * @param appId The id of the app to delete
+   */
+  deleteApp(appId) {
+    const apps = this.appsService.applications;
+    const index = apps.indexOf(appId);
+    if (index > -1) {
+      apps.splice(index, 1);
+    }
+    this.activityEdit(this.activityLoaded._id, 'applicationList', apps).then( () => {
+      this.appsService.deleteApp(appId);
+    });
+  }
+
+  /**
+   * Delete an application
+   * @param appId The id of the app to delete
+   */
+  deleteResource(resId) {
+    const res = this.resourcesService.resources;
+    const index = res.indexOf(resId);
+    if (index > -1) {
+      res.splice(index, 1);
+    }
+    this.activityEdit(this.activityLoaded._id, 'resourceList', res).then( () => {
+      this.resourcesService.deleteResource(resId);
+    });
+  }
+
+  /**
    * Get all participants of an activity
    * @param activityId The activity to retrieve participants
    * @returns {any | Promise<any>} List of participants
