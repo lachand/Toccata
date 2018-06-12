@@ -101,7 +101,7 @@ export class AppsService {
       })
         .then(() => {
           return this.databaseService.addDocument(application).then(res => {
-            this.applications.push(app._id);
+            this.applications.push(application._id);
             this.logger.log('CREATE', application['dbName'], `application_${app.provider}_${guid}`, 'create application');
             resolve(res);
           });
