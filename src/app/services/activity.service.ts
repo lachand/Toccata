@@ -567,6 +567,7 @@ export class ActivityService {
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
         .then(activity => {
+          activity['userList'].push(userName);
           const subactivities = activity['subactivityList'];
           if (!isNullOrUndefined(subactivities)) {
             return Promise.all(subactivities.map(function (subactivity) {
@@ -604,7 +605,7 @@ export class ActivityService {
 
           if (!isNullOrUndefined(subactivities)) {
             return Promise.all(subactivities.map(function (subactivity) {
-              return tempThis.removeUser(userName, subactivity);
+              return tempThis.removeUser(userName, subactivity['stepId']);
             }))
               .then(() => {
                 return this.database.updateDocument(activity);
