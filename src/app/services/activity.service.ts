@@ -563,14 +563,14 @@ export class ActivityService {
    */
   addUser(userName: any, activityId: any) {
     const tempThis = this;
+    console.log(userName, activityId);
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
         .then(activity => {
-          activity['userList'].push(userName);
           const subactivities = activity['subactivityList'];
           if (!isNullOrUndefined(subactivities)) {
             return Promise.all(subactivities.map(function (subactivity) {
-              return tempThis.addUser(userName, subactivity);
+              return tempThis.addUser(userName, subactivity['stepId']);
             }))
               .then(() => {
                 return this.database.updateDocument(activity);
@@ -657,7 +657,11 @@ export class ActivityService {
               }
               const subactivities = [];
               for (const subactivity of doc.subactivityList) {
-                subactivities.push(`${subactivity}_duplicate_${guid}`);
+                subactivities.push({
+                  'stepId': `${subactivity['stepId']}_duplicate_${guid}`,
+                  'visible': true,
+                  'blocked': false
+                });
               }
               doc.userList = [this.userService.id];
               if (doc.master) {
