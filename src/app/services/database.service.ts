@@ -31,6 +31,8 @@ export class DatabaseService {
 
     this.room = environment.ROOM;
 
+    console.log(environment.USERNAME_DB, environment.PASSWORD_DB)z
+
     this.dbRemote = new PouchDB(`${environment.URL_DB}${environment.PORT_DB}/abcde`, {
       auth: {
         username: `${environment.USERNAME_DB}`,
@@ -47,7 +49,8 @@ export class DatabaseService {
       live: true,
       retry: true,
       continuous: true,
-      revs_limit: 2,
+      auto_compaction: true,
+      //revs_limit: 2,
       filter: 'appFilters/by_db_name',
       query_params: { 'dbNames': ['user_list'] }
     };
@@ -59,6 +62,7 @@ export class DatabaseService {
     const tempOptions = this.options;
 
     this.dbRemote.compact().then((res) => {
+      this.db.compact.then( () => {
       return this.db.replicate.from(this.dbRemote, this.optionsReplication).on('complete', () => {
         console.log("begin sync");
         return this.db.replicate.to(this.dbRemote).on('complete', () => {
@@ -77,6 +81,7 @@ export class DatabaseService {
            **/
           this.sync();
         });
+      });
       });
       })
       .catch(err => {
@@ -109,7 +114,7 @@ export class DatabaseService {
       live: true,
       retry: true,
       continuous: true,
-      revs_limit: 2,
+      //revs_limit: 2,
       filter: 'appFilters/by_db_name',
       query_params: {'dbNames': this.dbList}
     };

@@ -36,7 +36,7 @@ export class ActivityService {
 
     this.database.changes.subscribe(
       (change) => {
-        if (change.type === 'Activity') {
+        if (change.type === 'Activity' && userService.loggedIn) {
           this.changes.emit({doc: change.doc, type: 'Main'});
           let finded = false;
           for (const user of change.doc.userList) {
@@ -298,7 +298,7 @@ export class ActivityService {
           this.activitiesList = userDoc['activityList'];
           const tempThis = this;
           const promises = this.activitiesList.map(function (activityId) {
-            tempThis.database.addDatabase(activityId);
+            //tempThis.database.addDatabase(activityId);
           });
           return Promise.all(promises);
         })
@@ -635,7 +635,7 @@ export class ActivityService {
         dbName = activity['dbName'];
         guid = this.database.guid();
         newDb = `${dbName}_duplicate_${guid}`;
-        return this.database.addDatabase(newDb);
+        //return this.database.addDatabase(newDb);
       })
         .then(() => {
           return this.database.getAllDocs(dbName);
