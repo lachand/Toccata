@@ -65,12 +65,14 @@ export class UserService {
           }
         }).then((result) => {
           this.loggedIn = result['ok'];
+          this.id = username;
           return this.database.addDatabase(`user_${username}`);
         })
           .then(() => {
             return this.database.getDocument(username);
           })
           .then((res) => {
+            console.log(res);
             this.name = res['name'];
             this.id = res['_id'];
             this.avatar = res['avatar'];

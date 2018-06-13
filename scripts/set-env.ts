@@ -20,7 +20,8 @@ export const environment = {
   PORT_DB: "${process.env.PORT_DB}",
   USERNAME_DB: "${process.env.USERNAME_DB}",
   PASSWORD_DB: "${process.env.PASSWORD_DB}",
-  ROOM: "${process.env.ROOM}"
+  ROOM: "${process.env.ROOM}",
+  DB: "${process.env.DB}"
 };
 `
 writeFile(targetPath, envConfigFile, function (err) {

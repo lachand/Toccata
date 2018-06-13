@@ -298,7 +298,7 @@ export class ActivityService {
           this.activitiesList = userDoc['activityList'];
           const tempThis = this;
           const promises = this.activitiesList.map(function (activityId) {
-            //tempThis.database.addDatabase(activityId);
+            tempThis.database.addDatabase(activityId);
           });
           return Promise.all(promises);
         })
@@ -635,7 +635,7 @@ export class ActivityService {
         dbName = activity['dbName'];
         guid = this.database.guid();
         newDb = `${dbName}_duplicate_${guid}`;
-        //return this.database.addDatabase(newDb);
+        return this.database.addDatabase(newDb);
       })
         .then(() => {
           return this.database.getAllDocs(dbName);
@@ -695,12 +695,22 @@ export class ActivityService {
             resolve(res);
           });
         })
+        .then( () => {
+          return Promise.all( activity['userList'].map(user => {
+            return this.database.getDocument(user).then( userDoc => {
+              userDoc['activityList'].push(newDb);
+              return this.database.updateDocument(userDoc);
+              }
+            );
+          }));
+        })
         .catch(err => {
           console.log(`Error in activity service whith call to duplicateActivity :
           ${err}`);
         });
     });
   }
+
 
   /**
    * List all duplicates of an activity

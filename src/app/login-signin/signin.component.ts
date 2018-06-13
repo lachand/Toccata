@@ -33,9 +33,11 @@ export class SigninComponent implements OnInit {
       password: '',
       name: '',
       surname: '',
+      passwordCheck: '',
       avatar: 'http://mondesfrancophones.com/wp-content/Cimy_User_Extra_Fields/clarouche/Christian%20Larouche.JPG'
     });
     this.teacher = false;
+    this.error = new Array();
     this.errorReset();
   }
 
@@ -50,7 +52,8 @@ export class SigninComponent implements OnInit {
 
   checked() {
     let checked = true;
-    if (this.signinForm.value.password !== this.signinForm.value.passwordCheck){
+    console.log(this.signinForm.value);
+    if (this.signinForm.value.password !== this.signinForm.value.passwordCheck) {
       this.error['passwordCheck'] = true;
       checked = false;
     }
