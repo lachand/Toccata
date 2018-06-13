@@ -60,8 +60,8 @@ export class DatabaseService {
       continuous: true,
       since: 0,
       //revs_limit: 2,
-      //filter: 'appFilters/by_db_name',
-      //query_params: { 'dbNames': ['user_list'] }
+      filter: 'appFilters/by_db_name',
+      query_params: { 'dbNames': ['user_list'] }
     };
 
     this.optionsReplication = this.options;
@@ -125,8 +125,8 @@ export class DatabaseService {
       retry: true,
       timeout: false,
       heartbeat: false,
-      //filter: 'appFilters/by_db_name',
-      //query_params: { 'dbNames': ['user_list'] }
+      filter: 'appFilters/by_db_name',
+      query_params: { 'dbNames': ['user_list'] }
     }).on('change', change => {
       this.handleChange(change);
     }).on('paused', function (info) {
@@ -149,8 +149,8 @@ export class DatabaseService {
       retry: true,
       continuous: true,
       //revs_limit: 2,
-      //filter: 'appFilters/by_db_name',
-      //query_params: {'dbNames': this.dbList}
+      filter: 'appFilters/by_db_name',
+      query_params: {'dbNames': this.dbList}
     };
     //console.log(options.query_params);
     /*
