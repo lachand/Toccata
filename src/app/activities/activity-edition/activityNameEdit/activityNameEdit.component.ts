@@ -70,9 +70,9 @@ export class ActivityNameEditComponent {
   activityGroupView() {
     let activityId = '';
     if (this.activityService.activityLoaded.type === 'Main') {
-      activityId = this.activityService.activityLoaded._id;
+      activityId = this.activityService.activityLoaded._id.split('_duplicate')[0];
     } else {
-      activityId = this.activityService.activityLoaded.parent;
+      activityId = this.activityService.activityLoaded.parent.split('_duplicate')[0];
     }
     this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
     this.router.navigate(['duplicates/' + activityId]);

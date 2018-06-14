@@ -2,6 +2,7 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
 import {environment} from 'environments/environment.prod';
+import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class DatabaseService {
@@ -23,7 +24,6 @@ export class DatabaseService {
    * Construct the service to communicate with the local and remote database
    */
   constructor() {
-
     require('events').EventEmitter.defaultMaxListeners = 0;
 
     PouchDB.plugin(PouchdbFind);
@@ -40,8 +40,9 @@ export class DatabaseService {
     });
 
     /*this.dbRemote.compact();*/
-    this.db = new PouchDB('myLocalDatabase');
+    this.db = new PouchDB(environment.DB);
 
+    /*
     this.db.replicate.to(this.dbRemote).on('change', changes => {
       console.log(`sync 1 change ${changes}`);
     }).on('paused', function (info) {
@@ -51,6 +52,7 @@ export class DatabaseService {
     }).on('error', err => {
       console.log(`sync error ${err}`);
     });
+    */
 
     this.dbList.push('user_list');
 
@@ -58,7 +60,8 @@ export class DatabaseService {
       live: true,
       retry: true,
       continuous: true,
-      since: 0,
+      //since: 'now'
+      //since: 0,
       //revs_limit: 2,
       //filter: 'appFilters/by_db_name',
       //query_params: { 'dbNames': ['user_list'] }
@@ -84,11 +87,21 @@ export class DatabaseService {
 
     this.db.compact().then((res) => {
     console.log(this.db);
-      return this.db.replicate.to(this.dbRemote, this.optionsReplication).on('complete', () => {
-        console.log("begin sync");
-        return this.db.replicate.from(this.dbRemote).on('complete', () => {
-          console.log("sync complete");
-          this.changes.emit({type: 'CONNEXION_DONE'})
+      //return this.db.replicate.to(this.dbRemote, this.optionsReplication).on('complete', () => {
+      //  console.log("begin sync");
+      //  return this.db.replicate.from(this.dbRemote).on('complete', () => {
+      //    console.log("sync complete");
+      let tmpthis = this;
+      this.dbRemote.sync(this.db, this.options).on('change', changes => {
+        console.log(`sync change ${changes}`);
+      }).on('paused', function (info) {
+        tmpthis.changes.emit({type: 'CONNEXION_DONE'})
+        console.log('pause: ', info);
+      }).on('active', function (info) {
+        console.log('active: ', info);
+      }).on('error', err => {
+        console.log(`sync error ${err}`);
+      });
           /**this.dbSync = this.db.sync(this.dbRemote, this.options);
            this.dbSync.on('change', changes => {
             console.log(`sync change ${changes}`);
@@ -100,9 +113,28 @@ export class DatabaseService {
             console.log(`sync error ${err}`);
           });
            **/
-          //this.dbSync = this.db.sync(this.dbRemote, this.options);
-          this.sync();
-        }).on('change', changes => {
+          /*this.dbSync = this.db.sync(this.dbRemote, this.options).on('change', changes => {
+            console.log(`sync change : ${changes}`);
+          }).on('paused', function (info) {
+            console.log('pause: ', info);
+          }).on('active', function (info) {
+            console.log('active: ', info);
+          }).on('error', err => {
+            console.log(`sync error ${err}`);
+          });*/
+          /*
+          this.db.sync(this.dbRemote, this.options).on('change', changes => {
+            console.log(`sync in change ${changes}`);
+          }).on('paused', function (info) {
+            console.log('pause in: ', info);
+          }).on('active', function (info) {
+            console.log('active in : ', info);
+          }).on('error', err => {
+            console.log(`sync error in ${err}`);
+          });*/
+
+          //this.sync();
+        /*}).on('change', changes => {
           console.log(`sync change ${changes}`);
         }).on('paused', function (info) {
           console.log('pause: ', info);
@@ -111,7 +143,7 @@ export class DatabaseService {
         }).on('error', err => {
           console.log(`sync error ${err}`);
         });
-      });
+      });*/
     })
       .catch(err => {
         console.log(`error with call to databaseService initialisation : ${err}`);
@@ -129,6 +161,29 @@ export class DatabaseService {
       //query_params: { 'dbNames': ['user_list'] }
     }).on('change', change => {
       this.handleChange(change);
+      console.log("change on local");
+    }).on('paused', function (info) {
+      console.log('pause: ', info);
+    }).on('active', function (info) {
+      console.log('active: ', info);
+    }).on('error', function (err) {
+      console.log('activities: ', err);
+    }).catch(err => {
+      console.log(err);
+    });
+
+
+    this.dbRemote.changes({
+      live: true,
+      include_docs: true,
+      retry: true,
+      timeout: false,
+      heartbeat: false,
+      //filter: 'appFilters/by_db_name',
+      //query_params: { 'dbNames': ['user_list'] }
+    }).on('change', change => {
+      this.handleChangeRemote(change);
+      console.log('change_on_remote');
     }).on('paused', function (info) {
       console.log('pause: ', info);
     }).on('active', function (info) {
@@ -161,6 +216,7 @@ export class DatabaseService {
     }
     */
 
+    /*
     this.db.replicate.to(this.dbRemote, options)
       .on('change', change => {
         console.log(`Change remote`);
@@ -172,6 +228,7 @@ export class DatabaseService {
     }).on('error', function (err) {
       console.log(err);
     });
+    */
   }
 
   /**
@@ -181,8 +238,34 @@ export class DatabaseService {
    */
   handleChange(change) {
     //console.log(change.doc);
+    console.log(change);
     this.changes.emit({type: change.doc.documentType, doc: change.doc});
   }
+
+  handleChangeRemote(change) {
+    return this.getDocument(change.doc._id)
+      .then(() => {
+        this.forceUpdateDocument(change.doc);
+      })
+      .catch(function (err) {
+      console.log(err);
+    });
+  }
+
+  forceUpdateDocument(doc) {
+    const tmp_this = this;
+    return this.db.get(doc._id).then((origDoc, tmp_this) => {
+      doc._rev = origDoc._rev;
+      return tmp_this.db.put(doc);
+    }).catch(function (err) {
+      if (err.status === 409) {
+        return tmp_this.updateDocument(doc);
+      } else { // new doc
+        return tmp_this.db.put(doc);
+      }
+    });
+  }
+
 
   /**
    * Add a new external database to the local databse
@@ -197,8 +280,8 @@ export class DatabaseService {
       } else {
         console.log("Add database : ", databaseName)
         this.dbList.push(databaseName);
-        this.options.query_params.dbNames.push(databaseName);
-        this.optionsReplication.query_params.dbNames.push(databaseName);
+        //this.options.query_params.dbNames.push(databaseName);
+        //this.optionsReplication.query_params.dbNames.push(databaseName);
         /*
         this.db.replicate.from(this.dbRemote, this.optionsReplication)
           .on('change', change => {
@@ -241,7 +324,7 @@ export class DatabaseService {
 
 
       }*/
-        this.sync();
+        //this.sync();
         resolve(databaseName);
       }
     });
@@ -255,7 +338,7 @@ export class DatabaseService {
    */
   ereaseDocument(documentId) {
     return new Promise(resolve => {
-      return this.db.remove(documentId);
+      return this.dbRemote.remove(documentId);
     });
   }
 
@@ -266,15 +349,16 @@ export class DatabaseService {
    * @returns {Promise<any>} The created database
    */
   createDatabase(databaseName: string, options = this.options) {
+    console.log(databaseName);
     return new Promise(resolve => {
       const guid = this.guid();
       const newDbName = `${databaseName}_${guid}`;
       this.dbList.push(databaseName);
-      this.options.query_params.dbNames.push(databaseName);
-      this.optionsReplication.query_params.dbNames.push(databaseName);
+      //this.options.query_params.dbNames.push(databaseName);
+      //this.optionsReplication.query_params.dbNames.push(databaseName);
       //this.dbSync.cancel();
       //this.dbSync = this.db.sync(this.dbRemote, this.options);
-      this.sync();
+      //this.sync();
       resolve(newDbName);
     });
   }
@@ -286,7 +370,7 @@ export class DatabaseService {
    */
   addDocument(document: any) {
     return new Promise((resolve, reject) => {
-      this.db.put(document)
+      this.dbRemote.put(document)
         .then(response => {
           resolve(response);
         })
@@ -327,12 +411,15 @@ export class DatabaseService {
    */
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
-      return this.db.allDocs().then(res => {
+      return this.dbRemote.allDocs().then(res => {
       })
         .then(() => {
-          return this.db.get(docId);
+          return this.dbRemote.get(docId);
         })
         .then(result => {
+          if (!isNullOrUndefined(result['_conflict'])) {
+            console.log(result);
+          }
           resolve(result);
         })
         .catch(err => {
@@ -384,14 +471,14 @@ export class DatabaseService {
 
   updateDocument(doc) {
     const tmp_this = this;
-    return this.db.get(doc._id).then((origDoc, tmp_this) => {
+    return this.dbRemote.get(doc._id).then((origDoc, tmp_this) => {
       doc._rev = origDoc._rev;
-      return tmp_this.db.put(doc);
+      return tmp_this.dbRemote.put(doc);
     }).catch(function (err) {
       if (err.status === 409) {
         return tmp_this.updateDocument(doc);
       } else { // new doc
-        return tmp_this.db.put(doc);
+        return tmp_this.dbRemote.put(doc);
       }
     });
   }
@@ -402,7 +489,7 @@ export class DatabaseService {
    */
   removeDocument(documentId) {
     return new Promise(resolve => {
-      this.db.get(documentId).then(document => {
+      this.dbRemote.get(documentId).then(document => {
         if (document.documentType === 'Resource' || document.documentType === 'Application') {
           const changes = [];
           this.db.find({

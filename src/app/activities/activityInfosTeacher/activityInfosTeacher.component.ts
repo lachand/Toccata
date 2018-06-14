@@ -6,6 +6,7 @@ import {current} from 'codelyzer/util/syntaxKind';
 import {isNullOrUndefined} from 'util';
 import {ViewRef_} from '@angular/core/src/view';
 import {LoggerService} from '../../services/logger.service';
+import {DatabaseService} from "../../services/database.service";
 
 @Component({
   selector: 'app-activity-infos-teacher',
@@ -21,6 +22,7 @@ export class ActivityInfosTeacherComponent implements OnInit {
   currentLoadedName: any;
   constructor(public user: UserService,
               public activityService: ActivityService,
+              public database: DatabaseService,
               public router: Router,
               private ref: ChangeDetectorRef,
               private logger: LoggerService) {
@@ -35,13 +37,14 @@ export class ActivityInfosTeacherComponent implements OnInit {
       });
     });
     this.activityService.changes.subscribe((change) => {
-      console.log(change);
-      if (change.type === 'Main' && change.doc._id === this.activityId) {
+      if (change.type === 'Activity' && change.doc._id === this.activityId) {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
+          console.log(activityInfos);
           this.activityInfos = activityInfos;
           this.activityService.getActivityInfos(this.activityInfos['currentLoaded']).then(currentLoadedInfos => {
             this.currentLoadedInfos = currentLoadedInfos;
             this.currentLoadedName = currentLoadedInfos['name'];
+            console.log(this.currentLoadedName)
             if (this.ref !== null &&
               this.ref !== undefined &&
               !(this.ref as ViewRef_).destroyed) {

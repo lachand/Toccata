@@ -239,8 +239,10 @@ export class ActivityService {
    */
   public createActivity(activityType) {
     let dbName = '';
+    console.log(`here : ${dbName}`);
     return new Promise((resolve, reject) => {
       this.database.createDatabase('activity').then((newDatabase: string) => {
+        console.log(newDatabase);
         dbName = newDatabase;
         const activityToCreate = {
           _id: dbName,

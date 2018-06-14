@@ -63,12 +63,15 @@ export class UserService {
               reject(err);
             }
           }
-        }).then((result) => {
+        })/*.then((result) => {
           this.loggedIn = result['ok'];
           this.id = username;
           return this.database.addDatabase(`user_${username}`);
-        })
-          .then(() => {
+        })*/
+          .then((result) => {
+            this.loggedIn = result['ok'];
+            this.id = username;
+            console.log(username);
             return this.database.getDocument(username);
           })
           .then((res) => {
@@ -80,7 +83,7 @@ export class UserService {
             resolve(this.loggedIn);
           })
           .catch(function (err) {
-            resolve(err);
+            reject(err);
           });
       }
     );

@@ -57,9 +57,9 @@ export class LoginComponent implements OnInit {
           this.errorUsernamePassword = true;
         } else if (this.userService.isLoggedIn) {
           console.log(this.userService.id, this.userService);
-            return this.activityService.getActivities().then(res => {
+            return this.activityService.getActivities()/*.then(res => {
               return this.userService.getAllUsers();
-            })
+            })*/
               .then(() => {
                 this.logger.initLog();
                 this.router.navigate(['../activities']);

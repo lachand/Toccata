@@ -69,11 +69,13 @@ export class TextEditorComponent implements OnInit {
   }
 
   save() {
-    console.log('autosave');
+    console.log('manualsave');
     this.databaseService.getDocument(this.resource._id).then( res => {
-      res['text'] = this.resource.text;
-      this.databaseService.updateDocument(res);
+      if (res['text'] !== this.resource.text) {
+        res['text'] = this.resource.text;
+        console.log(res);
+        this.databaseService.updateDocument(res);
+      }
     });
   }
-
 }
