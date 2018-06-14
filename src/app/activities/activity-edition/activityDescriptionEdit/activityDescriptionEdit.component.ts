@@ -50,7 +50,7 @@ export class ActivityDescriptionEditComponent {
         this.description = change.doc.description;
       }
     });
-    const autosave = setInterval( () => {this.saveDescription();} , 30000);
+    /*const autosave = setInterval( () => {this.saveDescription();} , 30000);*/
   }
 
   /**
