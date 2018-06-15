@@ -60,6 +60,7 @@ export class DatabaseService {
       live: true,
       retry: true,
       continuous: true,
+    {ajax: {timeout: 10000}}
       //since: 'now'
       //since: 0,
       //revs_limit: 2,
