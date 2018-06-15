@@ -165,6 +165,7 @@ export class DatabaseService {
       console.log("change on local");
     }).on('paused', function (info) {
       console.log('pause: ', info);
+      this.changes.emit({type: 'CONNEXION_DONE'});
     }).on('active', function (info) {
       console.log('active: ', info);
     }).on('error', function (err) {
@@ -186,6 +187,7 @@ export class DatabaseService {
       this.handleChangeRemote(change);
       console.log('change_on_remote');
     }).on('paused', function (info) {
+      this.changes.emit({type: 'CONNEXION_DONE'});
       console.log('pause: ', info);
     }).on('active', function (info) {
       console.log('active: ', info);

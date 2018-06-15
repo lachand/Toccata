@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   loading: boolean;
   hide: boolean;
   errorUsernamePassword: boolean;
+  can_connect: boolean;
   errorConnexionImpossible: boolean;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit {
     this.errorUsernamePassword = false;
     this.errorConnexionImpossible = false;
     this.hide = true;
+    this.can_connect = false;
     this.loginForm = this.formBuilder.group({
       username: '',
       password: ''
@@ -42,6 +44,9 @@ export class LoginComponent implements OnInit {
       if (changes.type === 'CONNEXION_IMPOSSIBLE') {
         this.errorConnexionImpossible = true;
         this.loading = false;
+      }
+      if (changes.type === 'CONNEXTION_DONE') {
+        this.can_connect = true;
       }
     });
   }

@@ -22,7 +22,7 @@
   </div>
 
   <div>
-    <button mat-button type="submit" *ngIf="!loading || errorUsernamePassword || errorConnexionImpossible" i18n="@@connexion">Connexion
+    <button mat-button type="submit" *ngIf="!loading || errorUsernamePassword || errorConnexionImpossible && can_connect" i18n="@@connexion">Connexion
     </button>
     <mat-progress-bar mode="indeterminate"
                       *ngIf="loading && !errorUsernamePassword && !errorConnexionImpossible"></mat-progress-bar>
