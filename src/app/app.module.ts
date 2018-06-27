@@ -10,7 +10,7 @@ import {
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
   MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
   MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule, MatDividerModule, MatChipsModule,
-  MAT_DIALOG_DEFAULT_OPTIONS
+  MAT_DIALOG_DEFAULT_OPTIONS, MatButtonToggleModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -133,6 +133,7 @@ import {DialogResourceEditionComponent} from "./activities/activity-edition/reso
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    MatButtonToggleModule,
     ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,

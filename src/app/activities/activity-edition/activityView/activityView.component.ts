@@ -19,6 +19,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
 
   steps: any;
   editActivity: any;
+  editMode: boolean;
   viewGroup: any;
   editable: Array<any>;
   shareActivity: string;
@@ -44,6 +45,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     }
     if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
       this.steps = [];
+    } else {
     }
     this.steps.map(elmt => {
       if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
@@ -66,7 +68,22 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
         }
         this.ref.detectChanges();
       }
+      if (changes.type === "CreateStep") {
+        console.log("stepCreated");
+        if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
+          this.steps = this.activityService.activityLoadedChild;
+        } else {
+          this.steps = this.activityService.sisters;
+        }
+        this.ref.detectChanges();
+      }
     });
+
+    if (this.user.fonction === "Enseignant") {
+      this.editMode = true;
+    } else {
+      this.editMode = false;
+    }
   }
 
   /**
@@ -74,7 +91,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    */
   ngAfterViewInit(): void {
     console.log(this.stepper._steps);
-    if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded) && this.steps.length > 0) {
+    if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded) && this.steps.length > 1) {
       let activityId = this.activityService.activityLoaded.currentLoaded;
 
       if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
@@ -89,7 +106,21 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
           this.router.navigate(['activity_view/' + activityId]);
         });
       }
+    } else {
+      this.stepper.selectedIndex = 0;
     }
+  }
+
+  addStep() {
+    let id = '';
+    if (this.activityService.activityLoaded.type === 'Main') {
+      id = this.activityService.activityLoaded._id;
+    } else {
+      id = this.activityService.activityLoaded.parent;
+    }
+    this.activityService.createSubActivity(id).then(res => {
+      this.steps.push(res['_id']);
+    });
   }
 
   /**
@@ -97,10 +128,8 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    * @param $event
    */
   loadActivity($event) {
-    console.log(this.steps);
-    console.log(this.steps[$event.selectedIndex]);
-    console.log($event.selectedIndex);
     const activityId = this.steps[$event.selectedIndex];
+    console.log(activityId);
     this.loadAnActivity(activityId);
   }
 

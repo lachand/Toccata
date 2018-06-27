@@ -18,6 +18,7 @@ export class MenuComponent {
 
   logout() {
     this.activityService.logout();
+    this.router.navigate(['/login']);
   }
 
   isNullOrUndefined(elmt) {

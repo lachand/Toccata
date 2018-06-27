@@ -8,9 +8,28 @@
   margin-bottom: 20px;
 }
 
+.button-left {
+  float: left;
+  margin-top: 22px;
+}
+
+.flex-card-centered {
+  float: left;
+  width: 100%;
+}
+
 .flex-card-small {
   width: 30%;
   padding: 1%;
+}
+
+.stepper-left {
+  max-width: 85%;
+  float: left;
+}
+
+.aligned-right {
+  float: left;
 }
 
 .chip {

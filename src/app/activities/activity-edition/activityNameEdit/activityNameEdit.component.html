@@ -2,32 +2,16 @@
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div *ngIf="!nameEdition" class="name-edition">
   <h3>
-    <div>
-      <div>
-        <activity-name class="activity-name" [activityId]="activityService.activityLoaded._id" (dblclick)="switch()"></activity-name>
-      </div>
-      <div>
-        <mat-chip-list class="chip-list">
-          <mat-chip class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityView()">
-            <mat-icon>visibility</mat-icon>
-            {{viewActivity}}
-          </mat-chip>
-          <mat-chip class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
-            <mat-icon>group</mat-icon>
-            {{viewGroup}}
-          </mat-chip>
-        </mat-chip-list>
-      </div>
-    </div>
+    {{appName}} <mat-icon *ngIf="edit" (click)="switch()">edit</mat-icon>
   </h3>
   <!--<h3 (dblclick)="switch()">{{activityService.activityLoaded.name}}</h3>-->
 </div>
 
 <div *ngIf="nameEdition" class="name-edition">
-  <mat-input-container *ngIf="activityService.activityLoaded.type === 'Main'">
+  <mat-input-container *ngIf="type === 'Parent'">
     <input matInput placeholder="Nom de l'activité" type="text" name="appName" [(ngModel)]="appName">
   </mat-input-container>
-  <mat-input-container *ngIf="activityService.activityLoaded.type === 'Sequence'">
+  <mat-input-container *ngIf="type === 'Loaded'">
     <input matInput placeholder="Nom de l'étape" type="text" name="appName" [(ngModel)]="appName">
   </mat-input-container>
   <mat-icon class="aligned-with-text" (click)="changeTheName()">done</mat-icon>

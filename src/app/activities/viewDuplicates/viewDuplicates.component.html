@@ -8,7 +8,7 @@
     </div>
     <div>
   <mat-chip-list class="chip-list">
-    <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
+    <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityView()">
       <mat-icon>edit</mat-icon>
       {{editActivity}}
     </mat-chip>

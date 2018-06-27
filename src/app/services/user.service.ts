@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {DatabaseService} from './database.service';
+import {Md5} from "ts-md5";
 
 @Injectable()
 export class UserService {
@@ -26,24 +27,24 @@ export class UserService {
    * @returns {Promise<any>} The confirmation of creation
    */
   signup(username: string, password: string) {
+
+
+
+    return new Promise((resolve, reject) => {
+      resolve(username);
+    });
+    /*
     return new Promise((resolve, reject) => {
       this.database.dbRemote.signup(username, password, function (err) {
-        if (err) {
-          if (err.name === 'conflict') {
-            reject(err);
-          } else if (err.name === 'forbidden') {
-            reject(err);
-          } else {
-          }
-        }
       }).then(userCreated => {
         resolve(userCreated);
       }).catch(err => {
-        console.log(`Error in user service whith call to signup : 
-        ${err}`);
+        console.log(`Error in user service whith call to signup :
+        ${err.name} ; reason : ${err.reason}`);
         reject(err);
       });
     });
+    */
   }
 
   /**
@@ -54,26 +55,15 @@ export class UserService {
    */
   public login(username, password) {
     return new Promise((resolve, reject) => {
-        this.database.dbRemote.login(username, password, function (err, response) {
-          if (err) {
-            if (err.name === 'unauthorized') {
-              console.log('name or password incorrect');
-              reject(err);
-            } else {
-              reject(err);
-            }
-          }
-        })/*.then((result) => {
-          this.loggedIn = result['ok'];
-          this.id = username;
-          return this.database.addDatabase(`user_${username}`);
-        })*/
-          .then((result) => {
-            this.loggedIn = result['ok'];
+        return this.database.getDocument(username).then(user => {
+          const md5 = new Md5();
+          const hashedPassword = md5.appendStr(password).end();
+          if (user['hashedPassword'] === hashedPassword) {
+            this.loggedIn = true;
             this.id = username;
             console.log(username);
             return this.database.getDocument(username);
-          })
+          }})
           .then((res) => {
             console.log(res);
             this.name = res['name'];
@@ -81,9 +71,6 @@ export class UserService {
             this.avatar = res['avatar'];
             this.fonction = res['fonct'];
             resolve(this.loggedIn);
-          })
-          .catch(function (err) {
-            reject(err);
           });
       }
     );
@@ -118,13 +105,16 @@ export class UserService {
    * @param isTeacher Whether the user is a teacher or not
    * @returns {Promise<any>} The created user
    */
-  createUser(username: string, name: string, surname: string, avatar: string, isTeacher: any) {
+  createUser(username: string, name: string, surname: string, password: string, avatar: string, isTeacher: any) {
+    const md5 = new Md5();
+    const hashedPassword = md5.appendStr(password).end();
     return new Promise(resolve => {
       const fonct = isTeacher ? 'Enseignant' : 'Eleve';
       const document = {
         _id: username,
         name: name,
         surname: surname,
+        hashedPassword: hashedPassword,
         avatar: avatar,
         fonct: fonct,
         activityList: [],

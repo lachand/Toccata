@@ -1,8 +1,8 @@
-import { Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AppsService} from '../../../services/apps.service';
 import {LoggerService} from '../../../services/logger.service';
 import {ResourcesService} from '../../../services/resources.service';
@@ -21,11 +21,13 @@ import {ResourcesService} from '../../../services/resources.service';
               public router: Router,
               public resourcesService: ResourcesService,
               public formBuilder: FormBuilder,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     this.formNewUrl = this.formBuilder.group({
       url: '',
       name: ''
     });
+    console.log(data);
   }
 
   /**
@@ -38,9 +40,16 @@ import {ResourcesService} from '../../../services/resources.service';
       type: 'url'
     };
 
-    this.activityService.getActivityInfos(this.activityService.activityLoaded._id).then(activity => {
-      this.resourcesService.createResource(ressource, this.activityService.activityLoaded._id).then((res) => {
-        this.logger.log('CREATE', this.activityService.activityLoaded._id, res['_id'], 'resource created');
+    let id;
+    if (this.data === 'step') {
+      id = this.activityService.activityLoaded._id;
+    } else {
+      id = this.activityService.activityLoaded.parent;
+    }
+
+    this.activityService.getActivityInfos(id).then(activity => {
+      this.resourcesService.createResource(ressource, id).then((res) => {
+        this.logger.log('CREATE', id, id, 'resource created');
         this.dialogRef.close();
       });
     });

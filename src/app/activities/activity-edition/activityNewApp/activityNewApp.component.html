@@ -4,20 +4,23 @@
   <h3 i18n="@@newApp">Nouvelle application</h3>
 
   <mat-form-field>
-    <mat-select matInput placeholder="Type d'application" formControlName="appType" ngDefaultControl>
+    <mat-select matInput placeholder="Type d'application" formControlName="appType" ngDefaultControl><mat-hint class="hint-red" *ngIf="error['passwordCheck']" i18n="@@errorPasswordCheck">Lesm ots de passes ne correspondent pas</mat-hint>
     <mat-option *ngFor="let appType of appsType" [value]="appType">
       {{ appType }}
     </mat-option>
   </mat-select>
+    <mat-hint class="hint-red" *ngIf="error['appType']" i18n="@@errorAppType">Merci de choisir un type d'application</mat-hint>
   </mat-form-field>
 
   <mat-input-container>
     <input matInput placeholder="Nom de l'application" type="text" formControlName="appName">
+    <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName">Merci de définir un nom pour l'application</mat-hint>
   </mat-input-container>
 
   <div [hidden]="!(appType == 'Chronomètre')">
     <mat-input-container>
       <input matInput placeholder="Durée" type="time" formControlName="chronometreValue">
+      <mat-hint class="hint-red" *ngIf="error['chronometerValue']" i18n="@@errorAppName">Merci de définir une durée</mat-hint>
     </mat-input-container>
   </div>
 
@@ -29,10 +32,23 @@
     -->
     <mat-input-container>
       <input matInput placeholder="Lien vers l'application" type="text" formControlName="url">
+      <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName">Merci de définir une url</mat-hint>
     </mat-input-container>
 
   </div>
 
+  <div>
+    Rendre l'application disponible pour :
+    <div>
+    <mat-button-toggle-group name="stepOrActivity" formControlName="stepOrActivity" aria-label="Etape ou activité ?">
+      <mat-button-toggle value="step">Etape uniquement</mat-button-toggle>
+      <mat-button-toggle value="activity">Toute l'activité</mat-button-toggle>
+    </mat-button-toggle-group>
+    </div>
+    <div>
+    <mat-hint class="hint-red" *ngIf="error['stepOrActivity']" i18n="@@errorAppType">Merci de définir la disponibilité de l'application</mat-hint>
+    </div>
+  </div>
   <div>
     <button mat-button type="submit" i18n="@@add">Ajouter</button>
   </div>

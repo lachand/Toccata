@@ -322,6 +322,7 @@ export class ActivityService {
   public getActivityInfos(activityId) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
+        console.log(activity);
         resolve({
           name: activity['name'],
           description: activity['description'],
@@ -386,7 +387,9 @@ export class ActivityService {
           return this.database.updateDocument(parent);
         })
         .then(() => {
-        this.activityLoadedChild.push(subActivity._id);
+          this.sisters.push(subActivity._id)
+          this.activityLoadedChild.push(subActivity._id);
+          this.changes.emit({doc: subActivity, type: 'CreateStep'});
           resolve(subActivity);
         })
         .catch(err => {

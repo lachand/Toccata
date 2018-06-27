@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 
@@ -8,17 +8,19 @@ import {LoggerService} from '../../../services/logger.service';
   styleUrls: ['./activityDescriptionEdit.component.scss']
 })
 
-export class ActivityDescriptionEditComponent {
+export class ActivityDescriptionEditComponent implements OnInit{
   descriptionEdition: boolean;
   description: String = '';
   editorOptions: any;
   @Input() edit: boolean;
+  @Input() type: string;
 
   constructor(public activityService: ActivityService, private logger: LoggerService) {
-    this.descriptionEdition = false;
+
     if (this.activityService.activityLoaded.description !== 'Il n\'y a aucune description') {
       this.description = this.activityService.activityLoaded.description;
     }
+
     this.editorOptions = {
       toolbar: 'full',
       toolbar_full: [
@@ -42,11 +44,20 @@ export class ActivityDescriptionEditComponent {
       uiColor: '#FAFAFA',
     };
 
+
+
     this.activityService.changes.subscribe(change => {
       //console.log('doc : ', change.doc);
       //console.log('previous : ', this.activityService.activityLoaded);
-      if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded._id) {
+      if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         console.log(change.doc._id, this.activityService.activityLoaded._id);
+        this.description = change.doc.description;
+      } else if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+        console.log(change.doc._id, this.activityService.activityLoaded._id);
+        this.description = change.doc.description;
+      }
+      if (change.type === 'ChangeActivity' && this.type === 'Loaded') {
+        console.log(change.type);
         this.description = change.doc.description;
       }
     });
@@ -57,10 +68,8 @@ export class ActivityDescriptionEditComponent {
    * Open or close text editor
    */
   switchDescription() {
-    if (this.edit) {
-      this.description = this.activityService.activityLoaded.description;
+      //this.description = this.activityService.activityLoaded.description;
       this.descriptionEdition = !this.descriptionEdition;
-    }
   }
 
   /**
@@ -68,9 +77,15 @@ export class ActivityDescriptionEditComponent {
    */
   saveDescription(system: boolean = true) {
     if (this.descriptionEdition) {
-      return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description, system);
+      this.descriptionEdition = !this.descriptionEdition;
+      if (this.type === 'Loaded') {
+        return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'description', this.description, system);
+      } else {
+        return this.activityService.activityEdit(this.activityService.activityLoaded.parent, 'description', this.description, system);
+      }
     }
     else {
+      this.descriptionEdition = !this.descriptionEdition;
       return new Promise( resolve => {
         resolve(0);
       });
@@ -81,10 +96,20 @@ export class ActivityDescriptionEditComponent {
    * Change the description of an activity
    */
   changeTheDescription() {
-    this.saveDescription(false)
-      .then(() => {
-        this.switchDescription();
+    this.saveDescription(false);
+  }
+
+  ngOnInit(): void {
+    console.log(this.type);
+    this.descriptionEdition = false;
+    if (this.type === 'Loaded') {
+      this.description = this.activityService.activityLoaded.description;
+    } else {
+      this.activityService.getActivityInfos(this.activityService.activityLoaded.parent).then(res => {
+        this.description = res['description'];
       });
+    }
+    console.log(this.description);
   }
 
 }

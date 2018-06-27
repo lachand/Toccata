@@ -24,178 +24,189 @@ export class DatabaseService {
    * Construct the service to communicate with the local and remote database
    */
   constructor() {
+
     require('events').EventEmitter.defaultMaxListeners = 0;
 
     PouchDB.plugin(PouchdbFind);
     PouchDB.plugin(require('pouchdb-authentication'));
+    PouchDB.plugin(require('pouchdb-upsert'));
 
     this.room = environment.ROOM;
     console.log(environment.DB);
 
-    this.dbRemote = new PouchDB(`${environment.URL_DB}${environment.PORT_DB}/${environment.DB}`, {
+    this.dbRemote = new PouchDB(`${environment.URL_DB}/${environment.DB}`, {
       auth: {
         username: `${environment.USERNAME_DB}`,
         password: `${environment.PASSWORD_DB}`
       },
-    });
+    skipSetup: true
+    }
+      );
 
-    /*this.dbRemote.compact();*/
     this.db = new PouchDB(environment.DB);
 
-    /*
-    this.db.replicate.to(this.dbRemote).on('change', changes => {
-      console.log(`sync 1 change ${changes}`);
-    }).on('paused', function (info) {
-      console.log('pause: ', info);
-    }).on('active', function (info) {
-      console.log('active: ', info);
-    }).on('error', err => {
-      console.log(`sync error ${err}`);
-    });
-    */
-
-    this.dbList.push('user_list');
-
-    this.options = {
+    this.db.sync(this.dbRemote, {
       live: true,
-      retry: true,
-      continuous: true,
-      ajax: {timeout: 60000}
-      //since: 'now'
-      //since: 0,
-      //revs_limit: 2,
-      //filter: 'appFilters/by_db_name',
-      //query_params: { 'dbNames': ['user_list'] }
-    };
-
-    this.optionsReplication = this.options;
-    this.optionsReplication.live = false;
-    this.optionsReplication.continuous = false;
-
-    /*
-    this.db.sync(this.dbRemote).on('change', changes => {
-      console.log(`sync change ${changes}`);
-    }).on('paused', function (info) {
-      console.log('pause: ', info);
-    }).on('active', function (info) {
-      console.log('active: ', info);
-    }).on('error', err => {
-      console.log(`sync error ${err}`);
-    });
-    */
-
-    const tempOptions = this.options;
-
-    this.db.compact().then((res) => {
-    console.log(this.db);
-      //return this.db.replicate.to(this.dbRemote, this.optionsReplication).on('complete', () => {
-      //  console.log("begin sync");
-      //  return this.db.replicate.from(this.dbRemote).on('complete', () => {
-      //    console.log("sync complete");
-      let tmpthis = this;
-      this.dbRemote.sync(this.db, this.options).on('change', changes => {
-        console.log(`sync change ${changes}`);
-      }).on('paused', function (info) {
-        tmpthis.changes.emit({type: 'CONNEXION_DONE'})
-        console.log('pause: ', info);
-      }).on('active', function (info) {
-        console.log('active: ', info);
-      }).on('error', err => {
-        console.log(`sync error ${err}`);
-      });
-          /**this.dbSync = this.db.sync(this.dbRemote, this.options);
-           this.dbSync.on('change', changes => {
-            console.log(`sync change ${changes}`);
-          }).on('paused', function (info) {
-            console.log('pause: ', info);
-          }).on('active', function (info) {
-            console.log('active: ', info);
-          }).on('error', err => {
-            console.log(`sync error ${err}`);
-          });
-           **/
-          /*this.dbSync = this.db.sync(this.dbRemote, this.options).on('change', changes => {
-            console.log(`sync change : ${changes}`);
-          }).on('paused', function (info) {
-            console.log('pause: ', info);
-          }).on('active', function (info) {
-            console.log('active: ', info);
-          }).on('error', err => {
-            console.log(`sync error ${err}`);
-          });*/
-          /*
-          this.db.sync(this.dbRemote, this.options).on('change', changes => {
-            console.log(`sync in change ${changes}`);
-          }).on('paused', function (info) {
-            console.log('pause in: ', info);
-          }).on('active', function (info) {
-            console.log('active in : ', info);
-          }).on('error', err => {
-            console.log(`sync error in ${err}`);
-          });*/
-
-          //this.sync();
-        /*}).on('change', changes => {
-          console.log(`sync change ${changes}`);
-        }).on('paused', function (info) {
-          console.log('pause: ', info);
-        }).on('active', function (info) {
-          console.log('active: ', info);
-        }).on('error', err => {
-          console.log(`sync error ${err}`);
-        });
-      });*/
-    })
-      .catch(err => {
-        console.log(`error with call to databaseService initialisation : ${err}`);
-        this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
-      });
-
-
-    this.db.changes({
-      live: true,
-      include_docs: true,
-      retry: true,
-      timeout: false,
-      heartbeat: false,
-      //filter: 'appFilters/by_db_name',
-      //query_params: { 'dbNames': ['user_list'] }
-    }).on('change', change => {
-      this.handleChange(change);
-      console.log("change on local");
-    }).on('paused', function (info) {
-      console.log('pause: ', info);
-      this.changes.emit({type: 'CONNEXION_DONE'});
-    }).on('active', function (info) {
-      console.log('active: ', info);
-    }).on('error', function (err) {
-      console.log('activities: ', err);
-    }).catch(err => {
-      console.log(err);
+      retry: true
     });
 
-
-    this.dbRemote.changes({
-      live: true,
-      include_docs: true,
-      retry: true,
-      timeout: false,
-      heartbeat: false,
-      //filter: 'appFilters/by_db_name',
-      //query_params: { 'dbNames': ['user_list'] }
-    }).on('change', change => {
-      this.handleChangeRemote(change);
-      console.log('change_on_remote');
-    }).on('paused', function (info) {
-      this.changes.emit({type: 'CONNEXION_DONE'});
-      console.log('pause: ', info);
-    }).on('active', function (info) {
-      console.log('active: ', info);
-    }).on('error', function (err) {
-      console.log('activities: ', err);
-    }).catch(err => {
-      console.log(err);
-    });
+    // /*this.dbRemote.compact();*/
+    // this.db = new PouchDB(environment.DB);
+    //
+    // /*
+    // this.db.replicate.to(this.dbRemote).on('change', changes => {
+    //   console.log(`sync 1 change ${changes}`);
+    // }).on('paused', function (info) {
+    //   console.log('pause: ', info);
+    // }).on('active', function (info) {
+    //   console.log('active: ', info);
+    // }).on('error', err => {
+    //   console.log(`sync error ${err}`);
+    // });
+    // */
+    //
+    // this.dbList.push('user_list');
+    //
+    // this.options = {
+    //   live: true,
+    //   retry: true,
+    //   continuous: true,
+    //   ajax: {timeout: 60000}
+    //   //since: 'now'
+    //   //since: 0,
+    //   //revs_limit: 2,
+    //   //filter: 'appFilters/by_db_name',
+    //   //query_params: { 'dbNames': ['user_list'] }
+    // };
+    //
+    // this.optionsReplication = this.options;
+    // this.optionsReplication.live = false;
+    // this.optionsReplication.continuous = false;
+    //
+    // /*
+    // this.db.sync(this.dbRemote).on('change', changes => {
+    //   console.log(`sync change ${changes}`);
+    // }).on('paused', function (info) {
+    //   console.log('pause: ', info);
+    // }).on('active', function (info) {
+    //   console.log('active: ', info);
+    // }).on('error', err => {
+    //   console.log(`sync error ${err}`);
+    // });
+    // */
+    //
+    // const tempOptions = this.options;
+    //
+    // this.db.compact().then((res) => {
+    // console.log(this.db);
+    //   //return this.db.replicate.to(this.dbRemote, this.optionsReplication).on('complete', () => {
+    //   //  console.log("begin sync");
+    //   //  return this.db.replicate.from(this.dbRemote).on('complete', () => {
+    //   //    console.log("sync complete");
+    //   let tmpthis = this;
+    //   this.dbRemote.sync(this.db, this.options).on('change', changes => {
+    //     console.log(`sync change ${changes}`);
+    //   }).on('paused', function (info) {
+    //     tmpthis.changes.emit({type: 'CONNEXION_DONE'})
+    //     console.log('pause: ', info);
+    //   }).on('active', function (info) {
+    //     console.log('active: ', info);
+    //   }).on('error', err => {
+    //     console.log(`sync error ${err}`);
+    //   });
+    //       /**this.dbSync = this.db.sync(this.dbRemote, this.options);
+    //        this.dbSync.on('change', changes => {
+    //         console.log(`sync change ${changes}`);
+    //       }).on('paused', function (info) {
+    //         console.log('pause: ', info);
+    //       }).on('active', function (info) {
+    //         console.log('active: ', info);
+    //       }).on('error', err => {
+    //         console.log(`sync error ${err}`);
+    //       });
+    //        **/
+    //       /*this.dbSync = this.db.sync(this.dbRemote, this.options).on('change', changes => {
+    //         console.log(`sync change : ${changes}`);
+    //       }).on('paused', function (info) {
+    //         console.log('pause: ', info);
+    //       }).on('active', function (info) {
+    //         console.log('active: ', info);
+    //       }).on('error', err => {
+    //         console.log(`sync error ${err}`);
+    //       });*/
+    //       /*
+    //       this.db.sync(this.dbRemote, this.options).on('change', changes => {
+    //         console.log(`sync in change ${changes}`);
+    //       }).on('paused', function (info) {
+    //         console.log('pause in: ', info);
+    //       }).on('active', function (info) {
+    //         console.log('active in : ', info);
+    //       }).on('error', err => {
+    //         console.log(`sync error in ${err}`);
+    //       });*/
+    //
+    //       //this.sync();
+    //     /*}).on('change', changes => {
+    //       console.log(`sync change ${changes}`);
+    //     }).on('paused', function (info) {
+    //       console.log('pause: ', info);
+    //     }).on('active', function (info) {
+    //       console.log('active: ', info);
+    //     }).on('error', err => {
+    //       console.log(`sync error ${err}`);
+    //     });
+    //   });*/
+    // })
+    //   .catch(err => {
+    //     console.log(`error with call to databaseService initialisation : ${err}`);
+    //     this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
+    //   });
+    //
+    //
+    // this.db.changes({
+    //   live: true,
+    //   include_docs: true,
+    //   retry: true,
+    //   timeout: false,
+    //   heartbeat: false,
+    //   //filter: 'appFilters/by_db_name',
+    //   //query_params: { 'dbNames': ['user_list'] }
+    // }).on('change', change => {
+    //   this.handleChange(change);
+    //   console.log("change on local");
+    // }).on('paused', function (info) {
+    //   console.log('pause: ', info);
+    //   this.changes.emit({type: 'CONNEXION_DONE'});
+    // }).on('active', function (info) {
+    //   console.log('active: ', info);
+    // }).on('error', function (err) {
+    //   console.log('activities: ', err);
+    // }).catch(err => {
+    //   console.log(err);
+    // });
+    //
+    //
+    // this.dbRemote.changes({
+    //   live: true,
+    //   include_docs: true,
+    //   retry: true,
+    //   timeout: false,
+    //   heartbeat: false,
+    //   //filter: 'appFilters/by_db_name',
+    //   //query_params: { 'dbNames': ['user_list'] }
+    // }).on('change', change => {
+    //   this.handleChangeRemote(change);
+    //   console.log('change_on_remote');
+    // }).on('paused', function (info) {
+    //   this.changes.emit({type: 'CONNEXION_DONE'});
+    //   console.log('pause: ', info);
+    // }).on('active', function (info) {
+    //   console.log('active: ', info);
+    // }).on('error', function (err) {
+    //   console.log('activities: ', err);
+    // }).catch(err => {
+    //   console.log(err);
+    // });
 
   }
 
@@ -246,13 +257,14 @@ export class DatabaseService {
   }
 
   handleChangeRemote(change) {
-    return this.getDocument(change.doc._id)
-      .then(() => {
-        this.forceUpdateDocument(change.doc);
-      })
-      .catch(function (err) {
-      console.log(err);
-    });
+    //return this.getDocument(change.doc._id)
+    //  .then(() => {
+    //    this.forceUpdateDocument(change.doc);
+    //  })
+    //  .catch(function (err) {
+    //  console.log(err);
+    //});
+    return 0;
   }
 
   forceUpdateDocument(doc) {
@@ -341,7 +353,7 @@ export class DatabaseService {
    */
   ereaseDocument(documentId) {
     return new Promise(resolve => {
-      return this.dbRemote.remove(documentId);
+      return this.db.remove(documentId);
     });
   }
 
@@ -373,7 +385,7 @@ export class DatabaseService {
    */
   addDocument(document: any) {
     return new Promise((resolve, reject) => {
-      this.dbRemote.put(document)
+      this.db.put(document)
         .then(response => {
           resolve(response);
         })
@@ -392,7 +404,7 @@ export class DatabaseService {
    */
   ereaseDatabase(dbName) {
     return new Promise(resolve => {
-      return this.dbRemote.allDocs({include_docs: true}).then(docs => {
+      return this.db.allDocs({include_docs: true}).then(docs => {
         const promises = docs.rows.map((doc) => {
           if (doc.doc.dbName === dbName) {
             console.log('deleted_doc :', doc.doc);
@@ -414,10 +426,10 @@ export class DatabaseService {
    */
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
-      return this.dbRemote.allDocs().then(res => {
+      return this.db.allDocs().then(res => {
       })
         .then(() => {
-          return this.dbRemote.get(docId);
+          return this.db.get(docId);
         })
         .then(result => {
           if (!isNullOrUndefined(result['_conflict'])) {
@@ -473,16 +485,17 @@ export class DatabaseService {
   }**/
 
   updateDocument(doc) {
-    const tmp_this = this;
-    return this.dbRemote.get(doc._id).then((origDoc, tmp_this) => {
-      doc._rev = origDoc._rev;
-      return tmp_this.dbRemote.put(doc);
-    }).catch(function (err) {
-      if (err.status === 409) {
-        return tmp_this.updateDocument(doc);
-      } else { // new doc
-        return tmp_this.dbRemote.put(doc);
+    return this.db.upsert(doc._id, function (elmt) {
+      elmt = doc;
+      if (!elmt.count) {
+        elmt.count = 0;
       }
+      elmt.count++;
+      return elmt;
+    }).then(function (res) {
+      console.log(res);
+    }).catch(function (err) {
+      console.log(err);
     });
   }
 
@@ -492,7 +505,7 @@ export class DatabaseService {
    */
   removeDocument(documentId) {
     return new Promise(resolve => {
-      this.dbRemote.get(documentId).then(document => {
+      this.db.get(documentId).then(document => {
         if (document.documentType === 'Resource' || document.documentType === 'Application') {
           const changes = [];
           this.db.find({

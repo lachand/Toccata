@@ -92,12 +92,14 @@ export class SigninComponent implements OnInit {
           this.signinForm.value.username,
           this.signinForm.value.name,
           this.signinForm.value.surname,
+          this.signinForm.value.password,
           this.signinForm.value.avatar,
           this.teacher
         );
       })
         .then(newUser => {
           console.log(`user created : ${newUser}`);
+          this.router.navigate(['/login']);
         })
         .catch(err => {
           console.log(`Error in signup component whith call to signup : 

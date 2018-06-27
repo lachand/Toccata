@@ -8,17 +8,17 @@
         <div class="activity-name">
           <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
           <div class="right">
-            <activity-name [activityId]="activityService?.activityLoaded?._id"></activity-name>
+            <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Parent'" [edit]="editMode"></activity-name-edit>
           </div>
         </div>
         <div>
           <mat-chip-list class="chip-list">
-            <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
+            <mat-chip *ngIf="editMode" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
               <mat-icon>edit</mat-icon>
               {{editActivity}}
             </mat-chip>
 
-            <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+            <mat-chip *ngIf="editMode" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
               <mat-icon>group</mat-icon>
               {{viewGroup}}
             </mat-chip>
@@ -31,18 +31,19 @@
         <div class="activity-name">
         <button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>
           <div class="right">
-        <activity-name [activityId]="activityService?.activityLoaded?.parent"
-        ></activity-name> :
-        <activity-name [activityId]="activityService?.activityLoaded?._id"
-        ></activity-name> ({{activityService?.activityLoaded?.nameForTeacher}})
+        <activity-name-edit class="aligned-right" [type]="'Parent'" [edit]="editMode" [activityId]="activityService?.activityLoaded?.parent"
+        ></activity-name-edit> <div class="aligned-right">:</div>
+        <activity-name-edit class="aligned-right" [type]="'Loaded'" [edit]="editMode" [activityId]="activityService?.activityLoaded?._id"
+        ></activity-name-edit> <div class="aligned-right">({{activityService?.activityLoaded?.nameForTeacher}})</div>
           </div>
         </div>
         <mat-chip-list class="chip-list">
+          <!--
           <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityEdit()">
             <mat-icon>edit</mat-icon>
             {{editActivity}}
           </mat-chip>
-
+          -->
           <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
             <mat-icon>group</mat-icon>
             {{viewGroup}}
@@ -52,23 +53,30 @@
         </div>
     </h3>
 
-    <div *ngIf="steps.length > 0" class="left-aligned">
-      <mat-horizontal-stepper class="stepperLeft" [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
+    <div>
+      <mat-card class="flex-card-centered">
+        <app-activity-description-edit [edit]="editMode" [type]="'Parent'"></app-activity-description-edit>
+      </mat-card>
+    </div>
+
+    <div class="left-aligned">
+      <mat-horizontal-stepper *ngIf="steps.length > 0" class="stepper-left" [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
         <mat-step *ngFor="let step of steps" [completed]="false" [editable]="true">
           <ng-template matStepLabel>
-            <activity-name [activityId]="step"></activity-name>
+            <activity-name [activityId]="step" ></activity-name>
           </ng-template>
         </mat-step>
       </mat-horizontal-stepper>
+      <button *ngIf="editMode" mat-button class='button-left' (click)="addStep()"><mat-icon>add_circle</mat-icon>Ajouter une étape</button>
     </div>
 
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 
       <div fxFlex="30%">
 
-        <div>
+        <div *ngIf="activityService?.activityLoaded?.type !== 'Main'">
           <mat-card class="flex-card">
-            <app-activity-description-edit [edit]="false"></app-activity-description-edit>
+            <app-activity-description-edit [edit]="editMode" [type]="'Loaded'"></app-activity-description-edit>
           </mat-card>
         </div>
 
@@ -87,13 +95,13 @@
             <mat-card-header>
               <h3 mat-line i18n="@@applications">Applications</h3>
             </mat-card-header>
-            <app-activity-apps-edit [edit]="false"></app-activity-apps-edit>
+            <app-activity-apps-edit [edit]="editMode"></app-activity-apps-edit>
           </mat-card>
         </div>
 
         <div>
           <mat-card class="flex-card">
-            <app-activity-participants-edit [edit]="false"></app-activity-participants-edit>
+            <app-activity-participants-edit [edit]="editMode"></app-activity-participants-edit>
           </mat-card>
         </div>
 

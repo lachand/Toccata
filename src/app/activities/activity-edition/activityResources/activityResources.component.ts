@@ -39,11 +39,17 @@ export class ActivityResourcesComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.type === 'File') {
-        this.resourcesService.createResource(result.data, this.activityService.activityLoaded._id).then(res => {
-          this.logger.log('CREATE', this.activityService.activityLoaded._id, res['_id'], 'resource created');
+        let id;
+        if (result.stepOrActivity === 'step') {
+          id = this.activityService.activityLoaded._id;
+        } else {
+          id = this.activityService.activityLoaded.parent;
+        }
+        this.resourcesService.createResource(result.data, id).then(res => {
+          this.logger.log('CREATE', id, id, 'resource created');
         });
       } else if (result.type === 'Link') {
-        const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent);
+        const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent, {data: result.stepOrActivity});
         dialogRefUrl.componentInstance.dialogRef = dialogRefUrl;
       }
     });

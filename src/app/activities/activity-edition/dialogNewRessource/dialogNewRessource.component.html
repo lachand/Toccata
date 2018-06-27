@@ -2,11 +2,26 @@
 <div layout="row" >
   <div>
     <h2 mat-dialog-title i18n="@@addResource">Ajout d'une ressource</h2>
+    <form [formGroup]="formNewRes">
+    <div>
+      Rendre la ressource disponible pour :
+      <div>
+        <mat-button-toggle-group name="stepOrActivity" formControlName="stepOrActivity" aria-label="Etape ou activité ?">
+          <mat-button-toggle value="step">Etape uniquement</mat-button-toggle>
+          <mat-button-toggle value="activity">Toute l'activité</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <div>
+        <mat-hint class="hint-red" *ngIf="error['stepOrActivity']" i18n="@@errorStepOrAct">Merci de définir la disponibilité de la resource</mat-hint>
+      </div>
+    </div>
+    </form>
+
     <mat-dialog-content i18n="@@fileOrLink">Voulez vous ajouter un fichier ou un lien ?</mat-dialog-content>
     <mat-dialog-actions>
       <button mat-button i18n="@@file" (click)="clickFile($event)">Fichier</button>
-      <button mat-button [mat-dialog-close]="{type: 'Link'}" i18n="@@link">Lien</button>
+      <button mat-button (click)="clickLink($event)" i18n="@@link">Lien</button>
     </mat-dialog-actions>
-    <input type="file" id="hiddenFile" #hiddenFile style="display:none" (change)="uploadFile()"/>
+    <input type="file" id="hiddenFile" class="hiddenFile" #hiddenFile style="display:none" (change)="uploadFile()"/>
   </div>
 </div>
