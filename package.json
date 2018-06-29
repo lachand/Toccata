@@ -66,6 +66,7 @@
     "ng2-scroll-to": "^1.0.7",
     "ngx-auto-scroll": "^1.0.15",
     "ngx-flip": "^1.0.0",
+    "node-sass": "^4.9.0",
     "pouchdb": "^6.3.4",
     "pouchdb-authentication": "^0.5.5",
     "pouchdb-find": "^6.3.4",

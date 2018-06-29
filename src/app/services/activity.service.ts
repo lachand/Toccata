@@ -239,6 +239,7 @@ export class ActivityService {
    */
   public createActivity(activityType) {
     let dbName = '';
+    let subactivity;
     console.log(`here : ${dbName}`);
     return new Promise((resolve, reject) => {
       this.database.createDatabase('activity').then((newDatabase: string) => {
@@ -276,6 +277,20 @@ export class ActivityService {
           console.log('resolved');
           console.log(dbName, res);
           this.activitiesList.push(dbName);
+          return this.load_activity(dbName);
+        })
+        .then( () => {
+          return this.createSubActivity(dbName);
+        })
+        .then( (subActivity) => {
+          subactivity = subActivity;
+          return this.database.getDocument(dbName);
+        })
+        .then( activity => {
+          activity['currentLoaded'] = subactivity._id;
+          return this.database.updateDocument(activity);
+        })
+        .then( () => {
           resolve(dbName);
         })
         .catch(err => {
@@ -388,7 +403,7 @@ export class ActivityService {
         })
         .then(() => {
           this.sisters.push(subActivity._id)
-          this.activityLoadedChild.push(subActivity._id);
+          //this.activityLoadedChild.push(subActivity._id);
           this.changes.emit({doc: subActivity, type: 'CreateStep'});
           resolve(subActivity);
         })
