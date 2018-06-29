@@ -72,7 +72,6 @@ export class MyActivitiesComponent {
       .then(res => {
         this.logger.log('CREATE', 'na', res['_id'], 'duplicate activity');
         this.edit_activity(res['id']);
-        this.router.navigate(['activity_view/' + res['_id']);
         /**console.log(res['id']);
       this.activityService.user.db.get(this.user.id).then( res2 => {
         res2.activites.push({
