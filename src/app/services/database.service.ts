@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
-import {environment} from 'environments/environment.prod';
-import {isNullOrUndefined} from "util";
+import {environment} from '../../environments/environment.prod';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class DatabaseService {
@@ -32,7 +32,6 @@ export class DatabaseService {
     PouchDB.plugin(require('pouchdb-upsert'));
 
     this.room = environment.ROOM;
-    console.log(environment.DB);
 
     this.dbRemote = new PouchDB(`${environment.URL_DB}/${environment.DB}`, {
       auth: {
@@ -45,23 +44,59 @@ export class DatabaseService {
 
     this.db = new PouchDB(environment.DB);
 
-    this.db.sync(this.dbRemote, {
-      live: true,
-      retry: true
+    this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
+      console.info(`Replication to remote completed`);
+      return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
+        console.info(`Replication from remote complete`);
+        return this.db.sync(this.dbRemote, {
+          live: true,
+          retry: true
+        }).on('change', change => {
+          console.info(change);
+        }).on('paused', info => {
+          console.info('Sync pause: ', info);
+        }).on('active', () => {
+          console.info('Sync active: ');
+        }).on('denied', err => {
+          console.error(err);
+        }).on('error', err => {
+          console.error(`Sync error ${err}`);
+        });
+      }).on('From remote change', change => {
+        console.info(change);
+      }).on('paused', info => {
+        console.info('From remote pause: ', info);
+      }).on('active', () => {
+        console.info('From remote active: ');
+      }).on('denied', err => {
+        console.error(err);
+      }).on('error', err => {
+        console.error(`Replication from remote error ${err}`);
+      });
+    }).on('change', change => {
+      console.info(change);
+    }).on('paused', function (info) {
+      console.info('To remote pause: ', info);
+    }).on('active', function (info) {
+      console.info('To remote active: ', info);
+    }).on('error', err => {
+      console.error(`Replication to remote error ${err}`);
     });
+
+      // */
 
     // /*this.dbRemote.compact();*/
     // this.db = new PouchDB(environment.DB);
     //
     // /*
     // this.db.replicate.to(this.dbRemote).on('change', changes => {
-    //   console.log(`sync 1 change ${changes}`);
+    //   console.info(`sync 1 change ${changes}`);
     // }).on('paused', function (info) {
-    //   console.log('pause: ', info);
+    //   console.info('pause: ', info);
     // }).on('active', function (info) {
-    //   console.log('active: ', info);
+    //   console.info('active: ', info);
     // }).on('error', err => {
-    //   console.log(`sync error ${err}`);
+    //   console.error(`sync error ${err}`);
     // });
     // */
     //
@@ -211,7 +246,7 @@ export class DatabaseService {
   }
 
   sync() {
-    console.log('sync');
+    console.info('sync');
     //this.dbSync.cancel();
     const options = {
       live: true,
@@ -252,7 +287,7 @@ export class DatabaseService {
    */
   handleChange(change) {
     //console.log(change.doc);
-    console.log(change);
+    console.info(change);
     this.changes.emit({type: change.doc.documentType, doc: change.doc});
   }
 
@@ -293,7 +328,7 @@ export class DatabaseService {
       if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
-        console.log("Add database : ", databaseName)
+        console.info("Add database : ", databaseName)
         this.dbList.push(databaseName);
         //this.options.query_params.dbNames.push(databaseName);
         //this.optionsReplication.query_params.dbNames.push(databaseName);
@@ -364,7 +399,6 @@ export class DatabaseService {
    * @returns {Promise<any>} The created database
    */
   createDatabase(databaseName: string, options = this.options) {
-    console.log(databaseName);
     return new Promise(resolve => {
       const guid = this.guid();
       const newDbName = `${databaseName}_${guid}`;
@@ -390,7 +424,7 @@ export class DatabaseService {
           resolve(response);
         })
         .catch(err => {
-          console.log(`Error in database service whith call to addDocument:
+          console.error(`Error in database service whith call to addDocument:
           ${err}`);
           reject(err);
         });
@@ -407,7 +441,7 @@ export class DatabaseService {
       return this.db.allDocs({include_docs: true}).then(docs => {
         const promises = docs.rows.map((doc) => {
           if (doc.doc.dbName === dbName) {
-            console.log('deleted_doc :', doc.doc);
+            console.info('deleted_doc :', doc.doc);
             doc.doc._deleted = true;
             return this.updateDocument(doc.doc);
           }
@@ -433,13 +467,14 @@ export class DatabaseService {
         })
         .then(result => {
           if (!isNullOrUndefined(result['_conflict'])) {
-            console.log(result);
+            console.info(result);
           }
           resolve(result);
         })
         .catch(err => {
-          console.log(`Error in database service whith call to getDocument ${docId}:
+          console.error(`Error in database service whith call to getDocument ${docId}:
           ${err}`);
+          console.trace();
           reject(err);
         });
     });
@@ -493,9 +528,9 @@ export class DatabaseService {
       elmt.count++;
       return elmt;
     }).then(function (res) {
-      console.log(res);
+      console.info(res);
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -536,7 +571,7 @@ export class DatabaseService {
               resolve(res);
             })
               .catch(err => {
-                console.log(`Error in database service whith call to deleteDocument:
+                console.error(`Error in database service whith call to deleteDocument:
           ${err}`);
               });
           });

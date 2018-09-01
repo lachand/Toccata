@@ -5,10 +5,10 @@
     <mat-dialog-content>
       <div>
         <form [formGroup]="groupNameForm">
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Nom du groupe" type="text" formControlName="groupname">
           <mat-hint class="hint-red" *ngIf="errorGroupName" i18n="@@errorGrpName">Merci de rentrer un nom de groupe</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         </form>
       </div>
     </mat-dialog-content>

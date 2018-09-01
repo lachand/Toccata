@@ -3,13 +3,13 @@
 <form [formGroup]="formTask">
   <h3 i18n="@@task">Tâche</h3>
 
-  <mat-input-container>
+  <mat-form-field>
     <input matInput placeholder="Nom de la tâche" type="text" formControlName="taskName">
-  </mat-input-container>
+  </mat-form-field>
 
-  <mat-input-container>
+  <mat-form-field>
     <input matInput placeholder="Estimation" type="number" formControlName="estimation">
-  </mat-input-container>
+  </mat-form-field>
 
   <div>
     <button mat-button (click)="update()" i18n="@@validate">Valider</button>

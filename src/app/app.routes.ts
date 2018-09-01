@@ -1,5 +1,4 @@
 import { LoginComponent } from './login-signin/login.component';
-import { ChatComponent } from './applications/chat/chat.component';
 import {LoggedInGuard} from './verifications/logged-in.guards';
 import {SigninComponent} from './login-signin/signin.component';
 import {MyActivitiesComponent} from './activities/myActivities/myActivities.component';
@@ -17,7 +16,7 @@ export const routes = [
   { path: 'activity_edit/:id', component: ActivityEditComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_view/:id', component: ActivityViewComponent, canActivate: [LoggedInGuard]},
   { path: 'activity_apps/:id', component: ActivityAppsComponent/**, canActivate: [LoggedInGuard]**/, children:
-      [{ path: 'Chat/:id', component: ChatComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
+      [
         { path: 'Externe/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
         { path: 'Editeur de texte/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'},
         { path: 'Feuille de calcul/:id', component: ExternalAppComponent, /**canActivate: [LoggedInGuard],**/ outlet: 'apps'}]},

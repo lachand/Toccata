@@ -5,10 +5,10 @@
     <mat-dialog-content>
       <div>
         <form [formGroup]="resourceNameForm">
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Nom de la resource" type="text" formControlName="resourcename">
           <mat-hint class="hint-red" *ngIf="errorResourceName" i18n="@@errorResourceName">Merci de rentrer un nom</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         </form>
       </div>
     </mat-dialog-content>

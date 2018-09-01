@@ -7,7 +7,7 @@ import PouchDB from 'pouchdb';
 PouchDB.plugin(require('pouchdb-authentication'));
 
 import { UserService } from '../services/user.service';
-import {ActivityService} from 'app/services/activity.service';
+import {ActivityService} from '../services/activity.service';
 import {DatabaseService} from '../services/database.service';
 import {LoggerService} from '../services/logger.service';
 
@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
       password: ''
     });
     this.databaseService.changes.subscribe(changes => {
+      console.log(changes);
       if (changes.type === 'CONNEXION_IMPOSSIBLE') {
         this.errorConnexionImpossible = true;
         this.loading = false;

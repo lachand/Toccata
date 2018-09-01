@@ -1,7 +1,7 @@
 import {DatabaseService} from './database.service';
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {LoggerService} from './logger.service';
-import {ActivityService} from 'app/services/activity.service';
+import {ActivityService} from './activity.service';
 import {UserService} from "./user.service";
 
 @Injectable()

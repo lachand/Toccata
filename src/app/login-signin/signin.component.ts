@@ -34,7 +34,7 @@ export class SigninComponent implements OnInit {
       name: '',
       surname: '',
       passwordCheck: '',
-      avatar: 'http://mondesfrancophones.com/wp-content/Cimy_User_Extra_Fields/clarouche/Christian%20Larouche.JPG'
+      avatar: 'https://mondesfrancophones.com/wp-content/Cimy_User_Extra_Fields/clarouche/Christian%20Larouche.JPG'
     });
     this.teacher = false;
     this.error = new Array();

@@ -12,28 +12,28 @@
     <mat-hint class="hint-red" *ngIf="error['appType']" i18n="@@errorAppType">Merci de choisir un type d'application</mat-hint>
   </mat-form-field>
 
-  <mat-input-container>
+  <mat-form-field>
     <input matInput placeholder="Nom de l'application" type="text" formControlName="appName">
     <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName">Merci de définir un nom pour l'application</mat-hint>
-  </mat-input-container>
+  </mat-form-field>
 
   <div [hidden]="!(appType == 'Chronomètre')">
-    <mat-input-container>
+    <mat-form-field>
       <input matInput placeholder="Durée" type="time" formControlName="chronometreValue">
       <mat-hint class="hint-red" *ngIf="error['chronometerValue']" i18n="@@errorAppName">Merci de définir une durée</mat-hint>
-    </mat-input-container>
+    </mat-form-field>
   </div>
 
   <div [hidden]="!(appType == 'Externe')">
     <!--
-    <mat-input-container>
+    <mat-form-field>
       <input matInput placeholder="Nom du service" type="text" formControlName="serviceName">
-    </mat-input-container>
+    </mat-form-field>
     -->
-    <mat-input-container>
+    <mat-form-field>
       <input matInput placeholder="Lien vers l'application" type="text" formControlName="url">
       <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName">Merci de définir une url</mat-hint>
-    </mat-input-container>
+    </mat-form-field>
 
   </div>
 

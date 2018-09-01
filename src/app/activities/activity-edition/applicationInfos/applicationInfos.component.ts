@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AppsService} from '../../../services/apps.service';
 import {LoggerService} from '../../../services/logger.service';
-import {ActivityService} from 'app/services/activity.service';
-import {UserService} from "../../../services/user.service";
+import {ActivityService} from '../../../services/activity.service';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'app-application-infos',

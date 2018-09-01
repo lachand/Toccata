@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "dist/ToccataPWA",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

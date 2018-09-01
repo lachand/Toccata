@@ -3,7 +3,7 @@ import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {ActivityNewAppComponent} from '../activityNewApp/activityNewApp.component';
-import {AppsService} from 'app/services/apps.service';
+import {AppsService} from '../../../services/apps.service';
 import {UserService} from '../../../services/user.service';
 
 @Component({

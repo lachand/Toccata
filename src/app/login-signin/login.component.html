@@ -7,18 +7,18 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()">
 
   <div>
-    <mat-input-container>
-      <input matInput placeholder="Nom d'utilisateur" type="text" formControlName="username">
-    </mat-input-container>
+    <mat-form-field>
+      <input matInput placeholder="Nom d'utilisateur" type="text" autocomplete="username" formControlName="username">
+    </mat-form-field>
   </div>
 
   <div>
-    <mat-input-container>
-      <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" formControlName="password">
+    <mat-form-field>
+      <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" autocomplete="current-password" formControlName="password">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
       <mat-hint class="hint-red" *ngIf="errorUsernamePassword" i18n="@@errorPswd">Couple identifiant/mot de passe incorrect</mat-hint>
       <mat-hint class="hint-red" *ngIf="errorConnexionImpossible" i18n="@@errorNetwork">Problème de connexion, merci de réessayer</mat-hint>
-    </mat-input-container>
+    </mat-form-field>
   </div>
 
   <div>

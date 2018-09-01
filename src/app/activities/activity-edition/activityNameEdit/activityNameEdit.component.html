@@ -8,12 +8,12 @@
 </div>
 
 <div *ngIf="nameEdition" class="name-edition">
-  <mat-input-container *ngIf="type === 'Parent'">
+  <mat-form-field *ngIf="type === 'Parent'">
     <input matInput placeholder="Nom de l'activité" type="text" name="appName" [(ngModel)]="appName">
-  </mat-input-container>
-  <mat-input-container *ngIf="type === 'Loaded'">
+  </mat-form-field>
+  <mat-form-field *ngIf="type === 'Loaded'">
     <input matInput placeholder="Nom de l'étape" type="text" name="appName" [(ngModel)]="appName">
-  </mat-input-container>
+  </mat-form-field>
   <mat-icon class="aligned-with-text" (click)="changeTheName()">done</mat-icon>
   <mat-icon class="aligned-with-text" (click)="switch()">close</mat-icon>
 </div>

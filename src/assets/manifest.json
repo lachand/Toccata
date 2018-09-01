@@ -1,7 +1,7 @@
 {
   "name": "Toccata",
   "short_name": "Toccata",
-  "start_url": "https://www.toccata.herokuapp.com/#/",
+  "start_url": "/#/",
   "icons": [{
     "src": "styles/images/icons/ic_launcher_48x48.png",
     "sizes": "48x48",
@@ -25,7 +25,8 @@
   }],
   "display": "standalone",
   "orientation": "landscape",
-  "background_color": "#fff",
+  "background_color": "#3367D6",
+  "theme_color": "#3367D6",
   "description": "ABCDE",
   "related_applications": [
     {

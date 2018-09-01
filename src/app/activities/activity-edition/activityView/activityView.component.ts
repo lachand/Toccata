@@ -6,7 +6,7 @@ import {isNullOrUndefined} from 'util';
 import {AppsService} from '../../../services/apps.service';
 import {Location} from '@angular/common';
 import {LoggerService} from '../../../services/logger.service';
-import {UserService} from 'app/services/user.service';
+import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
 
 @Component({

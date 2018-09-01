@@ -3,45 +3,45 @@
     <form [formGroup]="signinForm" (ngSubmit)="signup()">
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Prénom" type="text" formControlName="name">
           <mat-hint class="hint-red" *ngIf="error['nameEmpty']" i18n="@@errorNameEmpty">Merci de rentrer un prénom</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Nom" type="text" formControlName="surname">
           <mat-hint class="hint-red" *ngIf="error['surnameEmpty']" i18n="@@errorSurnameEmpty">Merci de rentrer un nom</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Nom d'utilisateur" type="text" formControlName="username">
           <mat-hint class="hint-red" *ngIf="error['usernameEmpty']" i18n="@@errorUsernameEmpty">Merci de rentrer un nom d'utilisateur</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Mot de passe" type="password" formControlName="password">
           <mat-hint class="hint-red" *ngIf="error['passwordEmpty']" i18n="@@errorPasswordEmpty">Merci de rentrer un mot de passe</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Vérification du mot de passe" type="password" formControlName="passwordCheck">
           <mat-hint class="hint-red" *ngIf="error['passwordCheck']" i18n="@@errorPasswordCheck">Lesm ots de passes ne correspondent pas</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Lien vers l'avatar" type="text" formControlName="avatar">
           <mat-hint class="hint-red" *ngIf="error['avatarEmpty']" i18n="@@errorAvatarEmpty">Merci de mettre un lien vers une image</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div>

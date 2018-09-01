@@ -4,9 +4,9 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 import {ResourcesService} from '../../../services/resources.service';
-import {AppsService} from 'app/services/apps.service';
-import {DialogResourceEditionComponent} from "./dialogResourceEdition/dialogResourceEdition.component";
-import {LoggerService} from "../../../services/logger.service";
+import {AppsService} from '../../../services/apps.service';
+import {DialogResourceEditionComponent} from './dialogResourceEdition/dialogResourceEdition.component';
+import {LoggerService} from '../../../services/logger.service';
 import {isNullOrUndefined} from "util";
 
 @Component({

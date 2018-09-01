@@ -12,6 +12,7 @@ export class UserService {
   fonction: any;
   participants: Array<any> = null;
   allUsers: Array<any>;
+  avatarUrl: String;
 
   @Output()
   change = new EventEmitter();
@@ -55,9 +56,11 @@ export class UserService {
    */
   public login(username, password) {
     return new Promise((resolve, reject) => {
+      console.log(username);
         return this.database.getDocument(username).then(user => {
           const md5 = new Md5();
           const hashedPassword = md5.appendStr(password).end();
+          console.log(user['hashedPassword'], hashedPassword);
           if (user['hashedPassword'] === hashedPassword) {
             this.loggedIn = true;
             this.id = username;
@@ -70,10 +73,19 @@ export class UserService {
             this.id = res['_id'];
             this.avatar = res['avatar'];
             this.fonction = res['fonct'];
+
             resolve(this.loggedIn);
           });
       }
     );
+  }
+
+  getUserAvatar(participant) {
+    return new Promise(resolve => {
+      return this.database.db.getAttachment(participant._id, participant.avatar).then(res => {
+        resolve(URL.createObjectURL(res));
+      });
+    });
   }
 
   /**
@@ -215,7 +227,10 @@ export class UserService {
     return new Promise(resolve => {
       return this.database.getDocument(participantId)
         .then(participant => {
-          resolve(participant);
+          this.getUserAvatar(participant).then( url => {
+            participant['url'] = url;
+            resolve(participant);
+          });
         })
         .catch(err => {
           console.log(`Error in user service whith call to getParticipantInfos : 

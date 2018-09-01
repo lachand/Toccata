@@ -2,11 +2,10 @@ import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../services/activity.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
-import {current} from 'codelyzer/util/syntaxKind';
 import {isNullOrUndefined} from 'util';
 import {ViewRef_} from '@angular/core/src/view';
 import {LoggerService} from '../../services/logger.service';
-import {DatabaseService} from "../../services/database.service";
+import {DatabaseService} from '../../services/database.service';
 
 @Component({
   selector: 'app-activity-infos-teacher',
