@@ -155,7 +155,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MatIconModule,
     MatSidenavModule,
     FlexLayoutModule,
-    environment.production ? ServiceWorkerModule.register('/ngsw-worker.js') : [],
+    ServiceWorkerModule.register('/ngsw-worker.js'),
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [ActivityInfosComponent,
