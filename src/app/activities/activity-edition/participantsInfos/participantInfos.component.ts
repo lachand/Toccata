@@ -12,6 +12,7 @@ export class ParticipantInfosComponent implements OnInit {
 
   @Input() participantId;
   participant: any;
+  avatarUrl: any;
 
   constructor(public userService: UserService) {
   }
@@ -20,7 +21,9 @@ export class ParticipantInfosComponent implements OnInit {
     console.log(this.participantId);
     this.userService.getParticipantInfos(this.participantId).then(participant => {
         this.participant = participant;
-        console.log(participant);
+        this.userService.getUserAvatar(participant).then(resource => {
+        this.avatarUrl = URL.createObjectURL(resource);
+      });
       }
     );
   }

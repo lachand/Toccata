@@ -24,14 +24,16 @@ export class MyActivitiesComponent {
               public databaseService: DatabaseService,
               private logger: LoggerService,
               private ref: ChangeDetectorRef) {
+
     this.activityService.changes.subscribe(change => {
+      console.log(change.type);
       if (change.type === 'Activity') {
-        ("changes in activity");
         if (!this.ref['destroyed']) {
-          this.ref.markForCheck();
+          this.ref.detectChanges();
         }
       }
     });
+
     if (!user.loggedIn) {
       this.router.navigate(['login']);
     }

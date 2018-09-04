@@ -21,14 +21,17 @@ export class ActivityNameEditComponent implements OnInit {
   constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef) {
 
     this.activityService.changes.subscribe(change => {
-      if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
+      if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         this.appName = change.doc.name;
-      } else if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+      } else if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
         this.appName = change.doc.name;
       }
       if (change.type === 'ChangeActivity' && this.type === 'Loaded') {
         console.log(change.type);
         this.appName = change.doc.name;
+      }
+      if (!this.ref['destroyed']) {
+        this.ref.detectChanges();
       }
     });
     this.nameEdition = false;

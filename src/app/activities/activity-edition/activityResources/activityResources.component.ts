@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, Renderer, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, Renderer, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -26,12 +26,20 @@ export class ActivityResourcesComponent {
               public user: UserService, dialog: MatDialog,
               public resourcesService: ResourcesService,
               private logger: LoggerService,
-              private eleRef: ElementRef) {
+              private eleRef: ElementRef,
+              private ref: ChangeDetectorRef) {
     this.dialog = dialog;
     this.image = /image\/(?:.*)/i;
     this.text = /text\/(?:.*)/i;
     this.video = /video\/(?:.*)/i;
     this.audio = /audio\/(?:.*)/i;
+    this.resourcesService.changes.subscribe(change => {
+      console.log("new resource");
+      this.resourcesService.getResources(this.activityService.activityLoaded._id)
+      if (!this.ref['destroyed']) {
+        this.ref.detectChanges();
+      }
+    });
   }
 
   newResource() {

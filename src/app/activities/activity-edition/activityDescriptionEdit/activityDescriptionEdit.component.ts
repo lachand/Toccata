@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 
@@ -15,7 +15,9 @@ export class ActivityDescriptionEditComponent implements OnInit{
   @Input() edit: boolean;
   @Input() type: string;
 
-  constructor(public activityService: ActivityService, private logger: LoggerService) {
+  constructor(public activityService: ActivityService,
+              private logger: LoggerService,
+              private ref: ChangeDetectorRef) {
 
     if (this.activityService.activityLoaded.description !== 'Il n\'y a aucune description') {
       this.description = this.activityService.activityLoaded.description;
@@ -49,16 +51,19 @@ export class ActivityDescriptionEditComponent implements OnInit{
     this.activityService.changes.subscribe(change => {
       //console.log('doc : ', change.doc);
       //console.log('previous : ', this.activityService.activityLoaded);
-      if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
+      if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         console.log(change.doc._id, this.activityService.activityLoaded._id);
         this.description = change.doc.description;
-      } else if (change.type === 'Activity' && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+      } else if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
         console.log(change.doc._id, this.activityService.activityLoaded._id);
         this.description = change.doc.description;
       }
       if (change.type === 'ChangeActivity' && this.type === 'Loaded') {
         console.log(change.type);
         this.description = change.doc.description;
+      }
+      if (!this.ref['destroyed']) {
+        this.ref.detectChanges();
       }
     });
     /*const autosave = setInterval( () => {this.saveDescription();} , 30000);*/

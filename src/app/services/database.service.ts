@@ -1,8 +1,10 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
 import {environment} from '../../environments/environment.prod';
 import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs/internal/Observable';
+import {Subject} from 'rxjs/internal/Subject';
 
 @Injectable()
 export class DatabaseService {
@@ -13,12 +15,9 @@ export class DatabaseService {
   options: any;
   optionsReplication: any;
   dbSync: any;
-  changes: EventEmitter<any> = new EventEmitter();
   dbNames: Array<string> = [];
   room: string;
-
-  @Output()
-  change = new EventEmitter();
+  changes: Subject<any> = new Subject<any>();
 
   /**
    * Construct the service to communicate with the local and remote database
@@ -42,6 +41,10 @@ export class DatabaseService {
     }
       );
 
+    this.changes.subscribe(event => {
+      console.log('EVENT');
+    });
+
     this.db = new PouchDB(environment.DB);
 
     this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
@@ -52,11 +55,11 @@ export class DatabaseService {
           live: true,
           retry: true
         }).on('change', change => {
-          console.info(change);
+          this.handleChange(change);
         }).on('paused', info => {
-          console.info('Sync pause: ', info);
+          //console.info('Sync pause: ', info);
         }).on('active', () => {
-          console.info('Sync active: ');
+          //console.info('Sync active: ');
         }).on('denied', err => {
           console.error(err);
         }).on('error', err => {
@@ -286,9 +289,7 @@ export class DatabaseService {
    * @param change change that occurs
    */
   handleChange(change) {
-    //console.log(change.doc);
-    console.info(change);
-    this.changes.emit({type: change.doc.documentType, doc: change.doc});
+    this.changes.next({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
   }
 
   handleChangeRemote(change) {

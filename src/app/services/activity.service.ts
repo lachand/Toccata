@@ -337,7 +337,6 @@ export class ActivityService {
   public getActivityInfos(activityId) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
-        console.log(activity);
         resolve({
           name: activity['name'],
           description: activity['description'],

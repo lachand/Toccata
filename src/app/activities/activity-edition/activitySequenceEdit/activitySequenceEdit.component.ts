@@ -20,7 +20,7 @@ export class ActivitySequenceEditComponent {
     this.activityService.changes.subscribe((change) => {
       if (change.type === 'Sequence') {
         if (!this.ref['destroyed']) {
-          this.ref.markForCheck();
+          this.ref.detectChanges();
         }
       }
     });

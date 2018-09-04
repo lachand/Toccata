@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -18,9 +18,16 @@ export class ActivityAppsEditComponent {
 
   constructor(public activityService: ActivityService, public router: Router,
               public appsService: AppsService, dialog: MatDialog,
-              public user: UserService) {
+              public user: UserService,
+              private ref: ChangeDetectorRef) {
     this.dialog = dialog;
     console.log(user.fonction, this.edit);
+    this.appsService.changes.subscribe( change => {
+      this.appsService.getApplications(this.activityService.activityLoaded._id);
+      if (!this.ref['destroyed']) {
+        this.ref.detectChanges();
+      }
+    });
   }
 
   newApplication() {

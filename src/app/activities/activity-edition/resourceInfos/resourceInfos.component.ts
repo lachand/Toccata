@@ -62,7 +62,7 @@ export class ResourceInfosComponent implements OnInit {
         this.resourcesService.editName(this.resourceId, result.value).then( () =>
         {
           if (!this.ref['destroyed']) {
-            this.ref.markForCheck();
+            this.ref.detectChanges();
           }
         });
       }

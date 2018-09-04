@@ -28,13 +28,15 @@ export class ActivityInfosComponent implements OnInit {
       this.activityInfos = activityInfos;
     });
     this.activityService.changes.subscribe((change) => {
+      console.log(change);
       if (change.type === 'Main') {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
+          console.log('toto');
           this.activityInfos = activityInfos;
+          if (!this.ref['destroyed']) {
+            this.ref.detectChanges();
+          }
         });
-      }
-      if (!this.ref['destroyed']) {
-        this.ref.markForCheck();
       }
     });
   }
@@ -47,11 +49,7 @@ export class ActivityInfosComponent implements OnInit {
     this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
     this.activityService.load_activity(activity_id).then(res => {
       console.log(this.activityService.activityLoaded);
-      //if (this.activityService.activityLoaded.subactivityList.length > 0) {
-        this.router.navigate(['activity_apps/' + activity_id]);
-      //} else {
-      //  this.router.navigate(['activity_view/' + activity_id]);
-      //}
+      this.router.navigate(['activity_apps/' + activity_id]);
     });
   }
 

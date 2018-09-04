@@ -53,7 +53,7 @@ export class ViewDuplicatesComponent {
       if (change.type === 'Activity') {
         console.log("changes in activity");
         if (!this.ref['destroyed']) {
-          this.ref.markForCheck();
+          this.ref.detectChanges();
         }
       }
     });
@@ -127,7 +127,7 @@ export class ViewDuplicatesComponent {
           });
 
           if (!this.ref['destroyed']) {
-            this.ref.markForCheck();
+            this.ref.detectChanges();
           }
           this.creation = false;
         });

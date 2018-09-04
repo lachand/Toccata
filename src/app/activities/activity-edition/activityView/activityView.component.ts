@@ -77,6 +77,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
         }
         this.ref.detectChanges();
       }
+      this.ref.detectChanges();
     });
 
     if (this.user.fonction === "Enseignant") {
