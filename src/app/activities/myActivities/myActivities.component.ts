@@ -101,7 +101,7 @@ export class MyActivitiesComponent {
 
   duplicate_activity(activityId) {
     this.logger.log('CREATE', activityId, activityId, 'duplicate activity');
-    this.activityService.duplicate(activityId, '');
+    this.activityService.duplicateActivity(activityId, 'duplicate');
 }
 
   view_or_edit(activityId) {
