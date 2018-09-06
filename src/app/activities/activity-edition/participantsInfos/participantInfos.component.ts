@@ -21,9 +21,7 @@ export class ParticipantInfosComponent implements OnInit {
     console.log(this.participantId);
     this.userService.getParticipantInfos(this.participantId).then(participant => {
         this.participant = participant;
-        this.userService.getUserAvatar(participant).then(resource => {
-        this.avatarUrl = URL.createObjectURL(resource);
-      });
+        console.log(participant);
       }
     );
   }
