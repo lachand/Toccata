@@ -105,7 +105,102 @@ export class ResourcesService {
           this.resources.push(`resource_${resource.name}_${guid}`);
           return this.database.updateDocument(activity);
         })
-        .then(() => resolve(resourceToAdd))
+        .then(() => {
+            var duplicateList = [];
+            var duplicateTmp = [];
+            console.log('toto');
+            console.log(activity);
+            console.log(activity['type']);
+            if (activity['type'] === 'Main') {
+              duplicateList = activity['duplicateList'];
+              return Promise.all(duplicateList.map(duplicate => {
+                if (resource.type === 'url') {
+                  resourceToAdd = {
+                    _id: `resource_${resource.name}_${guid}_duplicate_${duplicate.split('_')[3]}`,
+                    name: resource.name,
+                    activity: duplicate,
+                    documentType: 'Resource',
+                    type: resource.type,
+                    url: resource.value,
+                    creator: this.userService.id,
+                    dbName: duplicate
+                  };
+                } else {
+                  resourceToAdd = {
+                    _id: `resource_${resource.name}_${guid}_duplicate_${duplicate.split('_')[3]}`,
+                    name: resource.name,
+                    activity: duplicate,
+                    documentType: 'Resource',
+                    type: resource.type,
+                    creator: this.userService.id,
+                    dbName: duplicate,
+                    _attachments: {
+                      filename: {
+                        content_type: resource.type,
+                        data: resource
+                      }
+                    }
+                  };
+                }
+                return this.database.getDocument(`${activityId}_duplicate_${duplicate.split('_')[3]}`).then(result => {
+                  result['resourceList'].push(resourceToAdd['_id']);
+                  return this.database.updateDocument(result);
+                }).then( () => {
+                  return this.database.addDocument(resourceToAdd);
+                });
+              }));
+            } else {
+              console.log('HERE');
+              this.database.getDocument(activity['parent']).then(parent => {
+                console.log(parent);
+                  duplicateList = parent['duplicateList'];
+                  duplicateList.map(duplicate => {
+                    console.log(duplicate.split('_')[3]);
+                    duplicateTmp.push(`resource_${resource.name}_${guid}_duplicate_${duplicate.split('duplicate_')[1]}`);
+                  });
+                  console.log(duplicateTmp);
+                  return Promise.all(duplicateTmp.map(duplicate => {
+                    if (resource.type === 'url') {
+                    resourceToAdd = {
+                      _id: `resource_${resource.name}_${guid}_duplicate_${duplicate.split('duplicate_')[1]}`,
+                      name: resource.name,
+                      activity: `${activityId}_duplicate_${duplicate.split('duplicate_')[1]}`,
+                      documentType: 'Resource',
+                      type: resource.type,
+                      url: resource.value,
+                      creator: this.userService.id,
+                      dbName: `${activity['dbName']}_duplicate_${duplicate.split('duplicate_')[1]}`
+                    };
+                  } else {
+                    resourceToAdd = {
+                      _id: `resource_${resource.name}_${guid}_duplicate_${duplicate.split('duplicate_')[1]}`,
+                      name: resource.name,
+                      activity: `${activityId}_duplicate_${duplicate.split('duplicate_')[1]}`,
+                      documentType: 'Resource',
+                      type: resource.type,
+                      creator: this.userService.id,
+                      dbName: `${activity['dbName']}_duplicate_${duplicate.split('duplicate_')[1]}`,
+                      _attachments: {
+                        filename: {
+                          content_type: resource.type,
+                          data: resource
+                        }
+                      }
+                    };
+                  }
+                  console.log(resourceToAdd);
+                    return this.database.getDocument(`${activityId}_duplicate_${duplicate.split('duplicate_')[1]}`).then(result => {
+                      result['resourceList'].push(resourceToAdd['_id']);
+                      return this.database.updateDocument(result);
+                    }).then( () => {
+                      return this.database.addDocument(resourceToAdd);
+                    });
+                  }));
+                }
+              );
+            }
+            resolve(resourceToAdd);
+              })
         .catch(err => {
           console.log(`Error in resource service whith call to createResource : 
           ${err}`);
