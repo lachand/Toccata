@@ -66,6 +66,11 @@ export class ActivityService {
             }
           }
           this.changes.emit({doc: change.doc, type: 'Activity'});
+
+          //Sync from template
+          if (change.doc.master === true) {
+            let activities = this.getActivityDuplicate(this.activityLoaded._id.parent);
+          }
         }
       }
     );
@@ -108,6 +113,7 @@ export class ActivityService {
         {startkey: name, endkey: name})
         .then(result => {
           result.rows.map((row) => {
+            console.log(row);
             this.userActivitiesListId.push(row.id);
           });
           resolve(this.userActivitiesListId);
@@ -260,7 +266,8 @@ export class ActivityService {
           applicationList: [],
           createdAt: Date.now(),
           dbName: dbName,
-          documentType: 'Activity'
+          documentType: 'Activity',
+          master: true
         };
         this.logger.log('CREATE', dbName, dbName, 'create activity');
         return this.database.addDocument(activityToCreate);
@@ -377,6 +384,7 @@ export class ActivityService {
             parent: parent['_id'],
             type: 'Sequence',
             subactivityList: [],
+            maste: parent['master'],
             visible: true,
             blocked: false,
             createdAt: Date.now(),
@@ -511,38 +519,6 @@ export class ActivityService {
   }
 
   /**
-   * Duplicate an activity
-   * @param activityId The activity to duplicate
-   * @param duplicateName Name of the duplicate
-   * @returns {Promise<any>} The duplicated activity
-   */
-  duplicate(activityId, duplicateName) {
-    return new Promise((resolve, reject) => {
-      let newActivityCreated;
-      this.database.db.get(activityId).then(res => {
-        const newActivity = {
-          'name': 'Copie de ' + res.name,
-          'participants': [this.user.id]
-        };
-        return this.database.db.post(newActivity);
-      })
-        .then(activityCreated => {
-          newActivityCreated = activityCreated;
-          return this.appsService.duplicateAppsFromActivity(activityId, activityCreated.id);
-        })
-        .then(() => {
-          return this.user.addActivity(newActivityCreated.id, this.user.id);
-        })
-        .then(() => {
-          return this.user.addActivity(newActivityCreated.id, this.user.id);
-        }).catch(function (err) {
-        console.log(err);
-        reject(err);
-      });
-    });
-  }
-
-  /**
    * Unload activity before user logout
    */
   logout() {
@@ -556,23 +532,49 @@ export class ActivityService {
    * @param {String} value The new value
    */
   activityEdit(activityId: string, key: string, value: String, system: boolean = false) {
-    this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`, system);
-    let duplicateList = [];
-    return new Promise(resolve => {
-      return this.database.getDocument(activityId)
-        .then(res => {
-          res[key] = value;
-          duplicateList = res['duplicateList'];
-          return this.database.updateDocument(res);
-        })
-        .then(result => {
-              resolve(result);
-        })
-        .catch(err => {
-          console.log(`Error in user activity whith call to activityEdit :
+      this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`, system);
+      let duplicateList = [];
+      let duplicateTmp = [];
+      console.log(`update act ${activityId}`);
+      return new Promise(resolve => {
+        return this.database.getDocument(activityId)
+          .then(res => {
+            res[key] = value;
+            console.log(res);
+            if (res['type'] === 'Main') {
+              duplicateList = res['duplicateList'];
+              return this.database.updateDocument(res).then(() => {
+                  return Promise.all(duplicateList.map(duplicate => {
+                    return this.activityEdit(duplicate, key, value, system);
+                  }));
+                }
+              );
+            } else {
+              this.database.getDocument(res['parent']).then(parent => {
+                duplicateList = parent['duplicateList'];
+                duplicateList.map(duplicate => {
+                  console.log(duplicate.split('_')[3]);
+                  duplicateTmp.push(`${activityId}_duplicate_${duplicate.split('_')[3]}`);
+                });
+                console.log(duplicateTmp);
+                return this.database.updateDocument(res).then(() => {
+                    return Promise.all(duplicateTmp.map(duplicate => {
+                      console.log(duplicate);
+                      return this.activityEdit(duplicate, key, value, system);
+                    }));
+                  }
+                );
+              });
+            }
+          })
+          .then(result => {
+            resolve(result);
+          })
+          .catch(err => {
+            console.log(`Error in user activity whith call to activityEdit :
           ${err}`);
-        });
-    });
+          });
+      });
   }
 
   /**
@@ -638,6 +640,35 @@ export class ActivityService {
           console.log(`Error in user activity whith call to removeUser :
           ${err}`);
         });
+    });
+  }
+
+  updateActivityMaster(change) {
+    if (change.doc.master) {
+      this.getActivityDuplicate(change.doc.parent).then((duplicates: Array<any>) => {
+        Promise.all(duplicates.map( duplicate => {
+            const duplicateName = duplicate.split('_', 2);
+            const duplicateId = `${change.doc._id}_duplicate_${duplicateName}`;
+            return this.updateActivityDuplicate(change.doc, duplicateId);
+          })
+        );
+      });
+    }
+  }
+
+  updateActivityDuplicate(template, duplicateId) {
+    return new Promise(resolve => {
+      return this.database.getDocument(duplicateId).then(duplicate => {
+          duplicate['name'] = template.name;
+          duplicate['description'] = template.description;
+          duplicate['userList'] = template.userList;
+          duplicate['subactivityList'] = template.subactivityList;
+          duplicate['resourceList'] = template.resourceList;
+          duplicate['visible'] = template.visible;
+          duplicate['blocked'] = template.blocked;
+          duplicate['applicationList'] = template.applicationList;
+          // Subactivities, resources & apps => Change with Id
+      });
     });
   }
 
@@ -717,7 +748,7 @@ export class ActivityService {
         .then( () => {
           return Promise.all( activity['userList'].map(user => {
             return this.database.getDocument(user).then( userDoc => {
-              userDoc['activityList'].push(newDb);
+              //userDoc['activityList'].push(newDb);
               return this.database.updateDocument(userDoc);
               }
             );
@@ -737,9 +768,9 @@ export class ActivityService {
    * @returns {Promise<any>} The list of duplicates
    */
   getActivityDuplicate(activityId: any) {
-    return new Promise(resolve => {
+    return new Promise(cast => {
       return this.database.getDocument(activityId).then(activity => {
-        resolve(activity['duplicateList']);
+        cast(activity['duplicateList']);
       });
     });
   }
@@ -811,6 +842,11 @@ export class ActivityService {
           return this.database.updateDocument(parent);
         })
         .then(doc => {
+          if (state) {
+            this.logger.log('UPDATE', this.activityLoaded._id, activityId, 'show step');
+          } else {
+            this.logger.log('UPDATE', this.activityLoaded._id, activityId, 'hide step');
+          }
           resolve(doc);
         });
     });
