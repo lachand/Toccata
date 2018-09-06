@@ -63,7 +63,8 @@
       <mat-horizontal-stepper *ngIf="steps.length > 0" class="stepper-left" [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
         <mat-step *ngFor="let step of steps" [completed]="false" [editable]="true">
           <ng-template matStepLabel>
-            <activity-name [activityId]="step" ></activity-name>
+            <activity-name [activityId]="step"></activity-name>
+            <activity-hide [activityId]="step" (click)="switchLock($event); switchVisibility(step)"></activity-hide>
           </ng-template>
         </mat-step>
       </mat-horizontal-stepper>

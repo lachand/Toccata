@@ -74,6 +74,7 @@ import {DialogApplicationLaunchedComponent} from './activities/activity-edition/
 import {DialogResourceEditionComponent} from './activities/activity-edition/resourceInfos/dialogResourceEdition/dialogResourceEdition.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import {ActivityHideComponent} from './activities/activity-edition/activityHide/activityHide.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -123,6 +124,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     DialogResourceOpenedComponent,
     DialogResourceEditionComponent,
     DialogApplicationLaunchedComponent,
+    ActivityHideComponent
   ],
   imports: [
     BrowserModule,

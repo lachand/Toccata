@@ -88,6 +88,20 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   /**
+   * Change the value of the visibility of the step
+   */
+  switchVisibility(activityId) {
+    this.activityService.switchVisibility(activityId);
+  }
+
+  switchLock(event) {
+    console.log(event);
+    //let index = event.path[2].id.split('cdk-step-label-0-')[1];
+    event.stopPropagation();
+    //this.switchVisibility(this.steps[index]);
+  }
+
+  /**
    * Set the current step to 'undefined' if the current activity is the main activity
    */
   ngAfterViewInit(): void {
