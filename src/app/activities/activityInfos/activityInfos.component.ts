@@ -28,7 +28,6 @@ export class ActivityInfosComponent implements OnInit {
       this.activityInfos = activityInfos;
     });
     this.activityService.changes.subscribe((change) => {
-      console.log(change);
       if (change.type === 'Main') {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
           console.log('toto');
