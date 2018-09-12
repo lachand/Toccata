@@ -87,6 +87,7 @@ export class ResourceOpenedComponent implements OnInit {
    * Get informations about resource and create a page for the resource
    */
   ngOnInit(): void {
+    this.myUrl = 'assets/static/component.loading.html'
     this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
       this.resource = resourceInfos;
       if (this.resource.type === 'url') {

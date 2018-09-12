@@ -37,10 +37,14 @@ export class ApplicationLaunchedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.url = 'assets/static/component.loading.html'
     this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
       this.application = applicationInfos;
+      console.log(applicationInfos);
+      console.log(this.application.url);
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.application.url);
       console.log(this.url);
+      this.ref.detectChanges();
     });
   }
 

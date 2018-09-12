@@ -114,7 +114,9 @@ export class ActivityService {
         .then(result => {
           result.rows.map((row) => {
             console.log(row);
-            this.userActivitiesListId.push(row.id);
+            if (this.activitiesList.indexOf(row.id) === -1) {
+              this.userActivitiesListId.push(row.id);
+            }
           });
           resolve(this.userActivitiesListId);
         }).catch(console.log.bind(console));
@@ -283,7 +285,9 @@ export class ActivityService {
         .then(res => {
           console.log('resolved');
           console.log(dbName, res);
-          this.activitiesList.push(dbName);
+          if (this.activitiesList.indexOf(dbName) === -1) {
+            this.activitiesList.push(dbName);
+          }
           return this.load_activity(dbName);
         })
         .then( () => {
@@ -451,8 +455,10 @@ export class ActivityService {
   deleteResource(resId) {
     const res = this.resourcesService.resources;
     const index = res.indexOf(resId);
+    console.log(index);
     if (index > -1) {
       res.splice(index, 1);
+      console.log(res);
     }
     this.activityEdit(this.activityLoaded._id, 'resourceList', res).then( () => {
       this.resourcesService.deleteResource(resId);

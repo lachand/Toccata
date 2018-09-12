@@ -42,12 +42,14 @@ export class ResourcesService {
           this.database.getDocument(activityId).then( act => {
             if (act['dbName'] !== act['_id']) {
               this.database.getDocument(act['dbName']).then(parent => {
+                console.log(parent);
                 if (parent['resourceList'].length > 0) {
                   this.resources = this.resources.concat(parent['resourceList']);
                   this.resources = this.resources.filter(this.onlyUnique);
                 }
               });
             }
+            console.log(this.resources);
             resolve(this.resources);
           });
         });

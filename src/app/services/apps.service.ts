@@ -83,13 +83,14 @@ export class AppsService {
       application['initialTime'] = app.options.time;
       application['timeLeft'] = app.options.time;
       application['startedAt'] = '';
-    }
-
-    if (app.provider === 'Feuille de calcul') {
+    } else if (app.provider === 'Feuille de calcul') {
       application.url = `https://framacalc.org/${guid}`;
     } else if (app.provider === 'Editeur de texte') {
       application.url = `https://annuel2.framapad.org/p/${guid}`;
+    } else {
+      application.url = app.url;
     }
+
 
     return new Promise(resolve => {
       return this.databaseService.getDocument(activityId).then(activity => {
@@ -119,6 +120,7 @@ export class AppsService {
   getApplicationInfos(applicationId: any) {
     return new Promise(resolve => {
       return this.databaseService.getDocument(applicationId).then(application => {
+        console.log(application);
         resolve({
           name: application['name'],
           id: application['_id'],

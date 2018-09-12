@@ -82,8 +82,11 @@ export class UserService {
 
   getUserAvatar(participant) {
     return new Promise(resolve => {
-      return this.database.db.getAttachment(participant._id, participant.avatar).then(res => {
-        resolve(URL.createObjectURL(res));
+      console.log('here');
+      console.log(participant);
+      return this.database.getDocument(participant).then(res => {
+        console.log(res);
+        resolve((res['avatar']));
       });
     });
   }

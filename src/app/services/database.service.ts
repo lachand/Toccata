@@ -461,15 +461,16 @@ export class DatabaseService {
    */
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
-      return this.db.allDocs().then(res => {
-      })
-        .then(() => {
-          return this.db.get(docId);
-        })
+      //return this.db.allDocs().then(res => {
+      //})
+      //  .then(() => {
+          return this.db.get(docId)//;
+        //})
         .then(result => {
           if (!isNullOrUndefined(result['_conflict'])) {
             console.info(result);
           }
+          console.log(result)
           resolve(result);
         })
         .catch(err => {
