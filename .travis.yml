@@ -1,6 +1,6 @@
 sudo: required
 addons:
-  chrome: stable
+  chrome: stable --no-sandbox
 
 language: node_js
 node_js:
@@ -14,6 +14,8 @@ before_script:
 - npm install -g @angular/cli
 - npm install typescript@'>=2.7.2 <2.8'
 - npm install
+
+
 
 script:
 - ng build
