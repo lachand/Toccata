@@ -42,12 +42,15 @@ export class LoginComponent implements OnInit {
     });
     this.databaseService.changes.subscribe(changes => {
       console.log(changes);
-      if (changes.type === 'CONNEXION_IMPOSSIBLE') {
+      if (changes === 'CONNEXION_IMPOSSIBLE') {
         this.errorConnexionImpossible = true;
         this.loading = false;
       }
-      if (changes.type === 'CONNEXTION_DONE') {
+      if (changes === 'CONNEXION_DONE') {
         this.can_connect = true;
+        this.databaseService.getDocument('user_list').then(res => {
+          console.log(res);
+        });
       }
     });
   }

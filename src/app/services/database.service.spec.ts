@@ -16,7 +16,8 @@ describe('DatabaseService', () => {
     database = testbed.get(DatabaseService);
 
     database.changes.subscribe( change => {
-      if (change.type === 'CONNEXION_DONE') {
+      console.log(change);
+      if (change === 'CONNEXION_DONE') {
         done();
       }
     });

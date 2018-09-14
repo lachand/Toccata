@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
-import {environment} from '../../environments/environment.prod';
+import {environment} from '../../environments/environment.production';
 import {isNullOrUndefined} from 'util';
 import {Observable} from 'rxjs/internal/Observable';
 import {Subject} from 'rxjs/internal/Subject';
@@ -42,8 +42,9 @@ export class DatabaseService {
       );
 
     this.changes.subscribe(event => {
-      console.log('EVENT');
     });
+
+    this.addDatabase('user_list');
 
     this.db = new PouchDB(environment.DB);
 
@@ -51,6 +52,8 @@ export class DatabaseService {
       console.info(`Replication to remote completed`);
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
         console.info(`Replication from remote complete`);
+        this.changes.next('CONNEXION_DONE');
+        console.log(environment);
         return this.db.sync(this.dbRemote, {
           live: true,
           retry: true

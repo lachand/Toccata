@@ -28,9 +28,12 @@ describe('UserService', () => {
     databaseService = testbed.get(DatabaseService);
 
     databaseService.changes.subscribe( change => {
-      if (change.type === 'CONNEXION_DONE') {
+      if (change === 'CONNEXION_DONE') {
         guid = databaseService.guid();
         userService = testbed.get(UserService)
+        console.info(`=============================
+        Passing to User service test
+        =============================`);
         done();
       }
     });
@@ -42,13 +45,23 @@ describe('UserService', () => {
   });
 
   it('Should create a new user', done => {
-    userService.createUser(`user_test_${guid}`, 'test', 'user', 'na', 'Enseignant').then((res) => {
+    userService.createUser(`user_test_${guid}`, `${guid}`, `${guid}`, `user_test_${guid}`, `https://api.adorable.io/avatars/285/${guid}.png`, true).then((res) => {
+      console.log(res);
       expect(res).toBe(`user_test_${guid}`);
       databaseService.getDocument('user_list').then(user => {
+        console.log(user['userList'].indexOf(`user_test_${guid}`));
         expect(user['userList'].indexOf(`user_test_${guid}`)).toBeGreaterThanOrEqual(0);
         done();
       });
     }).catch(e => done.fail(e));
+  }, 1000000);
+
+  it('Should loged in an user', done => {
+    userService.login(`user_test_${guid}`, `user_test_${guid}`).then(logged => {
+      console.log(logged);
+      expect(logged).toBe(true);
+      done();
+    });
   }, 1000000);
 
   it('Should delete an user', done => {
@@ -58,13 +71,6 @@ describe('UserService', () => {
         done();
       });
     }).catch(e => done.fail(e));
-  }, 1000000);
-
-  xit('Should loged in an user', done => {
-    userService.login('user_test', 'test_usr_paswd').then(logged => {
-      expect(logged).toBe(true);
-      done();
-    });
   }, 1000000);
 
 });

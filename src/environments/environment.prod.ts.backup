@@ -7,5 +7,6 @@ export const environment = {
   USERNAME_DB_BACKUP: '',
   PASSWORD_DB_BACKUP: '',
   ROOM: '',
-  URL_PORT: ''
+  URL_PORT: '',
+  envName: 'prod'
 };
