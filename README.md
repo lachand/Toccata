@@ -1,4 +1,4 @@
-# Toccata
+# Toccata [![Build Status](https://travis-ci.com/lachand/Toccata.svg?branch=master)](https://travis-ci.com/lachand/Toccata)
 
 This project is a research project financed buy the REPI project http://www.repi-recherche.com/
 
