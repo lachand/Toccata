@@ -1,9 +1,8 @@
 import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
-import {environment} from '../../environments/environment.production';
+import {environment} from '../../environments/environment';
 import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs/internal/Observable';
 import {Subject} from 'rxjs/internal/Subject';
 
 @Injectable()

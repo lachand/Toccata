@@ -1,12 +1,12 @@
 {
-  "name": "toccata-pwa",
-  "version": "0.0.0",
+  "name": "Toccata",
+  "version": "1.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build-prod-ngsw": "ng build --prod && node_modules/.bin/ngsw-config dist ./src/ngsw-config.json && cp node_modules/@angular/service-worker/ngsw-worker.js ./dist/ngsw-worker.js",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --prod",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
