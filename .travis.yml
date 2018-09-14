@@ -9,6 +9,7 @@ node_js:
 branches:
   only:
   - master
+  - /^greenkeeper/.*$/
 
 before_script:
 - npm install -g @angular/cli
