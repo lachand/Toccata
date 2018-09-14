@@ -12,6 +12,7 @@ branches:
 
 before_script:
 - npm install -g @angular/cli
+- npm install typescript@'>=2.7.2 <2.8'
 - npm install
 
 script:
