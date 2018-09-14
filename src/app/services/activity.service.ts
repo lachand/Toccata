@@ -443,6 +443,19 @@ export class ActivityService {
             return this.database.updateDocument(res);
           });
         }))
+          .then( () => {
+          console.log("here");
+          return this.database.getDocument(this.user.id);
+        })
+          .then( user => {
+            console.log(user);
+            let index = user['activityList'].indexOf(activityId);
+            console.log(index);
+            if (index > -1) {
+              user['activityList'].splice(index, 1);
+            }
+            return this.database.updateDocument(user);
+          })
           .then(() => {
             console.log("deleted");
             return Promise.all(activity['applicationList'].map(application => {
