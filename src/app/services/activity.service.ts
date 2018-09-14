@@ -109,7 +109,7 @@ export class ActivityService {
       return Promise.resolve(this.userActivitiesListId);
     }
     return new Promise(resolve => {
-      this.db.query('byParticipant/id-by-participant',
+      this.database.db.query('byParticipant/id-by-participant',
         {startkey: name, endkey: name})
         .then(result => {
           result.rows.map((row) => {
@@ -349,6 +349,7 @@ export class ActivityService {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
         resolve({
+          id: activity['_id'],
           name: activity['name'],
           description: activity['description'],
           image: activity['image'],
@@ -426,12 +427,89 @@ export class ActivityService {
   }
 
   /**
+   * Erease a specified activity
+   * @param activityId The Id of the activity to delete
+   */
+  ereaseActivity(activityId) {
+    console.log(activityId);
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId).then(activity => {
+        console.log(this);
+        return Promise.all(activity['resourceList'].map(resource => {
+          console.log(this);
+          return this.database.getDocument(resource).then(res => {
+            res['_deleted'] = true;
+            console.log(res);
+            return this.database.updateDocument(res);
+          });
+        }))
+          .then(() => {
+            console.log("deleted");
+            return Promise.all(activity['applicationList'].map(application => {
+              return this.database.getDocument(application).then(app => {
+                app['_deleted'] = true;
+                return this.database.updateDocument(app);
+              });
+            }));
+          })
+          .then(() => {
+            return Promise.all(activity['subactivityList'].map(subactivity => {
+              return this.ereaseActivity(subactivity.stepId);
+            }));
+          })
+          .then(() => {
+            activity['_deleted'] = true;
+            return this.database.updateDocument(activity);
+          });
+      });
+    });
+  }
+  /*
+  resourceList: parent['resourceList'],
+            applicationList: parent['applicationList'],
+            parent: parent['_id'],
+            type: 'Sequence',
+            subactivityList: [],
+   */
+
+  /**
    * Delete a specified activity
    * @param activityId The Id of the activity to delete
    */
   deleteActivity(activityId) {
-    console.log('delete activity');
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId)
+    .then(activity => {
+      console.log(this.user);
+      let index = activity['userList'].indexOf(this.user.id);
+      console.log(index);
+      if (index > -1) {
+        activity['userList'].splice(index, 1);
+      }
+      if (activity['userList'].length === 0) {
+        return this.ereaseActivity(activityId);
+      } else {
+        return this.database.updateDocument(activity);
+      }
+    })
+    .then( () => {
+      console.log("here");
+      return this.database.getDocument(this.user.id);
+    })
+    .then( user => {
+      console.log(user);
+      let index = user['activityList'].indexOf(activityId);
+      console.log(index);
+      if (index > -1) {
+        user['activityList'].splice(index, 1);
+      }
+      return this.database.updateDocument(user);
+    });
+    }
+    );
   }
+
+
 
   /**
    * Delete an application

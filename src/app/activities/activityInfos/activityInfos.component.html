@@ -8,11 +8,9 @@
   <div *ngIf="!isNull(activityInfos)">
 
   <h3 mat-line>{{activityInfos?.name}}
-    <!--
-    <button class="menu-right-align" mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
+    <button class="menu-right-align" mat-icon-button (click)="deleteActivity(activityInfos?.id); $event.stopPropagation();">
+      <mat-icon>delete</mat-icon>
     </button>
-    -->
   </h3>
 
     <!--

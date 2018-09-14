@@ -103,6 +103,10 @@ export class ActivityInfosComponent implements OnInit {
     this.activityService.duplicateActivity(activityId, '');
   }
 
+  deleteActivity(activityId) {
+    return this.activityService.deleteActivity(activityId);
+  }
+
   show_duplicates(activityId) {
     this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
     this.router.navigate(['duplicates/' + activityId]);

@@ -7,6 +7,9 @@ html, body {
 }
 
 .container {
-  height: 100%;
   width: 100%;
+}
+
+.mat-drawer-container {
+  display: contents;
 }

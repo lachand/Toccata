@@ -522,17 +522,21 @@ export class DatabaseService {
   }**/
 
   updateDocument(doc) {
-    return this.db.upsert(doc._id, function (elmt) {
-      elmt = doc;
-      if (!elmt.count) {
-        elmt.count = 0;
-      }
-      elmt.count++;
-      return elmt;
-    }).then(function (res) {
-      console.info(res);
-    }).catch(function (err) {
-      console.error(err);
+    return new Promise((resolve, reject) => {
+      return this.db.upsert(doc._id, function (elmt) {
+        elmt = doc;
+        if (!elmt.count) {
+          elmt.count = 0;
+        }
+        elmt.count++;
+        return elmt;
+      }).then(function (res) {
+        console.info(res);
+        resolve(res);
+      }).catch(function (err) {
+        console.error(err);
+        reject(err);
+      });
     });
   }
 
