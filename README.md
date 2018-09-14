@@ -1,4 +1,4 @@
-# Toccata [![Build Status](https://travis-ci.com/lachand/Toccata.svg?branch=master)](https://travis-ci.com/lachand/Toccata) [![Coverage Status](https://coveralls.io/repos/github/lachand/Toccata/badge.svg?branch=master)](https://coveralls.io/github/lachand/Toccata?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/lachand/Toccata.svg)](https://greenkeeper.io/)
+# Toccata [![Build Status](https://travis-ci.com/lachand/Toccata.svg?branch=master)](https://travis-ci.com/lachand/Toccata) [![Coverage Status](https://coveralls.io/repos/github/lachand/Toccata/badge.svg?branch=master)](https://coveralls.io/github/lachand/Toccata?branch=master)
 
 This project is a research project financed buy the REPI project http://www.repi-recherche.com/
 
