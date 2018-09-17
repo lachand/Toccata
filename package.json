@@ -3,10 +3,11 @@
   "version": "1.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "build-prod-ngsw": "ng build --prod && node_modules/.bin/ngsw-config dist ./src/ngsw-config.json && cp node_modules/@angular/service-worker/ngsw-worker.js ./dist/ngsw-worker.js",
-    "build": "ng build",
-    "test": "ng test --prod",
+    "config": "ts-node ./scripts/set-env.ts",
+    "start": "npm run config -- --environment=dev && ng serve ",
+    "build": "npm run config -- --environment=prod && ng build ",
+    "test": "npm run config -- --environment=prod && ng test ",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -54,6 +55,7 @@
     "@types/node": "^8.10.21",
     "artillery": "^1.6.0-23",
     "codelyzer": "~4.2.1",
+    "dotenv": "^6.0.0",
     "grunt": "^1.0.3",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",

@@ -23,8 +23,8 @@ before_script:
 
 
 script:
-- ng build
-- ng test
+- nnpm build
+- npm test
 
 after_script:
 - cat ./coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js
