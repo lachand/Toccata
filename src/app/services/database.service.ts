@@ -29,6 +29,8 @@ export class DatabaseService {
     PouchDB.plugin(require('pouchdb-authentication'));
     PouchDB.plugin(require('pouchdb-upsert'));
 
+    console.log(environment);
+
     this.room = environment.ROOM;
 
     this.dbRemote = new PouchDB(`${environment.URL_DB}/${environment.DB}`, {

@@ -3,8 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  envName: 'dev'
+    production: false,
+    DB: process.env.DB,
+    URL_DB: process.env.URL_DB,
+    USERNAME_DB: process.env.USERNAME_DB,
+    PASSWORD_DB: process.env.PASSWORD_DB,
+    ROOM: process.env.ROOM,
+    URL_PORT: process.env.URL_PORT,
+    envName: 'dev'
+
 };
 
 /*
