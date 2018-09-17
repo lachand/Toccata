@@ -65,25 +65,23 @@ describe('UserService', () => {
   }, 1000000);
 
   it('Should check if an user is logged', done => {
-    userService.isLoggedIn();
-    expect(this.loggedIn).toBe(true);
+    expect(userService.isLoggedIn()).toBe(true);
     done();
   }, 1000000);
 
   it('Should logged out an user', done => {
     userService.logout();
-    expect(this.loggedIn).toBe(false);
-    expect(this.name).toBe(null);
-    expect(this.id).toBe(null);
-    expect(this.avatar).toBe(null);
-    expect(this.fonction).toBe(null);
-    expect(this.participants).toBe(null);
+    expect(userService.loggedIn).toBe(false);
+    expect(userService.name).toBe(null);
+    expect(userService.id).toBe(null);
+    expect(userService.avatar).toBe(null);
+    expect(userService.fonction).toBe(null);
+    expect(userService.participants).toBe(null);
     done();
   }, 1000000);
 
   it('Should check if an user is logged', done => {
-    userService.isLoggedIn();
-    expect(this.loggedIn).toBe(false);
+    expect(userService.isLoggedIn()).toBe(false);
     done();
   }, 1000000);
 
