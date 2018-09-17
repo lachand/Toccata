@@ -27,4 +27,5 @@ script:
 - npm test
 
 after_script:
+- codecov
 - cat ./coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js
