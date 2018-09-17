@@ -23,7 +23,7 @@ before_script:
 
 
 script:
-- nnpm build
+- npm build
 - npm test
 
 after_script:
