@@ -2,6 +2,11 @@
 
 This project is a research project financed buy the REPI project http://www.repi-recherche.com/
 
+## Videos
+### Presentation of Toccata (french)
+[![Presentation video of Toccata (French)](https://img.youtube.com/vi/RdKIndS-Znc/0.jpg)](https://www.youtube.com/watch?v=RdKIndS-Znc)
+
+
 ## Screenshots
 ![Teacher view during activity scripting](https://raw.githubusercontent.com/lachand/Toccata/master/images/edit.png)
 ![Student view during activity conduction](https://raw.githubusercontent.com/lachand/Toccata/master/images/conduct.png)
