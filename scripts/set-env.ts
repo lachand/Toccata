@@ -11,6 +11,8 @@ require('dotenv').config();
 const environment = argv.environment;
 const isProd = environment === 'prod';
 
+console.log(process.env);
+
 const targetPath = `./src/environments/environment.${environment}.ts`;
 const envConfigFile = `
 export const environment = {

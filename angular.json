@@ -85,6 +85,16 @@
               "src/manifest.json"
             ]
           },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
