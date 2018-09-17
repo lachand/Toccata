@@ -9,6 +9,10 @@ import {UserService} from './services/user.service';
 
 export class AppComponent {
 
+  /**
+   * Create the main app
+   * @param userService
+   */
   constructor(public userService: UserService) {
   }
 }
