@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
-//import {environment} from '../../environments/environment';
+import {environment} from '../../environments/environment';
 import {isNullOrUndefined} from 'util';
 import {Subject} from 'rxjs/internal/Subject';
 
@@ -28,8 +28,6 @@ export class DatabaseService {
     PouchDB.plugin(PouchdbFind);
     PouchDB.plugin(require('pouchdb-authentication'));
     PouchDB.plugin(require('pouchdb-upsert'));
-
-    const environment = process.env;
 
     this.room = environment.ROOM;
 
