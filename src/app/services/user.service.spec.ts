@@ -64,6 +64,29 @@ describe('UserService', () => {
     });
   }, 1000000);
 
+  it('Should check if an user is logged', done => {
+    userService.isLoggedIn();
+    expect(this.loggedIn).toBe(true);
+    done();
+  }, 1000000);
+
+  it('Should logged out an user', done => {
+    userService.logout();
+    expect(this.loggedIn).toBe(false);
+    expect(this.name).toBe(null);
+    expect(this.id).toBe(null);
+    expect(this.avatar).toBe(null);
+    expect(this.fonction).toBe(null);
+    expect(this.participants).toBe(null);
+    done();
+  }, 1000000);
+
+  it('Should check if an user is logged', done => {
+    userService.isLoggedIn();
+    expect(this.loggedIn).toBe(false);
+    done();
+  }, 1000000);
+
   it('Should delete an user', done => {
     userService.deleteUser(`user_test_${guid}`).then(res => {
       databaseService.getDocument('user_list').then(user => {
