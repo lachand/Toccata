@@ -1,4 +1,5 @@
-# Toccata [![Build Status](https://travis-ci.com/lachand/Toccata.svg?branch=master)](https://travis-ci.com/lachand/Toccata) [![Coverage Status](https://coveralls.io/repos/github/lachand/Toccata/badge.svg?branch=master)](https://coveralls.io/github/lachand/Toccata?branch=master)
+# ![Toccata logo](readme_files/toccata_logo.png) 
+[![Build Status](https://travis-ci.com/lachand/Toccata.svg?branch=master)](https://travis-ci.com/lachand/Toccata) [![Coverage Status](https://coveralls.io/repos/github/lachand/Toccata/badge.svg?branch=master)](https://coveralls.io/github/lachand/Toccata?branch=master)
 
 This project is a research project financed buy the REPI project http://www.repi-recherche.com/
 
@@ -6,11 +7,6 @@ This project is a research project financed buy the REPI project http://www.repi
 ### Presentation of Toccata (french)
 [![Presentation video of Toccata (French)](https://img.youtube.com/vi/RdKIndS-Znc/0.jpg)](https://www.youtube.com/watch?v=RdKIndS-Znc)
 
-
-## Screenshots
-![Teacher view during activity scripting](https://raw.githubusercontent.com/lachand/Toccata/master/images/edit.png)
-![Student view during activity conduction](https://raw.githubusercontent.com/lachand/Toccata/master/images/conduct.png)
-![Teacher overview of groups](https://raw.githubusercontent.com/lachand/Toccata/master/images/manage.png)
 
 ## Publications
 Here is the list of publications related to our work in the REPI project :
