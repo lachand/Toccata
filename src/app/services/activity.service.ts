@@ -36,6 +36,7 @@ export class ActivityService {
 
     this.database.changes.subscribe(
       (change) => {
+        console.log(change);
         if (change.type === 'Activity' && userService.loggedIn) {
           this.changes.emit({doc: change.doc, type: 'Main'});
           let finded = false;
@@ -50,11 +51,9 @@ export class ActivityService {
             this.changes.emit({doc: change.doc, type: 'Main'});
             if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
               (change.doc.master === true )) {
-              console.log(change);
               if (this.activitiesList.indexOf(change.doc._id) === -1) {
                 this.activitiesList.push(change.doc._id);
               }
-              console.log(this.activityLoaded._id, change.doc._id);
               if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
                 this.load_activity(change.doc._id);
               }
@@ -65,6 +64,13 @@ export class ActivityService {
               this.load_activity(change.doc._id);
             }
           }
+          if (change.doc._deleted) {
+            let index = this.activitiesList.indexOf(change.doc._id);
+            if (index > -1) {
+              this.activitiesList.splice(index, 1);
+            }
+          }
+
           this.changes.emit({doc: change.doc, type: 'Activity'});
 
           //Sync from template
@@ -113,7 +119,6 @@ export class ActivityService {
         {startkey: name, endkey: name})
         .then(result => {
           result.rows.map((row) => {
-            console.log(row);
             if (this.activitiesList.indexOf(row.id) === -1) {
               this.userActivitiesListId.push(row.id);
             }
@@ -146,12 +151,10 @@ export class ActivityService {
    * @returns {Promise<any>} The activity loaded
    */
   public load_activity(activity_id) {
-    console.log(activity_id);
     this.unloadActivity();
     return new Promise(resolve => {
       this.database.getDocument(activity_id)
         .then((result) => {
-          console.log(result);
           this.activityLoaded = result;
         if (result['type'] === 'Main') {
           if (result['_id'].indexOf('duplicate') !== -1 && this.user.fonction === 'Enseignant') {
@@ -159,8 +162,6 @@ export class ActivityService {
           } else {
             this.logger.log('OPEN', result['_id'], result['_id'], 'load activity');
           }
-          //this.sisters = this.activityLoadedChild;
-          console.log(result);
           this.activityLoadedChild = [];
           result['subactivityList'].map(elmt => {
             if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
@@ -184,8 +185,6 @@ export class ActivityService {
               }
             });
             this.activityLoadedChild = [];
-            console.log(result);
-            //this.activityLoadedChild = result['subactivityList'];
             result['subactivityList'].map(elmt => {
               if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
                 this.activityLoadedChild.push(elmt['stepId']);
@@ -196,12 +195,9 @@ export class ActivityService {
         }
         })
         .then(() => {
-          console.log("get apps");
-          console.log(this.activityLoaded);
           return this.appsService.getApplications(this.activityLoaded._id);
         })
         .then(() => {
-          console.log(this.appsService.applications);
           return this.userService.getParticipants(this.activityLoaded._id);
         })
         .then(() => {
@@ -248,10 +244,8 @@ export class ActivityService {
   public createActivity(activityType) {
     let dbName = '';
     let subactivity;
-    console.log(`here : ${dbName}`);
     return new Promise((resolve, reject) => {
       this.database.createDatabase('activity').then((newDatabase: string) => {
-        console.log(newDatabase);
         dbName = newDatabase;
         const activityToCreate = {
           _id: dbName,
@@ -279,12 +273,9 @@ export class ActivityService {
         })
         .then(userDoc => {
           userDoc['activityList'].push(dbName);
-          console.log('here');
           return this.database.updateDocument(userDoc);
         })
         .then(res => {
-          console.log('resolved');
-          console.log(dbName, res);
           if (this.activitiesList.indexOf(dbName) === -1) {
             this.activitiesList.push(dbName);
           }
@@ -431,33 +422,29 @@ export class ActivityService {
    * @param activityId The Id of the activity to delete
    */
   ereaseActivity(activityId) {
-    console.log(activityId);
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
-        console.log(this);
-        return Promise.all(activity['resourceList'].map(resource => {
-          console.log(this);
-          return this.database.getDocument(resource).then(res => {
-            res['_deleted'] = true;
-            console.log(res);
-            return this.database.updateDocument(res);
-          });
-        }))
+        activity['_deleted'] = true;
+        return this.database.updateDocument(activity).then( () => {
+          return Promise.all(activity['resourceList'].map(resource => {
+            return this.database.getDocument(resource).then(res => {
+              res['_deleted'] = true;
+              return this.database.updateDocument(res);
+            });
+          }));
+        }
+      )
           .then( () => {
-          console.log("here");
           return this.database.getDocument(this.user.id);
         })
           .then( user => {
-            console.log(user);
             let index = user['activityList'].indexOf(activityId);
-            console.log(index);
             if (index > -1) {
               user['activityList'].splice(index, 1);
             }
             return this.database.updateDocument(user);
           })
           .then(() => {
-            console.log("deleted");
             return Promise.all(activity['applicationList'].map(application => {
               return this.database.getDocument(application).then(app => {
                 app['_deleted'] = true;
@@ -493,9 +480,7 @@ export class ActivityService {
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
     .then(activity => {
-      console.log(this.user);
       let index = activity['userList'].indexOf(this.user.id);
-      console.log(index);
       if (index > -1) {
         activity['userList'].splice(index, 1);
       }
@@ -506,13 +491,10 @@ export class ActivityService {
       }
     })
     .then( () => {
-      console.log("here");
       return this.database.getDocument(this.user.id);
     })
     .then( user => {
-      console.log(user);
       let index = user['activityList'].indexOf(activityId);
-      console.log(index);
       if (index > -1) {
         user['activityList'].splice(index, 1);
       }
@@ -546,10 +528,8 @@ export class ActivityService {
   deleteResource(resId) {
     const res = this.resourcesService.resources;
     const index = res.indexOf(resId);
-    console.log(index);
     if (index > -1) {
       res.splice(index, 1);
-      console.log(res);
     }
     this.activityEdit(this.activityLoaded._id, 'resourceList', res).then( () => {
       this.resourcesService.deleteResource(resId);
@@ -632,12 +612,10 @@ export class ActivityService {
       this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`, system);
       let duplicateList = [];
       let duplicateTmp = [];
-      console.log(`update act ${activityId}`);
       return new Promise(resolve => {
         return this.database.getDocument(activityId)
           .then(res => {
             res[key] = value;
-            console.log(res);
             if (res['type'] === 'Main') {
               duplicateList = res['duplicateList'];
               return this.database.updateDocument(res).then(() => {
@@ -650,13 +628,10 @@ export class ActivityService {
               this.database.getDocument(res['parent']).then(parent => {
                 duplicateList = parent['duplicateList'];
                 duplicateList.map(duplicate => {
-                  console.log(duplicate.split('_')[3]);
                   duplicateTmp.push(`${activityId}_duplicate_${duplicate.split('_')[3]}`);
                 });
-                console.log(duplicateTmp);
                 return this.database.updateDocument(res).then(() => {
                     return Promise.all(duplicateTmp.map(duplicate => {
-                      console.log(duplicate);
                       return this.activityEdit(duplicate, key, value, system);
                     }));
                   }
@@ -681,7 +656,6 @@ export class ActivityService {
    */
   addUser(userName: any, activityId: any) {
     const tempThis = this;
-    console.log(userName, activityId);
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
         .then(activity => {
@@ -788,7 +762,6 @@ export class ActivityService {
           return this.database.getAllDocs(dbName);
         })
         .then(docs => {
-          console.log(docs.docs);
           return Promise.all(docs.docs.map(row => {
             const doc = row;
             doc.dbName = newDb;
@@ -838,7 +811,6 @@ export class ActivityService {
         .then(() => {
           activity['duplicateList'].push(newDb);
           this.database.updateDocument(activity).then( res => {
-            console.log(res);
             resolve(res);
           });
         })

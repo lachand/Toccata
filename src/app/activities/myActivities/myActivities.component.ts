@@ -26,7 +26,7 @@ export class MyActivitiesComponent {
               private ref: ChangeDetectorRef) {
 
     this.activityService.changes.subscribe(change => {
-      console.log(change.type);
+      console.log(change);
       if (change.type === 'Activity') {
         if (!this.ref['destroyed']) {
           this.ref.detectChanges();

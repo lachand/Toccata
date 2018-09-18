@@ -90,171 +90,10 @@ export class DatabaseService {
       console.error(`Replication to remote error ${err}`);
     });
 
-      // */
-
-    // /*this.dbRemote.compact();*/
-    // this.db = new PouchDB(environment.DB);
-    //
-    // /*
-    // this.db.replicate.to(this.dbRemote).on('change', changes => {
-    //   console.info(`sync 1 change ${changes}`);
-    // }).on('paused', function (info) {
-    //   console.info('pause: ', info);
-    // }).on('active', function (info) {
-    //   console.info('active: ', info);
-    // }).on('error', err => {
-    //   console.error(`sync error ${err}`);
-    // });
-    // */
-    //
-    // this.dbList.push('user_list');
-    //
-    // this.options = {
-    //   live: true,
-    //   retry: true,
-    //   continuous: true,
-    //   ajax: {timeout: 60000}
-    //   //since: 'now'
-    //   //since: 0,
-    //   //revs_limit: 2,
-    //   //filter: 'appFilters/by_db_name',
-    //   //query_params: { 'dbNames': ['user_list'] }
-    // };
-    //
-    // this.optionsReplication = this.options;
-    // this.optionsReplication.live = false;
-    // this.optionsReplication.continuous = false;
-    //
-    // /*
-    // this.db.sync(this.dbRemote).on('change', changes => {
-    //   console.log(`sync change ${changes}`);
-    // }).on('paused', function (info) {
-    //   console.log('pause: ', info);
-    // }).on('active', function (info) {
-    //   console.log('active: ', info);
-    // }).on('error', err => {
-    //   console.log(`sync error ${err}`);
-    // });
-    // */
-    //
-    // const tempOptions = this.options;
-    //
-    // this.db.compact().then((res) => {
-    // console.log(this.db);
-    //   //return this.db.replicate.to(this.dbRemote, this.optionsReplication).on('complete', () => {
-    //   //  console.log("begin sync");
-    //   //  return this.db.replicate.from(this.dbRemote).on('complete', () => {
-    //   //    console.log("sync complete");
-    //   let tmpthis = this;
-    //   this.dbRemote.sync(this.db, this.options).on('change', changes => {
-    //     console.log(`sync change ${changes}`);
-    //   }).on('paused', function (info) {
-    //     tmpthis.changes.emit({type: 'CONNEXION_DONE'})
-    //     console.log('pause: ', info);
-    //   }).on('active', function (info) {
-    //     console.log('active: ', info);
-    //   }).on('error', err => {
-    //     console.log(`sync error ${err}`);
-    //   });
-    //       /**this.dbSync = this.db.sync(this.dbRemote, this.options);
-    //        this.dbSync.on('change', changes => {
-    //         console.log(`sync change ${changes}`);
-    //       }).on('paused', function (info) {
-    //         console.log('pause: ', info);
-    //       }).on('active', function (info) {
-    //         console.log('active: ', info);
-    //       }).on('error', err => {
-    //         console.log(`sync error ${err}`);
-    //       });
-    //        **/
-    //       /*this.dbSync = this.db.sync(this.dbRemote, this.options).on('change', changes => {
-    //         console.log(`sync change : ${changes}`);
-    //       }).on('paused', function (info) {
-    //         console.log('pause: ', info);
-    //       }).on('active', function (info) {
-    //         console.log('active: ', info);
-    //       }).on('error', err => {
-    //         console.log(`sync error ${err}`);
-    //       });*/
-    //       /*
-    //       this.db.sync(this.dbRemote, this.options).on('change', changes => {
-    //         console.log(`sync in change ${changes}`);
-    //       }).on('paused', function (info) {
-    //         console.log('pause in: ', info);
-    //       }).on('active', function (info) {
-    //         console.log('active in : ', info);
-    //       }).on('error', err => {
-    //         console.log(`sync error in ${err}`);
-    //       });*/
-    //
-    //       //this.sync();
-    //     /*}).on('change', changes => {
-    //       console.log(`sync change ${changes}`);
-    //     }).on('paused', function (info) {
-    //       console.log('pause: ', info);
-    //     }).on('active', function (info) {
-    //       console.log('active: ', info);
-    //     }).on('error', err => {
-    //       console.log(`sync error ${err}`);
-    //     });
-    //   });*/
-    // })
-    //   .catch(err => {
-    //     console.log(`error with call to databaseService initialisation : ${err}`);
-    //     this.changes.emit({type: 'CONNEXION_IMPOSSIBLE'});
-    //   });
-    //
-    //
-    // this.db.changes({
-    //   live: true,
-    //   include_docs: true,
-    //   retry: true,
-    //   timeout: false,
-    //   heartbeat: false,
-    //   //filter: 'appFilters/by_db_name',
-    //   //query_params: { 'dbNames': ['user_list'] }
-    // }).on('change', change => {
-    //   this.handleChange(change);
-    //   console.log("change on local");
-    // }).on('paused', function (info) {
-    //   console.log('pause: ', info);
-    //   this.changes.emit({type: 'CONNEXION_DONE'});
-    // }).on('active', function (info) {
-    //   console.log('active: ', info);
-    // }).on('error', function (err) {
-    //   console.log('activities: ', err);
-    // }).catch(err => {
-    //   console.log(err);
-    // });
-    //
-    //
-    // this.dbRemote.changes({
-    //   live: true,
-    //   include_docs: true,
-    //   retry: true,
-    //   timeout: false,
-    //   heartbeat: false,
-    //   //filter: 'appFilters/by_db_name',
-    //   //query_params: { 'dbNames': ['user_list'] }
-    // }).on('change', change => {
-    //   this.handleChangeRemote(change);
-    //   console.log('change_on_remote');
-    // }).on('paused', function (info) {
-    //   this.changes.emit({type: 'CONNEXION_DONE'});
-    //   console.log('pause: ', info);
-    // }).on('active', function (info) {
-    //   console.log('active: ', info);
-    // }).on('error', function (err) {
-    //   console.log('activities: ', err);
-    // }).catch(err => {
-    //   console.log(err);
-    // });
-
   }
 
   sync() {
     console.info('sync');
-    //this.dbSync.cancel();
     const options = {
       live: true,
       retry: true,
@@ -264,27 +103,6 @@ export class DatabaseService {
       //query_params: {'dbNames': this.dbList}
     };
     //console.log(options.query_params);
-    /*
-    this.dbSync = this.db.sync(this.dbRemote, options).on('change', change => {
-      console.log(`Change : ${change}`);
-    }).on('error', function (err) {
-      console.log(err);
-    }
-    */
-
-    /*
-    this.db.replicate.to(this.dbRemote, options)
-      .on('change', change => {
-        console.log(`Change remote`);
-      }).on('error', function (err) {
-      console.log(err);
-    });
-    this.db.replicate.from(this.dbRemote, this.options).on('change', change => {
-      console.log(`Change local`);
-    }).on('error', function (err) {
-      console.log(err);
-    });
-    */
   }
 
   /**
@@ -293,17 +111,12 @@ export class DatabaseService {
    * @param change change that occurs
    */
   handleChange(change) {
+    console.log(change);
     this.changes.next({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
   }
 
   handleChangeRemote(change) {
-    //return this.getDocument(change.doc._id)
-    //  .then(() => {
-    //    this.forceUpdateDocument(change.doc);
-    //  })
-    //  .catch(function (err) {
-    //  console.log(err);
-    //});
+
     return 0;
   }
 
@@ -335,51 +148,6 @@ export class DatabaseService {
       } else {
         console.info("Add database : ", databaseName)
         this.dbList.push(databaseName);
-        //this.options.query_params.dbNames.push(databaseName);
-        //this.optionsReplication.query_params.dbNames.push(databaseName);
-        /*
-        this.db.replicate.from(this.dbRemote, this.optionsReplication)
-          .on('change', change => {
-            if (change.docs[0].dbName === databaseName) {
-              console.log(this.options);
-              /**this.dbSync.cancel();
-               this.dbSync = this.db.sync(this.dbRemote, this.options);
-               this.dbSync.on('change', changes => {
-                console.log(`sync change ${changes}`);
-              }).on('paused', function (info) {
-                console.log('pause: ', info);
-              }).on('active', function (info) {
-                console.log('active: ', info);
-              }).on('error', err => {
-                console.log(`sync error ${err}`);
-              });**/
-        /*
-              this.sync();
-              resolve(databaseName);
-            }
-          })
-          .on('complete', () => {
-            console.log(this.options);
-            /**this.dbSync.cancel();
-             this.dbSync = this.db.sync(this.dbRemote, this.options);
-             this.dbSync.on('change', changes => {
-              console.log(`sync change ${changes}`);
-            }).on('paused', function (info) {
-              console.log('pause: ', info);
-            }).on('active', function (info) {
-              console.log('active: ', info);
-            }).on('error', err => {
-              console.log(`sync error ${err}`);
-            });
-             **/
-        /*
-            this.sync();
-            resolve(databaseName);
-          });
-
-
-      }*/
-        //this.sync();
         resolve(databaseName);
       }
     });
@@ -408,11 +176,6 @@ export class DatabaseService {
       const guid = this.guid();
       const newDbName = `${databaseName}_${guid}`;
       this.dbList.push(databaseName);
-      //this.options.query_params.dbNames.push(databaseName);
-      //this.optionsReplication.query_params.dbNames.push(databaseName);
-      //this.dbSync.cancel();
-      //this.dbSync = this.db.sync(this.dbRemote, this.options);
-      //this.sync();
       resolve(newDbName);
     });
   }
@@ -465,11 +228,7 @@ export class DatabaseService {
    */
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
-      //return this.db.allDocs().then(res => {
-      //})
-      //  .then(() => {
-          return this.db.get(docId)//;
-        //})
+          return this.db.get(docId)
         .then(result => {
           if (!isNullOrUndefined(result['_conflict'])) {
             console.info(result);

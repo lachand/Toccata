@@ -5,7 +5,7 @@
     "ng": "ng",
     "build-prod-ngsw": "ng build --prod && node_modules/.bin/ngsw-config dist ./src/ngsw-config.json && cp node_modules/@angular/service-worker/ngsw-worker.js ./dist/ngsw-worker.js",
     "config": "ts-node ./scripts/set-env.ts",
-    "start": "npm run config -- --environment=dev && ng serve ",
+    "start": "npm run config -- --environment=dev && ng serve",
     "build": "npm run config -- --environment=prod && ng build ",
     "test": "npm run config -- --environment=prod && ng test --prod --watch=false --progress=false --code-coverage",
     "lint": "ng lint",

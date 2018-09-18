@@ -59,6 +59,14 @@
           "configurations": {
             "production": {
               "browserTarget": "ToccataPWA:build:production"
+            },
+            "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
             }
           }
         },
