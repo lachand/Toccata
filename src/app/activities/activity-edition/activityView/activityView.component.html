@@ -34,7 +34,8 @@
         <activity-name-edit class="aligned-right" [type]="'Parent'" [edit]="editMode" [activityId]="activityService?.activityLoaded?.parent"
         ></activity-name-edit> <div class="aligned-right">:</div>
         <activity-name-edit class="aligned-right" [type]="'Loaded'" [edit]="editMode" [activityId]="activityService?.activityLoaded?._id"
-        ></activity-name-edit> <div class="aligned-right">({{activityService?.activityLoaded?.nameForTeacher}})</div>
+        ></activity-name-edit>
+            <div *ngIf="activityService?.activityLoaded?.master" class="aligned-right">({{activityService?.activityLoaded?.nameForTeacher}})</div>
           </div>
         </div>
         <mat-chip-list class="chip-list">

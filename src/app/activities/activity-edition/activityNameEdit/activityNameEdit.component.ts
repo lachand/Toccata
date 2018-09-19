@@ -30,6 +30,7 @@ export class ActivityNameEditComponent implements OnInit {
         console.log(change.type);
         this.appName = change.doc.name;
       }
+      console.log(this.appName);
       if (!this.ref['destroyed']) {
         this.ref.detectChanges();
       }
