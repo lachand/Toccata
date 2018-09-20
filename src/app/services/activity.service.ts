@@ -59,6 +59,7 @@ export class ActivityService {
               }
             }
           } else if (finded) {
+            console.log(change);
             this.changes.emit({doc: change.doc, type: 'Sequence'});
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
@@ -252,6 +253,7 @@ export class ActivityService {
           type: activityType,
           name: 'Nouvelle activité',
           description: `Nouvelle description`,
+          notes: '',
           userList: [this.user.id],
           subactivityList: [],
           duplicateList : [],
@@ -343,6 +345,7 @@ export class ActivityService {
           id: activity['_id'],
           name: activity['name'],
           description: activity['description'],
+          notes: activity['notes'],
           image: activity['image'],
           dbName: activity['dbName'],
           master: activity['master'],
@@ -374,13 +377,14 @@ export class ActivityService {
             _id: `activity_${this.database.guid()}`,
             name: 'Nouvelle étape',
             description: 'Il n\'y a aucune description',
+            notes: '',
             userList: parent['userList'],
             resourceList: parent['resourceList'],
             applicationList: parent['applicationList'],
             parent: parent['_id'],
             type: 'Sequence',
             subactivityList: [],
-            maste: parent['master'],
+            master: parent['master'],
             visible: true,
             blocked: false,
             createdAt: Date.now(),
@@ -732,6 +736,7 @@ export class ActivityService {
       return this.database.getDocument(duplicateId).then(duplicate => {
           duplicate['name'] = template.name;
           duplicate['description'] = template.description;
+          duplicate['notes'] = template.notes;
           duplicate['userList'] = template.userList;
           duplicate['subactivityList'] = template.subactivityList;
           duplicate['resourceList'] = template.resourceList;

@@ -65,16 +65,16 @@ import {ApplicationInfosTeacherComponent} from './activities/activity-edition/ap
 import {PostitInfosComponent} from './activities/activity-edition/postitInfos/postitInfos.component';
 import {CreateEditPostitComponent} from './activities/createEditPostit/createEditPostit.component';
 import {LoggerService} from './services/logger.service';
-import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {ResourceOpenedComponent} from './activities/activity-edition/resourceOpened/resourceOpened.component';
 import {DialogNewRessourceComponent} from './activities/activity-edition/dialogNewRessource/dialognewRessource.component';
 import {ActivityNewRessourceComponent} from './activities/activity-edition/activityNewRessource/activityNewRessource.component';
 import {DialogResourceOpenedComponent} from './activities/activity-edition/dialogResourceOpened/dialogResourceOpened.component';
 import {DialogApplicationLaunchedComponent} from './activities/activity-edition/dialogApplicationLaunched/dialogApplicationLaunched.component';
 import {DialogResourceEditionComponent} from './activities/activity-edition/resourceInfos/dialogResourceEdition/dialogResourceEdition.component';
-import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {ActivityHideComponent} from './activities/activity-edition/activityHide/activityHide.component';
+import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -124,7 +124,8 @@ import {ActivityHideComponent} from './activities/activity-edition/activityHide/
     DialogResourceOpenedComponent,
     DialogResourceEditionComponent,
     DialogApplicationLaunchedComponent,
-    ActivityHideComponent
+    ActivityHideComponent,
+    AppNotesComponent
   ],
   imports: [
     BrowserModule,
