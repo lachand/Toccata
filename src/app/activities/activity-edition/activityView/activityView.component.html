@@ -101,6 +101,12 @@
           </mat-card>
         </div>
 
+        <div *ngIf="activityService?.activityLoaded?.type !== 'Main' && user.fonction === 'Enseignant'">
+          <mat-card class="flex-card">
+            <app-notes [edit]="editMode"></app-notes>
+          </mat-card>
+        </div>
+
         <div>
           <mat-card class="flex-card">
             <app-activity-participants-edit [edit]="editMode"></app-activity-participants-edit>

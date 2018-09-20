@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
 import {ActivityChangeUsersComponent} from '../activityChangeUsers/activityChangeUsers.component';
@@ -19,7 +19,13 @@ export class ActivityParticipantsEditComponent {
   constructor(public activityService: ActivityService,
               public router: Router,
               public dialog: MatDialog,
-              public userService: UserService) {
+              public userService: UserService,
+              private ref: ChangeDetectorRef) {
+    this.activityService.changes.subscribe( change => {
+      if (change.doc._id === this.activityService.activityLoaded._id || change.doc.id === this.activityService.activityLoaded.parent) {
+        this.ref.detectChanges();
+      }
+    })
   }
 
   private changeParticipants() {

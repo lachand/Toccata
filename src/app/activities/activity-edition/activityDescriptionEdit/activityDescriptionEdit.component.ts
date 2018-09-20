@@ -49,8 +49,6 @@ export class ActivityDescriptionEditComponent implements OnInit{
 
 
     this.activityService.changes.subscribe(change => {
-      //console.log('doc : ', change.doc);
-      //console.log('previous : ', this.activityService.activityLoaded);
       if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         console.log(change.doc._id, this.activityService.activityLoaded._id);
         this.description = change.doc.description;
