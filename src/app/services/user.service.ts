@@ -205,13 +205,10 @@ export class UserService {
    */
   deleteUser(userId) {
     return new Promise(resolve => {
-      console.log("begin deletion");
       return this.database.removeDocument(userId).then( () => {
-        console.log("doc deleted");
         return this.database.getDocument('user_list');
       })
         .then( res => {
-          console.log("user list loaded");
           res['userList'].splice( res['userList'].indexOf(userId), 1 );
           return this.database.updateDocument(res);
         })

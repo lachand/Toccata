@@ -258,6 +258,7 @@ export class ActivityService {
           subactivityList: [],
           duplicateList : [],
           resourceList: [],
+          parent: dbName,
           visible: true,
           blocked: false,
           currentLoaded: dbName,
@@ -658,10 +659,13 @@ export class ActivityService {
    * @param userName The user to add
    * @param activityId The Id of the activity where change occurs
    */
-  addUser(userName: any, activityId: any) {
+  addUser(userName: any, activityId: any, recur: boolean = true) {
     const tempThis = this;
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
+        .then(activityChild => {
+          return this.database.getDocument(activityChild['parent']);
+        })
         .then(activity => {
           activity['userList'].push(userName);
           const subactivities = activity['subactivityList'];
@@ -684,6 +688,28 @@ export class ActivityService {
     });
   }
 
+  editParticipants(userList: any, activityId: any) {
+    console.log(userList);
+    let activity;
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId)
+        .then(activityChild => {
+          console.log(activityChild);
+          return this.database.getDocument(activityChild['parent']);
+        })
+        .then(result => {
+          activity = result;
+          return this.activityEdit(activity['_id'], 'userList', userList);
+        })
+        .then( () => {
+          return Promise.all( activity['subactivityList'].map(subActivity => {
+            console.log(subActivity, userList );
+            return this.activityEdit(subActivity.stepId, 'userList', userList);
+          }));
+        });
+        });
+  }
+
   /**
    * Remove a specific user to the specified activity
    * @param userName The user to remove
@@ -694,6 +720,9 @@ export class ActivityService {
     const tempThis = this;
     return new Promise(resolve => {
       return this.database.getDocument(activityId)
+        .then(activityChild => {
+          return this.database.getDocument(activityChild['parent']);
+        })
         .then(activity => {
           activity['userList'].splice(activity['userList'].indexOf(userName), 1);
 
@@ -755,11 +784,12 @@ export class ActivityService {
    */
   duplicateActivity(activityId: any, duplicateName: any) {
     return new Promise(resolve => {
-      let dbName, guid, newDb, activity;
+      let dbName, guid, newDb, activity, parent;
       return this.database.getDocument(activityId).then(activityDoc => {
         activity = activityDoc;
         dbName = activity['dbName'];
         guid = this.database.guid();
+        parent = `${activity['dbName']}_duplicate_${guid}`;
         newDb = `${dbName}_duplicate_${guid}`;
         return this.database.addDatabase(newDb);
       })
@@ -770,6 +800,7 @@ export class ActivityService {
           return Promise.all(docs.docs.map(row => {
             const doc = row;
             doc.dbName = newDb;
+            doc.parent = parent;
             doc._id = `${doc._id}_duplicate_${guid}`;
             doc.nameForTeacher = duplicateName;
             if (doc.documentType === 'Activity') {

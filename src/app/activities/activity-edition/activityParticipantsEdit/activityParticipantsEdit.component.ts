@@ -23,9 +23,12 @@ export class ActivityParticipantsEditComponent {
               private ref: ChangeDetectorRef) {
     this.activityService.changes.subscribe( change => {
       if (change.doc._id === this.activityService.activityLoaded._id || change.doc.id === this.activityService.activityLoaded.parent) {
-        this.ref.detectChanges();
+        this.activityService.userService.getParticipants(this.activityService.activityLoaded._id).then( () => {
+          console.log(this.activityService.userService.participants);
+          this.ref.detectChanges();
+        });
       }
-    })
+    });
   }
 
   private changeParticipants() {

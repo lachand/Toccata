@@ -63,31 +63,34 @@ export class ActivityChangeUsersComponent {
   }
 
   changeUsers() {
-    this.usersToChange = [];
-
+    let userList = [];
     return Promise.all(this.userChecked.map(userSelected => {
         for (let i = 0; i < this.userCheckedInitially.length; i++) {
+          console.log(userSelected);
+          if (userSelected.checked && userSelected.user === this.userCheckedInitially[i].user) {
+            userList.push(userSelected.user);
+          }
           if (userSelected.user === this.userCheckedInitially[i].user && userSelected.checked !== this.userCheckedInitially[i].checked) {
             const user = userSelected.user;
             if (userSelected.checked) {
-              return this.userService.addActivity(this.activityService.activityLoaded._id, user)
+              return this.userService.addActivity(this.activityService.activityLoaded.parent, user)
                 .then(() => {
-                  this.logger.log('UPDATE', this.activityService.activityLoaded._id, user, 'user added');
-                  return this.activityService.addUser(user, this.activityService.activityLoaded._id);
+                  this.logger.log('UPDATE', this.activityService.activityLoaded.parent, user, 'user added');
                 });
             } else {
-              console.log('remove activity');
-              return this.userService.removeActivity(this.activityService.activityLoaded._id, user)
+              return this.userService.removeActivity(this.activityService.activityLoaded.parent, user)
                 .then(() => {
-                  this.logger.log('UPDATE', this.activityService.activityLoaded._id, user, 'user removed');
-                  return this.activityService.removeUser(user, this.activityService.activityLoaded._id);
+                  this.logger.log('UPDATE', this.activityService.activityLoaded.parent, user, 'user removed');
                 });
             }
           }
         }
-      this.dialogRef.close();
       }
-    ));
+    )).then( () => {
+      return this.activityService.editParticipants(userList, this.activityService.activityLoaded._id);
+    }).then( () => {
+      this.dialogRef.close();
+    });
   }
 
   changeValue(event) {
