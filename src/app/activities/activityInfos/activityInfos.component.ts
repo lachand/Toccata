@@ -30,7 +30,6 @@ export class ActivityInfosComponent implements OnInit {
     this.activityService.changes.subscribe((change) => {
       if (change.type === 'Main') {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
-          console.log('toto');
           this.activityInfos = activityInfos;
           if (!this.ref['destroyed']) {
             this.ref.detectChanges();

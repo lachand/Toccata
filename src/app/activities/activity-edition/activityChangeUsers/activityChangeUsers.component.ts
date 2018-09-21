@@ -64,6 +64,7 @@ export class ActivityChangeUsersComponent {
 
   changeUsers() {
     let userList = [];
+    this.dialogRef.close();
     return Promise.all(this.userChecked.map(userSelected => {
         for (let i = 0; i < this.userCheckedInitially.length; i++) {
           console.log(userSelected);
@@ -88,8 +89,6 @@ export class ActivityChangeUsersComponent {
       }
     )).then( () => {
       return this.activityService.editParticipants(userList, this.activityService.activityLoaded._id);
-    }).then( () => {
-      this.dialogRef.close();
     });
   }
 

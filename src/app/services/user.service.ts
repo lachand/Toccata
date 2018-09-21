@@ -56,19 +56,15 @@ export class UserService {
    */
   public login(username, password) {
     return new Promise((resolve, reject) => {
-      console.log(username);
         return this.database.getDocument(username).then(user => {
           const md5 = new Md5();
           const hashedPassword = md5.appendStr(password).end();
-          console.log(user['hashedPassword'], hashedPassword);
           if (user['hashedPassword'] === hashedPassword) {
             this.loggedIn = true;
             this.id = username;
-            console.log(username);
             return this.database.getDocument(username);
           }})
           .then((res) => {
-            console.log(res);
             this.name = res['name'];
             this.id = res['_id'];
             this.avatar = res['avatar'];
@@ -82,10 +78,7 @@ export class UserService {
 
   getUserAvatar(participant) {
     return new Promise(resolve => {
-      console.log('here');
-      console.log(participant);
       return this.database.getDocument(participant).then(res => {
-        console.log(res);
         resolve((res['avatar']));
       });
     });

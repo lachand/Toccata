@@ -36,7 +36,6 @@ export class ActivityService {
 
     this.database.changes.subscribe(
       (change) => {
-        console.log(change);
         if (change.type === 'Activity' && userService.loggedIn) {
           this.changes.emit({doc: change.doc, type: 'Main'});
           let finded = false;
@@ -59,7 +58,6 @@ export class ActivityService {
               }
             }
           } else if (finded) {
-            console.log(change);
             this.changes.emit({doc: change.doc, type: 'Sequence'});
             if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
               this.load_activity(change.doc._id);
@@ -703,7 +701,6 @@ export class ActivityService {
         })
         .then( () => {
           return Promise.all( activity['subactivityList'].map(subActivity => {
-            console.log(subActivity, userList );
             return this.activityEdit(subActivity.stepId, 'userList', userList);
           }));
         });

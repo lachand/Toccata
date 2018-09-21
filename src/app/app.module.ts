@@ -75,6 +75,7 @@ import {DialogResourceEditionComponent} from './activities/activity-edition/reso
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {ActivityHideComponent} from './activities/activity-edition/activityHide/activityHide.component';
 import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes.component';
+import {ActivityStepperComponent} from './activities/activity-edition/activityStepper/activityStepper.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -125,7 +126,8 @@ import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes
     DialogResourceEditionComponent,
     DialogApplicationLaunchedComponent,
     ActivityHideComponent,
-    AppNotesComponent
+    AppNotesComponent,
+    ActivityStepperComponent
   ],
   imports: [
     BrowserModule,

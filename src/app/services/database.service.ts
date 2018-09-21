@@ -54,7 +54,6 @@ export class DatabaseService {
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
         console.info(`Replication from remote complete`);
         this.changes.next('CONNEXION_DONE');
-        console.log(environment);
         return this.db.sync(this.dbRemote, {
           live: true,
           retry: true
@@ -111,7 +110,6 @@ export class DatabaseService {
    * @param change change that occurs
    */
   handleChange(change) {
-    console.log(change);
     this.changes.next({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
   }
 
@@ -146,7 +144,6 @@ export class DatabaseService {
       if (this.dbList.indexOf(databaseName) !== -1) {
         resolve(databaseName);
       } else {
-        console.info("Add database : ", databaseName)
         this.dbList.push(databaseName);
         resolve(databaseName);
       }
@@ -231,9 +228,7 @@ export class DatabaseService {
           return this.db.get(docId)
         .then(result => {
           if (!isNullOrUndefined(result['_conflict'])) {
-            console.info(result);
           }
-          console.log(result)
           resolve(result);
         })
         .catch(err => {
@@ -294,7 +289,6 @@ export class DatabaseService {
         elmt.count++;
         return elmt;
       }).then(function (res) {
-        console.info(res);
         resolve(res);
       }).catch(function (err) {
         console.error(err);

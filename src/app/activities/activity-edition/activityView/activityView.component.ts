@@ -57,10 +57,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.activityService.activityLoaded);
-    if (this.activityService.activityLoaded.master === true) {
-      this.ref.detectChanges();
-    }
+
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
       if (changes.type === 'ChangeActivity') {
@@ -74,8 +71,10 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
       if (changes.type === "Sequence" && changes.doc.parent === this.activityService.activityLoaded.parent) {
         if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
           this.steps = this.activityService.activityLoadedChild;
+          console.log(this.steps);
         } else {
           this.steps = this.activityService.sisters;
+          console.log(this.steps);
         }
         this.ref.detectChanges();
       }
@@ -91,6 +90,10 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
       }*/
       this.ref.detectChanges();
     });
+
+    if (this.activityService.activityLoaded.master === true) {
+      this.ref.detectChanges();
+    }
 
     if (this.user.fonction === "Enseignant") {
       this.editMode = true;

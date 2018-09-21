@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
       password: ''
     });
     this.databaseService.changes.subscribe(changes => {
-      console.log(changes);
       if (changes === 'CONNEXION_IMPOSSIBLE') {
         this.errorConnexionImpossible = true;
         this.loading = false;
@@ -49,7 +48,6 @@ export class LoginComponent implements OnInit {
       if (changes === 'CONNEXION_DONE') {
         this.can_connect = true;
         this.databaseService.getDocument('user_list').then(res => {
-          console.log(res);
         });
       }
     });
@@ -65,7 +63,6 @@ export class LoginComponent implements OnInit {
         if (result['status'] === 401) {
           this.errorUsernamePassword = true;
         } else if (this.userService.isLoggedIn) {
-          console.log(this.userService.id, this.userService);
             return this.activityService.getActivities()/*.then(res => {
               return this.userService.getAllUsers();
             })*/
