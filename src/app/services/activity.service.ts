@@ -83,6 +83,7 @@ export class ActivityService {
     this.user = userService;
     this.activityLoaded = null;
     this.activityLoadedChild = [];
+    this.sisters = [];
   }
 
   /**
@@ -241,6 +242,7 @@ export class ActivityService {
    * @returns {Promise<any>} The activity created
    */
   public createActivity(activityType) {
+    console.log('create an activity');
     let dbName = '';
     let subactivity;
     return new Promise((resolve, reject) => {
@@ -286,10 +288,12 @@ export class ActivityService {
           return this.createSubActivity(dbName);
         })
         .then( (subActivity) => {
+          console.log(subActivity);
           subactivity = subActivity;
           return this.database.getDocument(dbName);
         })
         .then( activity => {
+          console.log(activity, subactivity);
           activity['currentLoaded'] = subactivity._id;
           return this.database.updateDocument(activity);
         })
@@ -368,6 +372,7 @@ export class ActivityService {
    * @returns {Promise<any>} The created activity
    */
   public createSubActivity(parentId) {
+    console.log("createSubActivity");
     return new Promise(resolve => {
       let subActivity;
       return this.database.getDocument(parentId)
@@ -411,6 +416,7 @@ export class ActivityService {
           this.sisters.push(subActivity._id)
           //this.activityLoadedChild.push(subActivity._id);
           this.changes.emit({doc: subActivity, type: 'CreateStep'});
+          console.log("end subactivity", subActivity);
           resolve(subActivity);
         })
         .catch(err => {

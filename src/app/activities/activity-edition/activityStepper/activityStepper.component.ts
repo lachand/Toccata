@@ -7,7 +7,8 @@ import {MatStepper} from '@angular/material';
 
 @Component({
   selector: 'activity-stepper',
-  templateUrl: './activityStepper.component.html'
+  templateUrl: './activityStepper.component.html',
+  styleUrls: ['./activityStepper.component.scss']
 })
 
 export class ActivityStepperComponent implements OnInit {
