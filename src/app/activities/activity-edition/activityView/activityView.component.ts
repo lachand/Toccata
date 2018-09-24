@@ -33,7 +33,7 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
               private _location: Location,
               private ref: ChangeDetectorRef,
               private logger: LoggerService,
-              private user: UserService) {
+              public user: UserService) {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';

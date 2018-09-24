@@ -3,10 +3,13 @@
   "version": "1.1.0",
   "scripts": {
     "ng": "ng",
-    "build-prod-ngsw": "ng build --prod && node_modules/.bin/ngsw-config dist ./src/ngsw-config.json && cp node_modules/@angular/service-worker/ngsw-worker.js ./dist/ngsw-worker.js",
     "config": "ts-node ./scripts/set-env.ts",
     "start": "npm run config -- --environment=dev && ng serve",
     "build": "npm run config -- --environment=prod && ng build ",
+    "deploy": "npm run build-firebase && npm run copy-firebase && npm run deploy-firebase",
+    "build-firebase": "ng build --prod --build-optimizer",
+    "copy-firebase": "node_modules/.bin/ngsw-config dist ./src/ngsw-config.json && cp node_modules/@angular/service-worker/ngsw-worker.js ./dist/ngsw-worker.js",
+    "deploy-firebase": "firebase deploy --only hosting",
     "test": "npm run config -- --environment=prod && ng test --prod --watch=false --progress=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e"

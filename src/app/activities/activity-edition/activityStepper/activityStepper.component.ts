@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/c
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 import {MatStepper} from '@angular/material';
 
 @Component({
@@ -13,7 +13,7 @@ import {MatStepper} from '@angular/material';
 
 export class ActivityStepperComponent implements OnInit {
 
-  private steps: Array<any>;
+  public steps: Array<any>;
   private editable: Array<any>;
   @Input() edit: Boolean;
   @ViewChild('stepper') stepper: MatStepper;
