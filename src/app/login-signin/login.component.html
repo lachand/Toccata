@@ -13,13 +13,13 @@
 
   <div>
     <mat-form-field>
-      <input matInput placeholder="Nom d'utilisateur" type="text" autocomplete="username" formControlName="username">
+      <input matInput placeholder="Nom d'utilisateur" type="text" autocomplete="username" formControlName="username" autocapitalize=off>
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field>
-      <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" autocomplete="current-password" formControlName="password">
+      <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" autocomplete="current-password" formControlName="password" autocapitalize=off>
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
       <mat-hint class="hint-red" *ngIf="errorUsernamePassword" i18n="@@errorPswd">Couple identifiant/mot de passe incorrect</mat-hint>
       <mat-hint class="hint-red" *ngIf="errorConnexionImpossible" i18n="@@errorNetwork">Problème de connexion, merci de réessayer</mat-hint>
