@@ -4,7 +4,7 @@
     <mat-sidenav #sidenav mode="over" class="sidenav-content">
       <div class="fullDiv">
       <div class="userInfos">
-      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos><h3>{{userService.name}}</h3><h4>{{databaseService.room}}</h4>
+      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos><h3>{{userService.name}}</h3>
       </div>
       <div>
         <mat-nav-list>
@@ -24,11 +24,20 @@
 
     </div>
 
+    <div>
     <button mat-button *ngIf="userService.loggedIn" (click)="sidenav.toggle();"><mat-icon>menu</mat-icon></button>
+    </div>
     <!--
     <button mat-button routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
     -->
+
+    <div class="flex-auto">
     <span class="spacer"></span>
+    </div>
+    <div *ngIf="userService.loggedIn" class="aligned-right-padding-right">
+      <div class="aligned-left"><app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos></div>
+      <div class="aligned-right"><h3>{{userService.name}}</h3></div>
+    </div>
     <!--
     <div *ngIf="userService.loggedIn" class="aligned-right">
       <h6>{{userService.name}}

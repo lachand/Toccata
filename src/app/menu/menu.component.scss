@@ -37,6 +37,19 @@ button.mat-menu-item {
   float: right;
 }
 
+.aligned-left {
+  float: left;
+}
+
+.aligned-right-padding-right {
+  float: right;
+  padding-right: 30px;
+}
+
+.flex-auto {
+  flex: auto;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
