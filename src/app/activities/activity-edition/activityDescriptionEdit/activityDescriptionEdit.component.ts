@@ -49,22 +49,27 @@ export class ActivityDescriptionEditComponent implements OnInit{
 
 
     this.activityService.changes.subscribe(change => {
+
+      let previousDescription: String;
+
       if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         console.log(change.doc._id, this.activityService.activityLoaded._id);
+        previousDescription = this.description;
         this.description = change.doc.description;
       } else if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+        previousDescription = this.description;
         console.log(change.doc._id, this.activityService.activityLoaded._id);
         this.description = change.doc.description;
       }
-      if (change.type === 'ChangeActivity' && this.type === 'Loaded') {
+      if (change.type === 'ChangeActivity' && this.type === 'Loaded' && previousDescription !== this.description) {
         console.log(change.type);
+        previousDescription = this.description;
         this.description = change.doc.description;
       }
-      if (!this.ref['destroyed']) {
+      if (!this.ref['destroyed'] && previousDescription !== this.description) {
         this.ref.detectChanges();
       }
     });
-    /*const autosave = setInterval( () => {this.saveDescription();} , 30000);*/
   }
 
   /**
@@ -100,6 +105,11 @@ export class ActivityDescriptionEditComponent implements OnInit{
    */
   changeTheDescription() {
     this.saveDescription(false);
+  }
+
+  focusOut() {
+    console.log("focus out");
+    this.changeTheDescription();
   }
 
   ngOnInit(): void {

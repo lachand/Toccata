@@ -1,20 +1,19 @@
 <script src="../../../../main.ts"></script>
 <mat-card-header>
-  <h3 *ngIf="type === 'Parent'" (dblclick)="switchDescription()" mat-line i18n="@@instructions">Description de l'activité<mat-icon *ngIf="edit" (click)="switchDescription()" class="aligned-with-text">edit</mat-icon></h3>
-  <h3 *ngIf="type === 'Loaded'" (dblclick)="switchDescription()" mat-line i18n="@@instructions">Consignes de l'étape<mat-icon  *ngIf="edit" (click)="switchDescription()" class="aligned-with-text">edit</mat-icon></h3>
+  <h3 *ngIf="type === 'Parent'" (click)="switchDescription()" mat-line i18n="@@instructions">Description de l'activité<mat-icon *ngIf="edit" (click)="switchDescription()" class="aligned-with-text">edit</mat-icon></h3>
+  <h3 *ngIf="type === 'Loaded'" (click)="switchDescription()" mat-line i18n="@@instructions">Consignes de l'étape<mat-icon  *ngIf="edit" (click)="switchDescription()" class="aligned-with-text">edit</mat-icon></h3>
 </mat-card-header>
 
-<div *ngIf="!descriptionEdition" class="name-edition">
+<div *ngIf="!descriptionEdition" class="name-edition" (click)="switchDescription()">
   <div [innerHTML]="description"></div>
 </div>
 
-<div *ngIf="descriptionEdition" class="name-edition">
-  <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
-  --><ckeditor [config]="editorOptions" [(ngModel)]="description"></ckeditor>
-  <button mat-button (click)="changeTheDescription()">
-    <mat-icon class="aligned-with-text">done</mat-icon>
-  </button>
+<div *ngIf="descriptionEdition" class="name-edition" (focusout)="focusOut()">
+  <ckeditor [config]="editorOptions" [(ngModel)]="description" (focusout)="focusOut()"></ckeditor>
   <button mat-button (click)="switchDescription()">
-    <mat-icon class="aligned-with-text">close</mat-icon>
+    Annuler
+  </button>
+  <button mat-button (click)="changeTheDescription()">
+    Valider
   </button>
 </div>
