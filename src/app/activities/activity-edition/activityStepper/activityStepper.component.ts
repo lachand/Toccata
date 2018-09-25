@@ -21,25 +21,6 @@ export class ActivityStepperComponent implements OnInit {
 
   constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef, public user: UserService) {
     this.editable = [];
-    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
-      this.steps = this.activityService.activityLoadedChild;
-    } else {
-      this.steps = this.activityService.sisters;
-    }
-    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
-      this.steps = [];
-    } else {
-    }
-    this.steps.map(elmt => {
-      if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
-        this.editable['elmt'] = false;
-      } else {
-        this.editable['elmt'] = true;
-      }
-    });
-  }
-
-  ngOnInit() {
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
       if (changes.type === 'ChangeActivity') {
@@ -71,6 +52,25 @@ export class ActivityStepperComponent implements OnInit {
         this.ref.detectChanges();
       }*/
       this.ref.detectChanges();
+    });
+  }
+
+  ngOnInit() {
+    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
+      this.steps = this.activityService.activityLoadedChild;
+    } else {
+      this.steps = this.activityService.sisters;
+    }
+    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
+      this.steps = [];
+    } else {
+    }
+    this.steps.map(elmt => {
+      if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
+        this.editable['elmt'] = false;
+      } else {
+        this.editable['elmt'] = true;
+      }
     });
   }
 

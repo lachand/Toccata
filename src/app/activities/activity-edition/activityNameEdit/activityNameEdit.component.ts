@@ -61,8 +61,11 @@ export class ActivityNameEditComponent implements OnInit {
       id = this.activityService.activityLoaded.parent ;
     }
 
+    console.log(id);
+
     this.activityService.activityEdit(id, 'name', this.appName)
       .then(() => {
+        console.log("done");
         this.switch();
       });
   }

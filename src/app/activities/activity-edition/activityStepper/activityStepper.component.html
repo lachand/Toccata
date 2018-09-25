@@ -1,5 +1,6 @@
 <script src="../../../../main.ts"></script>
 
+<!--
 <mat-horizontal-stepper *ngIf="steps.length > 0" class="stepper-left" [linear]="false" (selectionChange)="loadActivity($event)" #stepper>
   <mat-step *ngFor="let step of steps" [completed]="false" [editable]="true">
     <ng-template matStepLabel>
@@ -8,4 +9,14 @@
     </ng-template>
   </mat-step>
 </mat-horizontal-stepper>
-<button *ngIf="edit" mat-button class='button-left' (click)="addStep()"><mat-icon>add_circle</mat-icon>Ajouter une étape</button>
+-->
+<div class="stepper-left">
+  <div *ngFor="let step of steps" class="float-left">
+    <button mat-button (click)="loadAnActivity(step)">
+      <activity-name [activityId]="step"></activity-name>
+      <activity-hide *ngIf="user.fonction === 'Enseignant'" [activityId]="step" (click)="switchLock($event); switchVisibility(step)"></activity-hide>
+    </button>
+    </div>
+</div>
+
+<button *ngIf="edit" mat-button class='float-left' (click)="addStep()"><mat-icon>add_circle</mat-icon>Ajouter une étape</button>

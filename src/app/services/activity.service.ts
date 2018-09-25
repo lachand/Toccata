@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, EventEmitter, Injectable, Output} from '@angular/core';
+import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import {UserService} from './user.service';
 
 import {AppsService} from './apps.service';
@@ -8,7 +8,7 @@ import {isNullOrUndefined} from 'util';
 import {LoggerService} from "./logger.service";
 
 @Injectable()
-export class ActivityService {
+export class ActivityService implements OnInit {
   db: any;
   activityLoaded: any ;
   sisters: Array<any>;
@@ -32,10 +32,14 @@ export class ActivityService {
               public resourcesService: ResourcesService,
               public database: DatabaseService,
               public appsService: AppsService,
-              public logger: LoggerService) {
+              public logger: LoggerService){
+
 
     this.database.changes.subscribe(
       (change) => {
+        console.log(change);
+
+        /*
         if (change.type === 'Activity' && userService.loggedIn) {
           this.changes.emit({doc: change.doc, type: 'Main'});
           let finded = false;
@@ -70,6 +74,7 @@ export class ActivityService {
             }
           }
 
+          console.log(change.doc);
           this.changes.emit({doc: change.doc, type: 'Activity'});
 
           //Sync from template
@@ -77,6 +82,12 @@ export class ActivityService {
             let activities = this.getActivityDuplicate(this.activityLoaded._id.parent);
           }
         }
+        */
+        if (change.type === 'Activity' && userService.loggedIn) {
+          this.changes.emit({doc: change.doc, type: 'Activity'});
+        }
+      }, error => {
+        console.log(error);
       }
     );
 
@@ -958,5 +969,9 @@ export class ActivityService {
           resolve(doc);
         });
     });
+  }
+
+  ngOnInit(): void {
+
   }
 }

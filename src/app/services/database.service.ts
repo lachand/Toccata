@@ -4,6 +4,7 @@ import PouchdbFind from 'pouchdb-find';
 import {environment} from '../../environments/environment';
 import {isNullOrUndefined} from 'util';
 import {Subject} from 'rxjs/internal/Subject';
+import {ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class DatabaseService {
@@ -16,7 +17,8 @@ export class DatabaseService {
   dbSync: any;
   dbNames: Array<string> = [];
   room: string;
-  changes: Subject<any> = new Subject<any>();
+  //changes: Subject<any> = new ReplaySubject<any>(5);
+  @Output() changes = new EventEmitter();
 
   /**
    * Construct the service to communicate with the local and remote database
@@ -53,7 +55,7 @@ export class DatabaseService {
       console.info(`Replication to remote completed`);
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
         console.info(`Replication from remote complete`);
-        this.changes.next('CONNEXION_DONE');
+        this.changes.emit('CONNEXION_DONE');
         return this.db.sync(this.dbRemote, {
           live: true,
           retry: true
@@ -110,7 +112,8 @@ export class DatabaseService {
    * @param change change that occurs
    */
   handleChange(change) {
-    this.changes.next({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
+    console.log(change, change.change.docs[0].documentType, change.change.docs[0]);
+    this.changes.emit({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
   }
 
   handleChangeRemote(change) {
