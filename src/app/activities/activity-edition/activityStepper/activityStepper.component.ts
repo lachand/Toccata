@@ -4,6 +4,7 @@ import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {MatStepper} from '@angular/material';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'activity-stepper',
@@ -18,7 +19,7 @@ export class ActivityStepperComponent implements OnInit {
   @Input() edit: Boolean;
   @ViewChild('stepper') stepper: MatStepper;
 
-  constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef) {
+  constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef, public user: UserService) {
     this.editable = [];
     if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
