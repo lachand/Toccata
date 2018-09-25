@@ -1,7 +1,7 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
 <div *ngIf="!nameEdition" class="name-edition">
-  <h3>
+  <h3 (click)="switch()">
     {{appName}} <mat-icon *ngIf="edit" (click)="switch()">edit</mat-icon>
   </h3>
   <!--<h3 (dblclick)="switch()">{{activityService.activityLoaded.name}}</h3>-->
@@ -9,11 +9,13 @@
 
 <div *ngIf="nameEdition" class="name-edition">
   <mat-form-field *ngIf="type === 'Parent'">
-    <input matInput placeholder="Nom de l'activité" type="text" name="appName" [(ngModel)]="appName">
+    <input matInput placeholder="Nom de l'activité" type="text" name="appName" [(ngModel)]="appName" (focusout)="focusOut()" (keypress)="keyPressed($event)">
   </mat-form-field>
   <mat-form-field *ngIf="type === 'Loaded'">
-    <input matInput placeholder="Nom de l'étape" type="text" name="appName" [(ngModel)]="appName">
+    <input matInput placeholder="Nom de l'étape" type="text" name="appName" [(ngModel)]="appName" (focusout)="focusOut()" (keypress)="keyPressed($event)">
   </mat-form-field>
+  <!--
   <mat-icon class="aligned-with-text" (click)="changeTheName()">done</mat-icon>
   <mat-icon class="aligned-with-text" (click)="switch()">close</mat-icon>
+  -->
 </div>

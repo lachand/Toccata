@@ -21,17 +21,21 @@ export class ActivityNameEditComponent implements OnInit {
   constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef) {
 
     this.activityService.changes.subscribe(change => {
+      let previousName: String;
       if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
+        previousName = this.appName;
         this.appName = change.doc.name;
       } else if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+        previousName = this.appName;
         this.appName = change.doc.name;
       }
-      if (change.type === 'ChangeActivity' && this.type === 'Loaded') {
+
+      if (change.type === 'ChangeActivity' && this.type === 'Loaded' && change.doc.name !== this.appName) {
         console.log(change.type);
         this.appName = change.doc.name;
       }
-      console.log(this.appName);
-      if (!this.ref['destroyed']) {
+
+      if (!this.ref['destroyed'] && this.appName !== previousName) {
         this.ref.detectChanges();
       }
     });
@@ -63,38 +67,8 @@ export class ActivityNameEditComponent implements OnInit {
       });
   }
 
-  onHovering($event: Event) {
-    this.viewActivity = 'Voir l\'activité';
-  }
-
-  onUnovering($event: Event) {
-    this.viewActivity = '';
-  }
-
-  onHoveringGroupView($event: Event) {
-    this.viewGroup = 'Voir les groupes';
-  }
-
-  onUnoveringGroupView($event: Event) {
-    this.viewGroup = '';
-  }
-
-  activityView() {
-    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.activityService.activityLoaded._id, 'open activity view');
-    this.activityService.load_activity(this.activityService.activityLoaded._id).then(res => {
-      this.router.navigate(['activity_view/' + this.activityService.activityLoaded._id]);
-    });
-  }
-
-  activityGroupView() {
-    let activityId = '';
-    if (this.activityService.activityLoaded.type === 'Main') {
-      activityId = this.activityService.activityLoaded._id.split('_duplicate')[0];
-    } else {
-      activityId = this.activityService.activityLoaded.parent.split('_duplicate')[0];
-    }
-    this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
-    this.router.navigate(['duplicates/' + activityId]);
+  focusOut(){
+    this.changeTheName();
   }
 
   ngOnInit() {
@@ -107,6 +81,14 @@ export class ActivityNameEditComponent implements OnInit {
       });
     }
     console.log(this.appName);
+  }
+
+  keyPressed(ev) {
+    console.log(`Pressed keyCode ${ev.key}`);
+    if (ev.key === 'Enter') {
+      this.changeTheName();
+      ev.preventDefault();
+    }
   }
 
 }
