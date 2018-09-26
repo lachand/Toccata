@@ -1,9 +1,7 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<div *ngIf="!nameEdition" class="name-edition">
-  <h3 (click)="switch()">
+<div *ngIf="!nameEdition" class="name-edition" (click)="switch()">
     {{appName}} <mat-icon *ngIf="edit" (click)="switch()">edit</mat-icon>
-  </h3>
   <!--<h3 (dblclick)="switch()">{{activityService.activityLoaded.name}}</h3>-->
 </div>
 
