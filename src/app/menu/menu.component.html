@@ -31,6 +31,28 @@
     <button mat-button routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
     -->
 
+      <h3>
+        <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
+          <div class="activity-name">
+            <div class="right">
+              <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="true"></activity-name-edit>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
+          <div class="activity-name">
+            <div class="right">
+              <activity-name-edit class="aligned-left" [type]="'Parent'" [edit]="false" [activityId]="activityService?.activityLoaded?.parent"
+              ></activity-name-edit> <div class="aligned-left">&nbsp; : 	&nbsp;</div>
+              <activity-name-edit class="aligned-left" [type]="'Loaded'" [edit]="false" [activityId]="activityService?.activityLoaded?._id"
+              ></activity-name-edit>
+              <div *ngIf="!activityService?.activityLoaded?.master" class="aligned-left">({{activityService?.activityLoaded?.nameForTeacher}})</div>
+            </div>
+          </div>
+        </div>
+      </h3>
+
     <div class="flex-auto">
     <span class="spacer"></span>
     </div>
