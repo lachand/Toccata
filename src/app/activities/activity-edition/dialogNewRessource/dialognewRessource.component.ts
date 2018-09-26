@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'dialog-new-ressource',
   templateUrl: './dialogNewRessource.component.html',
+  styleUrls: ['./dialogNewRessource.component.scss']
 })
 
 export class DialogNewRessourceComponent implements OnInit {
