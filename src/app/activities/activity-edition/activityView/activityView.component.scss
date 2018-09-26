@@ -2,9 +2,13 @@
   float:right;
 }
 
+.right-padding {
+  padding-right: 5%;
+}
+
 .flex-card {
   //margin: auto;
-  padding: 2% 0% 0%;
+  padding: 1% 1% 1% 1%;
   margin-bottom: 20px;
 }
 
@@ -74,4 +78,14 @@
 
 .name {
   padding-top: 7px;
+}
+
+.menu {
+  height: 75vh;
+  overflow: auto;
+}
+
+.content {
+  height: 75vh;
+  overflow: auto;
 }

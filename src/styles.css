@@ -6,3 +6,8 @@
   position: relative;
   top: -1px;
 }
+
+body, html {
+  overflow: hidden;
+}
+

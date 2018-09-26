@@ -8,6 +8,10 @@ button.mat-menu-item {
   height: 100vh;
 }
 
+mat-sidenav-content {
+    overflow: hidden;
+}
+
 .sidenav-content {
   display: flex;
   height: 100%;

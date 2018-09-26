@@ -42,11 +42,13 @@
         </div>
     </h3>
 
+    <!--
     <div>
       <mat-card class="flex-card-centered">
         <app-activity-description-edit [edit]="editMode" [type]="'Parent'"></app-activity-description-edit>
       </mat-card>
     </div>
+    -->
 
     <div class="left-aligned">
       <activity-stepper [edit]="editMode"></activity-stepper>
@@ -54,17 +56,17 @@
 
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 
-      <div fxFlex="30%">
+      <div fxFlex="30%" class="menu">
 
         <div *ngIf="activityService?.activityLoaded?.type !== 'Main'">
-          <mat-card class="flex-card">
+          <mat-card class="flex-card right-padding">
             <app-activity-description-edit [edit]="editMode" [type]="'Loaded'"></app-activity-description-edit>
           </mat-card>
         </div>
 
 
         <div>
-          <mat-card class="flex-card">
+          <mat-card class="flex-card right-padding">
             <mat-card-header>
               <h3 mat-line i18n="@@resources">Ressources</h3>
             </mat-card-header>
@@ -73,7 +75,7 @@
         </div>
 
         <div>
-          <mat-card class="flex-card">
+          <mat-card class="flex-card right-padding">
             <mat-card-header>
               <h3 mat-line i18n="@@applications">Applications</h3>
             </mat-card-header>
@@ -82,20 +84,20 @@
         </div>
 
         <div *ngIf="activityService?.activityLoaded?.type !== 'Main' && user.fonction === 'Enseignant'">
-          <mat-card class="flex-card">
+          <mat-card class="flex-card right-pading">
             <app-notes [edit]="editMode"></app-notes>
           </mat-card>
         </div>
 
         <div>
-          <mat-card class="flex-card">
+          <mat-card class="flex-card right-padding">
             <app-activity-participants-edit [edit]="editMode"></app-activity-participants-edit>
           </mat-card>
         </div>
 
       </div>
 
-      <div fxFlex="70%">
+      <div fxFlex="70%" class="content">
         <application-launched *ngFor="let app of appsService.applications"
                               [appId]="app"></application-launched>
         <resource-opened *ngFor="let resource of resourcesService.resources"

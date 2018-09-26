@@ -3,7 +3,6 @@ html, body {
   min-height: 100vh;
   margin:0;
   padding:0;
-  overflow: auto;
 }
 
 .container {
@@ -12,4 +11,8 @@ html, body {
 
 .mat-drawer-container {
   display: contents;
+}
+
+mat-sidenav-content {
+  ioverflow: hidden;
 }
