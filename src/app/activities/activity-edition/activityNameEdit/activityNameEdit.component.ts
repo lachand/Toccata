@@ -45,7 +45,9 @@ export class ActivityNameEditComponent implements OnInit {
   }
 
   switch() {
-    this.nameEdition = !this.nameEdition;
+    if (this.edit) {
+      this.nameEdition = !this.nameEdition;
+    }
   }
 
   /**

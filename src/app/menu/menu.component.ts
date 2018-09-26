@@ -5,6 +5,7 @@ import {ActivityService} from '../services/activity.service';
 import {Location} from '@angular/common';
 import {isNullOrUndefined} from 'util';
 import {DatabaseService} from "../services/database.service";
+import {toggleFullScreen as fullScreen, isFullScreen as isFullScreen} from '../../interfaces/fullscreen.interface'
 
 @Component({
   selector: 'app-menu',
@@ -12,11 +13,15 @@ import {DatabaseService} from "../services/database.service";
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
+
+  fullscreen: boolean;
+
   constructor(public userService: UserService,
               public router: Router,
               public activityService: ActivityService,
               public databaseService: DatabaseService,
               private _location: Location) {
+    this.fullscreen = isFullScreen();
   }
 
   logout() {
@@ -26,6 +31,11 @@ export class MenuComponent {
 
   isNullOrUndefined(elmt) {
     return isNullOrUndefined(elmt);
+  }
+
+  fullScreen() {
+    fullScreen();
+    this.fullscreen = !this.fullscreen;
   }
 
   goToActivities() {
