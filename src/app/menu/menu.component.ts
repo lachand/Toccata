@@ -12,8 +12,11 @@ import {DatabaseService} from "../services/database.service";
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-  constructor(public userService: UserService, public router: Router,
-              public activityService: ActivityService, public databaseService: DatabaseService) {
+  constructor(public userService: UserService,
+              public router: Router,
+              public activityService: ActivityService,
+              public databaseService: DatabaseService,
+              private _location: Location) {
   }
 
   logout() {
@@ -27,6 +30,19 @@ export class MenuComponent {
 
   goToActivities() {
     this.router.navigate(['/activities']);
+  }
+
+  backClicked() {
+    this._location.back();
+    if (this._location.path().includes('activity_view')) {
+      const parts = this._location.path().split('/');
+      const activityId = parts[parts.length - 1];
+      this.activityService.setCurrentActivity(activityId).then(() => {
+        this.activityService.load_activity(activityId).then(res => {
+          this.router.navigate(['activity_view/' + activityId]);
+        });
+      });
+    }
   }
 
 }

@@ -34,6 +34,7 @@
       <h3>
         <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
           <div class="activity-name">
+            <!--<button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>-->
             <div class="right">
               <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="true"></activity-name-edit>
             </div>
@@ -42,6 +43,7 @@
 
         <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
           <div class="activity-name">
+            <!--<button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>-->
             <div class="right">
               <activity-name-edit class="aligned-left" [type]="'Parent'" [edit]="false" [activityId]="activityService?.activityLoaded?.parent"
               ></activity-name-edit> <div class="aligned-left">&nbsp; : 	&nbsp;</div>
