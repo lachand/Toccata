@@ -6,18 +6,6 @@
   </button>
       <p class="aligned-with-text" i18n="@@activityGroups">Groupes : {{activityInfo?.name}}</p>
     </div>
-    <div>
-  <mat-chip-list class="chip-list">
-    <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHovering($event);" (mouseleave)="onUnovering($event)" (click)="activityView()">
-      <mat-icon>edit</mat-icon>
-      {{editActivity}}
-    </mat-chip>
-    <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringView($event);" (mouseleave)="onUnoveringView($event)" (click)="activityView()">
-      <mat-icon>visibility</mat-icon>
-      {{viewActivity}}
-    </mat-chip>
-  </mat-chip-list>
-    </div>
   </div>
 </h3>
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">

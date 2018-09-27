@@ -812,6 +812,7 @@ export class ActivityService implements OnInit {
         })
         .then(docs => {
           return Promise.all(docs.docs.map(row => {
+            console.log(row);
             const doc = row;
             doc.dbName = newDb;
             doc.parent = parent;
@@ -844,10 +845,10 @@ export class ActivityService implements OnInit {
               doc.subactivityList = subactivities;
               doc.duplicateList = [];
               if (!isNullOrUndefined(doc.parent)) {
-                doc.parent = `${doc.parent}_duplicate_${guid}`;
+                doc.parent = `${parent}`;
               }
-              if (!isNullOrUndefined(doc.currentLoaded)) {
-                doc.currentLoaded = `${doc.currentLoaded}_duplicate_${guid}`;
+              if (doc.type === "Main") {
+                doc.currentLoaded = `${subactivities[0].stepId}`;
               }
             } else if (doc.documentType === 'Ressource application') {
               doc.application = `${doc.application}_duplicate_${guid}`;
@@ -859,7 +860,9 @@ export class ActivityService implements OnInit {
           }));
         })
         .then(() => {
-          activity['duplicateList'].push(newDb);
+          console.log(activity);
+          activity.duplicateList.push(newDb);
+          console.log(activity);
           this.database.updateDocument(activity).then( res => {
             resolve(res);
           });

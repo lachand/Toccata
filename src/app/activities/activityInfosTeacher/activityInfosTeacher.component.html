@@ -1,4 +1,4 @@
-<mat-card class="activity-card" (dblclick)="show_activity(activityId)">
+<mat-card class="activity-card" (click)="show_activity(activityId)">
   <!--
   <img mat-card-image src="http://163.172.38.12:5984/activites/{{activityId}}/{{activityInfos?.image}}"
        alt="http://163.172.38.12:5984/{{activityId}}/{{activityInfos?.image}}">
@@ -8,19 +8,7 @@
 -->
 
   <h3 mat-line>{{activityInfos?.nameForTeacher}}
-    <button class="menu-right-align" mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
   </h3>
-
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngIf="user.fonction === 'Enseignant'" (click)="edit_activity(activityId)">
-      <span>Editer</span>
-    </button>
-    <button mat-menu-item (click)="show_activity(activityId)">
-      <span>Voir</span>
-    </button>
-  </mat-menu>
 
   <div *ngIf="currentLoadedName" i18n="@@currentStep">Etape actuelle : {{currentLoadedName}}</div>
 

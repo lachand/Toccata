@@ -77,15 +77,16 @@ export class ActivityNameEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.type);
+    console.log(this);
     if (this.type === 'Loaded') {
       this.appName = this.activityService.activityLoaded.name;
+      console.log(this.appName);
     } else {
       this.activityService.getActivityInfos(this.activityService.activityLoaded.parent).then(res => {
         this.appName = res['name'];
+        console.log(this.appName);
       });
     }
-    console.log(this.appName);
   }
 
   keyPressed(ev) {
