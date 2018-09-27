@@ -220,7 +220,7 @@ export class UserService {
     return new Promise(resolve => {
       return this.database.getDocument(participantId)
         .then(participant => {
-          this.getUserAvatar(participant).then( url => {
+          this.getUserAvatar(participantId).then( url => {
             participant['url'] = url;
             resolve(participant);
           });

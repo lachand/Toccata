@@ -14,7 +14,10 @@ export class ParticipantInfosComponent implements OnInit {
 
   @Input() participantId;
   participant: any;
+  participant_name: String;
+  participant_full_name: String;
   avatarUrl: any = '';
+  errorWhileLoading: boolean;
 
   constructor(public userService: UserService,
               private ref: ChangeDetectorRef,
@@ -22,12 +25,21 @@ export class ParticipantInfosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.errorWhileLoading = false;
     console.log(this.participantId);
-    this.userService.getUserAvatar(this.participantId).then( (url: string) => {
-      console.log('toto');
-      console.log(url);
-      this.avatarUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.ref.detectChanges();
+    this.userService.getParticipantInfos(this.participantId).then( res => {
+      this.participant = res;
+      this.avatarUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.participant['url']);
+        console.log(this.participant);
+        this.participant_name = `${this.participant['name'][0]} ${this.participant['surname'][0]}`;
+        this.participant_full_name = `${this.participant['name']} ${this.participant['surname']}`;
+        this.ref.detectChanges();
     });
+  }
+
+  loadingError() {
+    this.errorWhileLoading = true;
+    console.log(this.errorWhileLoading);
+    this.ref.detectChanges();
   }
 }
