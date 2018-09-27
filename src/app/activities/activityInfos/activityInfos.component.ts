@@ -28,9 +28,10 @@ export class ActivityInfosComponent implements OnInit {
       this.activityInfos = activityInfos;
     });
     this.activityService.changes.subscribe((change) => {
-      if (change.type === 'Main') {
+      if (change.type === 'Activity' && change.doc._id === this.activityId) {
         this.activityService.getActivityInfos(this.activityId).then(activityInfos => {
           this.activityInfos = activityInfos;
+          console.log(this.activityInfos);
           if (!this.ref['destroyed']) {
             this.ref.detectChanges();
           }
@@ -56,14 +57,13 @@ export class ActivityInfosComponent implements OnInit {
    * @param activity_id
    */
   show_activity(activity_id) {
-    this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
-    this.activityService.load_activity(this.activityInfos['currentLoaded']).then(res => {
-      console.log(this.activityService.activityLoaded);
+    if (this.activityInfos.id !== this.activityInfos.currentLoaded) {
+      this.logger.log('OPEN', activity_id, activity_id, 'open activity view');
+      this.activityService.load_activity(this.activityInfos['currentLoaded']).then(res => {
+        console.log(this.activityService.activityLoaded);
         this.router.navigate(['activity_view/' + this.activityInfos['currentLoaded']]);
-      //} else {
-      //  this.router.navigate(['activity_edit/' + activity_id]);
-      //}
-    });
+      });
+    }
   }
 
   /**

@@ -27,9 +27,6 @@
     <div>
     <button mat-button *ngIf="userService.loggedIn" (click)="sidenav.toggle();"><mat-icon>menu</mat-icon></button>
     </div>
-    <!--
-    <button mat-button routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
-    -->
 
       <h3>
         <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
@@ -64,21 +61,6 @@
     </div>
     <div *ngIf="!fullscreen" class="aligned-right-padding-right"> <mat-icon (click)="fullScreen()" matTooltip="Activer le plein écran">fullscreen</mat-icon></div>
     <div *ngIf="fullscreen" class="aligned-right-padding-right"> <mat-icon (click)="fullScreen()" matTooltip="Fermer le plein écran">fullscreen_exit</mat-icon></div>
-    <!--
-    <div *ngIf="userService.loggedIn" class="aligned-right">
-      <h6>{{userService.name}}
-        <button mat-button (click)="logout()" routerLink="/">
-          <mat-icon>power_settings_new</mat-icon>
-        </button>
-      </h6>
-    </div>
-    <!--
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="/activities" *ngIf="userService.loggedIn">Mes activités</button>
-      <button mat-menu-item (click)="logout()" routerLink="/" *ngIf="userService.loggedIn">Déconnexion</button>
-    </mat-menu>
-
-    -->
 
   </mat-toolbar>
 
