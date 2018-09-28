@@ -23,6 +23,10 @@ export class LoginComponent implements OnInit {
   errorUsernamePassword: boolean;
   can_connect: boolean;
   errorConnexionImpossible: boolean;
+  waitForConnection: boolean;
+  dbSize:any;
+  localSize: any;
+  ratio: any;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
               public activityService: ActivityService,
@@ -36,10 +40,24 @@ export class LoginComponent implements OnInit {
     this.errorConnexionImpossible = false;
     this.hide = true;
     this.can_connect = false;
+    this.waitForConnection = false;
     this.loginForm = this.formBuilder.group({
       username: '',
       password: ''
     });
+    this.databaseService.dbRemote.info().then(info => {
+      this.dbSize = info.doc_count;
+      console.log(this.dbSize, info);
+    });
+
+    setInterval(() => {
+      this.databaseService.db.info().then(info => {
+        this.localSize = info.doc_count;
+        this.ratio = Math.ceil((this.localSize / this.dbSize) * 100);
+        console.log(this.ratio, info);
+      });
+    }, 1000);
+
     this.databaseService.changes.subscribe(changes => {
       if (changes === 'CONNEXION_IMPOSSIBLE') {
         this.errorConnexionImpossible = true;
@@ -48,8 +66,12 @@ export class LoginComponent implements OnInit {
       if (changes === 'CONNEXION_DONE') {
         this.can_connect = true;
         this.databaseService.getDocument('user_list').then(res => {
+          if (this.waitForConnection) {
+            this.login();
+          }
         });
       }
+
     });
   }
 
@@ -59,20 +81,24 @@ export class LoginComponent implements OnInit {
   login(): void {
     if (this.loginForm.valid) {
       this.loading = true;
-      this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
-        if (result['status'] === 401) {
-          this.errorUsernamePassword = true;
-        } else if (this.userService.isLoggedIn) {
-            return this.activityService.getActivities()/*.then(res => {
+      if (this.can_connect) {
+        this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
+            if (result['status'] === 401) {
+              this.errorUsernamePassword = true;
+            } else if (this.userService.isLoggedIn) {
+              return this.activityService.getActivities()/*.then(res => {
               return this.userService.getAllUsers();
             })*/
-              .then(() => {
-                this.logger.initLog();
-                this.router.navigate(['../activities']);
-              });
+                .then(() => {
+                  this.logger.initLog();
+                  this.router.navigate(['../activities']);
+                });
+            }
           }
-        }
-      );
+        );
+      } else {
+        this.waitForConnection = true;
+      }
     }
   }
 

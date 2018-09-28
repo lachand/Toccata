@@ -29,12 +29,16 @@
   <div>
     <button mat-button type="submit" *ngIf="!loading || errorUsernamePassword || errorConnexionImpossible || can_connect" i18n="@@connexion">Connexion
     </button>
-    <mat-progress-bar mode="indeterminate"
+    <mat-progress-bar mode="determinate" [value]="ratio"
                       *ngIf="loading && !errorUsernamePassword && !errorConnexionImpossible"></mat-progress-bar>
   </div>
 
-  <div class="hint-demo">
+  <div *ngIf="!waitForConnection" class="hint-demo">
     Vous pouvez utiliser le couple identifiant/mot de passe demo/demo pour vous connecter au compte de démonstration.
+  </div>
+  <div *ngIf="waitForConnection" class="hint-demo">
+    Connection en cours.
+    (Cette étape peut prendre quelques instants la première fois)
   </div>
   <div class="false-link" (click)="goToInscription()"><u>Pas encore inscrit ?</u></div>
 </form>

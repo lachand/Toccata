@@ -50,6 +50,9 @@ export class DatabaseService {
     this.addDatabase('user_list');
 
     this.db = new PouchDB(environment.DB);
+    this.dbRemote.info().then(info => {
+      console.log(info);
+    })
 
     this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
       console.info(`Replication to remote completed`);
