@@ -38,8 +38,23 @@ export class MenuComponent {
     this.fullscreen = !this.fullscreen;
   }
 
-  goToActivities() {
-    this.router.navigate(['/activities']);
+  goToMyActivities() {
+    this.activityService.unloadActivity();
+    this.router.navigate(['activities']);
+  }
+
+  goToGroups() {
+    const activityId = this.activityService.activityLoaded.masterActivity;
+    this.activityService.setCurrentActivity(activityId).then(() => {
+      this.activityService.load_activity(activityId).then(res => {
+        this.router.navigate(['duplicates/' + activityId]);
+      });
+    });
+  }
+
+  goToActivity() {
+    /** ERROR HERE **/
+    this.router.navigate(['activity_view/'] + this.activityService.activityLoaded.id);
   }
 
   backClicked() {

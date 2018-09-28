@@ -31,8 +31,14 @@
       <h3>
         <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
           <div class="activity-name">
-            <!--<button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>-->
-            <div class="right">
+
+            <div class="aligned-left">
+              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== ''" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
+              <mat-icon *ngIf="router.url.includes('duplicates')" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
+              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== '') && !router.url.includes('duplicates')" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
+            </div>
+
+            <div class="aligned-left">
               <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="false"></activity-name-edit>
             </div>
           </div>
@@ -40,8 +46,14 @@
 
         <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
           <div class="activity-name">
-            <!--<button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>-->
-            <div class="right">
+
+            <div class="aligned-left">
+              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== ''" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
+              <mat-icon *ngIf="router.url.includes('duplicates')" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
+              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== '') && !router.url.includes('duplicates')" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
+            </div>
+
+            <div class="aligned-left">
               <activity-name-edit class="aligned-left" [type]="'Parent'" [edit]="false" [activityId]="activityService?.activityLoaded?.parent"
               ></activity-name-edit> <div class="aligned-left">&nbsp; : 	&nbsp;</div>
               <activity-name-edit class="aligned-left" [type]="'Loaded'" [edit]="false" [activityId]="activityService?.activityLoaded?._id"
