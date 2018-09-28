@@ -13,7 +13,7 @@ import {Http, Headers} from '@angular/http';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss']
+  styleUrls: ['./style-login-signin/login-signin.scss']
 })
 export class SigninComponent implements OnInit {
 
@@ -110,6 +110,10 @@ export class SigninComponent implements OnInit {
 
   isTeacher() {
     this.teacher = !this.teacher;
+  }
+
+  goToConnection() {
+    this.router.navigate(['/login']);
   }
 
 }

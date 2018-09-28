@@ -14,7 +14,7 @@ import {LoggerService} from '../services/logger.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./style-login-signin/login-signin.scss']
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -74,6 +74,10 @@ export class LoginComponent implements OnInit {
         }
       );
     }
+  }
+
+  goToInscription() {
+    this.router.navigate(['/inscription']);
   }
 
 }
