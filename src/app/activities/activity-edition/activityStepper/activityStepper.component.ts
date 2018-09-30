@@ -3,7 +3,6 @@ import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
-import {MatStepper} from '@angular/material';
 import {UserService} from '../../../services/user.service';
 
 @Component({
@@ -17,16 +16,12 @@ export class ActivityStepperComponent implements OnInit {
   public steps: Array<any>;
   private editable: Array<any>;
   @Input() edit: Boolean;
-  @ViewChild('stepper') stepper: MatStepper;
 
   constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef, public user: UserService) {
     this.editable = [];
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
       if (changes.type === 'ChangeActivity') {
-        if (!isNullOrUndefined(this.stepper)) {
-          this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
-        }
         this.ref.detectChanges();
       }
       console.log(changes);
@@ -39,6 +34,8 @@ export class ActivityStepperComponent implements OnInit {
           this.steps = this.activityService.sisters;
           console.log(this.steps);
         }
+        this.steps = Array.from(new Set(this.steps));
+        console.log(this.steps);
         this.ref.detectChanges();
       }
       /*
@@ -51,6 +48,7 @@ export class ActivityStepperComponent implements OnInit {
         }
         this.ref.detectChanges();
       }*/
+      this.steps = Array.from(new Set(this.steps));
       this.ref.detectChanges();
     });
   }
