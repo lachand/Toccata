@@ -47,14 +47,12 @@ export class LoginComponent implements OnInit {
     });
     this.databaseService.dbRemote.info().then(info => {
       this.dbSize = info.doc_count;
-      console.log(this.dbSize, info);
     });
 
     setInterval(() => {
       this.databaseService.db.info().then(info => {
         this.localSize = info.doc_count;
         this.ratio = Math.ceil((this.localSize / this.dbSize) * 100);
-        console.log(this.ratio, info);
       });
     }, 1000);
 
@@ -86,9 +84,7 @@ export class LoginComponent implements OnInit {
             if (result['status'] === 401) {
               this.errorUsernamePassword = true;
             } else if (this.userService.isLoggedIn) {
-              return this.activityService.getActivities()/*.then(res => {
-              return this.userService.getAllUsers();
-            })*/
+              return this.activityService.getActivities()
                 .then(() => {
                   this.logger.initLog();
                   this.router.navigate(['../activities']);
