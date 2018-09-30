@@ -15,13 +15,38 @@
         <mat-hint class="hint-red" *ngIf="error['stepOrActivity']" i18n="@@errorStepOrAct">Merci de définir la disponibilité de la resource</mat-hint>
       </div>
     </div>
-    </form>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Nom de la ressource" type="text" formControlName="name">
+      </mat-form-field>
+    </div>
 
     <mat-dialog-content i18n="@@fileOrLink">Voulez vous ajouter un fichier ou un lien ?</mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-button i18n="@@file" (click)="clickFile($event)">Fichier</button>
-      <button mat-button (click)="clickLink($event)" i18n="@@link">Lien</button>
+
+    <div class="margin-top">
+    <button mat-stroked-button class="margin-right" i18n="@@file" (click)="clickFile($event)">Fichier</button>
+    <button mat-stroked-button (click)="clickLink($event)" i18n="@@link">Lien</button>
+    </div>
+
+    <div *ngIf="type === 'Link'">
+      <mat-form-field>
+        <input matInput placeholder="Lien de la ressource" type="url" formControlName="url">
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="type === 'File'" class="margin-top">
+      <button mat-stroked-button (click)="loadFile($event)">Charger un fichier</button>
+      {{fileName}}
+    </div>
+    <mat-dialog-actions class="float-right">
+      <div class="float-right">
+      <button mat-stroked-button i18n="@@file" (click)="cancel()" class="margin-right">Annuler</button>
+      <button mat-flat-button (click)="validate($event)" i18n="@@link" class="margin-right">Valider</button>
+      </div>
     </mat-dialog-actions>
+
     <input type="file" id="hiddenFile" class="hiddenFile" #hiddenFile style="display:none" (change)="uploadFile()"/>
+    </form>
   </div>
 </div>

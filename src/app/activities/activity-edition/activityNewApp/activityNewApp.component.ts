@@ -19,7 +19,7 @@ import {LoggerService} from '../../../services/logger.service';
   formNewApp: FormGroup;
   error: Array<any>;
 
-  appsType = ['Post-it', 'Chronomètre', 'Editeur de texte', 'Externe'];
+  appsType = ['Chronomètre', 'Editeur de texte', 'Externe'];
 
   constructor(public activityService: ActivityService,
               public router: Router,
@@ -109,7 +109,7 @@ import {LoggerService} from '../../../services/logger.service';
     this.formNewApp = this.formBuilder.group({
       appName: ['', Validators.required],
       appType: ['', Validators.required],
-      stepOrActivity: ['', Validators.required],
+      stepOrActivity: ['step', Validators.required],
       //serviceName: '',
       chronometreValue: '',
       url: ''

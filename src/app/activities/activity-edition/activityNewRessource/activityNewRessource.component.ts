@@ -48,7 +48,7 @@ import {ResourcesService} from '../../../services/resources.service';
     }
 
     this.activityService.getActivityInfos(id).then(activity => {
-      this.resourcesService.createResource(ressource, id).then((res) => {
+      this.resourcesService.createResource(ressource, id, ressource.name).then((res) => {
         this.logger.log('CREATE', id, id, 'resource created');
         this.dialogRef.close();
       });

@@ -49,7 +49,10 @@
     <mat-hint class="hint-red" *ngIf="error['stepOrActivity']" i18n="@@errorAppType">Merci de définir la disponibilité de l'application</mat-hint>
     </div>
   </div>
-  <div>
-    <button mat-button type="submit" i18n="@@add">Ajouter</button>
-  </div>
+  <mat-card-actions>
+    <div class="float-right">
+    <button class="margin-right" mat-stroked-button i18n="@@cancel" (click)="dialogRef.close()">Annuler</button>
+    <button class=" margin-right" mat-flat-button type="submit" i18n="@@add">Ajouter</button>
+    </div>
+  </mat-card-actions>
 </form>

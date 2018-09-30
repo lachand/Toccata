@@ -34,7 +34,6 @@ export class ActivityResourcesComponent {
     this.video = /video\/(?:.*)/i;
     this.audio = /audio\/(?:.*)/i;
     this.resourcesService.changes.subscribe(change => {
-      console.log("new resource");
       this.resourcesService.getResources(this.activityService.activityLoaded._id)
       if (!this.ref['destroyed']) {
         this.ref.detectChanges();
@@ -46,19 +45,25 @@ export class ActivityResourcesComponent {
     const dialogRef = this.dialog.open(DialogNewRessourceComponent);
 
     dialogRef.afterClosed().subscribe(result => {
+      let id;
+      if (result.stepOrActivity === 'step') {
+        id = this.activityService.activityLoaded._id;
+      } else {
+        id = this.activityService.activityLoaded.parent;
+      }
       if (result.type === 'File') {
-        let id;
-        if (result.stepOrActivity === 'step') {
-          id = this.activityService.activityLoaded._id;
-        } else {
-          id = this.activityService.activityLoaded.parent;
-        }
-        this.resourcesService.createResource(result.data, id).then(res => {
+        this.resourcesService.createResource(result.data, id, result.name).then(res => {
           this.logger.log('CREATE', id, id, 'resource created');
         });
       } else if (result.type === 'Link') {
-        const dialogRefUrl = this.dialog.open(ActivityNewRessourceComponent, {data: result.stepOrActivity});
-        dialogRefUrl.componentInstance.dialogRef = dialogRefUrl;
+        const ressource = {
+          name: result.name,
+          value: result.url,
+          type: 'url'
+        };
+        this.resourcesService.createResource(ressource, id, result.name).then(res => {
+          this.logger.log('CREATE', id, id, 'resource created');
+        });
       }
     });
   }
