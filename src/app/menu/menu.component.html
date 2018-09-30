@@ -4,7 +4,7 @@
     <mat-sidenav #sidenav mode="over" class="sidenav-content">
       <div class="fullDiv">
       <div class="userInfos">
-      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos><h3>{{userService.name}}</h3>
+      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos>
       </div>
       <div>
         <mat-nav-list>
@@ -69,7 +69,6 @@
     </div>
     <div *ngIf="userService.loggedIn" class="aligned-right-padding-right">
       <div class="aligned-left"><app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos></div>
-      <div class="aligned-right"><h3>{{userService.name}}</h3></div>
     </div>
     <div *ngIf="!fullscreen" class="aligned-right-padding-right"> <mat-icon (click)="fullScreen()" matTooltip="Activer le plein écran">fullscreen</mat-icon></div>
     <div *ngIf="fullscreen" class="aligned-right-padding-right"> <mat-icon (click)="fullScreen()" matTooltip="Fermer le plein écran">fullscreen_exit</mat-icon></div>
