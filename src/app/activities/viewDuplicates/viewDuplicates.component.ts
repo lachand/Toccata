@@ -59,48 +59,6 @@ export class ViewDuplicatesComponent {
     });
   }
 
-  backClicked() {
-    this._location.back();
-  }
-
-  activityView() {
-    //const activityId = this.activityService.activityLoaded._id;
-    let activityId;
-    if (this.activityService.activityLoaded.type === 'Sequence') {
-      activityId = this.activityService.activityLoaded.parent.split('_duplicate')[0];
-    } else {
-      activityId = this.activityService.activityLoaded._id.split('_duplicate')[0];
-    }
-    //this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
-    //this.router.navigate(['duplicates/' + activityId]);
-    //this.logger.log('OPEN', activityId, activityId, 'open activity view');
-    this.router.navigate(['activity_view/' + activityId]);
-  }
-
-  onHovering($event: Event) {
-    this.editActivity = 'Editer l\'activité';
-  }
-
-  onUnovering($event: Event) {
-    this.editActivity = '';
-  }
-
-  onHoveringView($event: Event) {
-    this.viewActivity = 'Voir l\'activité';
-  }
-
-  onUnoveringView($event: Event) {
-    this.viewActivity = '';
-  }
-
-  activityEdit() {
-    const activityId = this.activityService.activityLoaded._id;
-    this.logger.log('OPEN', activityId, activityId, 'open activity edition');
-    this.activityService.load_activity(activityId).then(res => {
-      this.router.navigate(['activity_edit/' + activityId]);
-    });
-  }
-
   duplicateActivity() {
     let activityId;
 
