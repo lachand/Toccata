@@ -10,10 +10,10 @@
 
 <div *ngIf="descriptionEdition" class="name-edition" (focusout)="focusOut()">
   <ckeditor [config]="editorOptions" [(ngModel)]="description" (focusout)="focusOut()"></ckeditor>
-  <button mat-button (click)="switchDescription()">
+  <button mat-stroked-button (click)="switchDescription()">
     Annuler
   </button>
-  <button mat-button (click)="changeTheDescription()">
-    Valider
+  <button class="margin-left" mat-flat-button (click)="changeTheDescription()">
+    Enregistrer
   </button>
 </div>
