@@ -61,7 +61,7 @@ export class ResourcesService {
    * @param resource The resource content to create
    * @param activityId The activity where to add the resource
    */
-  createResource(resource, activityId) {
+  createResource(resource, activityId, name) {
     return new Promise(resolve => {
       let activity;
       let resourceToAdd;
@@ -74,7 +74,7 @@ export class ResourcesService {
         if (resource.type === 'url') {
           resourceToAdd = {
             _id: `resource_${resource.name}_${guid}`,
-            name: resource.name,
+            name: name,
             activity: activityId,
             documentType: 'Resource',
             type: resource.type,
@@ -85,7 +85,7 @@ export class ResourcesService {
         } else {
           resourceToAdd = {
             _id: `resource_${resource.name}_${guid}`,
-            name: resource.name,
+            name: name,
             activity: activityId,
             documentType: 'Resource',
             type: resource.type,
