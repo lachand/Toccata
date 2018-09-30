@@ -45,11 +45,13 @@ export class MenuComponent {
 
   goToGroups() {
     const activityId = this.activityService.activityLoaded.masterActivity;
-    this.activityService.setCurrentActivity(activityId).then(() => {
-      this.activityService.load_activity(activityId).then(res => {
-        this.router.navigate(['duplicates/' + activityId]);
+    this.activityService.getActivityInfos(activityId).then( activity => {
+      this.activityService.setCurrentActivity(activity['currentLoaded']).then(() => {
+        this.activityService.load_activity(activity['currentLoaded']).then(res => {
+          this.router.navigate(['duplicates/' + activity['currentLoaded']]);
+        });
       });
-    });
+    })
   }
 
   goToActivity() {
