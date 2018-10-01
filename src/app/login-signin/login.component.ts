@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
       username: '',
       password: ''
     });
+    this.can_connect = this.databaseService.canConnect;
     this.databaseService.dbRemote.info().then(info => {
       this.dbSize = info.doc_count;
     });
@@ -79,8 +80,10 @@ export class LoginComponent implements OnInit {
   login(): void {
     if (this.loginForm.valid) {
       this.loading = true;
+      console.log(this.can_connect);
       if (this.can_connect) {
         this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
+          console.log(result);
             if (result['status'] === 401) {
               this.errorUsernamePassword = true;
             } else if (this.userService.isLoggedIn) {
