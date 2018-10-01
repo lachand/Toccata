@@ -47,7 +47,7 @@ export class DialogNewRessourceComponent implements OnInit {
     }
   }
 
-  cancel(e) {
+  cancel() {
     this.dialogRef.close({type: 'Closed'});
   }
 

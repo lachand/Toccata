@@ -50,10 +50,19 @@ export class DatabaseService {
     this.addDatabase('user_list');
 
     this.db = new PouchDB(environment.DB);
-    this.dbRemote.info().then(info => {
-      console.log(info);
-    })
+    this.db.info().then(info => {
+      if (info.db_name !== environment.DB) {
+        this.db.destroy().then( () => {
+          this.db = new PouchDB(environment.DB);
+          this.initialize();
+        });
+      } else {
+        this.initialize();
+      }
+    });
+  }
 
+  initialize() {
     this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
       console.info(`Replication to remote completed`);
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
@@ -93,7 +102,6 @@ export class DatabaseService {
     }).on('error', err => {
       console.error(`Replication to remote error ${err}`);
     });
-
   }
 
   sync() {

@@ -51,11 +51,10 @@ export class MenuComponent {
           this.router.navigate(['duplicates/' + activity['currentLoaded']]);
         });
       });
-    })
+    });
   }
 
   goToActivity() {
-    /** ERROR HERE **/
     this.router.navigate(['activity_view/' + this.activityService.activityLoaded.id]);
   }
 

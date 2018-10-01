@@ -38,51 +38,6 @@ export class ActivityService implements OnInit {
     this.database.changes.subscribe(
       (change) => {
         console.log(change);
-
-        /*
-        if (change.type === 'Activity' && userService.loggedIn) {
-          this.changes.emit({doc: change.doc, type: 'Main'});
-          let finded = false;
-          for (const user of change.doc.userList) {
-            if (user === this.userService.id) {
-              finded = true;
-            }
-          }
-          // DEBUG
-          finded = true;
-          if (change.doc.type === 'Main' && finded) {
-            this.changes.emit({doc: change.doc, type: 'Main'});
-            if ((change.doc.master === false && userService.fonction !== 'Enseignant') ||
-              (change.doc.master === true )) {
-              if (this.activitiesList.indexOf(change.doc._id) === -1) {
-                this.activitiesList.push(change.doc._id);
-              }
-              if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
-                this.load_activity(change.doc._id);
-              }
-            }
-          } else if (finded) {
-            this.changes.emit({doc: change.doc, type: 'Sequence'});
-            if (!isNullOrUndefined(this.activityLoaded) && change.doc._id === this.activityLoaded._id) {
-              this.load_activity(change.doc._id);
-            }
-          }
-          if (change.doc._deleted) {
-            let index = this.activitiesList.indexOf(change.doc._id);
-            if (index > -1) {
-              this.activitiesList.splice(index, 1);
-            }
-          }
-
-          console.log(change.doc);
-          this.changes.emit({doc: change.doc, type: 'Activity'});
-
-          //Sync from template
-          if (change.doc.master === true) {
-            let activities = this.getActivityDuplicate(this.activityLoaded._id.parent);
-          }
-        }
-        */
         if (change.type === 'Activity' && userService.loggedIn) {
           this.changes.emit({doc: change.doc, type: 'Activity'});
         }
