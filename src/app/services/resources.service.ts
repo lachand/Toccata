@@ -224,7 +224,8 @@ export class ResourcesService {
             type: resource['type'],
             status: resource['status'],
             url: resource['url'],
-            creator: resource['creator']
+            creator: resource['creator'],
+            activity: resource['activity']
           });
         } else {
           resolve({
@@ -232,7 +233,8 @@ export class ResourcesService {
             id: resource['_id'],
             type: resource['type'],
             status: resource['status'],
-            creator: resource['creator']
+            creator: resource['creator'],
+            activity: resource['activity']
           });
         }
       }).catch(err => {

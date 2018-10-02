@@ -70,6 +70,8 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   deleteResource() {
-    return this.activityService.deleteResource(this.resourceId);
-  }
+      this.resourcesService.getResourceInfos(this.resourceId).then(res => {
+        this.activityService.deleteResource(res['id'], res['activity']);
+      });
+    }
 }

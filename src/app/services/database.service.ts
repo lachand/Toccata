@@ -16,6 +16,7 @@ export class DatabaseService {
   optionsReplication: any;
   dbSync: any;
   dbNames: Array<string> = [];
+  canConnect: boolean;
   room: string;
   //changes: Subject<any> = new ReplaySubject<any>(5);
   @Output() changes = new EventEmitter();
@@ -34,6 +35,7 @@ export class DatabaseService {
     console.log(environment);
 
     this.room = environment.ROOM;
+    this.canConnect = false;
 
     this.dbRemote = new PouchDB(`${environment.URL_DB}/${environment.DB}`, {
       auth: {
@@ -68,6 +70,7 @@ export class DatabaseService {
       return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
         console.info(`Replication from remote complete`);
         this.changes.emit('CONNEXION_DONE');
+        this.canConnect = true;
         return this.db.sync(this.dbRemote, {
           live: true,
           retry: true

@@ -33,7 +33,10 @@ export class ApplicationInfosComponent implements OnInit {
   }
 
   deleteApp() {
-    return this.activityService.deleteApp(this.applicationId);
+      this.appsService.getApplicationInfos(this.applicationId).then(app => {
+        console.log(app, app['activity']);
+        this.activityService.deleteApp(app['id'], app['activity']);
+      });
   }
 
   openApplication() {

@@ -29,23 +29,9 @@ export class UserService {
    */
   signup(username: string, password: string) {
 
-
-
     return new Promise((resolve, reject) => {
       resolve(username);
     });
-    /*
-    return new Promise((resolve, reject) => {
-      this.database.dbRemote.signup(username, password, function (err) {
-      }).then(userCreated => {
-        resolve(userCreated);
-      }).catch(err => {
-        console.log(`Error in user service whith call to signup :
-        ${err.name} ; reason : ${err.reason}`);
-        reject(err);
-      });
-    });
-    */
   }
 
   /**

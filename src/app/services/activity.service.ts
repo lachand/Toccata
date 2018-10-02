@@ -318,6 +318,7 @@ export class ActivityService implements OnInit {
           image: activity['image'],
           dbName: activity['dbName'],
           master: activity['master'],
+          resourceList: activity['resourceList'],
           applicationList: activity['applicationList'],
           currentLoaded: activity['currentLoaded'],
           subactivityList: activity['subactivityList'],
@@ -485,14 +486,20 @@ export class ActivityService implements OnInit {
    * Delete an application
    * @param appId The id of the app to delete
    */
-  deleteApp(appId) {
-    const apps = this.appsService.applications;
-    const index = apps.indexOf(appId);
-    if (index > -1) {
-      apps.splice(index, 1);
-    }
-    this.activityEdit(this.activityLoaded._id, 'applicationList', apps).then( () => {
-      this.appsService.deleteApp(appId);
+  deleteApp(appId, activityId) {
+
+    this.getActivityInfos(activityId).then( (activity) => {
+      let app = activity['applicationList'];
+      console.log(app);
+      console.log(appId);
+      const index = app.indexOf(appId);
+      if (index > -1) {
+        app.splice(index, 1);
+      }
+      console.log(app);
+      this.activityEdit(activityId, 'applicationList', app).then( () => {
+        this.appsService.deleteApp(appId);
+      });
     });
   }
 
@@ -500,14 +507,17 @@ export class ActivityService implements OnInit {
    * Delete an application
    * @param appId The id of the app to delete
    */
-  deleteResource(resId) {
-    const res = this.resourcesService.resources;
-    const index = res.indexOf(resId);
-    if (index > -1) {
-      res.splice(index, 1);
-    }
-    this.activityEdit(this.activityLoaded._id, 'resourceList', res).then( () => {
-      this.resourcesService.deleteResource(resId);
+  deleteResource(resId, activityId) {
+    this.getActivityInfos(activityId).then( (activity) => {
+      let res = activity['resourceList'];
+      console.log(res);
+      const index = res.indexOf(resId);
+      if (index > -1) {
+        res.splice(index, 1);
+      }
+      this.activityEdit(activityId, 'resourceList', res).then( () => {
+        this.resourcesService.deleteResource(resId);
+      });
     });
   }
 

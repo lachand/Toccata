@@ -19,7 +19,7 @@ import {LoggerService} from '../../../services/logger.service';
   formNewApp: FormGroup;
   error: Array<any>;
 
-  appsType = ['Chronomètre', 'Editeur de texte', 'Externe'];
+  appsType = ['Chronomètre', 'Editeur de texte', 'Calculatrice', 'Externe'];
 
   constructor(public activityService: ActivityService,
               public router: Router,

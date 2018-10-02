@@ -37,7 +37,6 @@ export class AppsService {
    */
   public getApplications(activityId) {
     this.applications = [];
-    console.log(activityId);
     return new Promise(resolve => {
       return this.databaseService.getDocument(activityId)
         .then(activity => {
@@ -70,6 +69,7 @@ export class AppsService {
     const application = {
       _id: `application_${app.provider}_${guid}`,
       name: app.name,
+      activity: activityId,
       documentType: 'Application',
       type: app.type,
       status: 'unloaded',
@@ -127,7 +127,8 @@ export class AppsService {
           type: application['type'],
           status: application['status'],
           url: application['url'],
-          creator: application['creator']
+          creator: application['creator'],
+          activity: application['activity']
         });
       }).catch(err => {
         console.log(`Error in apps service whith call to getApplicationInfos : 
