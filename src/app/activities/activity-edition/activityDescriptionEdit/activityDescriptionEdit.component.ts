@@ -14,6 +14,7 @@ export class ActivityDescriptionEditComponent implements OnInit{
   editorOptions: any;
   @Input() edit: boolean;
   @Input() type: string;
+  latestSaveInMinute: number;
 
   constructor(public activityService: ActivityService,
               private logger: LoggerService,
@@ -22,6 +23,12 @@ export class ActivityDescriptionEditComponent implements OnInit{
     if (this.activityService.activityLoaded.description !== 'Il n\'y a aucune description') {
       this.description = this.activityService.activityLoaded.description;
     }
+
+    this.latestSaveInMinute = 0;
+
+    setInterval( () => {
+      this.latestSaveInMinute++;
+    }, 60000);
 
     this.editorOptions = {
       toolbar: 'full',
@@ -55,15 +62,18 @@ export class ActivityDescriptionEditComponent implements OnInit{
       if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         console.log(change.doc._id, this.activityService.activityLoaded._id);
         previousDescription = this.description;
+        this.latestSaveInMinute = 0;
         this.description = change.doc.description;
       } else if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
         previousDescription = this.description;
         console.log(change.doc._id, this.activityService.activityLoaded._id);
+        this.latestSaveInMinute = 0;
         this.description = change.doc.description;
       }
       if (change.type === 'ChangeActivity' && this.type === 'Loaded' && previousDescription !== this.description) {
         console.log(change.type);
         previousDescription = this.description;
+        this.latestSaveInMinute = 0;
         this.description = change.doc.description;
       }
       if (!this.ref['destroyed'] && previousDescription !== this.description) {
@@ -104,6 +114,7 @@ export class ActivityDescriptionEditComponent implements OnInit{
    * Change the description of an activity
    */
   changeTheDescription() {
+    this.latestSaveInMinute = 0;
     this.saveDescription(false);
   }
 

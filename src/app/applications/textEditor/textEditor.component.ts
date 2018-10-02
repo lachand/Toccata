@@ -15,6 +15,7 @@ export class TextEditorComponent implements OnInit {
 
   editorOptions: any;
   resource: any;
+  latestSaveInMinute: number;
   @Input() appId;
 
   constructor(public applicationService: AppsService,
@@ -49,6 +50,12 @@ export class TextEditorComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.latestSaveInMinute = 0;
+
+    setInterval( () => {
+      this.latestSaveInMinute++;
+    }, 60000);
+
     this.applicationService.getRessources(this.appId).then( res => {
       if (res['docs'].length === 0) {
         const text = {
@@ -70,6 +77,7 @@ export class TextEditorComponent implements OnInit {
 
   save() {
     console.log('manualsave');
+    this.latestSaveInMinute = 0;
     this.databaseService.getDocument(this.resource._id).then( res => {
       if (res['text'] !== this.resource.text) {
         res['text'] = this.resource.text;

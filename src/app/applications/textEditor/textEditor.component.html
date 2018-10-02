@@ -3,12 +3,9 @@
 <div class="name-edition" *ngIf="resource">
   <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
   --><ckeditor [config]="editorOptions" [(ngModel)]="resource.text" id="myTextEditor" (paste)="paste($evt)">
-  <ckbutton [name]="'saveButton'"
-            [command]="'saveCmd'"
-            (click)="save()"
-            [icon]="'https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_save_48px-128.png'"
-            [label]="'Sauvegarder'"
-            [toolbar]="'clipboard,1'">
-  </ckbutton>
-</ckeditor>
+  </ckeditor>
+  <div>Dernière sauvegarde il y à {{latestSaveInMinute}} minutes : tout changement non sauvegardé sera perdu.</div>
+  <button class="margin-left" mat-flat-button (click)="save()">
+    Enregistrer
+  </button>
 </div>
