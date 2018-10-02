@@ -4,6 +4,8 @@ import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {UserService} from '../../../services/user.service';
+import {Subscription} from 'rxjs';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'activity-stepper',
@@ -15,10 +17,24 @@ export class ActivityStepperComponent implements OnInit {
 
   public steps: Array<any>;
   private editable: Array<any>;
+  subs = new Subscription();
   @Input() edit: Boolean;
+  STEPS: 'STEPS';
 
-  constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef, public user: UserService) {
+  constructor (public activityService: ActivityService,
+               private logger: LoggerService,
+               private router: Router,
+               private ref: ChangeDetectorRef,
+               public user: UserService,
+               private dragulaService: DragulaService) {
     this.editable = [];
+
+    this.subs.add(dragulaService.dropModel(this.STEPS)
+      .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+        this.changeStepsOrder();
+      })
+    );
+
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
       if (changes.type === 'ChangeActivity') {
@@ -38,16 +54,6 @@ export class ActivityStepperComponent implements OnInit {
         console.log(this.steps);
         this.ref.detectChanges();
       }
-      /*
-      if (changes.type === "CreateStep") {
-        console.log("stepCreated");
-        if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
-          this.steps = this.activityService.activityLoadedChild;
-        } else {
-          this.steps = this.activityService.sisters;
-        }
-        this.ref.detectChanges();
-      }*/
       this.steps = Array.from(new Set(this.steps));
       this.ref.detectChanges();
     });
@@ -119,4 +125,17 @@ export class ActivityStepperComponent implements OnInit {
     });
   }
 
+  changeStepsOrder() {
+    const activities = [];
+    this.activityService.getActivityInfos(this.activityService.activityLoaded.parent).then( activity => {
+      for (const subActivity of this.steps) {
+        for (const elm of activity['subactivityList']) {
+          if (subActivity === elm['stepId']) {
+            activities.push(elm);
+          }
+        }
+    }
+      this.activityService.activityEdit(this.activityService.activityLoaded.parent, 'subactivityList', activities);
+    });
+  }
 }

@@ -1,6 +1,6 @@
 <script src="../../../../main.ts"></script>
 
-<div class="stepper-left">
+<div class="stepper-left" dragula="STEPS" [dragulaModel]="steps" (dragulaModelChange)="steps = $event">
   <div *ngFor="let step of steps" class="float-left">
     <button mat-button (click)="loadAnActivity(step)">
       <activity-name [activityId]="step"></activity-name>

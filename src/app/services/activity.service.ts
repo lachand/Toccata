@@ -593,7 +593,7 @@ export class ActivityService implements OnInit {
    * @param {string} key The key of change
    * @param {String} value The new value
    */
-  activityEdit(activityId: string, key: string, value: String, system: boolean = false) {
+  activityEdit(activityId: string, key: string, value: any, system: boolean = false) {
       this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`, system);
       let duplicateList = [];
       let duplicateTmp = [];

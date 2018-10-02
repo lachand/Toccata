@@ -76,6 +76,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import {ActivityHideComponent} from './activities/activity-edition/activityHide/activityHide.component';
 import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes.component';
 import {ActivityStepperComponent} from './activities/activity-edition/activityStepper/activityStepper.component';
+import {DragulaModule} from 'ng2-dragula';
 
 @NgModule({
   declarations: [AppComponent,
@@ -161,6 +162,7 @@ import {ActivityStepperComponent} from './activities/activity-edition/activitySt
     MatSidenavModule,
     FlexLayoutModule,
     ServiceWorkerModule.register('/ngsw-worker.js'),
+    DragulaModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [ActivityInfosComponent,
