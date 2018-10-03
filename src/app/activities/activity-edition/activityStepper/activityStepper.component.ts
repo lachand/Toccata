@@ -37,20 +37,26 @@ export class ActivityStepperComponent implements OnInit {
 
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
+      console.log(this.steps);
       if (changes.type === 'ChangeActivity') {
         this.ref.detectChanges();
       }
       console.log(changes);
-      console.log(this.activityService.activityLoaded);
-      if (changes.type === "Sequence" && changes.doc.parent === this.activityService.activityLoaded.parent) {
-        if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
-          this.steps = this.activityService.activityLoadedChild;
+      console.log(this.activityService.activityLoaded.parent, changes.doc._id, this.activityService.activityLoaded.parent === changes.doc._id, (changes.type === "Sequence" || changes.type === "Activity") && changes.doc._id === this.activityService.activityLoaded.parent );
+      if ((changes.type === "Sequence" || changes.type === "Activity") && changes.doc._id === this.activityService.activityLoaded.parent) {
+        if ((changes.type === "Sequence" || changes.type === "Activity") && this.activityService.activityLoadedChild.length > 0) {
+          //this.steps = this.activityService.activityLoadedChild;
+          this.steps = changes.doc.subactivityList;
           console.log(this.steps);
         } else {
-          this.steps = this.activityService.sisters;
+          this.steps = changes.doc.subactivityList;
           console.log(this.steps);
         }
-        this.steps = Array.from(new Set(this.steps));
+        const tmpSteps = [];
+        for (const elmt of this.steps) {
+          tmpSteps.push(elmt.stepId);
+        }
+        this.steps = tmpSteps
         console.log(this.steps);
         this.ref.detectChanges();
       }
