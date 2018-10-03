@@ -22,10 +22,11 @@ export class ActivityNameEditComponent implements OnInit {
 
     this.activityService.changes.subscribe(change => {
       let previousName: String;
-      if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
+      console.log(change);
+      if ((change.type === 'Activity' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
         previousName = this.appName;
         this.appName = change.doc.name;
-      } else if ((change.type === 'Main' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+      } else if ((change.type === 'Activity' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
         previousName = this.appName;
         this.appName = change.doc.name;
       }
