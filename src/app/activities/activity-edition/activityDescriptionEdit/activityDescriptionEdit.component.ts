@@ -87,7 +87,9 @@ export class ActivityDescriptionEditComponent implements OnInit{
    */
   switchDescription() {
       //this.description = this.activityService.activityLoaded.description;
-      this.descriptionEdition = !this.descriptionEdition;
+      if (this.edit) {
+        this.descriptionEdition = !this.descriptionEdition;
+      }
   }
 
   /**
