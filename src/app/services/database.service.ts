@@ -51,11 +51,11 @@ export class DatabaseService {
 
     this.addDatabase('user_list');
 
-    this.db = new PouchDB(environment.DB);
+    this.db = new PouchDB(environment.DB, {storage:'persistent'});
     this.db.info().then(info => {
       if (info.db_name !== environment.DB) {
         this.db.destroy().then( () => {
-          this.db = new PouchDB(environment.DB);
+          this.db = new PouchDB(environment.DB, {storage:'persistent'});
           this.initialize();
         });
       } else {
