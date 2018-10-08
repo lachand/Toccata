@@ -1,12 +1,12 @@
-import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
+import {EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
 import {environment} from '../../environments/environment';
 import {isNullOrUndefined} from 'util';
-import {Subject} from 'rxjs/internal/Subject';
-import {ReplaySubject} from 'rxjs';
+import {errorHandler} from '@angular/platform-browser/src/browser';
 
 @Injectable()
+
 export class DatabaseService {
 
   db: any;
@@ -18,7 +18,6 @@ export class DatabaseService {
   dbNames: Array<string> = [];
   canConnect: boolean;
   room: string;
-  //changes: Subject<any> = new ReplaySubject<any>(5);
   @Output() changes = new EventEmitter();
 
   /**
@@ -51,35 +50,50 @@ export class DatabaseService {
 
     this.addDatabase('user_list');
 
-    this.db = new PouchDB(environment.DB, {storage:'persistent'});
+    this.db = new PouchDB(environment.DB);
     this.db.info().then(info => {
+      console.log(info);
       if (info.db_name !== environment.DB) {
         this.db.destroy().then( () => {
-          this.db = new PouchDB(environment.DB, {storage:'persistent'});
+          this.db = new PouchDB(environment.DB);
           this.initialize();
         });
       } else {
         this.initialize();
       }
+    }).catch(err => {
+      console.log("Error while duplicating database, failsafe mode activated");
+      this.db = this.dbRemote;
+      this.initialize();
     });
   }
 
   initialize() {
     this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
       console.info(`Replication to remote completed`);
-      return this.db.replicate.from(this.dbRemote, {retry: true}).on('complete', () => {
+      this.dbList.push('user_list');
+      this.dbList.push('activity_6c606a2b-a011-5fe5-ac20-c11a692e0499');
+      console.log(this.dbList);
+      return this.db.replicate.from(this.dbRemote,
+        {
+          retry: true,
+          //filter: 'app/by_dbName',
+          //query_params: {'databases': this.dbList}
+        }
+        ).on('complete', () => {
         console.info(`Replication from remote complete`);
         this.changes.emit('CONNEXION_DONE');
         this.canConnect = true;
         return this.db.sync(this.dbRemote, {
-          live: true,
-          retry: true
+          retry: true,
+          //filter: 'app/by_dbName',
+          //query_params: {'databases': this.dbList}
         }).on('change', change => {
+          console.log(change);
           this.handleChange(change);
         }).on('paused', info => {
-          //console.info('Sync pause: ', info);
+          console.log(info);
         }).on('active', () => {
-          //console.info('Sync active: ');
         }).on('denied', err => {
           console.error(err);
         }).on('error', err => {
@@ -377,5 +391,11 @@ export class DatabaseService {
       return res;
     })
       ;
+  }
+
+  customFilter(doc, req) {
+    for (const elmt of req.query.databases) {
+      return doc.dbName === elmt;
+    }
   }
 }
