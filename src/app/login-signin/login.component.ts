@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   dbSize:any;
   localSize: any;
   ratio: any;
+  minimalRatio: number;
   constructor(public userService: UserService, public router: Router,
               public formBuilder: FormBuilder,
               public activityService: ActivityService,
@@ -47,13 +48,17 @@ export class LoginComponent implements OnInit {
     });
     this.can_connect = this.databaseService.canConnect;
     this.databaseService.dbRemote.info().then(info => {
-      this.dbSize = info.doc_count;
+      this.databaseService.dbSize = info.doc_count;
+      this.dbSize = this.databaseService.dbSize;
     });
 
     setInterval(() => {
       this.databaseService.db.info().then(info => {
         this.localSize = info.doc_count;
-        this.ratio = Math.ceil((this.localSize / this.dbSize) * 100);
+        this.dbSize = this.databaseService.dbSize;
+        console.log(info);
+        this.ratio = Math.ceil(((this.localSize) / this.dbSize) * 100);
+        this.minimalRatio = Math.ceil(((this.localSize) / this.databaseService.minimalDbSize) * 100);
       });
     }, 1000);
 
@@ -78,20 +83,30 @@ export class LoginComponent implements OnInit {
    * Login a user
    */
   login(): void {
-    if (this.loginForm.valid) {
+    let isLoggedNow = false;
+    setInterval( () => {
+    console.log(this.minimalRatio);
+    if (this.loginForm.valid && this.minimalRatio >= 90) {
       this.loading = true;
-      console.log(this.can_connect);
       if (this.can_connect) {
         this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
-          console.log(result);
+            console.log(result);
             if (result['status'] === 401) {
               this.errorUsernamePassword = true;
             } else if (this.userService.isLoggedIn) {
-              return this.activityService.getActivities()
-                .then(() => {
-                  this.logger.initLog();
-                  this.router.navigate(['../activities']);
-                });
+              setInterval(() => {
+                if (this.ratio >= 90) {
+                  return this.activityService.getActivities()
+                    .then(() => {
+                      if (!isLoggedNow) {
+                        isLoggedNow = true;
+                        this.logger.initLog();
+                        this.router.navigate(['../activities']);
+                      }
+                    });
+                }
+                ;
+              }, 1000);
             }
           }
         );
@@ -99,6 +114,7 @@ export class LoginComponent implements OnInit {
         this.waitForConnection = true;
       }
     }
+      },1000);
   }
 
   goToInscription() {

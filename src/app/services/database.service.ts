@@ -18,12 +18,17 @@ export class DatabaseService {
   dbNames: Array<string> = [];
   canConnect: boolean;
   room: string;
+  dbSize: number;
+  minimalDbSize: number;
   @Output() changes = new EventEmitter();
 
   /**
    * Construct the service to communicate with the local and remote database
    */
   constructor() {
+
+    this.dbSize = 0;
+    this.minimalDbSize = 1;
 
     require('events').EventEmitter.defaultMaxListeners = 0;
 
@@ -69,35 +74,53 @@ export class DatabaseService {
   }
 
   initialize() {
-    this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
+    this.dbSync = this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
       console.info(`Replication to remote completed`);
-      this.dbList.push('user_list');
-      this.dbList.push('activity_6c606a2b-a011-5fe5-ac20-c11a692e0499');
-      console.log(this.dbList);
-      return this.db.replicate.from(this.dbRemote,
+      this.dbSync.cancel();
+      return this.dbSync = this.db.replicate.from(this.dbRemote,
         {
           retry: true,
-          //filter: 'app/by_dbName',
-          //query_params: {'databases': this.dbList}
+          filter: (doc, req) => {
+            for(let i = 0; i< this.dbList.length; i++){
+              if (this.dbList[i] == doc.dbName) {
+                console.log("ok");
+                return true;
+              }
+            }
+            return false;
+          },
+          query_params: {'databases': this.dbList, 'database': 'user_list'}
         }
         ).on('complete', () => {
-        console.info(`Replication from remote complete`);
+          console.info(`Replication from remote complete`);
         this.changes.emit('CONNEXION_DONE');
         this.canConnect = true;
-        return this.db.sync(this.dbRemote, {
-          retry: true,
-          //filter: 'app/by_dbName',
-          //query_params: {'databases': this.dbList}
-        }).on('change', change => {
-          console.log(change);
-          this.handleChange(change);
-        }).on('paused', info => {
-          console.log(info);
-        }).on('active', () => {
-        }).on('denied', err => {
-          console.error(err);
-        }).on('error', err => {
-          console.error(`Sync error ${err}`);
+        return this.getDocument('user_list').then(doc => {
+          this.minimalDbSize = this.minimalDbSize + doc['userList'].length;
+          for (const user of doc['userList']) {
+            this.dbList.push(`user_${user}`);
+          }
+          this.dbSync.cancel();
+          return this.dbSync = this.db.sync(this.dbRemote, {
+            retry: true,
+            filter: (doc, req) => {
+              for(let i = 0; i< this.dbList.length; i++){
+                if (this.dbList[i] == doc.dbName) {
+                  return true;
+                }
+              }
+              return false;
+            },
+            query_params: {'databases': this.dbList, 'database': 'user_list'}
+          }).on('change', change => {
+            this.handleChange(change);
+          }).on('paused', info => {
+          }).on('active', () => {
+          }).on('denied', err => {
+            console.error(err);
+          }).on('error', err => {
+            console.error(`Sync error ${err}`);
+          });
         });
       }).on('From remote change', change => {
         console.info(change);
@@ -122,16 +145,28 @@ export class DatabaseService {
   }
 
   sync() {
+    this.dbSync.cancel();
     console.info('sync');
-    const options = {
-      live: true,
+    this.dbSync = this.db.sync(this.dbRemote, {
       retry: true,
-      continuous: true,
-      //revs_limit: 2,
-      //filter: 'appFilters/by_db_name',
-      //query_params: {'dbNames': this.dbList}
-    };
-    //console.log(options.query_params);
+      filter: (doc, req) => {
+
+        for (let i = 0; i < this.dbList.length; i++) {
+          if (this.dbList[i] == doc.dbName) {
+            console.log("ok");
+            return true;
+          }
+        }
+        return false;
+      },
+      query_params: {'databases': this.dbList, 'database': 'user_list'}
+
+    }).on('change', change => {
+      console.log(change);
+      this.handleChange(change);
+    }).on('paused', info => {
+      console.log(this.dbSync);
+    });
   }
 
   /**
@@ -173,9 +208,19 @@ export class DatabaseService {
   addDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
       if (this.dbList.indexOf(databaseName) !== -1) {
+        const tmpDB = this.dbList.filter( (value, index, self) => {
+          return self.indexOf(value) === index;
+        })
+        this.dbList = tmpDB;
         resolve(databaseName);
       } else {
         this.dbList.push(databaseName);
+        const tmpDB = this.dbList.filter( (value, index, self) => {
+          return self.indexOf(value) === index;
+        })
+        this.dbList = tmpDB;
+        console.log(this.dbList);
+        this.sync();
         resolve(databaseName);
       }
     });
@@ -214,6 +259,7 @@ export class DatabaseService {
    * @returns {Promise<any>} The document added
    */
   addDocument(document: any) {
+    console.log(document);
     return new Promise((resolve, reject) => {
       this.db.put(document)
         .then(response => {

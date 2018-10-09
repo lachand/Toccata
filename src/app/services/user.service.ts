@@ -46,7 +46,7 @@ export class UserService {
           const md5 = new Md5();
           const hashedPassword = md5.appendStr(password).end();
           if (user['hashedPassword'] === hashedPassword) {
-            this.loggedIn = true;
+          this.loggedIn = true;
             this.id = username;
             return this.database.getDocument(username);
           }
@@ -58,7 +58,23 @@ export class UserService {
             this.avatar = res['avatar'];
             this.fonction = res['fonct'];
 
-            resolve(this.loggedIn);
+            Promise.all( res['activityList'].map (activity => {
+              return this.database.addDatabase(activity);
+            })).then( () => {
+              let docNumber = 0;
+              this.database.dbRemote.query('my_index/by_dbName').then(res => {
+                for (const doc of res.rows) {
+                  for (const database of this.database.dbList) {
+                    if (database === doc.key) {
+                      docNumber++;
+                    }
+                  }
+                }
+                this.database.dbSize = docNumber;
+                console.log(docNumber);
+                resolve(true);
+              });
+            });
           });
       }
     );

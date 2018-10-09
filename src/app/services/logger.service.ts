@@ -26,6 +26,7 @@ export class LoggerService {
       `,
       documentType: 'Log'
     }
+    console.log("initLog");
     this.database.addDocument(doc).then( () => {
       this.logFile.setItem(`${this.logDocument}_${this.cpt}`, `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message ; Initiated by`);
     })
