@@ -77,7 +77,7 @@ import {ActivityHideComponent} from './activities/activity-edition/activityHide/
 import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes.component';
 import {ActivityStepperComponent} from './activities/activity-edition/activityStepper/activityStepper.component';
 import {DragulaModule} from 'ng2-dragula';
-import {LoopAnimationModule} from 'angular-animation-looper';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 @NgModule({
   declarations: [AppComponent,
@@ -141,7 +141,6 @@ import {LoopAnimationModule} from 'angular-animation-looper';
     ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,
-    LoopAnimationModule,
     CKEditorModule,
     MatSlideToggleModule,
     MatCardModule,
@@ -166,6 +165,7 @@ import {LoopAnimationModule} from 'angular-animation-looper';
     FlexLayoutModule,
     ServiceWorkerModule.register('/ngsw-worker.js'),
     DragulaModule.forRoot(),
+    ScrollToModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
   entryComponents: [ActivityInfosComponent,

@@ -33,9 +33,9 @@
           <div class="activity-name">
 
             <div class="aligned-left">
-              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== ''" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
-              <mat-icon *ngIf="router.url.includes('duplicates')" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
-              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== '') && !router.url.includes('duplicates')" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
+              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== ''  && userService?.fonction === 'Enseignant'" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
+              <mat-icon *ngIf="router.url.includes('duplicates')  && userService?.fonction === 'Enseignant'" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
+              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== ''  && userService?.fonction === 'Enseignant') && !router.url.includes('duplicates')" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
             </div>
 
             <div class="aligned-left">
@@ -48,9 +48,9 @@
           <div class="activity-name">
 
             <div class="aligned-left">
-              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== ''" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
-              <mat-icon *ngIf="router.url.includes('duplicates')" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
-              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== '') && !router.url.includes('duplicates')" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
+              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== '' && userService?.fonction === 'Enseignant'" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
+              <mat-icon *ngIf="router.url.includes('duplicates')  && userService?.fonction === 'Enseignant'" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
+              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== '') && !router.url.includes('duplicates')  && userService?.fonction === 'Enseignant'" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
             </div>
 
             <div class="aligned-left">

@@ -1,4 +1,4 @@
-<mat-list-item *ngIf="resource?.name" (click)="openRessource()">
+<mat-list-item *ngIf="resource?.name" (click)="openRessource()" [ngx-scroll-to]="'#div_'+resourceId">
   <mat-icon mat-list-icon *ngIf="image.test(resource?.type)">image</mat-icon>
   <mat-icon mat-list-icon *ngIf="text.test(resource?.type)">description</mat-icon>
   <mat-icon mat-list-icon *ngIf="video.test(resource?.type)">videocam</mat-icon>

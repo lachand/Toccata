@@ -99,7 +99,10 @@ export class TextEditorComponent implements OnInit {
       if (res['text'] !== this.resource.text) {
         res['text'] = this.resource.text;
         console.log(res);
-        this.databaseService.updateDocument(res);
+        this.databaseService.updateDocument(res).then(() => {
+          this.logger.log('Update', this.activityService.activityLoaded.id, this.appId, 'Save text editor');
+          }
+        );
       }
     });
   }
