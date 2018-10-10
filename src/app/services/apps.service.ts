@@ -209,12 +209,10 @@ export class AppsService {
    */
   getRessources(appId) {
     return new Promise(resolve => {
-      this.databaseService.db.find({
-        selector: {
-          'documentType': 'Ressource application',
-          'application': appId
-        }
-      }).then(function (result) {
+
+      this.databaseService.db.query('my_index/by_application', {key: appId})
+        .then(function (result) {
+          console.log(result['rows']);
         resolve(result);
       }).catch(function (err) {
         console.log(`Error in apps service whith call to getRessources : 

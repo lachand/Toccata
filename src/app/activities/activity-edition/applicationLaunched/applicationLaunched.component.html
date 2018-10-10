@@ -16,7 +16,6 @@
     <app-postit *ngIf="application?.type === 'Post-It'" [appId]="application?.id"></app-postit>
     <app-text-editor *ngIf="application?.type === 'Editeur de texte'" [appId]="application?.id"></app-text-editor>
     <iframe *ngIf="application?.type === 'Externe'" class="iframe_application" id="iframe_{{application?.id}}" [src]="url" scrolling="no" (load)="resizeIframe(this)" style="width:100%; height:30vw;"></iframe>
-
-</div>
+  </div>
 </mat-card>
 </div>

@@ -74,21 +74,12 @@ export class TextEditorComponent implements OnInit {
     }, 60000);
 
     this.applicationService.getRessources(this.appId).then( res => {
-      if (res['docs'].length === 0) {
-        const text = {
-          '_id': `ressource_application_Text-Editor_${this.databaseService.guid()}`,
-          'documentType': 'Ressource application',
-          'application': this.appId,
-          'applicationType': 'Editeur de texte',
-          'ressourceType': 'Text',
-          'text': '',
-          'dbName': this.activityService.activityLoaded.dbName
-        };
-        this.databaseService.addDocument(text);
-        this.resource = text;
-      } else {
-        this.resource = res['docs'][0];
-      }
+      console.log(res);
+      console.log(res['rows']);
+      this.databaseService.getDocument(res['rows'][0]['id']).then( doc => {
+        console.log(doc);
+        this.resource = doc;
+      });
     });
   }
 

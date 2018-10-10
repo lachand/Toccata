@@ -37,6 +37,8 @@ export class ApplicationLaunchedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("here");
+    console.log(this.appId);
     this.url = 'assets/static/component.loading.html'
     this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
       this.application = applicationInfos;

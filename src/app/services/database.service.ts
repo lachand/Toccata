@@ -50,6 +50,7 @@ export class DatabaseService {
     }
       );
 
+    this.addDatabase('design');
     this.addDatabase('user_list');
 
     this.db = new PouchDB(environment.DB);
