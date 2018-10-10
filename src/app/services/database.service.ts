@@ -50,9 +50,6 @@ export class DatabaseService {
     }
       );
 
-    this.changes.subscribe(event => {
-    });
-
     this.addDatabase('user_list');
 
     this.db = new PouchDB(environment.DB);
@@ -103,6 +100,7 @@ export class DatabaseService {
           this.dbSync.cancel();
           return this.dbSync = this.db.sync(this.dbRemote, {
             retry: true,
+            live: true,
             filter: (doc, req) => {
               for(let i = 0; i< this.dbList.length; i++){
                 if (this.dbList[i] == doc.dbName) {
@@ -113,6 +111,7 @@ export class DatabaseService {
             },
             query_params: {'databases': this.dbList, 'database': 'user_list'}
           }).on('change', change => {
+            console.log(change);
             this.handleChange(change);
           }).on('paused', info => {
           }).on('active', () => {
@@ -134,7 +133,7 @@ export class DatabaseService {
         console.error(`Replication from remote error ${err}`);
       });
     }).on('change', change => {
-      console.info(change);
+      console.log(change);
     }).on('paused', function (info) {
       console.info('To remote pause: ', info);
     }).on('active', function (info) {
@@ -149,6 +148,7 @@ export class DatabaseService {
     console.info('sync');
     this.dbSync = this.db.sync(this.dbRemote, {
       retry: true,
+      live: true,
       filter: (doc, req) => {
 
         for (let i = 0; i < this.dbList.length; i++) {
@@ -357,6 +357,7 @@ export class DatabaseService {
   }**/
 
   updateDocument(doc) {
+    console.log(doc);
     return new Promise((resolve, reject) => {
       return this.db.upsert(doc._id, function (elmt) {
         elmt = doc;
