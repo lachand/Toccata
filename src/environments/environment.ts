@@ -3,15 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    DB: process.env.DB,
-    URL_DB: process.env.URL_DB,
-    USERNAME_DB: process.env.USERNAME_DB,
-    PASSWORD_DB: process.env.PASSWORD_DB,
-    ROOM: process.env.ROOM,
-    URL_PORT: process.env.URL_PORT,
-    envName: 'dev'
-
+  production: false,
+  DB: "toccata_empty",
+  URL_DB: "https://8138ef3c-4d19-4661-ac34-29c2f37fe002-bluemix.cloudant.com",
+  USERNAME_DB: "weenedoonleproughtytoged",
+  PASSWORD_DB: "252db8fca3a7ae861d54e9458b5c1eb96fe5acdb",
+  ROOM: "Externe",
+  URL_PORT: "443",
+  envName: "dev"
 };
 
 /*

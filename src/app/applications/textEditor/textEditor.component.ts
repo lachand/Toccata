@@ -6,7 +6,6 @@ import {DatabaseService} from '../../services/database.service';
 import {ActivityService} from '../../services/activity.service';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { pulse } from 'ng-animate';
-import {loopableAnimation, LoopAnimationService} from 'angular-animation-looper';
 
 @Component({
   selector: 'app-text-editor',
