@@ -46,13 +46,13 @@ export class UserService {
           const md5 = new Md5();
           const hashedPassword = md5.appendStr(password).end();
           if (user['hashedPassword'] === hashedPassword) {
+          //if (true){
           this.loggedIn = true;
             this.id = username;
             return this.database.getDocument(username);
           }
           })
           .then((res) => {
-            console.log(res);
             this.name = res['name'];
             this.id = res['_id'];
             this.avatar = res['avatar'];
@@ -71,7 +71,6 @@ export class UserService {
                   }
                 }
                 this.database.dbSize = docNumber;
-                console.log(docNumber);
                 resolve(true);
               });
             });

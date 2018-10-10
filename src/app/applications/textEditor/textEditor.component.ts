@@ -4,11 +4,19 @@ import {AppsService} from '../../services/apps.service';
 import {LoggerService} from '../../services/logger.service';
 import {DatabaseService} from '../../services/database.service';
 import {ActivityService} from '../../services/activity.service';
+import { trigger, transition, useAnimation } from '@angular/animations';
+import { pulse } from 'ng-animate';
+import {loopableAnimation, LoopAnimationService} from 'angular-animation-looper';
 
 @Component({
   selector: 'app-text-editor',
   templateUrl: './textEditor.component.html',
-  styleUrls: ['./textEditor.component.scss']
+  styleUrls: ['./textEditor.component.scss'],
+  animations: [
+    trigger('pulse', [transition('* => *', useAnimation(pulse, {
+      params: { timing: 1, delay: 0 }
+    }))])
+  ]
 })
 
 export class TextEditorComponent implements OnInit {
@@ -16,12 +24,16 @@ export class TextEditorComponent implements OnInit {
   editorOptions: any;
   resource: any;
   latestSaveInMinute: number;
+  pulse: any;
+  class: string;
   @Input() appId;
 
   constructor(public applicationService: AppsService,
               private logger: LoggerService,
               private databaseService: DatabaseService,
               private activityService: ActivityService) {
+
+    this.class = 'margin-left';
 
     this.editorOptions = {
       toolbar: 'full',
@@ -54,6 +66,12 @@ export class TextEditorComponent implements OnInit {
 
     setInterval( () => {
       this.latestSaveInMinute++;
+      if (this.latestSaveInMinute >= 5) {
+        this.class = 'margin-left pulse-button';
+      }
+      else {
+        this.class = 'margin-left';
+      }
     }, 60000);
 
     this.applicationService.getRessources(this.appId).then( res => {

@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {Router} from '@angular/router';
-import {MatChip, MatStepper} from '@angular/material';
+import {MatChip, MatSnackBar, MatStepper} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {AppsService} from '../../../services/apps.service';
 import {Location} from '@angular/common';
@@ -33,11 +33,18 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
               private _location: Location,
               private ref: ChangeDetectorRef,
               private logger: LoggerService,
-              public user: UserService) {
+              public user: UserService,
+              public snackBar: MatSnackBar) {
     this.editActivity = '';
     this.viewGroup = '';
     this.shareActivity = '';
     this.editable = [];
+
+    setInterval( () => {
+      this.snackBar.open("Pensez à remplir les traces et à sauvegarder", "Fermer");
+    }
+    , 300000);
+
     if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
       this.steps = this.activityService.activityLoadedChild;
     } else {

@@ -16,13 +16,13 @@ export class LoggerService {
 
   initLog() {
     this.logName = Date.now();
-    this.logDocument = `Log_${this.user.name}_${this.logName}`;
+    this.logDocument = `Log_${this.user.id}_${this.logName}`;
     this.cpt = 0;
     let doc = {
       _id: this.logDocument,
       name: `Log : ${this.logDocument}`,
       dbName: this.logDocument,
-      log: `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ; User ; Action ; Current activity ; Object ; Message ; Initiated by
+      log: `Time ; Year ; Month ; Day ; Hour ; Minutesnpm ; Seconds ; User ; Action ; Current activity ; Object ; Message ; Initiated by
       `,
       documentType: 'Log'
     }
@@ -40,11 +40,11 @@ export class LoggerService {
     }
     const date = new Date();
     this.database.getDocument(this.logDocument).then( res => {
-      res['log'] = res['log'] + `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}
+      res['log'] = res['log'] + `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.id} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}
       `;
       this.database.updateDocument(res).then( () => {
-        this.logFile.setItem(`${this.user.name}_${this.logName}_${this.cpt}`,
-          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.name} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}`);
+        this.logFile.setItem(`${this.user.id}_${this.logName}_${this.cpt}`,
+          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.id} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}`);
         this.cpt++;
       });
     });

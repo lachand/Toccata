@@ -10,7 +10,7 @@ import {
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
   MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
   MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule, MatDividerModule, MatChipsModule,
-  MAT_DIALOG_DEFAULT_OPTIONS, MatButtonToggleModule
+  MAT_DIALOG_DEFAULT_OPTIONS, MatButtonToggleModule, MatSnackBarModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -77,6 +77,7 @@ import {ActivityHideComponent} from './activities/activity-edition/activityHide/
 import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes.component';
 import {ActivityStepperComponent} from './activities/activity-edition/activityStepper/activityStepper.component';
 import {DragulaModule} from 'ng2-dragula';
+import {LoopAnimationModule} from 'angular-animation-looper';
 
 @NgModule({
   declarations: [AppComponent,
@@ -140,6 +141,7 @@ import {DragulaModule} from 'ng2-dragula';
     ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,
+    LoopAnimationModule,
     CKEditorModule,
     MatSlideToggleModule,
     MatCardModule,
@@ -147,6 +149,7 @@ import {DragulaModule} from 'ng2-dragula';
     MatRadioModule,
     MatStepperModule,
     MatTabsModule,
+    MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
     MatProgressSpinnerModule,

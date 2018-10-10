@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit {
       this.databaseService.db.info().then(info => {
         this.localSize = info.doc_count;
         this.dbSize = this.databaseService.dbSize;
-        console.log(info);
         this.ratio = Math.ceil(((this.localSize) / this.dbSize) * 100);
         this.minimalRatio = Math.ceil(((this.localSize) / this.databaseService.minimalDbSize) * 100);
       });
@@ -85,12 +84,10 @@ export class LoginComponent implements OnInit {
   login(): void {
     let isLoggedNow = false;
     setInterval( () => {
-    console.log(this.minimalRatio);
     if (this.loginForm.valid && this.minimalRatio >= 90) {
       this.loading = true;
       if (this.can_connect) {
         this.userService.login(this.loginForm.value.username, this.loginForm.value.password).then((result) => {
-            console.log(result);
             if (result['status'] === 401) {
               this.errorUsernamePassword = true;
             } else if (this.userService.isLoggedIn) {

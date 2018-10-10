@@ -12,3 +12,25 @@
 textarea{
   max-width: 90%;
 }
+
+.pulse-button {
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(103, 58, 183, 0.7);
+  cursor: pointer;
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+.pulse-button:hover
+{
+  -webkit-animation: none;-moz-animation: none;-ms-animation: none;animation: none;
+}
+
+@-webkit-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);}}
+@-moz-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);}}
+@-ms-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);}}
+@keyframes pulse {to {box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);}}
+
+.mat-flat-button {
+  background-color: #673ab7;
+  color: white;
+}
