@@ -50,6 +50,14 @@ export class ResourceOpenedComponent implements OnInit {
   }
 
   /**
+   * Reload the component
+   */
+  reload() {
+    let iframe = <HTMLIFrameElement>document.getElementById(`iframe_${this.resourceId}`);
+    iframe.src = iframe.src;
+  }
+
+  /**
    * Resize an iframe
    * @param obj The iframe to resize
    */

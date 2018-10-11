@@ -1,7 +1,10 @@
 <div id="div_{{resourceId}}">
 <mat-card class="flex-card" *ngIf="resource?.status==='loaded'">
   <div class="name">
-  <h3>{{resource?.name}}</h3>
+  <h3 class="float-left">{{resource?.name}}</h3>
+    <button class="menu-left-align aligned-with-text" mat-icon-button (click)="reload()">
+      <mat-icon>autorenew</mat-icon>
+    </button>
   </div>
   <div class="buttons">
   <button class="menu-right-align" mat-icon-button (click)="fullscreen()">
