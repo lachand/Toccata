@@ -103,4 +103,12 @@ export class DialogResourceOpenedComponent implements OnInit {
     return isNullOrUndefined(elmt);
   }
 
+  /**
+   * Reload the component
+   */
+  reload() {
+    let iframe = <HTMLIFrameElement>document.getElementById(`iframe_${this.resourceId}`);
+    iframe.src = iframe.src;
+  }
+
 }
