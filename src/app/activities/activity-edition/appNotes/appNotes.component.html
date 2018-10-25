@@ -9,7 +9,7 @@
 
 <div *ngIf="notesEdition" class="name-edition">
   <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
-  --><ckeditor [config]="editorOptions" [(ngModel)]="notes"></ckeditor>
+  --><ckeditor [editor]="Editor" [config]="editorOptions" [data]="notes" (change)="onChange($event)"></ckeditor>
   <button mat-stroked-button (click)="switchNotes()">
     Annuler
   </button>

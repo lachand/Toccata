@@ -39,8 +39,15 @@
             </div>
 
             <div class="aligned-left">
-              <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="false"></activity-name-edit>
+              <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="true"></activity-name-edit>
             </div>
+            <mat-chip-list class="chip-list">
+              <mat-chip *ngIf="userService.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+                <mat-icon>group</mat-icon>
+                {{viewGroup}}
+              </mat-chip>
+
+            </mat-chip-list>
           </div>
         </div>
 
@@ -54,13 +61,20 @@
             </div>
 
             <div class="aligned-left">
-              <activity-name-edit class="aligned-left" [type]="'Parent'" [edit]="false" [activityId]="activityService?.activityLoaded?.parent"
+              <activity-name-edit class="aligned-left" [type]="'Parent'" [edit]="true" [activityId]="activityService?.activityLoaded?.parent"
               ></activity-name-edit> <div class="aligned-left">&nbsp; : 	&nbsp;</div>
-              <activity-name-edit class="aligned-left" [type]="'Loaded'" [edit]="false" [activityId]="activityService?.activityLoaded?._id"
+              <activity-name-edit class="aligned-left" [type]="'Loaded'" [edit]="true" [activityId]="activityService?.activityLoaded?._id"
               ></activity-name-edit>
               <div *ngIf="!activityService?.activityLoaded?.master" class="aligned-left">({{activityService?.activityLoaded?.nameForTeacher}})</div>
             </div>
           </div>
+          <mat-chip-list class="chip-list">
+            <mat-chip *ngIf="userService.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+              <mat-icon>group</mat-icon>
+              {{viewGroup}}
+            </mat-chip>
+
+          </mat-chip-list>
         </div>
       </h3>
 

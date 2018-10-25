@@ -46,6 +46,7 @@ export class UserService {
           const md5 = new Md5();
           const hashedPassword = md5.appendStr(password).end();
           if (true) {
+            console.log('ok');
           //if (user['hashedPassword'] === hashedPassword) {
           this.loggedIn = true;
             this.id = username;

@@ -6,6 +6,8 @@ import {DatabaseService} from '../../services/database.service';
 import {ActivityService} from '../../services/activity.service';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { pulse } from 'ng-animate';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {ChangeEvent} from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 @Component({
   selector: 'app-text-editor',
@@ -26,6 +28,7 @@ export class TextEditorComponent implements OnInit {
   pulse: any;
   class: string;
   @Input() appId;
+  public Editor = ClassicEditor;
 
   constructor(public applicationService: AppsService,
               private logger: LoggerService,
@@ -35,26 +38,14 @@ export class TextEditorComponent implements OnInit {
     this.class = 'margin-left';
 
     this.editorOptions = {
-      toolbar: 'full',
-      toolbar_full: [
-        {
-          name: 'basicstyles',
-          items: ['Bold', 'Italic', 'Strike', 'Underline']
-        },
-        {name: 'paragraph', items: ['BulletedList', 'NumberedList', 'Blockquote']},
-        {name: 'editing', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-        {name: 'links', items: ['Link', 'Unlink']},
-        '/',
-        {
-          name: 'styles',
-          items: ['FontSize', 'TextColor', 'PasteText', 'PasteFromWord']
-        },
-        {name: 'insert', items: ['Image', 'Table']},
-        {name: 'forms', items: ['Outdent', 'Indent']},
-        {name: 'clipboard', items: ['Undo', 'Redo', 'saveButton']}
-      ],
-      disableNativeSpellChecker: false,
-      uiColor: '#FAFAFA',
+      toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+      heading: {
+        options: [
+          { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+          { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+          { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+        ]
+      }
     };
     /*const autosave = setInterval( () => {this.save();} , 30000);*/
   }
@@ -81,6 +72,10 @@ export class TextEditorComponent implements OnInit {
         this.resource = doc;
       });
     });
+  }
+
+  onChange( { editor }: ChangeEvent ) {
+    this.resource.text = editor.getData();
   }
 
   save() {

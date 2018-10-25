@@ -43,3 +43,7 @@ body, html {
 .cdk-overlay-pane {
   max-width:100vw !important;
 }
+
+app-activity-edit {
+  height: calc(100% - 64px);
+}

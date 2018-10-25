@@ -17,6 +17,10 @@ mat-sidenav-content {
   width: 20%;
 }
 
+.chip {
+  cursor: pointer !important;
+}
+
 .fullDiv {
   width: 100%;
 }
@@ -63,4 +67,8 @@ mat-sidenav-content {
 
 .activity-name {
   margin-top: 0px;
+}
+
+.mat-chip {
+  overflow: inherit;
 }

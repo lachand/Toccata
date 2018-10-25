@@ -15,6 +15,7 @@ import {toggleFullScreen as fullScreen, isFullScreen as isFullScreen} from '../.
 export class MenuComponent {
 
   fullscreen: boolean;
+  viewGroup: string;
 
   constructor(public userService: UserService,
               public router: Router,
@@ -22,6 +23,26 @@ export class MenuComponent {
               public databaseService: DatabaseService,
               private _location: Location) {
     this.fullscreen = isFullScreen();
+    this.viewGroup = '';
+  }
+
+  activityGroupView() {
+    let activityId;
+    if (this.activityService.activityLoaded.type === 'Sequence') {
+      activityId = this.activityService.activityLoaded.parent.split('_duplicate')[0];
+    } else {
+      activityId = this.activityService.activityLoaded._id.split('_duplicate')[0];
+    }
+    //this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
+    this.router.navigate(['duplicates/' + activityId]);
+  }
+
+  onHoveringGroupView($event: Event) {
+    this.viewGroup = 'Voir les groupes';
+  }
+
+  onUnoveringGroupView($event: Event) {
+    this.viewGroup = '';
   }
 
   logout() {

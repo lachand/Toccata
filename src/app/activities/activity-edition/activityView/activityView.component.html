@@ -1,12 +1,15 @@
 <script src="../../../../main.ts"></script>
 <!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
-<div fxFlex="100%" class="flex-card">
-  <mat-card class="mat-card">
+<div fxFlex="100%" class="flex-card fill-menu" fxLayout="column" fxFill>
+  <!--<mat-card class="mat-card">-->
 
+    <!--
     <h3>
       <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
         <div class="activity-name">
+        -->
           <!--<button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>-->
+    <!--
           <div class="right name">
             <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="editMode"></activity-name-edit>
           </div>
@@ -23,7 +26,9 @@
 
       <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
         <div class="activity-name">
+        -->
         <!--<button mat-button (click)="backClicked();"><mat-icon>arrow_back</mat-icon></button>-->
+    <!--
           <div class="right name">
         <activity-name-edit class="aligned-right" [type]="'Parent'" [edit]="editMode" [activityId]="activityService?.activityLoaded?.parent"
         ></activity-name-edit> <div class="aligned-right">&nbsp; : 	&nbsp;</div>
@@ -41,6 +46,8 @@
         </mat-chip-list>
         </div>
     </h3>
+    -->
+
 
     <!--
     <div>
@@ -56,48 +63,69 @@
 
     <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
 
-      <div fxFlex="30%" class="menu">
+      <div [fxFlex]="leftPart" class="menu fill" fxLayout="column" (mouseenter)="showArrow();" (mouseleave)="hideArrow();" id="divLeft">
 
-        <div *ngIf="activityService?.activityLoaded?.type !== 'Main'">
-          <mat-card class="flex-card right-padding">
+        <!--<div>-->
+
+        <div *ngIf="activityService?.activityLoaded?.type !== 'Main'" fxFlex="25" class="overflow" id="divDescription">
+          <!--<mat-card class="flex-card right-padding set-max">-->
             <app-activity-description-edit [edit]="editMode" [type]="'Loaded'"></app-activity-description-edit>
-          </mat-card>
+          <!--</mat-card>-->
         </div>
 
-
-        <div>
-          <mat-card class="flex-card right-padding">
-            <mat-card-header>
-              <h3 mat-line i18n="@@resources">Ressources</h3>
-            </mat-card-header>
-            <app-activity-resources [edit]="true"></app-activity-resources>
-          </mat-card>
+        <div fxFlex="25" class="overflow" id="divAppsResources">
+          <!--<mat-card class="flex-card right-padding  set-max overflow">-->
+          <!--<mat-card-header>-->
+          <mat-divider></mat-divider>
+            <h3 mat-line i18n="@@resources">Ressources</h3>
+          <!--</mat-card-header>-->
+          <app-activity-resources [edit]="true"></app-activity-resources>
+          <!--<mat-card-header>-->
+            <h3 mat-line i18n="@@applications">Applications</h3>
+          <!--</mat-card-header>-->
+          <app-activity-apps-edit [edit]="editMode"></app-activity-apps-edit>
+          
+        <!--</mat-card>-->
         </div>
 
+        <!--
         <div>
-          <mat-card class="flex-card right-padding">
+          <mat-card class="flex-card right-padding set-max">
             <mat-card-header>
               <h3 mat-line i18n="@@applications">Applications</h3>
             </mat-card-header>
             <app-activity-apps-edit [edit]="editMode"></app-activity-apps-edit>
           </mat-card>
         </div>
+        -->
 
-        <div *ngIf="activityService?.activityLoaded?.type !== 'Main' && user.fonction === 'Enseignant'">
-          <mat-card class="flex-card right-padding">
+        <div *ngIf="activityService?.activityLoaded?.type !== 'Main' && user.fonction === 'Enseignant'" fxFlex="25" id="divNotes">
+          <mat-divider></mat-divider>
+          <!--<mat-card class="flex-card right-padding  set-max">-->
             <app-notes [edit]="editMode"></app-notes>
-          </mat-card>
+          <!--</mat-card>-->
         </div>
 
-        <div>
-          <mat-card class="flex-card right-padding">
+        <div fxFlex="25" id="divParticipants">
+          <mat-divider></mat-divider>
+          <!--<mat-card class="flex-card right-padding set-max">-->
             <app-activity-participants-edit [edit]="editMode"></app-activity-participants-edit>
-          </mat-card>
+          <!--</mat-card>-->
         </div>
+
+      <!--</div>-->
+
+        <div class="arrow" *ngIf="showTheArrow" id="arrow">
+          <img class="arrow-height" src="../../../../assets/images/fleche-white.svg" alt="white arrow" (click)="collapseLeft()">
+        </div>
+        <div class="arrow-right" *ngIf="showArrowRight" id="arrowRight">
+          <img class="arrow-height" src="../../../../assets/images/fleche-white.svg" alt="white arrow" (click)="collapseRight()">
+        </div>
+
 
       </div>
 
-      <div fxFlex="70%" class="content">
+      <div [fxFlex]="rightPart" class="content fill">
         <application-launched *ngFor="let app of appsService.applications"
                               [appId]="app"></application-launched>
         <resource-opened *ngFor="let resource of resourcesService.resources"
@@ -106,5 +134,5 @@
 
     </div>
 
-  </mat-card>
+  <!--</mat-card>-->
 </div>

@@ -1,6 +1,8 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 @Component({
   selector: 'app-activity-description-edit',
@@ -10,11 +12,12 @@ import {LoggerService} from '../../../services/logger.service';
 
 export class ActivityDescriptionEditComponent implements OnInit{
   descriptionEdition: boolean;
-  description: String = '';
+  public description: String = '';
   editorOptions: any;
   @Input() edit: boolean;
   @Input() type: string;
   latestSaveInMinute: number;
+  public Editor = ClassicEditor;
 
   constructor(public activityService: ActivityService,
               private logger: LoggerService,
@@ -31,26 +34,14 @@ export class ActivityDescriptionEditComponent implements OnInit{
     }, 60000);
 
     this.editorOptions = {
-      toolbar: 'full',
-      toolbar_full: [
-        {
-          name: 'basicstyles',
-          items: ['Bold', 'Italic', 'Strike', 'Underline']
-        },
-        {name: 'paragraph', items: ['BulletedList', 'NumberedList', 'Blockquote']},
-        {name: 'editing', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-        {name: 'links', items: ['Link', 'Unlink']},
-        '/',
-        {
-          name: 'styles',
-          items: ['FontSize', 'TextColor', 'PasteText', 'PasteFromWord']
-        },
-        {name: 'insert', items: ['Image', 'Table']},
-        {name: 'forms', items: ['Outdent', 'Indent']},
-        {name: 'clipboard', items: ['Undo', 'Redo']}
-      ],
-      disableNativeSpellChecker: false,
-      uiColor: '#FAFAFA',
+      toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+      heading: {
+        options: [
+          { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+          { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+          { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+        ]
+      }
     };
 
 
@@ -82,6 +73,10 @@ export class ActivityDescriptionEditComponent implements OnInit{
     });
   }
 
+  onChange( { editor }: ChangeEvent ) {
+    this.description = editor.getData();
+  }
+
   /**
    * Open or close text editor
    */
@@ -96,6 +91,7 @@ export class ActivityDescriptionEditComponent implements OnInit{
    * Save the description
    */
   saveDescription(system: boolean = true) {
+    console.log(this.description);
     if (this.descriptionEdition) {
       this.descriptionEdition = !this.descriptionEdition;
       if (this.type === 'Loaded') {

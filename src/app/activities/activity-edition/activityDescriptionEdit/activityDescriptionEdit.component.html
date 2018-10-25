@@ -9,7 +9,7 @@
 </div>
 
 <div *ngIf="descriptionEdition" class="name-edition" (focusout)="focusOut()">
-  <ckeditor [config]="editorOptions" [(ngModel)]="description" (focusout)="focusOut()"></ckeditor>
+  <ckeditor [config]="editorOptions" [editor]="Editor" [data]="description" (focusout)="focusOut()" (change)="onChange($event)"></ckeditor>
   <div>Dernière sauvegarde il y à {{latestSaveInMinute}} minutes : tout changement non sauvegardé sera perdu.</div>
   <button mat-stroked-button (click)="switchDescription()">
     Annuler

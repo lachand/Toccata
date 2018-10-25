@@ -73,7 +73,7 @@ export class AppsService {
       documentType: 'Application',
       type: app.type,
       status: 'unloaded',
-      url: '',
+      url: app.url,
       creator: this.userService.id,
       dbName: dbName,
     };

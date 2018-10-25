@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {AppsService} from '../../../services/apps.service';
 import {LoggerService} from '../../../services/logger.service';
+import {ResourcesService} from '../../../services/resources.service';
 
 @Component({
   selector: 'app-activity-new-app',
@@ -25,7 +26,8 @@ import {LoggerService} from '../../../services/logger.service';
               public router: Router,
               public appsService: AppsService,
               public formBuilder: FormBuilder,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              public resourceService: ResourcesService) {
   }
 
   /**
@@ -80,6 +82,7 @@ import {LoggerService} from '../../../services/logger.service';
       if (this.formNewApp.value.appType === 'Chronomètre') {
         options['time'] = this.formNewApp.value.chronometreValue;
       } else if (this.formNewApp.value.appType === 'External') {
+        console.log(this.formNewApp.value);
         url = this.formNewApp.value.url;
       }
 
@@ -98,8 +101,25 @@ import {LoggerService} from '../../../services/logger.service';
       }
       this.activityService.getActivityInfos(id).then(activity => {
         this.appsService.createApp(appToAdd, id, activity['dbName']).then((app) => {
-          this.logger.log('CREATE', id, app['_id'], 'application created');
-          this.dialogRef.close();
+          console.log(app);
+          this.logger.log('CREATE', id, app['id'], 'application created');
+          if (this.formNewApp.value.appType === 'Editeur de texte') {
+            let resource = {
+              _id: `ressource_${app['id']}`,
+              documentType: "Ressource application",
+              application: app['id'],
+              applicationType: "Editeur de texte",
+              ressourceType: "Text",
+              text: "",
+              dbName: activity['dbName'],
+              parent: activity['dbName']
+            };
+            this.activityService.database.addDocument(resource).then( () => {
+              this.dialogRef.close();
+            });
+          } else {
+            this.dialogRef.close();
+          }
         });
       });
     }

@@ -23,6 +23,11 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   viewGroup: any;
   editable: Array<any>;
   shareActivity: string;
+  showTheArrow: boolean;
+  collapsedLeft: boolean;
+  showArrowRight: boolean;
+  leftPart: string;
+  rightPart: string;
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('chip') chip: MatChip;
 
@@ -39,6 +44,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.viewGroup = '';
     this.shareActivity = '';
     this.editable = [];
+    this.showArrowRight = false;
+    this.showTheArrow  = false;
+    this.collapsedLeft = false;
 
     setInterval( () => {
       this.snackBar.open("Pensez à remplir les traces et à sauvegarder", "Fermer");
@@ -64,6 +72,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
+
+    this.leftPart = '30';
+    this.rightPart = '70';
 
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
@@ -195,6 +206,28 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
         this.router.navigate(['activity_view/' + activityId]);
       });
     });
+  }
+
+  showArrow() {
+    this.showTheArrow = true;
+  }
+
+  hideArrow() {
+    this.showTheArrow = false;
+  }
+
+  collapseLeft() {
+    this.collapsedLeft = true;
+    this.leftPart = '0';
+    this.rightPart = '100';
+    this.showArrowRight = true;
+  }
+
+  collapseRight() {
+    this.collapsedLeft = false;
+    this.leftPart = '30';
+    this.rightPart = '70';
+    this.showArrowRight = false;
   }
 
   activityGroupShare() {

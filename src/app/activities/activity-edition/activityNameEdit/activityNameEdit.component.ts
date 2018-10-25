@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'activity-name-edit',
@@ -18,7 +19,7 @@ export class ActivityNameEditComponent implements OnInit {
   @Input() activityId: string;
   @Input() type: string;
 
-  constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef) {
+  constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef, private userService: UserService) {
 
     this.activityService.changes.subscribe(change => {
       let previousName: String;
@@ -79,6 +80,9 @@ export class ActivityNameEditComponent implements OnInit {
 
   ngOnInit() {
     console.log(this);
+    if (this.userService.fonction !== "Enseignant") {
+      this.edit = false;
+    }
     if (this.type === 'Loaded') {
       this.appName = this.activityService.activityLoaded.name;
       console.log(this.appName);

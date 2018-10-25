@@ -2,6 +2,14 @@
   float:right;
 }
 
+.fill {
+  height: 100%;
+}
+
+.fill-menu {
+  //height: calc(100% - 64px);
+}
+
 .right-padding {
   padding-right: 5%;
   margin-left: 3px;
@@ -11,8 +19,8 @@
 
 .flex-card {
   //margin: auto;
-  padding: 1% 1% 1% 1%;
-  margin-bottom: 20px;
+  //padding: 1% 1% 1% 1%;
+  //margin-bottom: 20px;
 }
 
 .button-left {
@@ -64,6 +72,24 @@
 
 .flex-main-div {
   padding: 1%;
+  height: 100%;
+}
+.arrow {
+  position: absolute;
+  top: calc(50% + 40px);
+  transform: rotate(180deg);
+  left: calc(30vw - 40px);
+}
+
+.arrow-right {
+  position: absolute;
+  top: calc(50% + 40px);
+  left: 0px;
+  z-index: 999;
+}
+
+.arrow-height {
+  height: 100px;
 }
 
 .aligned-with-h3 {
@@ -84,11 +110,17 @@
 }
 
 .menu {
-  height: 75vh;
   overflow: auto;
 }
 
 .content {
-  height: 75vh;
+  overflow: auto;
+}
+
+.set-max {
+  height:100%;
+}
+
+.overflow {
   overflow: auto;
 }

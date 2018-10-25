@@ -1,6 +1,8 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {ChangeEvent} from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 @Component({
   selector: 'app-notes',
@@ -62,6 +64,10 @@ export class AppNotesComponent implements OnInit {
    */
   switchNotes() {
       this.notesEdition = !this.notesEdition;
+  }
+
+  onChange( { editor }: ChangeEvent ) {
+    this.notes = editor.getData();
   }
 
   /**
