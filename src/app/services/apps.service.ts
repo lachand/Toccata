@@ -316,14 +316,27 @@ export class AppsService {
    * @param appId The application to open
    * @returns {Promise<any>} The opened application
    */
-  openApplication(appId: any) {
+  openApplication(appId: any, activityId: any) {
+    let app;
     return new Promise(resolve => {
       return this.databaseService.getDocument(appId).then(application => {
           application['status'] = 'loaded';
+          app = application;
         this.logger.log('OPEN', application['dbName'], application['_id'], 'open application');
           return this.databaseService.updateDocument(application);
         }
       ).then(() => {
+        return this.databaseService.getDocument(activityId).then(activity => {
+          console.log(app);
+          activity['currentElementLoaded'] = {
+            id: app._id,
+            type: 'application'
+          };
+          console.log(activity);
+          return this.databaseService.updateDocument(activity);
+        });
+      })
+        .then(() => {
         return this.getApplicationInfos(appId);
       })
         .then(appInfos => {
