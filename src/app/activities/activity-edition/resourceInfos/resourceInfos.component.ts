@@ -47,7 +47,7 @@ export class ResourceInfosComponent implements OnInit {
   }
 
   openRessource() {
-    this.resourcesService.openResource(this.resourceId).then(resourceInfos => {
+    this.resourcesService.openResource(this.resourceId, this.activityService.activityLoaded._id).then(resourceInfos => {
       this.resource = resourceInfos;
     });
   }

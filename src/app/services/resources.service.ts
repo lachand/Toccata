@@ -288,6 +288,7 @@ export class ResourcesService {
    * @param resourceId The Id of the resource to open
    * @returns {Promise<any>} The opened resource
    */
+  /*
   openResource(resourceId: any) {
     return new Promise(resolve => {
       return this.database.getDocument(resourceId).then(resource => {
@@ -304,6 +305,44 @@ export class ResourcesService {
         .catch(function (err) {
           console.log(`Error in apps service whith call to openResource : 
           ${err}`);
+        });
+    });
+  }
+  */
+
+  /**
+   * Open a specified resource
+   * @param resourceId The Id of the resource to open
+   * @returns {Promise<any>} The opened resource
+   */
+  openResource(resourceId: any, activityId: any) {
+    let res;
+    return new Promise(resolve => {
+      return this.database.getDocument(resourceId).then(resource => {
+          resource['status'] = 'loaded';
+          res = resource;
+          return this.database.updateDocument(resource);
+        }
+      ).then(() => {
+        return this.database.getDocument(activityId).then(activity => {
+          console.log(res);
+          activity['currentElementLoaded'] = {
+            id: res._id,
+            type: 'resource'
+          };
+          console.log(activity);
+          return this.database.updateDocument(activity);
+        }).then( () => {
+          return this.getResourceInfos(resourceId);
+        });
+      })
+        .then(resourceInfos => {
+          this.logger.log('OPEN', resourceInfos['dbName'], `resource_${resourceId}`, 'open ressource');
+          resolve(resourceInfos);
+        })
+        .catch(function (err) {
+          console.log(`Error in apps service whith call to openResource : 
+          ${err}; resource id: ${resourceId}; activity id: ${activityId}`);
         });
     });
   }

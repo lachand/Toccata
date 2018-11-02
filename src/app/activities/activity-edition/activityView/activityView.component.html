@@ -126,10 +126,12 @@
       </div>
 
       <div [fxFlex]="rightPart" class="content fill">
-        <application-launched *ngFor="let app of appsService.applications"
-                              [appId]="app"></application-launched>
-        <resource-opened *ngFor="let resource of resourcesService.resources"
-                         [resourceId]="resource"></resource-opened>
+
+
+        <application-launched *ngIf="activityService?.activityLoaded?.currentElementLoaded?.type === 'application'"
+                              [appId]="activityService?.activityLoaded?.currentElementLoaded?.id"></application-launched>
+        <resource-opened *ngIf="activityService?.activityLoaded?.currentElementLoaded?.type === 'resource'"
+                         [resourceId]="activityService?.activityLoaded?.currentElementLoaded?.id"></resource-opened>
       </div>
 
     </div>
