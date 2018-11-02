@@ -54,6 +54,11 @@ export class DatabaseService {
     this.addDatabase('user_list');
 
     this.db = new PouchDB(environment.DB);
+
+    this.onlineCheck().catch(err => {
+      this.dbRemote = this.db;
+    });
+
     this.db.info().then(info => {
       console.log(info);
       if (info.db_name !== environment.DB) {
@@ -68,6 +73,21 @@ export class DatabaseService {
       console.log("Error while duplicating database, failsafe mode activated");
       this.db = this.dbRemote;
       this.initialize();
+    });
+  }
+
+  onlineCheck() {
+    const baseUrl = 'http://www.google.com';
+    let xhr = new XMLHttpRequest();
+    return new Promise((resolve, reject)=>{
+      xhr.onload = () => {
+        resolve(true);
+      };
+      xhr.onerror = () => {
+        reject(false);
+      };
+      xhr.open('GET', baseUrl, true);
+      xhr.send();
     });
   }
 
