@@ -209,7 +209,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   showArrow() {
-    this.showTheArrow = true;
+    if(!this.showArrowRight) {
+      this.showTheArrow = true;
+    }
   }
 
   hideArrow() {
