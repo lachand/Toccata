@@ -77,15 +77,12 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     this.rightPart = '70';
 
     this.activityService.changes.subscribe(changes => {
-      console.log(changes);
       if (changes.type === 'ChangeActivity') {
         if (!isNullOrUndefined(this.stepper)) {
           this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
         }
         this.ref.detectChanges();
       }
-      console.log(changes);
-      console.log(this.activityService.activityLoaded);
       if (changes.type === "Sequence" && changes.doc.parent === this.activityService.activityLoaded.parent) {
         if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
           this.steps = this.activityService.activityLoadedChild;
@@ -106,6 +103,9 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
         }
         this.ref.detectChanges();
       }*/
+      console.log("reprint activity");
+      console.log(this.activityService.activityLoaded.currentElementLoaded);
+      console.log(changes.doc);
       this.ref.detectChanges();
     });
 

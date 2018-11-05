@@ -39,6 +39,9 @@ export class ActivityService implements OnInit {
       (change) => {
         console.log(change);
         if (change.type === 'Activity' && userService.loggedIn) {
+          if (change.doc._id === this.activityLoaded._id) {
+            this.activityLoaded = change.doc;
+          }
           this.changes.emit({doc: change.doc, type: 'Activity'});
         }
       }, error => {

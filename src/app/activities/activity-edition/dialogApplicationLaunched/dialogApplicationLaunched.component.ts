@@ -27,6 +27,7 @@ export class DialogApplicationLaunchedComponent implements OnInit {
 
     this.appId = data.appId;
 
+    // Change on app
     this.appsService.changes.subscribe(change => {
       if (this.appId === change.doc._id) {
         this.application = change.doc;
@@ -38,6 +39,28 @@ export class DialogApplicationLaunchedComponent implements OnInit {
         }
       }
     });
+
+    //Change on activity (change loaded app)
+    this.activityService.changes.subscribe( change => {
+      if (this.activityService.activityLoaded._id === change.doc._id) {
+        if (change.doc.currentElementLoaded.id !== this.application.id && change.doc.currentElementLoaded.type === 'application') {
+
+          this.appsService.getApplicationInfos(this.appId).then(applicationInfos => {
+            this.application = applicationInfos;
+            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.application.url);
+            console.log(this.url);
+          });
+
+          //this.resource = change.doc;
+          //this.resource.id = change.doc._id;
+          if (this.ref !== null &&
+            this.ref !== undefined &&
+            !(this.ref as ViewRef_).destroyed) {
+            this.ref.detectChanges();
+          }
+        }
+      }
+    })
   }
 
   /**

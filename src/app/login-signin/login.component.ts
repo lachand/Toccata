@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     let isLoggedNow = false;
     setInterval( () => {
-      console.log(this.minimalRatio);
+    //  console.log(this.minimalRatio);
     if (this.loginForm.valid && this.minimalRatio >= 90) {
       this.loading = true;
       if (this.can_connect) {

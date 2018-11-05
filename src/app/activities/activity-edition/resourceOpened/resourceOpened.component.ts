@@ -35,6 +35,7 @@ export class ResourceOpenedComponent implements OnInit {
               private logger: LoggerService, private activityService: ActivityService, private resourcesService: ResourcesService,
               private sanitizer: DomSanitizer, private dialog: MatDialog) {
 
+    // Change on ressource
     this.resourcesService.changes.subscribe(change => {
       this.reloaded = false;
       if (this.resourceId === change.doc._id) {
@@ -43,10 +44,40 @@ export class ResourceOpenedComponent implements OnInit {
         if (this.ref !== null &&
           this.ref !== undefined &&
           !(this.ref as ViewRef_).destroyed) {
-          //this.ref.detectChanges();
+          this.ref.detectChanges();
         }
       }
     });
+
+    //Change on activity (change loaded resource)
+    this.activityService.changes.subscribe( change => {
+      if (this.activityService.activityLoaded._id === change.doc._id) {
+        if (change.doc.currentElementLoaded.id !== this.resource.id && change.doc.currentElementLoaded.type === 'resource') {
+
+          this.resourcesService.getResourceInfos(change.doc.currentElementLoaded.id).then(resourceInfos => {
+            this.resource = resourceInfos;
+            if (this.resource.type === 'url') {
+              this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.resource.url);
+              this.ref.detectChanges();
+            } else {
+              this.resourcesService.getResourceData(this.resourceId, 'filename').then(ressource => {
+                this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(ressource));
+                //const iframe = document.getElementById(`iframe_${this.resourceId}`);
+                //console.log(iframe.document.document.body.scrollWidth/iframe.contentWindow.document.body.scrollHeight);
+              });
+            }
+          });
+
+          //this.resource = change.doc;
+          //this.resource.id = change.doc._id;
+          if (this.ref !== null &&
+            this.ref !== undefined &&
+            !(this.ref as ViewRef_).destroyed) {
+            this.ref.detectChanges();
+          }
+        }
+      }
+    })
   }
 
   /**
@@ -66,17 +97,17 @@ export class ResourceOpenedComponent implements OnInit {
       const iframe = document.getElementById(`iframe_${this.resourceId}`) as HTMLIFrameElement;
       const ratio = (iframe.offsetHeight / iframe.offsetWidth) * 100;
       if (this.resource.type === 'application/pdf') {
-        iframe.style.height = '70vw';
+        iframe.style.height = 'calc(100% - 64px)';
       } else if (this.resource.type === 'url') {
-        iframe.style.height = '70vw';
+        iframe.style.height = 'calc(100% - 64px)';
         iframe.setAttribute('scrolling', 'yes');
         iframe.setAttribute('src', iframe.getAttribute('src'));
         this.reloaded = true;
       } else if (this.resource.type.indexOf('video') !== -1) {
-        iframe.style.height = '30vw';
+        iframe.style.height = 'calc(100% - 64px)';
       } else if (this.resource.type.indexOf('image') !== -1) {
         let doc = iframe.contentDocument || iframe.contentWindow.document ;
-        iframe.style.height = '30vw';
+        iframe.style.height = 'calc(100% - 64px)';
         doc.querySelector('img').style.height = '100%';
         doc.querySelector('img').style.maxWidth = '100%';
       }

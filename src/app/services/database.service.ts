@@ -165,16 +165,18 @@ export class DatabaseService {
   }
 
   sync() {
+    console.log("syncing");
     this.dbSync.cancel();
-    console.info('sync');
+    console.log('sync');
     this.dbSync = this.db.sync(this.dbRemote, {
       retry: true,
       live: true,
       filter: (doc, req) => {
 
         for (let i = 0; i < this.dbList.length; i++) {
-          if (this.dbList[i] == doc.dbName) {
-            console.log("ok");
+          if (this.dbList[i] === doc.dbName) {
+            console.log("finded");
+            this.handleChangeDoc(doc);
             return true;
           }
         }
@@ -186,7 +188,7 @@ export class DatabaseService {
       console.log(change);
       this.handleChange(change);
     }).on('paused', info => {
-      console.log(this.dbSync);
+      console.log(this.dbSync, info);
     });
   }
 
@@ -198,6 +200,12 @@ export class DatabaseService {
   handleChange(change) {
     console.log(change, change.change.docs[0].documentType, change.change.docs[0]);
     this.changes.emit({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
+  }
+
+  handleChangeDoc(change) {
+    console.log("handle change");
+    console.log(change, change.documentType, change);
+    this.changes.emit({type: change.documentType, doc: change});
   }
 
   handleChangeRemote(change) {
@@ -231,14 +239,15 @@ export class DatabaseService {
       if (this.dbList.indexOf(databaseName) !== -1) {
         const tmpDB = this.dbList.filter( (value, index, self) => {
           return self.indexOf(value) === index;
-        })
+        });
         this.dbList = tmpDB;
         resolve(databaseName);
       } else {
+        console.log(this.dbList, databaseName);
         this.dbList.push(databaseName);
         const tmpDB = this.dbList.filter( (value, index, self) => {
           return self.indexOf(value) === index;
-        })
+        });
         this.dbList = tmpDB;
         console.log(this.dbList);
         this.sync();

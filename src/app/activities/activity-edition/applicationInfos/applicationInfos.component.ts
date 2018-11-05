@@ -41,7 +41,7 @@ export class ApplicationInfosComponent implements OnInit {
 
   openApplication() {
     this.logger.log('OPEN', this.activityService.activityLoaded._id, this.applicationId, 'open application');
-    this.appsService.openApplication(this.applicationId).then(applicationInfos => {
+    this.appsService.openApplication(this.applicationId, this.activityService.activityLoaded._id).then(applicationInfos => {
       this.application = applicationInfos;
     });
   }

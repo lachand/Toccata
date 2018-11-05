@@ -1,5 +1,5 @@
-<div id="div_{{resourceId}}">
-<mat-card class="flex-card" *ngIf="resource?.status==='loaded'">
+<div id="div_{{resourceId}}" class="full-height">
+<!--<mat-card class="flex-card" *ngIf="resource?.status==='loaded'">-->
   <div class="name">
   <h3 class="float-left">{{resource?.name}}</h3>
     <button class="menu-left-align aligned-with-text" mat-icon-button (click)="reload()">
@@ -14,8 +14,8 @@
     <mat-icon>close</mat-icon>
   </button>
   </div>
-  <div>
+  <div class="full-height">
     <iframe class="iframe_resource" id="iframe_{{resourceId}}" [src]="myUrl" scrolling="no" (load)="resizeIframe(this)"></iframe>
   </div>
-</mat-card>
+<!--</mat-card>-->
 </div>

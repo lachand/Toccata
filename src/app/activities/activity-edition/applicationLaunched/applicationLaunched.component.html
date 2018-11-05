@@ -1,5 +1,5 @@
 <div id="div_{{appId}}">
-<mat-card class="flex-card" *ngIf="application?.status === 'loaded'">
+<!--<mat-card class="flex-card" *ngIf="application?.status === 'loaded'">-->
   <div class="name">
   <h3>{{application?.name}}</h3>
   </div>
@@ -17,5 +17,5 @@
     <app-text-editor *ngIf="application?.type === 'Editeur de texte'" [appId]="application?.id"></app-text-editor>
     <iframe *ngIf="application?.type === 'Externe'" class="iframe_application" id="iframe_{{application?.id}}" [src]="url" scrolling="no" (load)="resizeIframe(this)" style="width:100%; height:30vw;"></iframe>
   </div>
-</mat-card>
+<!--</mat-card>-->
 </div>
