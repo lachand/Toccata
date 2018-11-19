@@ -78,6 +78,14 @@ import {AppNotesComponent} from './activities/activity-edition/appNotes/appNotes
 import {ActivityStepperComponent} from './activities/activity-edition/activityStepper/activityStepper.component';
 import {DragulaModule} from 'ng2-dragula';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import {FormulaireComponent} from './applications/formulaire/formulaire.component';
+import {DynamicFormBuilderComponent} from './applications/formulaire/dynamic-form-builder/dynamic-form-builder.component';
+import {FieldBuilderComponent} from './applications/formulaire/dynamic-form-builder/field-builder/field-builder.component';
+import {TextBoxComponent} from './applications/formulaire/dynamic-form-builder/atoms/textbox';
+import {DropDownComponent} from './applications/formulaire/dynamic-form-builder/atoms/dropdown';
+import {CheckBoxComponent} from './applications/formulaire/dynamic-form-builder/atoms/checkbox';
+import {FileComponent} from './applications/formulaire/dynamic-form-builder/atoms/file';
+import {RadioComponent} from './applications/formulaire/dynamic-form-builder/atoms/radio';
 
 @NgModule({
   declarations: [AppComponent,
@@ -127,9 +135,17 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     DialogResourceOpenedComponent,
     DialogResourceEditionComponent,
     DialogApplicationLaunchedComponent,
+    FormulaireComponent,
     ActivityHideComponent,
     AppNotesComponent,
-    ActivityStepperComponent
+    ActivityStepperComponent,
+    DynamicFormBuilderComponent,
+    FieldBuilderComponent,
+    TextBoxComponent,
+    DropDownComponent,
+    CheckBoxComponent,
+    FileComponent,
+    RadioComponent
   ],
   imports: [
     BrowserModule,

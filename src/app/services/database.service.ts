@@ -55,9 +55,10 @@ export class DatabaseService {
 
     this.db = new PouchDB(environment.DB);
 
-    this.onlineCheck().catch(err => {
-      this.dbRemote = this.db;
-    });
+    // Uncomment and correct for disconnected first device
+    //this.onlineCheck().catch(err => {
+    //  this.dbRemote = this.db;
+    //});
 
     this.db.info().then(info => {
       console.log(info);
@@ -81,9 +82,11 @@ export class DatabaseService {
     let xhr = new XMLHttpRequest();
     return new Promise((resolve, reject)=>{
       xhr.onload = () => {
+        console.log('OK');
         resolve(true);
       };
       xhr.onerror = () => {
+        console.log("KO");
         reject(false);
       };
       xhr.open('GET', baseUrl, true);
@@ -94,7 +97,9 @@ export class DatabaseService {
   initialize() {
     this.dbSync = this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
       console.info(`Replication to remote completed`);
-      this.dbSync.cancel();
+      if (!isNullOrUndefined(this.dbSync)) {
+        this.dbSync.cancel();
+      }
       return this.dbSync = this.db.replicate.from(this.dbRemote,
         {
           retry: true,
@@ -118,7 +123,9 @@ export class DatabaseService {
           for (const user of doc['userList']) {
             this.dbList.push(`user_${user}`);
           }
-          this.dbSync.cancel();
+          if (!isNullOrUndefined(this.dbSync)) {
+            this.dbSync.cancel();
+          }
           return this.dbSync = this.db.sync(this.dbRemote, {
             retry: true,
             live: true,
@@ -166,7 +173,9 @@ export class DatabaseService {
 
   sync() {
     console.log("syncing");
-    this.dbSync.cancel();
+    if (!isNullOrUndefined(this.dbSync)) {
+      this.dbSync.cancel();
+    }
     console.log('sync');
     this.dbSync = this.db.sync(this.dbRemote, {
       retry: true,
@@ -298,6 +307,7 @@ export class DatabaseService {
         .catch(err => {
           console.error(`Error in database service whith call to addDocument:
           ${err}`);
+          console.error(`DBLists: ${this.dbList}`);
           reject(err);
         });
     });
@@ -341,6 +351,7 @@ export class DatabaseService {
         .catch(err => {
           console.error(`Error in database service whith call to getDocument ${docId}:
           ${err}`);
+          console.error(`DBLists: ${this.dbList}`);
           console.trace();
           reject(err);
         });
