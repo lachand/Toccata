@@ -6,15 +6,17 @@ import {LoggerService} from "./logger.service";
 
 @Injectable()
 export class AppsService {
+
   applications: any;
 
   @Output()
   changes = new EventEmitter();
 
   /**
-   * Construct the service for applications management
-   * @param {Http} http
+   *
    * @param {DatabaseService} databaseService The service for database management
+   * @param {UserService} userService The service for user management
+   * @param {Logger} logger The service for logging activity
    */
   constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService, private userService: UserService, public logger: LoggerService) {
     this.databaseService.changes.subscribe(
@@ -58,6 +60,7 @@ export class AppsService {
   /**
    * Create an application to add to the current activity
    * @param app The application to ceate
+   * @param activityId The Id of the activity to update
    * @param dbName The name of the activity database
    * @returns {Promise<any>} The created applications
    */
@@ -330,6 +333,7 @@ export class AppsService {
   /**
    * Open a specified application
    * @param appId The application to open
+   * @param activityId The activity Id where the application is
    * @returns {Promise<any>} The opened application
    */
   openApplication(appId: any, activityId: any) {

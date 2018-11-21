@@ -9,8 +9,7 @@ import {
   MatSlideToggleModule, MatIconModule, MatDialogModule, MatRadioModule,
   MatTabsModule, MatOptionModule, MatMenuModule, MatCardModule, MatInputModule,
   MatButtonModule, MatToolbarModule, MatTooltipModule, MatProgressBarModule, MatListModule, MatSidenavModule,
-  MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule, MatDividerModule, MatChipsModule,
-  MAT_DIALOG_DEFAULT_OPTIONS, MatButtonToggleModule, MatSnackBarModule
+  MatFormFieldModule, MatSelectModule, MatStepperModule, MatProgressSpinnerModule, MatDividerModule, MatChipsModule, MatButtonToggleModule, MatSnackBarModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -87,10 +86,11 @@ import {DropDownComponent} from './applications/formulaire/dynamic-form-builder/
 import {CheckBoxComponent} from './applications/formulaire/dynamic-form-builder/atoms/checkbox';
 import {FileComponent} from './applications/formulaire/dynamic-form-builder/atoms/file';
 import {RadioComponent} from './applications/formulaire/dynamic-form-builder/atoms/radio';
+import {ApplicationsModule} from './applications/applications.module';
+import {MaterialDesignModule} from './materialDesign.module';
 
 @NgModule({
   declarations: [AppComponent,
-    ExternalAppComponent,
     ActivityAppsComponent,
     AppLoadingComponent,
     LoginComponent,
@@ -111,8 +111,6 @@ import {RadioComponent} from './applications/formulaire/dynamic-form-builder/ato
     ApplicationInfosTeacherComponent,
     ApplicationInfosComponent,
     ChronometreInfosComponent,
-    TextEditorComponent,
-    TextEditorComponent,
     PostitInfosComponent,
     ActivitySequenceInfosComponent,
     ActivityResourceViewComponent,
@@ -121,11 +119,7 @@ import {RadioComponent} from './applications/formulaire/dynamic-form-builder/ato
     ApplicationLaunchedComponent,
     ResourceOpenedComponent,
     ViewDuplicatesComponent,
-    ChronometreComponent,
     ResourceInfosComponent,
-    jqxKanbanComponent,
-    jqxSplitterComponent,
-    PostitComponent,
     ParticipantInfosComponent,
     DialogConfirmationComponent,
     DialogInformationComponent,
@@ -137,54 +131,24 @@ import {RadioComponent} from './applications/formulaire/dynamic-form-builder/ato
     DialogResourceOpenedComponent,
     DialogResourceEditionComponent,
     DialogApplicationLaunchedComponent,
-    FormulaireComponent,
     ActivityHideComponent,
     AppNotesComponent,
     ActivityStepperComponent,
-    DynamicFormBuilderComponent,
-    FieldBuilderComponent,
-    TextBoxComponent,
-    DropDownComponent,
-    CheckBoxComponent,
-    FileComponent,
-    RadioComponent
   ],
   imports: [
+    MaterialDesignModule,
     BrowserModule,
     FormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonToggleModule,
     ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,
     CKEditorModule,
-    MatSlideToggleModule,
-    MatCardModule,
-    MatDialogModule,
-    MatRadioModule,
-    MatStepperModule,
-    MatTabsModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    MatOptionModule,
-    MatMenuModule,
-    MatInputModule,
-    MatChipsModule,
-    MatDividerModule,
-    MatProgressBarModule,
-    MatButtonModule,
-    MatListModule,
-    MatIconModule,
-    MatSidenavModule,
     FlexLayoutModule,
     ServiceWorkerModule.register('/ngsw-worker.js'),
     DragulaModule.forRoot(),
     ScrollToModule.forRoot(),
-    RouterModule.forRoot(routes, {useHash: true})
+    RouterModule.forRoot(routes, {useHash: true}),
+    ApplicationsModule,
   ],
   entryComponents: [ActivityInfosComponent,
     AppLoadingComponent,
