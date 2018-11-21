@@ -33,11 +33,11 @@ export class LoggerService {
       log: `Time ; Year ; Month ; Day ; Hour ; Minutesnpm ; Seconds ; User ; Action ; Current activity ; Object ; Message ; Initiated by
       `,
       documentType: 'Log'
-    }
+    };
     console.log("initLog");
     this.database.addDocument(doc).then( () => {
       this.logFile.setItem(`${this.logDocument}_${this.cpt}`, `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message ; Initiated by`);
-    })
+    });
     this.cpt++;
   }
 

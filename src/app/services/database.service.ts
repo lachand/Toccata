@@ -94,6 +94,9 @@ export class DatabaseService {
     });
   }
 
+  /**
+   * Initialize connection
+   */
   initialize() {
     this.dbSync = this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
       console.info(`Replication to remote completed`);
@@ -171,6 +174,9 @@ export class DatabaseService {
     });
   }
 
+  /**
+   * Sync local and external database
+   */
   sync() {
     console.log("syncing");
     if (!isNullOrUndefined(this.dbSync)) {
@@ -204,24 +210,27 @@ export class DatabaseService {
   /**
    *
    * Handle changes
-   * @param change change that occurs
+   * @param change Change that occurs
    */
   handleChange(change) {
     console.log(change, change.change.docs[0].documentType, change.change.docs[0]);
     this.changes.emit({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
   }
 
+  /**
+   * Handle changes for a document
+   * @param change Change that ocurs
+   */
   handleChangeDoc(change) {
     console.log("handle change");
     console.log(change, change.documentType, change);
     this.changes.emit({type: change.documentType, doc: change});
   }
 
-  handleChangeRemote(change) {
-
-    return 0;
-  }
-
+  /**
+   * Force the update of a document
+   * @param doc The document to update
+   */
   forceUpdateDocument(doc) {
     const tmp_this = this;
     return this.db.get(doc._id).then((origDoc, tmp_this) => {
@@ -397,6 +406,10 @@ export class DatabaseService {
     });
   }**/
 
+  /**
+   * Update a document
+   * @param doc The document to update
+   */
   updateDocument(doc) {
     console.log(doc);
     return new Promise((resolve, reject) => {
@@ -479,11 +492,5 @@ export class DatabaseService {
       return res;
     })
       ;
-  }
-
-  customFilter(doc, req) {
-    for (const elmt of req.query.databases) {
-      return doc.dbName === elmt;
-    }
   }
 }
