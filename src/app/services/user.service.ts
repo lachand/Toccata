@@ -17,6 +17,10 @@ export class UserService {
   @Output()
   change = new EventEmitter();
 
+  /**
+   * Construct the user service
+   * @param database The database service for document updates
+   */
   constructor(public database: DatabaseService) {
     this.loggedIn = false;
   }
@@ -80,6 +84,10 @@ export class UserService {
     );
   }
 
+  /**
+   * Return the url of an user avatar
+   * @param participant The user Id to obtain avatar
+   */
   getUserAvatar(participant) {
     return new Promise(resolve => {
       return this.database.getDocument(participant).then(res => {
