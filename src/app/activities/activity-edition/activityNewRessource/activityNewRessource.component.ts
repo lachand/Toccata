@@ -1,31 +1,32 @@
-import {Component, Inject} from '@angular/core';
-import {ActivityService} from '../../../services/activity.service';
-import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {AppsService} from '../../../services/apps.service';
-import {LoggerService} from '../../../services/logger.service';
-import {ResourcesService} from '../../../services/resources.service';
+import { Component, Inject } from "@angular/core";
+import { ActivityService } from "../../../services/activity.service";
+import { Router } from "@angular/router";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { LoggerService } from "../../../services/logger.service";
+import { ResourcesService } from "../../../services/resources.service";
 
 @Component({
-  selector: 'app-activity-new-ressource',
-  templateUrl: './activityNewRessource.component.html'
+  selector: "app-activity-new-ressource",
+  templateUrl: "./activityNewRessource.component.html"
 })
-
-  export class ActivityNewRessourceComponent {
+export class ActivityNewRessourceComponent {
   apps: any;
   appType: any;
   dialogRef: MatDialogRef<ActivityNewRessourceComponent>;
   formNewUrl: FormGroup;
-  constructor(public activityService: ActivityService,
-              public router: Router,
-              public resourcesService: ResourcesService,
-              public formBuilder: FormBuilder,
-              private logger: LoggerService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+
+  constructor(
+    public activityService: ActivityService,
+    public router: Router,
+    public resourcesService: ResourcesService,
+    public formBuilder: FormBuilder,
+    private logger: LoggerService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.formNewUrl = this.formBuilder.group({
-      url: '',
-      name: ''
+      url: "",
+      name: ""
     });
     console.log(data);
   }
@@ -37,26 +38,27 @@ import {ResourcesService} from '../../../services/resources.service';
     const ressource = {
       name: this.formNewUrl.value.name,
       value: this.formNewUrl.value.url,
-      type: 'url'
+      type: "url"
     };
 
     let id;
-    if (this.data === 'step') {
+    if (this.data === "step") {
       id = this.activityService.activityLoaded._id;
     } else {
       id = this.activityService.activityLoaded.parent;
     }
 
     this.activityService.getActivityInfos(id).then(activity => {
-      this.resourcesService.createResource(ressource, id, ressource.name).then((res) => {
-        this.logger.log('CREATE', id, id, 'resource created');
-        this.dialogRef.close();
-      });
+      this.resourcesService
+        .createResource(ressource, id, ressource.name)
+        .then(res => {
+          this.logger.log("CREATE", id, id, "resource created");
+          this.dialogRef.close();
+        });
     });
   }
 
   close() {
     this.dialogRef.close();
   }
-
 }

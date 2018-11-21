@@ -1,53 +1,67 @@
-import {ChangeDetectorRef, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
-import {ActivityService} from '../../../services/activity.service';
-import {LoggerService} from '../../../services/logger.service';
-import {Router} from '@angular/router';
-import {isNullOrUndefined} from 'util';
-import {UserService} from '../../../services/user.service';
-import {Subscription} from 'rxjs';
-import {DragulaService} from 'ng2-dragula';
-import {DialogInformationComponent} from '../../../dialogInformation/dialogInformation.component';
-import {MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import { ActivityService } from "../../../services/activity.service";
+import { LoggerService } from "../../../services/logger.service";
+import { Router } from "@angular/router";
+import { isNullOrUndefined } from "util";
+import { UserService } from "../../../services/user.service";
+import { Subscription } from "rxjs";
+import { DragulaService } from "ng2-dragula";
+import { DialogInformationComponent } from "../../../dialogInformation/dialogInformation.component";
+import { MatDialog } from "@angular/material";
 
 @Component({
-  selector: 'activity-stepper',
-  templateUrl: './activityStepper.component.html',
-  styleUrls: ['./activityStepper.component.scss']
+  selector: "activity-stepper",
+  templateUrl: "./activityStepper.component.html",
+  styleUrls: ["./activityStepper.component.scss"]
 })
-
 export class ActivityStepperComponent implements OnInit {
-
   public steps: Array<any>;
-  private editable: Array<any>;
-  subs = new Subscription();
+  editable: Array<any>;
+  subs: Subscription = new Subscription();
   @Input() edit: Boolean;
-  STEPS: 'STEPS';
+  STEPS: "STEPS";
 
-  constructor (public activityService: ActivityService,
-               private logger: LoggerService,
-               private router: Router,
-               private ref: ChangeDetectorRef,
-               public user: UserService,
-               private dragulaService: DragulaService,
-               public dialog: MatDialog) {
+  constructor(
+    public activityService: ActivityService,
+    private logger: LoggerService,
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    public user: UserService,
+    private dragulaService: DragulaService,
+    public dialog: MatDialog
+  ) {
     this.editable = [];
 
-    this.subs.add(dragulaService.dropModel(this.STEPS)
-      .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
-        this.changeStepsOrder();
-      })
+    this.subs.add(
+      dragulaService
+        .dropModel(this.STEPS)
+        .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+          this.changeStepsOrder();
+        })
     );
 
     this.activityService.changes.subscribe(changes => {
       console.log(changes);
       console.log(this.steps);
-      if (changes.type === 'ChangeActivity') {
+      if (changes.type === "ChangeActivity") {
         this.ref.detectChanges();
       }
       console.log(changes);
-      console.log(this.activityService.activityLoaded.parent, changes.doc._id, this.activityService.activityLoaded.parent === changes.doc._id, (changes.type === "Sequence" || changes.type === "Activity") && changes.doc._id === this.activityService.activityLoaded.parent );
-      if ((changes.type === "Sequence" || changes.type === "Activity") && changes.doc._id === this.activityService.activityLoaded.parent) {
-        if ((changes.type === "Sequence" || changes.type === "Activity") && this.activityService.activityLoadedChild.length > 0) {
+      console.log(
+        this.activityService.activityLoaded.parent,
+        changes.doc._id,
+        this.activityService.activityLoaded.parent === changes.doc._id,
+        (changes.type === "Sequence" || changes.type === "Activity") &&
+          changes.doc._id === this.activityService.activityLoaded.parent
+      );
+      if (
+        (changes.type === "Sequence" || changes.type === "Activity") &&
+        changes.doc._id === this.activityService.activityLoaded.parent
+      ) {
+        if (
+          (changes.type === "Sequence" || changes.type === "Activity") &&
+          this.activityService.activityLoadedChild.length > 0
+        ) {
           //this.steps = this.activityService.activityLoadedChild;
           this.steps = changes.doc.subactivityList;
           console.log(this.steps);
@@ -59,7 +73,7 @@ export class ActivityStepperComponent implements OnInit {
         for (const elmt of this.steps) {
           tmpSteps.push(elmt.stepId);
         }
-        this.steps = tmpSteps
+        this.steps = tmpSteps;
         console.log(this.steps);
         this.ref.detectChanges();
       }
@@ -69,20 +83,26 @@ export class ActivityStepperComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
+    if (
+      this.activityService.activityLoaded.type === "Main" &&
+      this.activityService.activityLoadedChild.length > 0
+    ) {
       this.steps = this.activityService.activityLoadedChild;
     } else {
       this.steps = this.activityService.sisters;
     }
-    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
+    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
       this.steps = [];
     } else {
     }
     this.steps.map(elmt => {
-      if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
-        this.editable['elmt'] = false;
+      if (
+        !isNullOrUndefined(this.activityService.blocked) &&
+        this.activityService.blocked.indexOf(elmt) > -1
+      ) {
+        this.editable["elmt"] = false;
       } else {
-        this.editable['elmt'] = true;
+        this.editable["elmt"] = true;
       }
     });
   }
@@ -100,14 +120,14 @@ export class ActivityStepperComponent implements OnInit {
   }
 
   addStep() {
-    let id = '';
-    if (this.activityService.activityLoaded.type === 'Main') {
+    let id = "";
+    if (this.activityService.activityLoaded.type === "Main") {
       id = this.activityService.activityLoaded._id;
     } else {
       id = this.activityService.activityLoaded.parent;
     }
     this.activityService.createSubActivity(id).then(res => {
-      this.steps.push(res['_id']);
+      this.steps.push(res["_id"]);
     });
   }
 
@@ -129,13 +149,22 @@ export class ActivityStepperComponent implements OnInit {
     //console.log(this.steps);
     //console.log(this.steps.indexOf(this.activityService.activityLoaded._id), this.steps.indexOf(activityId));
     //console.log(this.activityService.activityLoaded);
-    if(this.steps.indexOf(this.activityService.activityLoaded._id) < this.steps.indexOf(activityId) && this.activityService.activityLoaded['blockingStep'].blocked){
+    if (
+      this.steps.indexOf(this.activityService.activityLoaded._id) <
+        this.steps.indexOf(activityId) &&
+      this.activityService.activityLoaded["blockingStep"].blocked
+    ) {
       console.log("L'étape est bloquée");
-      const dialogRef = this.dialog.open(DialogInformationComponent, {data: {message: "L'étape est bloquée, vous devez remplir le questionnaire pour changer d'étape"}});
+      const dialogRef = this.dialog.open(DialogInformationComponent, {
+        data: {
+          message:
+            "L'étape est bloquée, vous devez remplir le questionnaire pour changer d'étape"
+        }
+      });
     } else {
       this.activityService.setCurrentActivity(activityId).then(() => {
         this.activityService.load_activity(activityId).then(res => {
-          this.router.navigate(['activity_view/' + activityId]);
+          this.router.navigate(["activity_view/" + activityId]);
         });
       });
     }
@@ -150,15 +179,21 @@ export class ActivityStepperComponent implements OnInit {
 
   changeStepsOrder() {
     const activities = [];
-    this.activityService.getActivityInfos(this.activityService.activityLoaded.parent).then( activity => {
-      for (const subActivity of this.steps) {
-        for (const elm of activity['subactivityList']) {
-          if (subActivity === elm['stepId']) {
-            activities.push(elm);
+    this.activityService
+      .getActivityInfos(this.activityService.activityLoaded.parent)
+      .then(activity => {
+        for (const subActivity of this.steps) {
+          for (const elm of activity["subactivityList"]) {
+            if (subActivity === elm["stepId"]) {
+              activities.push(elm);
+            }
           }
         }
-    }
-      this.activityService.activityEdit(this.activityService.activityLoaded.parent, 'subactivityList', activities);
-    });
+        this.activityService.activityEdit(
+          this.activityService.activityLoaded.parent,
+          "subactivityList",
+          activities
+        );
+      });
   }
 }

@@ -1,16 +1,25 @@
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-  <div *ngFor="let activity of activityService.activitiesList" fxFlex="30%"
-       class="flex-card">
+  <div
+    *ngFor="let activity of activityService.activitiesList"
+    fxFlex="30%"
+    class="flex-card"
+  >
     <app-activity-infos [activityId]="activity"></app-activity-infos>
   </div>
 
-    <div front fxFlex="30%" class="flex-card" *ngIf="user.fonction === 'Enseignant'" flex-gt-sm="30" flex-sm="100">
-      <mat-card class="activity-card" (click)="newActivity()">
-        <div class="div-centered">
-          <mat-icon class="icon-huge">add_circle</mat-icon>
-          <p i18n="@@newActivity">Ajouter une activité</p>
-        </div>
-      </mat-card>
-    </div>
-
+  <div
+    front
+    fxFlex="30%"
+    class="flex-card"
+    *ngIf="user.fonction === 'Enseignant'"
+    flex-gt-sm="30"
+    flex-sm="100"
+  >
+    <mat-card class="activity-card" (click)="newActivity()">
+      <div class="div-centered">
+        <mat-icon class="icon-huge">add_circle</mat-icon>
+        <p i18n="@@newActivity">Ajouter une activité</p>
+      </div>
+    </mat-card>
+  </div>
 </div>

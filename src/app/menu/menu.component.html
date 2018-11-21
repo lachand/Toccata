@@ -1,99 +1,209 @@
-<div layout="row" >
-
+<div layout="row">
   <mat-sidenav-container class="example-container" autosize>
     <mat-sidenav #sidenav mode="over" class="sidenav-content">
       <div class="fullDiv">
-      <div class="userInfos">
-      <app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos>
-      </div>
-      <div>
-        <mat-nav-list>
-          <mat-divider></mat-divider>
-          <mat-list-item (click)="sidenav.toggle();goToMyActivities();" i18n="@@myActivities">Mes activités</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item (click)="logout()" i18n="@@logout"><mat-icon>power_settings_new</mat-icon>Déconnexion</mat-list-item>
-        </mat-nav-list>
-      </div>
+        <div class="userInfos">
+          <app-participant-infos
+            *ngIf="!isNullOrUndefined(userService?.id)"
+            [participantId]="userService.id"
+            class="userAvatar"
+          ></app-participant-infos>
+        </div>
+        <div>
+          <mat-nav-list>
+            <mat-divider></mat-divider>
+            <mat-list-item
+              (click)="sidenav.toggle(); goToMyActivities()"
+              i18n="@@myActivities"
+              >Mes activités
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item (click)="logout()" i18n="@@logout">
+              <mat-icon>power_settings_new</mat-icon>
+              Déconnexion
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
       </div>
     </mat-sidenav>
 
     <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <div class="mat-toolbar-tools"></div>
 
-  <mat-toolbar color="primary">
-    <div class="mat-toolbar-tools">
+        <div>
+          <button
+            mat-button
+            *ngIf="userService.loggedIn"
+            (click)="sidenav.toggle()"
+          >
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
 
-    </div>
+        <h3>
+          <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
+            <div class="activity-name">
+              <div class="aligned-left">
+                <mat-icon
+                  *ngIf="
+                    !isNullOrUndefined(
+                      activityService?.activityLoaded?.nameForTeacher
+                    ) &&
+                    activityService?.activityLoaded?.nameForTeacher !== '' &&
+                    userService?.fonction === 'Enseignant'
+                  "
+                  matTooltip="Revenir aux groupes"
+                  (click)="goToGroups()"
+                  >arrow_back
+                </mat-icon>
+                <mat-icon
+                  *ngIf="
+                    router.url.includes('duplicates') &&
+                    userService?.fonction === 'Enseignant'
+                  "
+                  matTooltip="Revenir a l'activité"
+                  (click)="goToActivity()"
+                  >arrow_back
+                </mat-icon>
+                <mat-icon
+                  *ngIf="
+                    (isNullOrUndefined(
+                      activityService?.activityLoaded?.nameForTeacher
+                    ) ||
+                      (activityService?.activityLoaded?.nameForTeacher === '' &&
+                        userService?.fonction === 'Enseignant')) &&
+                    !router.url.includes('duplicates')
+                  "
+                  matTooltip="Revenir à vos activités"
+                  (click)="goToMyActivities()"
+                  >arrow_back
+                </mat-icon>
+              </div>
 
-    <div>
-    <button mat-button *ngIf="userService.loggedIn" (click)="sidenav.toggle();"><mat-icon>menu</mat-icon></button>
-    </div>
-
-      <h3>
-        <div *ngIf="activityService?.activityLoaded?.type === 'Main'">
-          <div class="activity-name">
-
-            <div class="aligned-left">
-              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== ''  && userService?.fonction === 'Enseignant'" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
-              <mat-icon *ngIf="router.url.includes('duplicates')  && userService?.fonction === 'Enseignant'" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
-              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== ''  && userService?.fonction === 'Enseignant') && !router.url.includes('duplicates')" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
+              <div class="aligned-left">
+                <activity-name-edit
+                  [activityId]="activityService?.activityLoaded?._id"
+                  [type]="'Loaded'"
+                  [edit]="true"
+                ></activity-name-edit>
+              </div>
+              <mat-chip-list class="chip-list">
+                <mat-chip
+                  *ngIf="userService.fonction === 'Enseignant'"
+                  class="chip"
+                  #chip
+                  (mouseenter)="onHoveringGroupView($event)"
+                  (mouseleave)="onUnoveringGroupView($event)"
+                  (click)="activityGroupView()"
+                >
+                  <mat-icon>group</mat-icon>
+                  {{ viewGroup }}
+                </mat-chip>
+              </mat-chip-list>
             </div>
+          </div>
 
-            <div class="aligned-left">
-              <activity-name-edit [activityId]="activityService?.activityLoaded?._id" [type]="'Loaded'" [edit]="true"></activity-name-edit>
+          <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
+            <div class="activity-name">
+              <div class="aligned-left">
+                <mat-icon
+                  *ngIf="
+                    !isNullOrUndefined(
+                      activityService?.activityLoaded?.nameForTeacher
+                    ) &&
+                    activityService?.activityLoaded?.nameForTeacher !== '' &&
+                    userService?.fonction === 'Enseignant'
+                  "
+                  matTooltip="Revenir aux groupes"
+                  (click)="goToGroups()"
+                  >arrow_back
+                </mat-icon>
+                <mat-icon
+                  *ngIf="
+                    router.url.includes('duplicates') &&
+                    userService?.fonction === 'Enseignant'
+                  "
+                  matTooltip="Revenir a l'activité"
+                  (click)="goToActivity()"
+                  >arrow_back
+                </mat-icon>
+                <mat-icon
+                  *ngIf="
+                    (isNullOrUndefined(
+                      activityService?.activityLoaded?.nameForTeacher
+                    ) ||
+                      activityService?.activityLoaded?.nameForTeacher === '') &&
+                    !router.url.includes('duplicates') &&
+                    userService?.fonction === 'Enseignant'
+                  "
+                  matTooltip="Revenir à vos activités"
+                  (click)="goToMyActivities()"
+                  >arrow_back
+                </mat-icon>
+              </div>
+
+              <div class="aligned-left">
+                <activity-name-edit
+                  class="aligned-left"
+                  [type]="'Parent'"
+                  [edit]="true"
+                  [activityId]="activityService?.activityLoaded?.parent"
+                ></activity-name-edit>
+                <div class="aligned-left">&nbsp; : &nbsp;</div>
+                <activity-name-edit
+                  class="aligned-left"
+                  [type]="'Loaded'"
+                  [edit]="true"
+                  [activityId]="activityService?.activityLoaded?._id"
+                ></activity-name-edit>
+                <div
+                  *ngIf="!activityService?.activityLoaded?.master"
+                  class="aligned-left"
+                >
+                  ({{ activityService?.activityLoaded?.nameForTeacher }})
+                </div>
+              </div>
             </div>
             <mat-chip-list class="chip-list">
-              <mat-chip *ngIf="userService.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+              <mat-chip
+                *ngIf="userService.fonction === 'Enseignant'"
+                class="chip"
+                #chip
+                (mouseenter)="onHoveringGroupView($event)"
+                (mouseleave)="onUnoveringGroupView($event)"
+                (click)="activityGroupView()"
+              >
                 <mat-icon>group</mat-icon>
-                {{viewGroup}}
+                {{ viewGroup }}
               </mat-chip>
-
             </mat-chip-list>
           </div>
-        </div>
+        </h3>
 
-        <div *ngIf="activityService?.activityLoaded?.type === 'Sequence'">
-          <div class="activity-name">
-
-            <div class="aligned-left">
-              <mat-icon *ngIf="!isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) && activityService?.activityLoaded?.nameForTeacher!== '' && userService?.fonction === 'Enseignant'" matTooltip="Revenir aux groupes" (click)="goToGroups()">arrow_back</mat-icon>
-              <mat-icon *ngIf="router.url.includes('duplicates')  && userService?.fonction === 'Enseignant'" matTooltip="Revenir a l'activité" (click)="goToActivity()">arrow_back</mat-icon>
-              <mat-icon *ngIf="(isNullOrUndefined(activityService?.activityLoaded?.nameForTeacher) || activityService?.activityLoaded?.nameForTeacher=== '') && !router.url.includes('duplicates')  && userService?.fonction === 'Enseignant'" matTooltip="Revenir à vos activités" (click)="goToMyActivities()">arrow_back</mat-icon>
-            </div>
-
-            <div class="aligned-left">
-              <activity-name-edit class="aligned-left" [type]="'Parent'" [edit]="true" [activityId]="activityService?.activityLoaded?.parent"
-              ></activity-name-edit> <div class="aligned-left">&nbsp; : 	&nbsp;</div>
-              <activity-name-edit class="aligned-left" [type]="'Loaded'" [edit]="true" [activityId]="activityService?.activityLoaded?._id"
-              ></activity-name-edit>
-              <div *ngIf="!activityService?.activityLoaded?.master" class="aligned-left">({{activityService?.activityLoaded?.nameForTeacher}})</div>
-            </div>
+        <div class="flex-auto"><span class="spacer"></span></div>
+        <div *ngIf="userService.loggedIn" class="aligned-right-padding-right">
+          <div class="aligned-left">
+            <app-participant-infos
+              *ngIf="!isNullOrUndefined(userService?.id)"
+              [participantId]="userService.id"
+              class="userAvatar"
+            ></app-participant-infos>
           </div>
-          <mat-chip-list class="chip-list">
-            <mat-chip *ngIf="userService.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
-              <mat-icon>group</mat-icon>
-              {{viewGroup}}
-            </mat-chip>
-
-          </mat-chip-list>
         </div>
-      </h3>
-
-    <div class="flex-auto">
-    <span class="spacer"></span>
-    </div>
-    <div *ngIf="userService.loggedIn" class="aligned-right-padding-right">
-      <div class="aligned-left"><app-participant-infos *ngIf="!isNullOrUndefined(userService?.id)" [participantId]="userService.id" class="userAvatar"></app-participant-infos></div>
-    </div>
-    <div *ngIf="!fullscreen" class="aligned-right-padding-right"> <mat-icon (click)="fullScreen()" matTooltip="Activer le plein écran">fullscreen</mat-icon></div>
-    <div *ngIf="fullscreen" class="aligned-right-padding-right"> <mat-icon (click)="fullScreen()" matTooltip="Fermer le plein écran">fullscreen_exit</mat-icon></div>
-
-  </mat-toolbar>
+        <div *ngIf="!fullscreen" class="aligned-right-padding-right">
+          <mat-icon (click)="fullScreen()" matTooltip="Activer le plein écran"
+            >fullscreen</mat-icon
+          >
+        </div>
+        <div *ngIf="fullscreen" class="aligned-right-padding-right">
+          <mat-icon (click)="fullScreen()" matTooltip="Fermer le plein écran"
+            >fullscreen_exit</mat-icon
+          >
+        </div>
+      </mat-toolbar>
 
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
-
-
 </div>
-
-

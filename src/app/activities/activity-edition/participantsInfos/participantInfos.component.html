@@ -1,4 +1,15 @@
-<img *ngIf="avatarUrl && !errorWhileLoading" [src]="avatarUrl" class="avatar-circle" [alt]="participant_name" (error)="loadingError()" [matTooltip]="participant_full_name">
-<div *ngIf="errorWhileLoading" class="text-block" [matTooltip]="participant_full_name">
-  {{participant_name}}
+<img
+  *ngIf="avatarUrl && !errorWhileLoading"
+  [src]="avatarUrl"
+  class="avatar-circle"
+  [alt]="participant_name"
+  (error)="loadingError()"
+  [matTooltip]="participant_full_name"
+/>
+<div
+  *ngIf="errorWhileLoading"
+  class="text-block"
+  [matTooltip]="participant_full_name"
+>
+  {{ participant_name }}
 </div>

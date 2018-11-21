@@ -1,21 +1,18 @@
-import {ChangeDetectorRef, Component, Inject, Input, OnInit} from '@angular/core';
-import {AppsService} from '../../../services/apps.service';
-import {ViewRef_} from '@angular/core/src/view';
-import {isNullOrUndefined} from 'util';
-import {LoggerService} from '../../../services/logger.service';
-import {ActivityService} from '../../../services/activity.service';
-import {ResourcesService} from '../../../services/resources.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { ChangeDetectorRef, Component, Inject, OnInit } from "@angular/core";
+import { ViewRef_ } from "@angular/core/src/view";
+import { isNullOrUndefined } from "util";
+import { LoggerService } from "../../../services/logger.service";
+import { ActivityService } from "../../../services/activity.service";
+import { ResourcesService } from "../../../services/resources.service";
+import { DomSanitizer } from "@angular/platform-browser";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 @Component({
-  selector: 'dialog-resource-opened',
-  templateUrl: './dialogResourceOpened.component.html',
-  styleUrls: ['./dialogResourceOpened.component.scss']
+  selector: "dialog-resource-opened",
+  templateUrl: "./dialogResourceOpened.component.html",
+  styleUrls: ["./dialogResourceOpened.component.scss"]
 })
-
 export class DialogResourceOpenedComponent implements OnInit {
-
   resourceId: any;
   resource: any;
   myUrl;
@@ -31,13 +28,14 @@ export class DialogResourceOpenedComponent implements OnInit {
    * @param {ResourcesService} resourcesService Service for resources management
    * @param {DomSanitizer} sanitizer Sanitizer for creating url
    */
-  constructor(private ref: ChangeDetectorRef,
-              private logger: LoggerService,
-              private activityService: ActivityService,
-              private resourcesService: ResourcesService,
-              private sanitizer: DomSanitizer,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-
+  constructor(
+    private ref: ChangeDetectorRef,
+    private logger: LoggerService,
+    private activityService: ActivityService,
+    private resourcesService: ResourcesService,
+    private sanitizer: DomSanitizer,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.resourceId = data.resourceId;
 
     this.resourcesService.changes.subscribe(change => {
@@ -45,9 +43,11 @@ export class DialogResourceOpenedComponent implements OnInit {
       if (this.resourceId === change.doc._id) {
         this.resource = change.doc;
         this.resource.id = change.doc._id;
-        if (this.ref !== null &&
+        if (
+          this.ref !== null &&
           this.ref !== undefined &&
-          !(this.ref as ViewRef_).destroyed) {
+          !(this.ref as ViewRef_).destroyed
+        ) {
           //this.ref.detectChanges();
         }
       }
@@ -68,29 +68,42 @@ export class DialogResourceOpenedComponent implements OnInit {
    */
   ngOnInit(): void {
     console.log(this.resourceId);
-    this.resourcesService.getResourceInfos(this.resourceId).then(resourceInfos => {
-      console.log(resourceInfos);
-      this.resource = resourceInfos;
-      console.log(this.resource.status);
-      if (this.resource.type === 'url') {
-        this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.resource.url);
-        console.log(this.myUrl);
-        this.ref.detectChanges();
-      } else {
-        this.resourcesService.getResourceData(this.resourceId, 'filename').then(ressource => {
-          this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(ressource));
-          //const iframe = document.getElementById(`iframe_${this.resourceId}`);
-          //console.log(iframe.document.document.body.scrollWidth/iframe.contentWindow.document.body.scrollHeight);
-        });
-      }
-    });
+    this.resourcesService
+      .getResourceInfos(this.resourceId)
+      .then(resourceInfos => {
+        console.log(resourceInfos);
+        this.resource = resourceInfos;
+        console.log(this.resource.status);
+        if (this.resource.type === "url") {
+          this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.resource.url
+          );
+          console.log(this.myUrl);
+          this.ref.detectChanges();
+        } else {
+          this.resourcesService
+            .getResourceData(this.resourceId, "filename")
+            .then(ressource => {
+              this.myUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+                URL.createObjectURL(ressource)
+              );
+              //const iframe = document.getElementById(`iframe_${this.resourceId}`);
+              //console.log(iframe.document.document.body.scrollWidth/iframe.contentWindow.document.body.scrollHeight);
+            });
+        }
+      });
   }
 
   /**
    * Close the fullscreen mode
    */
   fullscreen_exit() {
-    this.logger.log('CLOSE', this.activityService.activityLoaded._id, this.resourceId, 'close resource fullscreen');
+    this.logger.log(
+      "CLOSE",
+      this.activityService.activityLoaded._id,
+      this.resourceId,
+      "close resource fullscreen"
+    );
     this.dialogRef.close();
   }
 
@@ -107,8 +120,9 @@ export class DialogResourceOpenedComponent implements OnInit {
    * Reload the component
    */
   reload() {
-    let iframe = <HTMLIFrameElement>document.getElementById(`iframe_${this.resourceId}`);
+    let iframe = <HTMLIFrameElement>(
+      document.getElementById(`iframe_${this.resourceId}`)
+    );
     iframe.src = iframe.src;
   }
-
 }

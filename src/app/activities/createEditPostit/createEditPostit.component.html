@@ -4,16 +4,28 @@
   <h3 i18n="@@task">Tâche</h3>
 
   <mat-form-field>
-    <input matInput placeholder="Nom de la tâche" type="text" formControlName="taskName">
+    <input
+      matInput
+      placeholder="Nom de la tâche"
+      type="text"
+      formControlName="taskName"
+    />
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput placeholder="Estimation" type="number" formControlName="estimation">
+    <input
+      matInput
+      placeholder="Estimation"
+      type="number"
+      formControlName="estimation"
+    />
   </mat-form-field>
 
   <div>
     <button mat-button (click)="update()" i18n="@@validate">Valider</button>
     <button mat-button (click)="close()" i18n="@@cancel">Annuler</button>
-    <button mat-button (click)="deletePostit()" color="warn" i18n="@@delete">Supprimer</button>
+    <button mat-button (click)="deletePostit()" color="warn" i18n="@@delete">
+      Supprimer
+    </button>
   </div>
 </form>

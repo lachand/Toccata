@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {UserService} from './user.service';
-import {DatabaseService} from "./database.service";
+import { Injectable } from "@angular/core";
+import { UserService } from "./user.service";
+import { DatabaseService } from "./database.service";
 
 @Injectable()
 export class LoggerService {
@@ -26,17 +26,20 @@ export class LoggerService {
     this.logName = Date.now();
     this.logDocument = `Log_${this.user.id}_${this.logName}`;
     this.cpt = 0;
-    let doc = {
+    const doc = {
       _id: this.logDocument,
       name: `Log : ${this.logDocument}`,
       dbName: this.logDocument,
       log: `Time ; Year ; Month ; Day ; Hour ; Minutesnpm ; Seconds ; User ; Action ; Current activity ; Object ; Message ; Initiated by
       `,
-      documentType: 'Log'
+      documentType: "Log"
     };
     console.log("initLog");
-    this.database.addDocument(doc).then( () => {
-      this.logFile.setItem(`${this.logDocument}_${this.cpt}`, `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message ; Initiated by`);
+    this.database.addDocument(doc).then(() => {
+      this.logFile.setItem(
+        `${this.logDocument}_${this.cpt}`,
+        `Time ; Year ; Month ; Day ; Hour ; Minutes ; Seconds ;User ; Action ; Current activity ; Object ; Message ; Initiated by`
+      );
     });
     this.cpt++;
   }
@@ -50,20 +53,29 @@ export class LoggerService {
    * @param system Value to know if the action is initiated by the system or the user
    */
   log(actionType, activity, object, message, system: boolean = false) {
-    let initiatedBy = 'User';
+    let initiatedBy = "User";
     if (system) {
-      initiatedBy = 'System';
+      initiatedBy = "System";
     }
     const date = new Date();
-    this.database.getDocument(this.logDocument).then( res => {
-      res['log'] = res['log'] + `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.id} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}
+    this.database.getDocument(this.logDocument).then(res => {
+      res["log"] =
+        res["log"] +
+        `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth() +
+          1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${
+          this.user.id
+        } ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}
       `;
-      this.database.updateDocument(res).then( () => {
-        this.logFile.setItem(`${this.user.id}_${this.logName}_${this.cpt}`,
-          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth()+1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${this.user.id} ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}`);
+      this.database.updateDocument(res).then(() => {
+        this.logFile.setItem(
+          `${this.user.id}_${this.logName}_${this.cpt}`,
+          `${Date.now()} ; ${date.getUTCFullYear()} ; ${date.getUTCMonth() +
+            1} ; ${date.getUTCDate()} ; ${date.getUTCHours()} ; ${date.getUTCMinutes()} ; ${date.getUTCSeconds()} ; ${
+            this.user.id
+          } ; ${actionType} ; ${activity} ; ${object} ; ${message} ; ${initiatedBy}`
+        );
         this.cpt++;
       });
     });
   }
-
 }

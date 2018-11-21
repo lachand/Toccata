@@ -1,18 +1,33 @@
 <h3 class="main-title">
   <div>
     <div class="title">
-      <p class="aligned-with-text" i18n="@@activityGroups">Groupes : {{activityInfo?.name}}</p>
+      <p class="aligned-with-text" i18n="@@activityGroups">
+        Groupes : {{ activityInfo?.name }}
+      </p>
     </div>
   </div>
 </h3>
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-  <br>
-  <div *ngFor="let activity of duplicateList" fxFlex="33%" flex-gt-sm="30" flex-sm="100"
-       class="flex-card">
-    <app-activity-infos-teacher class="activity-card" [activityId]="activity"></app-activity-infos-teacher>
+  <br />
+  <div
+    *ngFor="let activity of duplicateList"
+    fxFlex="33%"
+    flex-gt-sm="30"
+    flex-sm="100"
+    class="flex-card"
+  >
+    <app-activity-infos-teacher
+      class="activity-card"
+      [activityId]="activity"
+    ></app-activity-infos-teacher>
   </div>
 
-  <div front fxFlex="33%" class="flex-card" *ngIf="user.fonction === 'Enseignant' && creation === true">
+  <div
+    front
+    fxFlex="33%"
+    class="flex-card"
+    *ngIf="user.fonction === 'Enseignant' && creation === true"
+  >
     <mat-card class="activity-card">
       <div class="div-centered">
         <mat-spinner style="margin:0 auto;"></mat-spinner>
@@ -21,11 +36,14 @@
     </mat-card>
   </div>
 
-  <div front fxFlex="33%" class="flex-card" *ngIf="user.fonction === 'Enseignant'">
+  <div
+    front
+    fxFlex="33%"
+    class="flex-card"
+    *ngIf="user.fonction === 'Enseignant'"
+  >
     <mat-card class="activity-card" (click)="duplicateActivity()">
-      <div class="div-centered">
-        <p i18n="@@newGroup">Ajouter un groupe</p>
-      </div>
+      <div class="div-centered"><p i18n="@@newGroup">Ajouter un groupe</p></div>
     </mat-card>
   </div>
 </div>

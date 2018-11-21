@@ -1,25 +1,24 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {AppsService} from '../../../services/apps.service';
-import {LoggerService} from '../../../services/logger.service';
-import {ActivityService} from '../../../services/activity.service';
-import {UserService} from '../../../services/user.service';
+import { Component, Input, OnInit } from "@angular/core";
+import { AppsService } from "../../../services/apps.service";
+import { LoggerService } from "../../../services/logger.service";
+import { ActivityService } from "../../../services/activity.service";
+import { UserService } from "../../../services/user.service";
 
 @Component({
-  selector: 'app-application-infos',
-  templateUrl: './applicationInfos.component.html',
-  styleUrls: ['./applicationInfos.component.scss']
+  selector: "app-application-infos",
+  templateUrl: "./applicationInfos.component.html",
+  styleUrls: ["./applicationInfos.component.scss"]
 })
-
 export class ApplicationInfosComponent implements OnInit {
-
   @Input() applicationId;
   application: any;
 
-  constructor(public appsService: AppsService,
-              private logger: LoggerService,
-              private activityService: ActivityService,
-              public userService: UserService) {
-  }
+  constructor(
+    public appsService: AppsService,
+    private logger: LoggerService,
+    private activityService: ActivityService,
+    public userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.appsService.changes.subscribe(change => {
@@ -27,28 +26,42 @@ export class ApplicationInfosComponent implements OnInit {
         this.application = change.doc;
       }
     });
-    this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
-  }
-
-  deleteApp() {
-      this.appsService.getApplicationInfos(this.applicationId).then(app => {
-        console.log(app, app['activity']);
-        this.activityService.deleteApp(app['id'], app['activity']);
+    this.appsService
+      .getApplicationInfos(this.applicationId)
+      .then(applicationInfos => {
+        this.application = applicationInfos;
       });
   }
 
-  openApplication() {
-    this.logger.log('OPEN', this.activityService.activityLoaded._id, this.applicationId, 'open application');
-    this.appsService.openApplication(this.applicationId, this.activityService.activityLoaded._id).then(applicationInfos => {
-      this.application = applicationInfos;
+  deleteApp() {
+    this.appsService.getApplicationInfos(this.applicationId).then(app => {
+      console.log(app, app["activity"]);
+      this.activityService.deleteApp(app["id"], app["activity"]);
     });
   }
 
+  openApplication() {
+    this.logger.log(
+      "OPEN",
+      this.activityService.activityLoaded._id,
+      this.applicationId,
+      "open application"
+    );
+    this.appsService
+      .openApplication(
+        this.applicationId,
+        this.activityService.activityLoaded._id
+      )
+      .then(applicationInfos => {
+        this.application = applicationInfos;
+      });
+  }
+
   switchStatus() {
-    this.appsService.switchApplicationStatus(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
+    this.appsService
+      .switchApplicationStatus(this.applicationId)
+      .then(applicationInfos => {
+        this.application = applicationInfos;
+      });
   }
 }

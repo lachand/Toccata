@@ -4,55 +4,111 @@
   <h3 i18n="@@newApp">Nouvelle application</h3>
 
   <mat-form-field>
-    <mat-select matInput placeholder="Type d'application" formControlName="appType" ngDefaultControl><mat-hint class="hint-red" *ngIf="error['passwordCheck']" i18n="@@errorPasswordCheck">Lesm ots de passes ne correspondent pas</mat-hint>
-    <mat-option *ngFor="let appType of appsType" [value]="appType">
-      {{ appType }}
-    </mat-option>
-  </mat-select>
-    <mat-hint class="hint-red" *ngIf="error['appType']" i18n="@@errorAppType">Merci de choisir un type d'application</mat-hint>
+    <mat-select
+      matInput
+      placeholder="Type d'application"
+      formControlName="appType"
+      ngDefaultControl
+    >
+      <mat-hint
+        class="hint-red"
+        *ngIf="error['passwordCheck']"
+        i18n="@@errorPasswordCheck"
+        >Lesm ots de passes ne correspondent pas
+      </mat-hint>
+      <mat-option *ngFor="let appType of appsType" [value]="appType">
+        {{ appType }}
+      </mat-option>
+    </mat-select>
+    <mat-hint class="hint-red" *ngIf="error['appType']" i18n="@@errorAppType"
+      >Merci de choisir un type d'application
+    </mat-hint>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput placeholder="Nom de l'application" type="text" formControlName="appName">
-    <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName">Merci de définir un nom pour l'application</mat-hint>
+    <input
+      matInput
+      placeholder="Nom de l'application"
+      type="text"
+      formControlName="appName"
+    />
+    <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName"
+      >Merci de définir un nom pour l'application
+    </mat-hint>
   </mat-form-field>
 
   <div [hidden]="!(appType == 'Chronomètre')">
     <mat-form-field>
-      <input matInput placeholder="Durée" type="time" formControlName="chronometreValue">
-      <mat-hint class="hint-red" *ngIf="error['chronometerValue']" i18n="@@errorAppName">Merci de définir une durée</mat-hint>
+      <input
+        matInput
+        placeholder="Durée"
+        type="time"
+        formControlName="chronometreValue"
+      />
+      <mat-hint
+        class="hint-red"
+        *ngIf="error['chronometerValue']"
+        i18n="@@errorAppName"
+        >Merci de définir une durée
+      </mat-hint>
     </mat-form-field>
   </div>
 
   <div [hidden]="!(appType == 'Externe')">
     <!--
-    <mat-form-field>
-      <input matInput placeholder="Nom du service" type="text" formControlName="serviceName">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Nom du service" type="text" formControlName="serviceName">
+      </mat-form-field>
     -->
     <mat-form-field>
-      <input matInput placeholder="Lien vers l'application" type="text" formControlName="url">
-      <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName">Merci de définir une url</mat-hint>
+      <input
+        matInput
+        placeholder="Lien vers l'application"
+        type="text"
+        formControlName="url"
+      />
+      <mat-hint class="hint-red" *ngIf="error['appName']" i18n="@@errorAppName"
+        >Merci de définir une url</mat-hint
+      >
     </mat-form-field>
-
   </div>
 
   <div>
     Rendre l'application disponible pour :
     <div>
-    <mat-button-toggle-group name="stepOrActivity" formControlName="stepOrActivity" aria-label="Etape ou activité ?">
-      <mat-button-toggle value="step" checked="true">Etape uniquement</mat-button-toggle>
-      <mat-button-toggle value="activity">Toute l'activité</mat-button-toggle>
-    </mat-button-toggle-group>
+      <mat-button-toggle-group
+        name="stepOrActivity"
+        formControlName="stepOrActivity"
+        aria-label="Etape ou activité ?"
+      >
+        <mat-button-toggle value="step" checked="true"
+          >Etape uniquement</mat-button-toggle
+        >
+        <mat-button-toggle value="activity">Toute l'activité</mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
     <div>
-    <mat-hint class="hint-red" *ngIf="error['stepOrActivity']" i18n="@@errorAppType">Merci de définir la disponibilité de l'application</mat-hint>
+      <mat-hint
+        class="hint-red"
+        *ngIf="error['stepOrActivity']"
+        i18n="@@errorAppType"
+        >Merci de définir la disponibilité de l'application
+      </mat-hint>
     </div>
   </div>
   <mat-card-actions>
     <div class="float-right">
-    <button class="margin-right" mat-stroked-button i18n="@@cancel" (click)="dialogRef.close()">Annuler</button>
-    <button class=" margin-right" mat-flat-button type="submit" i18n="@@add">Ajouter</button>
+      <button
+        class="margin-right"
+        mat-stroked-button
+        i18n="@@cancel"
+        (click)="dialogRef.close()"
+      >
+        Annuler
+      </button>
+      <button class=" margin-right" mat-flat-button type="submit" i18n="@@add">
+        Ajouter
+      </button>
     </div>
   </mat-card-actions>
 </form>

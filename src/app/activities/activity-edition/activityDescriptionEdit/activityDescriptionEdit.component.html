@@ -1,19 +1,46 @@
 <script src="../../../../main.ts"></script>
 <mat-card-header>
-  <h3 *ngIf="type === 'Parent'" (click)="switchDescription()" mat-line i18n="@@instructions">Description de l'activité<mat-icon *ngIf="edit" class="aligned-with-text">edit</mat-icon></h3>
-  <h3 *ngIf="type === 'Loaded'" (click)="switchDescription()" mat-line i18n="@@instructions">Consignes de l'étape<mat-icon  *ngIf="edit" class="aligned-with-text">edit</mat-icon></h3>
+  <h3
+    *ngIf="type === 'Parent'"
+    (click)="switchDescription()"
+    mat-line
+    i18n="@@instructions"
+  >
+    Description de l'activité
+    <mat-icon *ngIf="edit" class="aligned-with-text">edit</mat-icon>
+  </h3>
+  <h3
+    *ngIf="type === 'Loaded'"
+    (click)="switchDescription()"
+    mat-line
+    i18n="@@instructions"
+  >
+    Consignes de l'étape
+    <mat-icon *ngIf="edit" class="aligned-with-text">edit</mat-icon>
+  </h3>
 </mat-card-header>
 
-<div *ngIf="!descriptionEdition" class="name-edition" (click)="switchDescription()">
+<div
+  *ngIf="!descriptionEdition"
+  class="name-edition"
+  (click)="switchDescription()"
+>
   <div [innerHTML]="description"></div>
 </div>
 
 <div *ngIf="descriptionEdition" class="name-edition" (focusout)="focusOut()">
-  <ckeditor [config]="editorOptions" [editor]="Editor" [data]="description" (focusout)="focusOut()" (change)="onChange($event)"></ckeditor>
-  <div>Dernière sauvegarde il y à {{latestSaveInMinute}} minutes : tout changement non sauvegardé sera perdu.</div>
-  <button mat-stroked-button (click)="switchDescription()">
-    Annuler
-  </button>
+  <ckeditor
+    [config]="editorOptions"
+    [editor]="Editor"
+    [data]="description"
+    (focusout)="focusOut()"
+    (change)="onChange($event)"
+  ></ckeditor>
+  <div>
+    Dernière sauvegarde il y à {{ latestSaveInMinute }} minutes : tout
+    changement non sauvegardé sera perdu.
+  </div>
+  <button mat-stroked-button (click)="switchDescription()">Annuler</button>
   <button class="margin-left" mat-flat-button (click)="changeTheDescription()">
     Enregistrer
   </button>

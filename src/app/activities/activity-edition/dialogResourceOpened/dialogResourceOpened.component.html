@@ -1,16 +1,32 @@
-<div class="fullscreen-div" id="div_{{resourceId}}" *ngIf="resource?.status==='loaded'">
+<div
+  class="fullscreen-div"
+  id="div_{{resourceId}}"
+  *ngIf="resource?.status === 'loaded'"
+>
   <div class="name">
-    <h3 class="float-left">{{resource?.name}}</h3>
-    <button class="menu-left-align aligned-with-text" mat-icon-button (click)="reload()">
+    <h3 class="float-left">{{ resource?.name }}</h3>
+    <button
+      class="menu-left-align aligned-with-text"
+      mat-icon-button
+      (click)="reload()"
+    >
       <mat-icon>autorenew</mat-icon>
     </button>
   </div>
   <div class="buttons">
-  <button class="menu-right-align" mat-icon-button (click)="fullscreen_exit()">
-    <mat-icon>fullscreen_exit</mat-icon>
-  </button>
+    <button
+      class="menu-right-align"
+      mat-icon-button
+      (click)="fullscreen_exit()"
+    >
+      <mat-icon>fullscreen_exit</mat-icon>
+    </button>
   </div>
   <div>
-    <iframe class="iframe_resource" id="iframe_{{resourceId}}" [src]="myUrl"></iframe>
+    <iframe
+      class="iframe_resource"
+      id="iframe_{{resourceId}}"
+      [src]="myUrl"
+    ></iframe>
   </div>
 </div>

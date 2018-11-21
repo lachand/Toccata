@@ -1,10 +1,27 @@
-<mat-card-title><span>Temps restant ({{step}}) : <span id="title">{{title}}</span></span><span>
-  <mat-icon class="icon-down" style="font-size:50px" *ngIf="title !== '00:00'"
-            (click)="timerStart()">play_arrow</mat-icon>
-  <mat-icon class="icon-down" style="font-size:50px" *ngIf="userService.fonction === 'Enseignant'"
-            (click)="timerPause()">pause</mat-icon>
-  <mat-icon class="icon-down" style="font-size:50px" *ngIf="userService.fonction === 'Enseignant'"
-            (click)="timerReload()">replay</mat-icon>
+<mat-card-title
+  ><span
+    >Temps restant ({{ step }}) : <span id="title">{{ title }}</span></span
+  ><span>
+    <mat-icon
+      class="icon-down"
+      style="font-size:50px"
+      *ngIf="title !== '00:00'"
+      (click)="timerStart()"
+      >play_arrow</mat-icon
+    >
+    <mat-icon
+      class="icon-down"
+      style="font-size:50px"
+      *ngIf="userService.fonction === 'Enseignant'"
+      (click)="timerPause()"
+      >pause</mat-icon
+    >
+    <mat-icon
+      class="icon-down"
+      style="font-size:50px"
+      *ngIf="userService.fonction === 'Enseignant'"
+      (click)="timerReload()"
+      >replay</mat-icon
+    >
   </span>
 </mat-card-title>
-

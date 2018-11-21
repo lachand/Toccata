@@ -1,59 +1,67 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {ActivityService} from '../../../services/activity.service';
-import {LoggerService} from '../../../services/logger.service';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {ChangeEvent} from '@ckeditor/ckeditor5-angular/ckeditor.component';
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import { ActivityService } from "../../../services/activity.service";
+import { LoggerService } from "../../../services/logger.service";
+import { ChangeEvent } from "@ckeditor/ckeditor5-angular/ckeditor.component";
 
 @Component({
-  selector: 'app-notes',
-  templateUrl: './appNotes.component.html',
-  styleUrls: ['./appNotes.component.scss']
+  selector: "app-notes",
+  templateUrl: "./appNotes.component.html",
+  styleUrls: ["./appNotes.component.scss"]
 })
-
 export class AppNotesComponent implements OnInit {
   notesEdition: boolean;
-  notes: String = '';
+  notes: String = "";
   editorOptions: any;
   @Input() edit: boolean;
 
-  constructor(public activityService: ActivityService,
-              private logger: LoggerService,
-              private ref: ChangeDetectorRef) {
-
-    if (this.activityService.activityLoaded.notes !== '') {
+  constructor(
+    public activityService: ActivityService,
+    private logger: LoggerService,
+    private ref: ChangeDetectorRef
+  ) {
+    if (this.activityService.activityLoaded.notes !== "") {
       this.notes = this.activityService.activityLoaded.notes;
     }
 
     this.editorOptions = {
-      toolbar: 'full',
+      toolbar: "full",
       toolbar_full: [
         {
-          name: 'basicstyles',
-          items: ['Bold', 'Italic', 'Strike', 'Underline']
+          name: "basicstyles",
+          items: ["Bold", "Italic", "Strike", "Underline"]
         },
-        {name: 'paragraph', items: ['BulletedList', 'NumberedList', 'Blockquote']},
-        {name: 'editing', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-        {name: 'links', items: ['Link', 'Unlink']},
-        '/',
         {
-          name: 'styles',
-          items: ['FontSize', 'TextColor', 'PasteText', 'PasteFromWord']
+          name: "paragraph",
+          items: ["BulletedList", "NumberedList", "Blockquote"]
         },
-        {name: 'insert', items: ['Image', 'Table']},
-        {name: 'forms', items: ['Outdent', 'Indent']},
-        {name: 'clipboard', items: ['Undo', 'Redo']}
+        {
+          name: "editing",
+          items: [
+            "JustifyLeft",
+            "JustifyCenter",
+            "JustifyRight",
+            "JustifyBlock"
+          ]
+        },
+        { name: "links", items: ["Link", "Unlink"] },
+        "/",
+        {
+          name: "styles",
+          items: ["FontSize", "TextColor", "PasteText", "PasteFromWord"]
+        },
+        { name: "insert", items: ["Image", "Table"] },
+        { name: "forms", items: ["Outdent", "Indent"] },
+        { name: "clipboard", items: ["Undo", "Redo"] }
       ],
       disableNativeSpellChecker: false,
-      uiColor: '#FAFAFA',
+      uiColor: "#FAFAFA"
     };
-
-
 
     this.activityService.changes.subscribe(change => {
       if (change.doc._id === this.activityService.activityLoaded._id) {
         this.notes = change.doc.notes;
       }
-      if (!this.ref['destroyed']) {
+      if (!this.ref["destroyed"]) {
         this.ref.detectChanges();
       }
     });
@@ -63,10 +71,10 @@ export class AppNotesComponent implements OnInit {
    * Open or close text editor
    */
   switchNotes() {
-      this.notesEdition = !this.notesEdition;
+    this.notesEdition = !this.notesEdition;
   }
 
-  onChange( { editor }: ChangeEvent ) {
+  onChange({ editor }: ChangeEvent) {
     this.notes = editor.getData();
   }
 
@@ -76,10 +84,15 @@ export class AppNotesComponent implements OnInit {
   saveNotes(system: boolean = true) {
     if (this.notesEdition) {
       this.notesEdition = !this.notesEdition;
-      return this.activityService.activityEdit(this.activityService.activityLoaded._id, 'notes', this.notes, system);
+      return this.activityService.activityEdit(
+        this.activityService.activityLoaded._id,
+        "notes",
+        this.notes,
+        system
+      );
     } else {
       this.notesEdition = !this.notesEdition;
-      return new Promise( resolve => {
+      return new Promise(resolve => {
         resolve(0);
       });
     }

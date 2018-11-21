@@ -1,49 +1,67 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {ActivityService} from '../../../services/activity.service';
-import {LoggerService} from '../../../services/logger.service';
-import {Router} from '@angular/router';
-import {UserService} from '../../../services/user.service';
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import { ActivityService } from "../../../services/activity.service";
+import { LoggerService } from "../../../services/logger.service";
+import { Router } from "@angular/router";
+import { UserService } from "../../../services/user.service";
 
 @Component({
-  selector: 'activity-name-edit',
-  templateUrl: './activityNameEdit.component.html',
-  styleUrls: ['./activityNameEdit.component.scss']
+  selector: "activity-name-edit",
+  templateUrl: "./activityNameEdit.component.html",
+  styleUrls: ["./activityNameEdit.component.scss"]
 })
-
 export class ActivityNameEditComponent implements OnInit {
   nameEdition: boolean;
-  appName: String = '';
+  appName: String = "";
   viewActivity: any;
   viewGroup: any;
   @Input() edit: boolean;
   @Input() activityId: string;
   @Input() type: string;
 
-  constructor (public activityService: ActivityService, private logger: LoggerService, private router: Router, private ref: ChangeDetectorRef, private userService: UserService) {
-
+  constructor(
+    public activityService: ActivityService,
+    private logger: LoggerService,
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    private userService: UserService
+  ) {
     this.activityService.changes.subscribe(change => {
       let previousName: String;
       console.log(change);
-      if ((change.type === 'Activity' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded._id && change.doc.type === 'Sequence' && this.type === 'Loaded') {
+      if (
+        (change.type === "Activity" || change.type === "Sequence") &&
+        change.doc._id === this.activityService.activityLoaded._id &&
+        change.doc.type === "Sequence" &&
+        this.type === "Loaded"
+      ) {
         previousName = this.appName;
         this.appName = change.doc.name;
-      } else if ((change.type === 'Activity' || change.type === 'Sequence') && change.doc._id === this.activityService.activityLoaded.parent && change.doc.type === 'Main' && this.type === 'Parent') {
+      } else if (
+        (change.type === "Activity" || change.type === "Sequence") &&
+        change.doc._id === this.activityService.activityLoaded.parent &&
+        change.doc.type === "Main" &&
+        this.type === "Parent"
+      ) {
         previousName = this.appName;
         this.appName = change.doc.name;
       }
 
-      if (change.type === 'ChangeActivity' && this.type === 'Loaded' && change.doc.name !== this.appName) {
+      if (
+        change.type === "ChangeActivity" &&
+        this.type === "Loaded" &&
+        change.doc.name !== this.appName
+      ) {
         console.log(change.type);
         this.appName = change.doc.name;
       }
 
-      if (!this.ref['destroyed'] && this.appName !== previousName) {
+      if (!this.ref["destroyed"] && this.appName !== previousName) {
         this.ref.detectChanges();
       }
     });
     this.nameEdition = false;
-    this.appName = '';
-    this.viewActivity = '';
+    this.appName = "";
+    this.viewActivity = "";
   }
 
   switch() {
@@ -56,25 +74,23 @@ export class ActivityNameEditComponent implements OnInit {
    * Change the name of the activity
    */
   changeTheName() {
+    let id = "";
 
-    let id = '';
-
-    if (this.type === 'Loaded') {
+    if (this.type === "Loaded") {
       id = this.activityService.activityLoaded._id;
     } else {
-      id = this.activityService.activityLoaded.parent ;
+      id = this.activityService.activityLoaded.parent;
     }
 
     console.log(id);
 
-    this.activityService.activityEdit(id, 'name', this.appName)
-      .then(() => {
-        console.log("done");
-        this.switch();
-      });
+    this.activityService.activityEdit(id, "name", this.appName).then(() => {
+      console.log("done");
+      this.switch();
+    });
   }
 
-  focusOut(){
+  focusOut() {
     this.changeTheName();
   }
 
@@ -83,23 +99,24 @@ export class ActivityNameEditComponent implements OnInit {
     if (this.userService.fonction !== "Enseignant") {
       this.edit = false;
     }
-    if (this.type === 'Loaded') {
+    if (this.type === "Loaded") {
       this.appName = this.activityService.activityLoaded.name;
       console.log(this.appName);
     } else {
-      this.activityService.getActivityInfos(this.activityService.activityLoaded.parent).then(res => {
-        this.appName = res['name'];
-        console.log(this.appName);
-      });
+      this.activityService
+        .getActivityInfos(this.activityService.activityLoaded.parent)
+        .then(res => {
+          this.appName = res["name"];
+          console.log(this.appName);
+        });
     }
   }
 
   keyPressed(ev) {
     console.log(`Pressed keyCode ${ev.key}`);
-    if (ev.key === 'Enter') {
+    if (ev.key === "Enter") {
       this.changeTheName();
       ev.preventDefault();
     }
   }
-
 }

@@ -1,4 +1,10 @@
-<chronometre-infos *ngIf="application?.type === 'Chronomètre' && application?.status === 'loaded'"
-                   [applicationId]="application?.id"></chronometre-infos>
-<postit-infos *ngIf="application?.type === 'Post-It' && application?.status === 'loaded'"
-              [appId]="application?.id"></postit-infos>
+<chronometre-infos
+  *ngIf="
+    application?.type === 'Chronomètre' && application?.status === 'loaded'
+  "
+  [applicationId]="application?.id"
+></chronometre-infos>
+<postit-infos
+  *ngIf="application?.type === 'Post-It' && application?.status === 'loaded'"
+  [appId]="application?.id"
+></postit-infos>

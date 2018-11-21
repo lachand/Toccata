@@ -1,20 +1,25 @@
 <script src="../../../../main.ts"></script>
 
-  <form>
+<form>
+  <mat-card-header> <h3 mat-line>Participants</h3> </mat-card-header>
 
-    <mat-card-header>
-      <h3 mat-line>Participants</h3>
-    </mat-card-header>
-
-    <div fxLayout="row" class="div-participants">
-      <div fxFlex="25%" *ngFor="let participantId of activityService.userService.participants">
-        <app-participant-infos [participantId]="participantId"></app-participant-infos>
+  <div fxLayout="row" class="div-participants">
+    <div
+      fxFlex="25%"
+      *ngFor="let participantId of activityService.userService.participants"
+    >
+      <app-participant-infos
+        [participantId]="participantId"
+      ></app-participant-infos>
     </div>
 
     <div fxFlex="25%">
-      <mat-icon class="icon-huge" (click)="changeParticipants()"
-                *ngIf="userService.fonction === 'Enseignant' && edit===true">add_circle
+      <mat-icon
+        class="icon-huge"
+        (click)="changeParticipants()"
+        *ngIf="userService.fonction === 'Enseignant' && edit === true"
+        >add_circle
       </mat-icon>
     </div>
-    </div>
-  </form>
+  </div>
+</form>

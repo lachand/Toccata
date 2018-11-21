@@ -1,13 +1,14 @@
 <script src="../../../../main.ts"></script>
-<!--<div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>-->
+<!--
+  <div style="height: 400px; overflow-y: auto" ngx-auto-scroll lock-y-offset="10" observe-attributes>
+-->
 <div layout="row">
   <mat-nav-list>
-
     <div *ngFor="let resourceId of resourcesService?.resources">
       <app-resource-infos [resourceId]="resourceId"></app-resource-infos>
     </div>
 
-    <mat-list-item *ngIf="edit===true" (click)="newResource()">
+    <mat-list-item *ngIf="edit === true" (click)="newResource()">
       <mat-icon mat-list-icon>add_circle</mat-icon>
       <p mat-line i18n="@@newResource">Nouvelle ressource</p>
     </mat-list-item>

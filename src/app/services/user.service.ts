@@ -1,6 +1,6 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
-import {DatabaseService} from './database.service';
-import {Md5} from "ts-md5";
+import { EventEmitter, Injectable, Output } from "@angular/core";
+import { DatabaseService } from "./database.service";
+import { Md5 } from "ts-md5";
 
 @Injectable()
 export class UserService {
@@ -32,7 +32,6 @@ export class UserService {
    * @returns {Promise<any>} The confirmation of creation
    */
   signup(username: string, password: string) {
-
     return new Promise((resolve, reject) => {
       resolve(username);
     });
@@ -46,42 +45,45 @@ export class UserService {
    */
   public login(username, password) {
     return new Promise((resolve, reject) => {
-        return this.database.getDocument(username).then(user => {
+      return this.database
+        .getDocument(username)
+        .then(user => {
           const md5 = new Md5();
           const hashedPassword = md5.appendStr(password).end();
           if (true) {
-          //  console.log('ok');
-          //if (user['hashedPassword'] === hashedPassword) {
-          this.loggedIn = true;
+            //  console.log('ok');
+            //if (user['hashedPassword'] === hashedPassword) {
+            this.loggedIn = true;
             this.id = username;
             return this.database.getDocument(username);
           }
-          })
-          .then((res) => {
-            this.name = res['name'];
-            this.id = res['_id'];
-            this.avatar = res['avatar'];
-            this.fonction = res['fonct'];
+        })
+        .then(res => {
+          this.name = res["name"];
+          this.id = res["_id"];
+          this.avatar = res["avatar"];
+          this.fonction = res["fonct"];
 
-            Promise.all( res['activityList'].map (activity => {
+          Promise.all(
+            res["activityList"].map(activity => {
               return this.database.addDatabase(activity);
-            })).then( () => {
-              let docNumber = 0;
-              this.database.dbRemote.query('my_index/by_dbName').then(res => {
-                for (const doc of res.rows) {
-                  for (const database of this.database.dbList) {
-                    if (database === doc.key) {
-                      docNumber++;
-                    }
+            })
+          ).then(() => {
+            let docNumber = 0;
+            this.database.dbRemote.query("my_index/by_dbName").then(res => {
+              for (const doc of res.rows) {
+                for (const database of this.database.dbList) {
+                  if (database === doc.key) {
+                    docNumber++;
                   }
                 }
-                this.database.dbSize = docNumber;
-                resolve(true);
-              });
+              }
+              this.database.dbSize = docNumber;
+              resolve(true);
             });
           });
-      }
-    );
+        });
+    });
   }
 
   /**
@@ -91,7 +93,7 @@ export class UserService {
   getUserAvatar(participant) {
     return new Promise(resolve => {
       return this.database.getDocument(participant).then(res => {
-        resolve((res['avatar']));
+        resolve(res["avatar"]);
       });
     });
   }
@@ -125,38 +127,49 @@ export class UserService {
    * @param isTeacher Whether the user is a teacher or not
    * @returns {Promise<any>} The created user
    */
-  createUser(username: string, name: string, surname: string, password: string, avatar: string, isTeacher: any) {
+  createUser(
+    username: string,
+    name: string,
+    surname: string,
+    password: string,
+    avatar: string,
+    isTeacher: any
+  ) {
     const md5 = new Md5();
     const hashedPassword = md5.appendStr(password).end();
     return new Promise(resolve => {
-      const fonct = isTeacher ? 'Enseignant' : 'Eleve';
+      const fonct = isTeacher ? "Enseignant" : "Eleve";
       const document = {
         _id: username,
-        name: name,
-        surname: surname,
-        hashedPassword: hashedPassword,
-        avatar: avatar,
-        fonct: fonct,
+        name,
+        surname,
+        hashedPassword,
+        avatar,
+        fonct,
         activityList: [],
-        documentType: 'user',
+        documentType: "user",
         dbName: `user_${username}`
       };
 
-      return this.database.addDatabase(document.dbName)
+      return this.database
+        .addDatabase(document.dbName)
         .then(databaseCreated => {
-          return this.database.addDocument(document); })
+          return this.database.addDocument(document);
+        })
         .then(res => {
-          return this.database.getDocument('user_list');
+          return this.database.getDocument("user_list");
         })
         .then(user_list => {
-          if (user_list['userList'].indexOf(document._id) === -1) {
-            user_list['userList'].push(document._id);
+          if (user_list["userList"].indexOf(document._id) === -1) {
+            user_list["userList"].push(document._id);
           }
           return this.database.updateDocument(user_list);
-        } )
-        .then( () => {resolve (document._id); })
+        })
+        .then(() => {
+          resolve(document._id);
+        })
         .catch(err => {
-          console.log(`Error in user service whith call to createUser : 
+          console.log(`Error in user service whith call to createUser :
         ${err}`);
         });
     });
@@ -168,12 +181,14 @@ export class UserService {
    */
   getAllUsers() {
     return new Promise(resolve => {
-      return this.database.getDocument('user_list').then(res => {
-        this.allUsers = res['userList'];
-        resolve(this.allUsers);
-      })
+      return this.database
+        .getDocument("user_list")
+        .then(res => {
+          this.allUsers = res["userList"];
+          resolve(this.allUsers);
+        })
         .catch(err => {
-          console.log(`Error in user service whith call to getAllUsers : 
+          console.log(`Error in user service whith call to getAllUsers :
         ${err}`);
         });
     });
@@ -187,18 +202,21 @@ export class UserService {
   getParticipants(activityId) {
     return new Promise(resolve => {
       const tempThis = this;
-      return this.database.getDocument(activityId).then(activity => {
-          this.participants = activity['userList'];
-          return Promise.all(this.participants.map(function (user) {
-            return tempThis.database.addDatabase(`user_${user}`);
-          }));
-        }
-      )
+      return this.database
+        .getDocument(activityId)
+        .then(activity => {
+          this.participants = activity["userList"];
+          return Promise.all(
+            this.participants.map(function(user) {
+              return tempThis.database.addDatabase(`user_${user}`);
+            })
+          );
+        })
         .then(() => {
           resolve(this.participants);
         })
         .catch(err => {
-          console.log(`Error in user service whith call to getParticipants : 
+          console.log(`Error in user service whith call to getParticipants :
         ${err}`);
         });
     });
@@ -210,18 +228,19 @@ export class UserService {
    */
   deleteUser(userId) {
     return new Promise(resolve => {
-      return this.database.removeDocument(userId).then( () => {
-        return this.database.getDocument('user_list');
-      })
-        .then( res => {
-          res['userList'].splice( res['userList'].indexOf(userId), 1 );
+      return this.database
+        .removeDocument(userId)
+        .then(() => {
+          return this.database.getDocument("user_list");
+        })
+        .then(res => {
+          res["userList"].splice(res["userList"].indexOf(userId), 1);
           return this.database.updateDocument(res);
         })
-        .then( deletion => {
+        .then(deletion => {
           resolve(deletion);
         });
     });
-
   }
 
   /**
@@ -230,15 +249,16 @@ export class UserService {
    */
   getParticipantInfos(participantId: any) {
     return new Promise(resolve => {
-      return this.database.getDocument(participantId)
+      return this.database
+        .getDocument(participantId)
         .then(participant => {
-          this.getUserAvatar(participantId).then( url => {
-            participant['url'] = url;
+          this.getUserAvatar(participantId).then(url => {
+            participant["url"] = url;
             resolve(participant);
           });
         })
         .catch(err => {
-          console.log(`Error in user service whith call to getParticipantInfos : 
+          console.log(`Error in user service whith call to getParticipantInfos :
         ${err}`);
         });
     });
@@ -251,21 +271,21 @@ export class UserService {
   addActivity(activityId, userName) {
     return new Promise(resolve => {
       return this.database.addDatabase(`user_${userName}`).then(() => {
-        return this.database.getDocument(userName)
+        return this.database
+          .getDocument(userName)
           .then(user => {
-            user['activityList'].push(activityId);
+            user["activityList"].push(activityId);
             return this.database.addDocument(user);
           })
           .then(resUser => {
             resolve(resUser);
           })
           .catch(err => {
-            console.log(`Error in user service whith call to addActivity : 
+            console.log(`Error in user service whith call to addActivity :
         ${err}`);
           });
       });
-    })
-      ;
+    });
   }
 
   /**
@@ -274,17 +294,24 @@ export class UserService {
    */
   removeActivity(activityId, userName) {
     return new Promise(resolve => {
-      return this.database.addDatabase(`user_${userName}`).then(() => {
-        return this.database.getDocument(userName).then(user => {
-          user['activityList'].splice(user['activityList'].indexOf(activityId), 1);
-          return this.database.addDocument(user);
+      return this.database
+        .addDatabase(`user_${userName}`)
+        .then(() => {
+          return this.database
+            .getDocument(userName)
+            .then(user => {
+              user["activityList"].splice(
+                user["activityList"].indexOf(activityId),
+                1
+              );
+              return this.database.addDocument(user);
+            })
+            .then(resUser => {
+              resolve(resUser);
+            });
         })
-          .then(resUser => {
-            resolve(resUser);
-          });
-      })
         .catch(err => {
-          console.log(`Error in user service whith call to addActivity : 
+          console.log(`Error in user service whith call to addActivity :
         ${err}`);
         });
     });

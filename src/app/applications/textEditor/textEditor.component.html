@@ -1,10 +1,22 @@
 <script src="../../../../main.ts"></script>
 
 <div class="name-edition" *ngIf="resource">
-  <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
-  --><ckeditor [editor]="Editor" [config]="editorOptions" [data]="resource.text" id="myTextEditor" (paste)="paste($evt)" (change)="onChange($event)">
+  <!--
+    <textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
+  -->
+  <ckeditor
+    [editor]="Editor"
+    [config]="editorOptions"
+    [data]="resource.text"
+    id="myTextEditor"
+    (paste)="paste($evt)"
+    (change)="onChange($event)"
+  >
   </ckeditor>
-  <div>Dernière sauvegarde il y à {{latestSaveInMinute}} minutes : tout changement non sauvegardé sera perdu.</div>
+  <div>
+    Dernière sauvegarde il y à {{ latestSaveInMinute }} minutes : tout
+    changement non sauvegardé sera perdu.
+  </div>
   <button [class]="'mat-flat-button ' + class" mat-flat-button (click)="save()">
     Enregistrer
   </button>

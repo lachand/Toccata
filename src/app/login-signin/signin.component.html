@@ -1,68 +1,128 @@
 <div fxLayout="row" fxLayout.xs="column" class="flex-main-div">
-
   <div class="flex-card">
-    <div>
-      <img class="logo" src="../../assets/icons/toccata_logo.png"/>
-    </div>
+    <div><img class="logo" src="../../assets/icons/toccata_logo.png" /></div>
 
     <mat-card>
-
       <h3 i18n="@@inscription">Inscription</h3>
 
-    <form [formGroup]="signinForm" (ngSubmit)="signup()">
+      <form [formGroup]="signinForm" (ngSubmit)="signup()">
+        <div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Prénom"
+              type="text"
+              formControlName="name"
+            />
+            <mat-hint
+              class="hint-red"
+              *ngIf="error['nameEmpty']"
+              i18n="@@errorNameEmpty"
+              >Merci de rentrer un prénom
+            </mat-hint>
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field>
-          <input matInput placeholder="Prénom" type="text" formControlName="name">
-          <mat-hint class="hint-red" *ngIf="error['nameEmpty']" i18n="@@errorNameEmpty">Merci de rentrer un prénom</mat-hint>
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Nom"
+              type="text"
+              formControlName="surname"
+            />
+            <mat-hint
+              class="hint-red"
+              *ngIf="error['surnameEmpty']"
+              i18n="@@errorSurnameEmpty"
+              >Merci de rentrer un nom
+            </mat-hint>
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field>
-          <input matInput placeholder="Nom" type="text" formControlName="surname">
-          <mat-hint class="hint-red" *ngIf="error['surnameEmpty']" i18n="@@errorSurnameEmpty">Merci de rentrer un nom</mat-hint>
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Nom d'utilisateur"
+              type="text"
+              formControlName="username"
+            />
+            <mat-hint
+              class="hint-red"
+              *ngIf="error['usernameEmpty']"
+              i18n="@@errorUsernameEmpty"
+              >Merci de rentrer un nom d'utilisateur
+            </mat-hint>
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field>
-          <input matInput placeholder="Nom d'utilisateur" type="text" formControlName="username">
-          <mat-hint class="hint-red" *ngIf="error['usernameEmpty']" i18n="@@errorUsernameEmpty">Merci de rentrer un nom d'utilisateur</mat-hint>
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Mot de passe"
+              type="password"
+              formControlName="password"
+            />
+            <mat-hint
+              class="hint-red"
+              *ngIf="error['passwordEmpty']"
+              i18n="@@errorPasswordEmpty"
+              >Merci de rentrer un mot de passe
+            </mat-hint>
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field>
-          <input matInput placeholder="Mot de passe" type="password" formControlName="password">
-          <mat-hint class="hint-red" *ngIf="error['passwordEmpty']" i18n="@@errorPasswordEmpty">Merci de rentrer un mot de passe</mat-hint>
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Vérification du mot de passe"
+              type="password"
+              formControlName="passwordCheck"
+            />
+            <mat-hint
+              class="hint-red"
+              *ngIf="error['passwordCheck']"
+              i18n="@@errorPasswordCheck"
+              >Lesm ots de passes ne correspondent pas
+            </mat-hint>
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field>
-          <input matInput placeholder="Vérification du mot de passe" type="password" formControlName="passwordCheck">
-          <mat-hint class="hint-red" *ngIf="error['passwordCheck']" i18n="@@errorPasswordCheck">Lesm ots de passes ne correspondent pas</mat-hint>
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Lien vers l'avatar"
+              type="text"
+              formControlName="avatar"
+            />
+            <mat-hint
+              class="hint-red"
+              *ngIf="error['avatarEmpty']"
+              i18n="@@errorAvatarEmpty"
+              >Merci de mettre un lien vers une image
+            </mat-hint>
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field>
-          <input matInput placeholder="Lien vers l'avatar" type="text" formControlName="avatar">
-          <mat-hint class="hint-red" *ngIf="error['avatarEmpty']" i18n="@@errorAvatarEmpty">Merci de mettre un lien vers une image</mat-hint>
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-slide-toggle (change)="isTeacher()" i18n="@@isTeacher"
+            >Je suis un enseignant</mat-slide-toggle
+          >
+        </div>
 
-      <div>
-        <mat-slide-toggle (change)="isTeacher()" i18n="@@isTeacher">Je suis un enseignant</mat-slide-toggle>
-      </div>
-
-      <div>
-        <button mat-flat-button type="submit" i18n="@@signin">Inscription</button>
-        <div class="false-link" (click)="goToConnection()"><u>Retour à la connection</u></div>
-      </div>
-    </form>
-  </mat-card>
+        <div>
+          <button mat-flat-button type="submit" i18n="@@signin">
+            Inscription
+          </button>
+          <div class="false-link" (click)="goToConnection()">
+            <u>Retour à la connection</u>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
 </div>
-</div>
-

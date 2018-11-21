@@ -4,11 +4,13 @@
   <h3 i18n="@@usersApp">Utilisateurs de l'application</h3>
 
   <div *ngFor="let participant of userChecked">
-    <mat-slide-toggle class="example-margin"
-                      [checked]="participant.checked"
-                      [name]="participant.user"
-                      (change)="changeValue($event)">
-      {{participant.user}}
+    <mat-slide-toggle
+      class="example-margin"
+      [checked]="participant.checked"
+      [name]="participant.user"
+      (change)="changeValue($event)"
+    >
+      {{ participant.user }}
     </mat-slide-toggle>
   </div>
 

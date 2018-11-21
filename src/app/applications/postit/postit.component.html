@@ -1,12 +1,16 @@
-<mat-card-title>
-  {{title}}
-</mat-card-title>
-<jqxKanban (onItemMoved)="itemMoved($event)"
-           *ngIf="!checkNull(columns) && columns.length > 0 && appId"
-           #myKanban
-           (onColumnAttrClicked)="myKanbanonColumnAttrClicked($event)"
-           [width]="'100%'"
-           [height]="850" [template]="template" [source]="dataAdapter"
-           [columns]="columns" [columnRenderer]="columnRenderer"
-           [resources]="resourcesAdapterFunc()" [itemRenderer]="itemRenderer">
+<mat-card-title> {{ title }} </mat-card-title>
+<jqxKanban
+  (onItemMoved)="itemMoved($event)"
+  *ngIf="!checkNull(columns) && columns.length > 0 && appId"
+  #myKanban
+  (onColumnAttrClicked)="myKanbanonColumnAttrClicked($event)"
+  [width]="'100%'"
+  [height]="850"
+  [template]="template"
+  [source]="dataAdapter"
+  [columns]="columns"
+  [columnRenderer]="columnRenderer"
+  [resources]="resourcesAdapterFunc()"
+  [itemRenderer]="itemRenderer"
+>
 </jqxKanban>

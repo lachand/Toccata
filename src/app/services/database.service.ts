@@ -1,14 +1,11 @@
-import {EventEmitter, Injectable, OnInit, Output} from '@angular/core';
-import PouchDB from 'pouchdb';
-import PouchdbFind from 'pouchdb-find';
-import {environment} from '../../environments/environment';
-import {isNullOrUndefined} from 'util';
-import {errorHandler} from '@angular/platform-browser/src/browser';
+import { EventEmitter, Injectable, Output } from "@angular/core";
+import PouchDB from "pouchdb";
+import PouchdbFind from "pouchdb-find";
+import { environment } from "../../environments/environment";
+import { isNullOrUndefined } from "util";
 
 @Injectable()
-
 export class DatabaseService {
-
   db: any;
   dbRemote: any;
   dbList: Array<any> = [];
@@ -26,15 +23,14 @@ export class DatabaseService {
    * Construct the service to communicate with the local and remote database
    */
   constructor() {
-
     this.dbSize = 0;
     this.minimalDbSize = 1;
 
-    require('events').EventEmitter.defaultMaxListeners = 0;
+    require("events").EventEmitter.defaultMaxListeners = 0;
 
     PouchDB.plugin(PouchdbFind);
-    PouchDB.plugin(require('pouchdb-authentication'));
-    PouchDB.plugin(require('pouchdb-upsert'));
+    PouchDB.plugin(require("pouchdb-authentication"));
+    PouchDB.plugin(require("pouchdb-upsert"));
 
     console.log(environment);
 
@@ -46,12 +42,11 @@ export class DatabaseService {
         username: `${environment.USERNAME_DB}`,
         password: `${environment.PASSWORD_DB}`
       },
-    skipSetup: true
-    }
-      );
+      skipSetup: true
+    });
 
-    this.addDatabase('design');
-    this.addDatabase('user_list');
+    this.addDatabase("design");
+    this.addDatabase("user_list");
 
     this.db = new PouchDB(environment.DB);
 
@@ -60,36 +55,41 @@ export class DatabaseService {
     //  this.dbRemote = this.db;
     //});
 
-    this.db.info().then(info => {
-      console.log(info);
-      if (info.db_name !== environment.DB) {
-        this.db.destroy().then( () => {
-          this.db = new PouchDB(environment.DB);
+    this.db
+      .info()
+      .then(info => {
+        console.log(info);
+        if (info.db_name !== environment.DB) {
+          this.db.destroy().then(() => {
+            this.db = new PouchDB(environment.DB);
+            this.initialize();
+          });
+        } else {
           this.initialize();
-        });
-      } else {
+        }
+      })
+      .catch(err => {
+        console.log(
+          "Error while duplicating database, failsafe mode activated"
+        );
+        this.db = this.dbRemote;
         this.initialize();
-      }
-    }).catch(err => {
-      console.log("Error while duplicating database, failsafe mode activated");
-      this.db = this.dbRemote;
-      this.initialize();
-    });
+      });
   }
 
   onlineCheck() {
-    const baseUrl = 'http://www.google.com';
-    let xhr = new XMLHttpRequest();
-    return new Promise((resolve, reject)=>{
+    const baseUrl = "http://www.google.com";
+    const xhr = new XMLHttpRequest();
+    return new Promise((resolve, reject) => {
       xhr.onload = () => {
-        console.log('OK');
+        console.log("OK");
         resolve(true);
       };
       xhr.onerror = () => {
         console.log("KO");
         reject(false);
       };
-      xhr.open('GET', baseUrl, true);
+      xhr.open("GET", baseUrl, true);
       xhr.send();
     });
   }
@@ -98,80 +98,98 @@ export class DatabaseService {
    * Initialize connection
    */
   initialize() {
-    this.dbSync = this.db.replicate.to(this.dbRemote, {retry: true}).on('complete', () => {
-      console.info(`Replication to remote completed`);
-      if (!isNullOrUndefined(this.dbSync)) {
-        this.dbSync.cancel();
-      }
-      return this.dbSync = this.db.replicate.from(this.dbRemote,
-        {
-          retry: true,
-          filter: (doc, req) => {
-            for(let i = 0; i< this.dbList.length; i++){
-              if (this.dbList[i] == doc.dbName) {
-                console.log("ok");
-                return true;
-              }
-            }
-            return false;
-          },
-          query_params: {'databases': this.dbList, 'database': 'user_list'}
+    this.dbSync = this.db.replicate
+      .to(this.dbRemote, { retry: true })
+      .on("complete", () => {
+        console.info(`Replication to remote completed`);
+        if (!isNullOrUndefined(this.dbSync)) {
+          this.dbSync.cancel();
         }
-        ).on('complete', () => {
-          console.info(`Replication from remote complete`);
-        this.changes.emit('CONNEXION_DONE');
-        this.canConnect = true;
-        return this.getDocument('user_list').then(doc => {
-          this.minimalDbSize = this.minimalDbSize + doc['userList'].length;
-          for (const user of doc['userList']) {
-            this.dbList.push(`user_${user}`);
-          }
-          if (!isNullOrUndefined(this.dbSync)) {
-            this.dbSync.cancel();
-          }
-          return this.dbSync = this.db.sync(this.dbRemote, {
+        return (this.dbSync = this.db.replicate
+          .from(this.dbRemote, {
             retry: true,
-            live: true,
             filter: (doc, req) => {
-              for(let i = 0; i< this.dbList.length; i++){
+              for (let i = 0; i < this.dbList.length; i++) {
                 if (this.dbList[i] == doc.dbName) {
+                  console.log("ok");
                   return true;
                 }
               }
               return false;
             },
-            query_params: {'databases': this.dbList, 'database': 'user_list'}
-          }).on('change', change => {
-            console.log(change);
-            this.handleChange(change);
-          }).on('paused', info => {
-          }).on('active', () => {
-          }).on('denied', err => {
+            query_params: { databases: this.dbList, database: "user_list" }
+          })
+          .on("complete", () => {
+            console.info(`Replication from remote complete`);
+            this.changes.emit("CONNEXION_DONE");
+            this.canConnect = true;
+            return this.getDocument("user_list").then(doc => {
+              this.minimalDbSize = this.minimalDbSize + doc["userList"].length;
+              for (const user of doc["userList"]) {
+                this.dbList.push(`user_${user}`);
+              }
+              if (!isNullOrUndefined(this.dbSync)) {
+                this.dbSync.cancel();
+              }
+              return (this.dbSync = this.db
+                .sync(this.dbRemote, {
+                  retry: true,
+                  live: true,
+                  filter: (doc, req) => {
+                    for (let i = 0; i < this.dbList.length; i++) {
+                      if (this.dbList[i] == doc.dbName) {
+                        return true;
+                      }
+                    }
+                    return false;
+                  },
+                  query_params: {
+                    databases: this.dbList,
+                    database: "user_list"
+                  }
+                })
+                .on("change", change => {
+                  console.log(change);
+                  this.handleChange(change);
+                })
+                .on("paused", info => {})
+                .on("active", () => {})
+                .on("denied", err => {
+                  console.error(err);
+                })
+                .on("error", err => {
+                  console.error(`Sync error ${err}`);
+                }));
+            });
+          })
+          .on("From remote change", change => {
+            console.info(change);
+          })
+          .on("paused", info => {
+            console.info("From remote pause: ", info);
+          })
+          .on("active", () => {
+            console.info("From remote active: ");
+          })
+          .on("denied", err => {
             console.error(err);
-          }).on('error', err => {
-            console.error(`Sync error ${err}`);
-          });
-        });
-      }).on('From remote change', change => {
-        console.info(change);
-      }).on('paused', info => {
-        console.info('From remote pause: ', info);
-      }).on('active', () => {
-        console.info('From remote active: ');
-      }).on('denied', err => {
-        console.error(err);
-      }).on('error', err => {
-        console.error(`Replication from remote error ${err}`);
+          })
+          .on("error", err => {
+            console.error(`Replication from remote error ${err}`);
+          }));
+      })
+      .on("change", change => {
+        console.log(change);
+      })
+      .on("paused", function(info) {
+        console.info("To remote pause: ", info);
+      })
+      .on("active", function(info) {
+        console.info("To remote active: ", info);
+      })
+      .on("error", err => {
+        console.error(`Replication to remote error ${err}`);
       });
-    }).on('change', change => {
-      console.log(change);
-    }).on('paused', function (info) {
-      console.info('To remote pause: ', info);
-    }).on('active', function (info) {
-      console.info('To remote active: ', info);
-    }).on('error', err => {
-      console.error(`Replication to remote error ${err}`);
-    });
   }
 
   /**
@@ -182,29 +200,30 @@ export class DatabaseService {
     if (!isNullOrUndefined(this.dbSync)) {
       this.dbSync.cancel();
     }
-    console.log('sync');
-    this.dbSync = this.db.sync(this.dbRemote, {
-      retry: true,
-      live: true,
-      filter: (doc, req) => {
-
-        for (let i = 0; i < this.dbList.length; i++) {
-          if (this.dbList[i] === doc.dbName) {
-            console.log("finded");
-            this.handleChangeDoc(doc);
-            return true;
+    console.log("sync");
+    this.dbSync = this.db
+      .sync(this.dbRemote, {
+        retry: true,
+        live: true,
+        filter: (doc, req) => {
+          for (let i = 0; i < this.dbList.length; i++) {
+            if (this.dbList[i] === doc.dbName) {
+              console.log("finded");
+              this.handleChangeDoc(doc);
+              return true;
+            }
           }
-        }
-        return false;
-      },
-      query_params: {'databases': this.dbList, 'database': 'user_list'}
-
-    }).on('change', change => {
-      console.log(change);
-      this.handleChange(change);
-    }).on('paused', info => {
-      console.log(this.dbSync, info);
-    });
+          return false;
+        },
+        query_params: { databases: this.dbList, database: "user_list" }
+      })
+      .on("change", change => {
+        console.log(change);
+        this.handleChange(change);
+      })
+      .on("paused", info => {
+        console.log(this.dbSync, info);
+      });
   }
 
   /**
@@ -213,8 +232,15 @@ export class DatabaseService {
    * @param change Change that occurs
    */
   handleChange(change) {
-    console.log(change, change.change.docs[0].documentType, change.change.docs[0]);
-    this.changes.emit({type: change.change.docs[0].documentType, doc: change.change.docs[0]});
+    console.log(
+      change,
+      change.change.docs[0].documentType,
+      change.change.docs[0]
+    );
+    this.changes.emit({
+      type: change.change.docs[0].documentType,
+      doc: change.change.docs[0]
+    });
   }
 
   /**
@@ -224,7 +250,7 @@ export class DatabaseService {
   handleChangeDoc(change) {
     console.log("handle change");
     console.log(change, change.documentType, change);
-    this.changes.emit({type: change.documentType, doc: change});
+    this.changes.emit({ type: change.documentType, doc: change });
   }
 
   /**
@@ -233,18 +259,21 @@ export class DatabaseService {
    */
   forceUpdateDocument(doc) {
     const tmp_this = this;
-    return this.db.get(doc._id).then((origDoc, tmp_this) => {
-      doc._rev = origDoc._rev;
-      return tmp_this.db.put(doc);
-    }).catch(function (err) {
-      if (err.status === 409) {
-        return tmp_this.updateDocument(doc);
-      } else { // new doc
+    return this.db
+      .get(doc._id)
+      .then((origDoc, tmp_this) => {
+        doc._rev = origDoc._rev;
         return tmp_this.db.put(doc);
-      }
-    });
+      })
+      .catch(function(err) {
+        if (err.status === 409) {
+          return tmp_this.updateDocument(doc);
+        } else {
+          // new doc
+          return tmp_this.db.put(doc);
+        }
+      });
   }
-
 
   /**
    * Add a new external database to the local databse
@@ -255,7 +284,7 @@ export class DatabaseService {
   addDatabase(databaseName: string, options = this.options) {
     return new Promise(resolve => {
       if (this.dbList.indexOf(databaseName) !== -1) {
-        const tmpDB = this.dbList.filter( (value, index, self) => {
+        const tmpDB = this.dbList.filter((value, index, self) => {
           return self.indexOf(value) === index;
         });
         this.dbList = tmpDB;
@@ -263,7 +292,7 @@ export class DatabaseService {
       } else {
         console.log(this.dbList, databaseName);
         this.dbList.push(databaseName);
-        const tmpDB = this.dbList.filter( (value, index, self) => {
+        const tmpDB = this.dbList.filter((value, index, self) => {
           return self.indexOf(value) === index;
         });
         this.dbList = tmpDB;
@@ -272,8 +301,7 @@ export class DatabaseService {
         resolve(databaseName);
       }
     });
-    }
-
+  }
 
   /**
    * Definitive supression of document
@@ -309,7 +337,8 @@ export class DatabaseService {
   addDocument(document: any) {
     console.log(document);
     return new Promise((resolve, reject) => {
-      this.db.put(document)
+      this.db
+        .put(document)
         .then(response => {
           resolve(response);
         })
@@ -329,18 +358,21 @@ export class DatabaseService {
    */
   ereaseDatabase(dbName) {
     return new Promise(resolve => {
-      return this.db.allDocs({include_docs: true}).then(docs => {
-        const promises = docs.rows.map((doc) => {
-          if (doc.doc.dbName === dbName) {
-            console.info('deleted_doc :', doc.doc);
-            doc.doc._deleted = true;
-            return this.updateDocument(doc.doc);
-          }
+      return this.db
+        .allDocs({ include_docs: true })
+        .then(docs => {
+          const promises = docs.rows.map(doc => {
+            if (doc.doc.dbName === dbName) {
+              console.info("deleted_doc :", doc.doc);
+              doc.doc._deleted = true;
+              return this.updateDocument(doc.doc);
+            }
+          });
+          return Promise.all(promises);
+        })
+        .then(res => {
+          resolve(res);
         });
-        return Promise.all(promises);
-      }).then(res => {
-        resolve(res);
-      });
     });
   }
 
@@ -351,9 +383,10 @@ export class DatabaseService {
    */
   getDocument(docId: string) {
     return new Promise((resolve, reject) => {
-          return this.db.get(docId)
+      return this.db
+        .get(docId)
         .then(result => {
-          if (!isNullOrUndefined(result['_conflict'])) {
+          if (!isNullOrUndefined(result["_conflict"])) {
           }
           resolve(result);
         })
@@ -376,8 +409,8 @@ export class DatabaseService {
    */
   guid() {
     function _p8(s) {
-      const p = (Math.random().toString(16) + '000000000').substr(2, 8);
-      return s ? '-' + p.substr(0, 4) + '-' + p.substr(4, 4) : p;
+      const p = (Math.random().toString(16) + "000000000").substr(2, 8);
+      return s ? "-" + p.substr(0, 4) + "-" + p.substr(4, 4) : p;
     }
 
     return _p8(false) + _p8(true) + _p8(true) + _p8(false);
@@ -387,6 +420,7 @@ export class DatabaseService {
    * Update an existing document
    * @param {any} doc The document to update
    */
+
   /**updateDocument(doc: any) {
     return new Promise((resolve, reject) => {
       this.db.get(doc._id).then(docu => {
@@ -413,19 +447,22 @@ export class DatabaseService {
   updateDocument(doc) {
     console.log(doc);
     return new Promise((resolve, reject) => {
-      return this.db.upsert(doc._id, function (elmt) {
-        elmt = doc;
-        if (!elmt.count) {
-          elmt.count = 0;
-        }
-        elmt.count++;
-        return elmt;
-      }).then(function (res) {
-        resolve(res);
-      }).catch(function (err) {
-        console.error(err);
-        reject(err);
-      });
+      return this.db
+        .upsert(doc._id, function(elmt) {
+          elmt = doc;
+          if (!elmt.count) {
+            elmt.count = 0;
+          }
+          elmt.count++;
+          return elmt;
+        })
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(function(err) {
+          console.error(err);
+          reject(err);
+        });
     });
   }
 
@@ -436,35 +473,42 @@ export class DatabaseService {
   removeDocument(documentId) {
     return new Promise(resolve => {
       this.db.get(documentId).then(document => {
-        if (document.documentType === 'Resource' || document.documentType === 'Application') {
+        if (
+          document.documentType === "Resource" ||
+          document.documentType === "Application"
+        ) {
           const changes = [];
-          this.db.find({
-            selector: {documentType: 'Activity', dbName: document.dbName},
-            sort: ['_id']
-          }).then(function (result) {
-            for (const element of result.docs){
-              if (document.documentType === 'Resource') {
-                const index1 = element.resourceList.indexOf(document._id);
-                if (index1 !== -1) {
-                  element.resourceList.splice(index1, 1);
-                  changes.push(element);
-                }
-              } else if (document.documentType === 'Application') {
-                const index2 = element.applicationList.indexOf(document._id);
-                if (index2 !== -1) {
-                  element.applicationList.splice(index2, 1);
-                  changes.push(element);
+          this.db
+            .find({
+              selector: { documentType: "Activity", dbName: document.dbName },
+              sort: ["_id"]
+            })
+            .then(function(result) {
+              for (const element of result.docs) {
+                if (document.documentType === "Resource") {
+                  const index1 = element.resourceList.indexOf(document._id);
+                  if (index1 !== -1) {
+                    element.resourceList.splice(index1, 1);
+                    changes.push(element);
+                  }
+                } else if (document.documentType === "Application") {
+                  const index2 = element.applicationList.indexOf(document._id);
+                  if (index2 !== -1) {
+                    element.applicationList.splice(index2, 1);
+                    changes.push(element);
+                  }
                 }
               }
-            }
-          }).catch(function (err) {
-          });
-          this.db.bulkDocs(changes).then( () => {
+            })
+            .catch(function(err) {});
+          this.db.bulkDocs(changes).then(() => {
             document._deleted = true;
 
-            this.db.put(document).then(res => {
-              resolve(res);
-            })
+            this.db
+              .put(document)
+              .then(res => {
+                resolve(res);
+              })
               .catch(err => {
                 console.error(`Error in database service whith call to deleteDocument:
           ${err}`);
@@ -484,13 +528,14 @@ export class DatabaseService {
    * @param dbName The name of the database where to retrieve al documents
    */
   getAllDocs(dbName) {
-    return this.db.find({
-      selector: {
-        dbName: dbName
-      }
-    }).then(res => {
-      return res;
-    })
-      ;
+    return this.db
+      .find({
+        selector: {
+          dbName
+        }
+      })
+      .then(res => {
+        return res;
+      });
   }
 }

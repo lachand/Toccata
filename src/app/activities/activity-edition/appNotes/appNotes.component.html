@@ -1,18 +1,28 @@
 <script src="../../../../main.ts"></script>
 <mat-card-header>
-  <h3 (dblclick)="switchNotes()" mat-line i18n="@@notes">Notes (enseignant seulement)<mat-icon *ngIf="edit" (click)="switchNotes()" class="aligned-with-text">edit</mat-icon></h3>
- </mat-card-header>
+  <h3 (dblclick)="switchNotes()" mat-line i18n="@@notes">
+    Notes (enseignant seulement)
+    <mat-icon *ngIf="edit" (click)="switchNotes()" class="aligned-with-text"
+      >edit</mat-icon
+    >
+  </h3>
+</mat-card-header>
 
 <div *ngIf="!notesEdition" class="name-edition">
   <div [innerHTML]="notes"></div>
 </div>
 
 <div *ngIf="notesEdition" class="name-edition">
-  <!--<textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
-  --><ckeditor [editor]="Editor" [config]="editorOptions" [data]="notes" (change)="onChange($event)"></ckeditor>
-  <button mat-stroked-button (click)="switchNotes()">
-    Annuler
-  </button>
+  <!--
+    <textarea mdTextareaAutosize placeholder="Description de l'activité" type="text" name="description" id="description" [(ngModel)]="description" rows="10" cols="100"></textarea>
+  -->
+  <ckeditor
+    [editor]="Editor"
+    [config]="editorOptions"
+    [data]="notes"
+    (change)="onChange($event)"
+  ></ckeditor>
+  <button mat-stroked-button (click)="switchNotes()">Annuler</button>
   <button class="margin-left" mat-flat-button (click)="changeTheNotes()">
     Enregistrer
   </button>

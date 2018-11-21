@@ -1,22 +1,26 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ActivityService} from '../../../services/activity.service';
-import {Router} from '@angular/router';
-import {MatChip, MatSnackBar, MatStepper} from '@angular/material';
-import {isNullOrUndefined} from 'util';
-import {AppsService} from '../../../services/apps.service';
-import {Location} from '@angular/common';
-import {LoggerService} from '../../../services/logger.service';
-import {UserService} from '../../../services/user.service';
-import {ResourcesService} from '../../../services/resources.service';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild
+} from "@angular/core";
+import { ActivityService } from "../../../services/activity.service";
+import { Router } from "@angular/router";
+import { MatChip, MatSnackBar, MatStepper } from "@angular/material";
+import { isNullOrUndefined } from "util";
+import { AppsService } from "../../../services/apps.service";
+import { Location } from "@angular/common";
+import { LoggerService } from "../../../services/logger.service";
+import { UserService } from "../../../services/user.service";
+import { ResourcesService } from "../../../services/resources.service";
 
 @Component({
-  selector: 'app-activity-edit',
-  templateUrl: './activityView.component.html',
-  styleUrls: ['./activityView.component.scss']
+  selector: "app-activity-edit",
+  templateUrl: "./activityView.component.html",
+  styleUrls: ["./activityView.component.scss"]
 })
-
 export class ActivityViewComponent implements AfterViewInit, OnInit {
-
   steps: any;
   editActivity: any;
   editMode: boolean;
@@ -28,63 +32,80 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   showArrowRight: boolean;
   leftPart: string;
   rightPart: string;
-  @ViewChild('stepper') stepper: MatStepper;
-  @ViewChild('chip') chip: MatChip;
+  @ViewChild("stepper") stepper: MatStepper;
+  @ViewChild("chip") chip: MatChip;
 
-  constructor(public activityService: ActivityService,
-              public router: Router,
-              public appsService: AppsService,
-              public resourcesService: ResourcesService,
-              private _location: Location,
-              private ref: ChangeDetectorRef,
-              private logger: LoggerService,
-              public user: UserService,
-              public snackBar: MatSnackBar) {
-    this.editActivity = '';
-    this.viewGroup = '';
-    this.shareActivity = '';
+  constructor(
+    public activityService: ActivityService,
+    public router: Router,
+    public appsService: AppsService,
+    public resourcesService: ResourcesService,
+    private _location: Location,
+    private ref: ChangeDetectorRef,
+    private logger: LoggerService,
+    public user: UserService,
+    public snackBar: MatSnackBar
+  ) {
+    this.editActivity = "";
+    this.viewGroup = "";
+    this.shareActivity = "";
     this.editable = [];
     this.showArrowRight = false;
-    this.showTheArrow  = false;
+    this.showTheArrow = false;
     this.collapsedLeft = false;
 
-    setInterval( () => {
-      this.snackBar.open("Pensez à remplir les traces et à sauvegarder", "Fermer");
-    }
-    , 300000);
+    setInterval(() => {
+      this.snackBar.open(
+        "Pensez à remplir les traces et à sauvegarder",
+        "Fermer"
+      );
+    }, 300000);
 
-    if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
+    if (
+      this.activityService.activityLoaded.type === "Main" &&
+      this.activityService.activityLoadedChild.length > 0
+    ) {
       this.steps = this.activityService.activityLoadedChild;
     } else {
       this.steps = this.activityService.sisters;
     }
-    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
+    if (isNullOrUndefined(this.steps) || this.steps.length === 0) {
       this.steps = [];
     } else {
     }
     this.steps.map(elmt => {
-      if (!isNullOrUndefined(this.activityService.blocked) && this.activityService.blocked.indexOf(elmt) > -1) {
-        this.editable['elmt'] = false;
+      if (
+        !isNullOrUndefined(this.activityService.blocked) &&
+        this.activityService.blocked.indexOf(elmt) > -1
+      ) {
+        this.editable["elmt"] = false;
       } else {
-        this.editable['elmt'] = true;
+        this.editable["elmt"] = true;
       }
     });
   }
 
   ngOnInit(): void {
-
-    this.leftPart = '30';
-    this.rightPart = '70';
+    this.leftPart = "30";
+    this.rightPart = "70";
 
     this.activityService.changes.subscribe(changes => {
-      if (changes.type === 'ChangeActivity') {
+      if (changes.type === "ChangeActivity") {
         if (!isNullOrUndefined(this.stepper)) {
-          this.stepper.selectedIndex = this.steps.indexOf(changes.doc.currentLoaded);
+          this.stepper.selectedIndex = this.steps.indexOf(
+            changes.doc.currentLoaded
+          );
         }
         this.ref.detectChanges();
       }
-      if (changes.type === "Sequence" && changes.doc.parent === this.activityService.activityLoaded.parent) {
-        if (this.activityService.activityLoaded.type === 'Main' && this.activityService.activityLoadedChild.length > 0) {
+      if (
+        changes.type === "Sequence" &&
+        changes.doc.parent === this.activityService.activityLoaded.parent
+      ) {
+        if (
+          this.activityService.activityLoaded.type === "Main" &&
+          this.activityService.activityLoadedChild.length > 0
+        ) {
           this.steps = this.activityService.activityLoadedChild;
           console.log(this.steps);
         } else {
@@ -139,19 +160,28 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
    */
   ngAfterViewInit(): void {
     console.log(this.stepper._steps);
-    if (! isNullOrUndefined(this.activityService.activityLoaded.currentLoaded) && this.steps.length > 1) {
+    if (
+      !isNullOrUndefined(this.activityService.activityLoaded.currentLoaded) &&
+      this.steps.length > 1
+    ) {
       let activityId = this.activityService.activityLoaded.currentLoaded;
 
-      if (this.activityService.activityLoaded.type === 'Main' && !isNullOrUndefined(activityId)) {
+      if (
+        this.activityService.activityLoaded.type === "Main" &&
+        !isNullOrUndefined(activityId)
+      ) {
         this.stepper.selectedIndex = this.steps.indexOf(activityId);
         this.activityService.load_activity(activityId).then(res => {
-          this.router.navigate(['activity_view/' + activityId]);
+          this.router.navigate(["activity_view/" + activityId]);
         });
-      } else if (this.activityService.activityLoaded.type === 'Main' && isNullOrUndefined(activityId)) {
+      } else if (
+        this.activityService.activityLoaded.type === "Main" &&
+        isNullOrUndefined(activityId)
+      ) {
         this.stepper.selectedIndex = 0;
         activityId = this.steps[0];
         this.activityService.load_activity(activityId).then(res => {
-          this.router.navigate(['activity_view/' + activityId]);
+          this.router.navigate(["activity_view/" + activityId]);
         });
       }
     } else {
@@ -160,14 +190,14 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
   }
 
   addStep() {
-    let id = '';
-    if (this.activityService.activityLoaded.type === 'Main') {
+    let id = "";
+    if (this.activityService.activityLoaded.type === "Main") {
       id = this.activityService.activityLoaded._id;
     } else {
       id = this.activityService.activityLoaded.parent;
     }
     this.activityService.createSubActivity(id).then(res => {
-      this.steps.push(res['_id']);
+      this.steps.push(res["_id"]);
     });
   }
 
@@ -183,13 +213,13 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
 
   backClicked() {
     this._location.back();
-    if (this._location.path().includes('activity_view')) {
-      const parts = this._location.path().split('/');
+    if (this._location.path().includes("activity_view")) {
+      const parts = this._location.path().split("/");
       const activityId = parts[parts.length - 1];
       this.activityService.setCurrentActivity(activityId).then(() => {
         this.activityService.load_activity(activityId).then(res => {
           this.stepper.selectedIndex = this.steps.indexOf(activityId);
-          this.router.navigate(['activity_view/' + activityId]);
+          this.router.navigate(["activity_view/" + activityId]);
         });
       });
     }
@@ -203,13 +233,13 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
     console.log(activityId);
     this.activityService.setCurrentActivity(activityId).then(() => {
       this.activityService.load_activity(activityId).then(res => {
-        this.router.navigate(['activity_view/' + activityId]);
+        this.router.navigate(["activity_view/" + activityId]);
       });
     });
   }
 
   showArrow() {
-    if(!this.showArrowRight) {
+    if (!this.showArrowRight) {
       this.showTheArrow = true;
     }
   }
@@ -220,15 +250,15 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
 
   collapseLeft() {
     this.collapsedLeft = true;
-    this.leftPart = '0';
-    this.rightPart = '100';
+    this.leftPart = "0";
+    this.rightPart = "100";
     this.showArrowRight = true;
   }
 
   collapseRight() {
     this.collapsedLeft = false;
-    this.leftPart = '30';
-    this.rightPart = '70';
+    this.leftPart = "30";
+    this.rightPart = "70";
     this.showArrowRight = false;
   }
 
@@ -238,48 +268,63 @@ export class ActivityViewComponent implements AfterViewInit, OnInit {
 
   activityGroupView() {
     let activityId;
-    if (this.activityService.activityLoaded.type === 'Sequence') {
-      activityId = this.activityService.activityLoaded.parent.split('_duplicate')[0];
+    if (this.activityService.activityLoaded.type === "Sequence") {
+      activityId = this.activityService.activityLoaded.parent.split(
+        "_duplicate"
+      )[0];
     } else {
-      activityId = this.activityService.activityLoaded._id.split('_duplicate')[0];
+      activityId = this.activityService.activityLoaded._id.split(
+        "_duplicate"
+      )[0];
     }
-    this.logger.log('OPEN', activityId, activityId, 'open activity duplicates');
-    this.router.navigate(['duplicates/' + activityId]);
+    this.logger.log("OPEN", activityId, activityId, "open activity duplicates");
+    this.router.navigate(["duplicates/" + activityId]);
   }
 
   onHovering($event: Event) {
-    this.editActivity = 'Editer l\'activité';
+    this.editActivity = "Editer l'activité";
   }
 
   onUnovering($event: Event) {
-    this.editActivity = '';
+    this.editActivity = "";
   }
 
   onHoveringGroupView($event: Event) {
-    this.viewGroup = 'Voir les groupes';
+    this.viewGroup = "Voir les groupes";
   }
 
   onUnoveringGroupView($event: Event) {
-    this.viewGroup = '';
+    this.viewGroup = "";
   }
 
   onHoveringShare($event: Event) {
-    this.shareActivity = 'Partager l\'activité';
+    this.shareActivity = "Partager l'activité";
   }
 
   onUnoveringShare($event: Event) {
-    this.shareActivity = '';
+    this.shareActivity = "";
   }
 
   activityEdit() {
     console.log(this.activityService.activityLoaded);
-    if (this.activityService.activityLoaded.type === 'Main') {
-      this.router.navigate(['activity_edit/' + this.activityService.activityLoaded._id]);
+    if (this.activityService.activityLoaded.type === "Main") {
+      this.router.navigate([
+        "activity_edit/" + this.activityService.activityLoaded._id
+      ]);
     } else {
-      this.logger.log('OPEN', this.activityService.activityLoaded.parent, this.activityService.activityLoaded.parent, 'open activity edition');
-      this.activityService.load_activity(this.activityService.activityLoaded.parent).then(res => {
-        this.router.navigate(['activity_edit/' + this.activityService.activityLoaded._id]);
-      });
+      this.logger.log(
+        "OPEN",
+        this.activityService.activityLoaded.parent,
+        this.activityService.activityLoaded.parent,
+        "open activity edition"
+      );
+      this.activityService
+        .load_activity(this.activityService.activityLoaded.parent)
+        .then(res => {
+          this.router.navigate([
+            "activity_edit/" + this.activityService.activityLoaded._id
+          ]);
+        });
     }
   }
 }

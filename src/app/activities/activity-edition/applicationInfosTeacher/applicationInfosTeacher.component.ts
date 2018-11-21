@@ -1,22 +1,19 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {AppsService} from '../../../services/apps.service';
-import {MatListItem} from '@angular/material';
-import {ViewRef_} from '@angular/core/src/view';
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import { AppsService } from "../../../services/apps.service";
 
 @Component({
-  selector: 'application-infos-teacher',
-  templateUrl: './applicationInfosTeacher.component.html'
+  selector: "application-infos-teacher",
+  templateUrl: "./applicationInfosTeacher.component.html"
 })
-
 export class ApplicationInfosTeacherComponent implements OnInit {
-
   @Input() applicationId;
   application: any;
   currentLoaded: any;
 
-  constructor(public appsService: AppsService,
-              private ref: ChangeDetectorRef) {
-  }
+  constructor(
+    public appsService: AppsService,
+    private ref: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.appsService.changes.subscribe(change => {
@@ -24,8 +21,10 @@ export class ApplicationInfosTeacherComponent implements OnInit {
         this.application = change.doc;
       }
     });
-    this.appsService.getApplicationInfos(this.applicationId).then(applicationInfos => {
-      this.application = applicationInfos;
-    });
+    this.appsService
+      .getApplicationInfos(this.applicationId)
+      .then(applicationInfos => {
+        this.application = applicationInfos;
+      });
   }
 }

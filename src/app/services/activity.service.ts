@@ -1,16 +1,16 @@
-import {ChangeDetectorRef, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
-import {UserService} from './user.service';
+import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
+import { UserService } from "./user.service";
 
-import {AppsService} from './apps.service';
-import {DatabaseService} from './database.service';
-import {ResourcesService} from './resources.service';
-import {isNullOrUndefined} from 'util';
-import {LoggerService} from "./logger.service";
+import { AppsService } from "./apps.service";
+import { DatabaseService } from "./database.service";
+import { ResourcesService } from "./resources.service";
+import { isNullOrUndefined } from "util";
+import { LoggerService } from "./logger.service";
 
 @Injectable()
 export class ActivityService implements OnInit {
   db: any;
-  activityLoaded: any ;
+  activityLoaded: any;
   sisters: Array<any>;
   blocked: Array<any>;
   activitiesList: Array<any>;
@@ -28,29 +28,30 @@ export class ActivityService implements OnInit {
    * @param {DatabaseService} database The service for database management
    * @param {AppsService} appsService The service for applications management >DUPLICATE TO DELETE<
    */
-  constructor(public userService: UserService,
-              public resourcesService: ResourcesService,
-              public database: DatabaseService,
-              public appsService: AppsService,
-              public logger: LoggerService){
-
-
+  constructor(
+    public userService: UserService,
+    public resourcesService: ResourcesService,
+    public database: DatabaseService,
+    public appsService: AppsService,
+    public logger: LoggerService
+  ) {
     this.database.changes.subscribe(
-      (change) => {
+      change => {
         console.log(change);
-        if (change.type === 'Activity' && userService.loggedIn) {
+        if (change.type === "Activity" && userService.loggedIn) {
           if (change.doc._id === this.activityLoaded._id) {
             this.activityLoaded = change.doc;
           }
-          this.changes.emit({doc: change.doc, type: 'Activity'});
+          this.changes.emit({ doc: change.doc, type: "Activity" });
         }
-      }, error => {
+      },
+      error => {
         console.log(error);
       }
     );
 
     this.user = userService;
-    this.activityLoaded = null;
+    this.activityLoaded = undefined;
     this.activityLoadedChild = [];
     this.sisters = [];
   }
@@ -77,23 +78,26 @@ export class ActivityService implements OnInit {
    * @returns {any} All activities of user
    */
   public getUserActivities() {
-
     const name = this.user.id;
 
     if (this.userActivitiesListId.length > 0) {
       return Promise.resolve(this.userActivitiesListId);
     }
     return new Promise(resolve => {
-      this.database.db.query('byParticipant/id-by-participant',
-        {startkey: name, endkey: name})
+      this.database.db
+        .query("byParticipant/id-by-participant", {
+          startkey: name,
+          endkey: name
+        })
         .then(result => {
-          result.rows.map((row) => {
+          result.rows.map(row => {
             if (this.activitiesList.indexOf(row.id) === -1) {
               this.userActivitiesListId.push(row.id);
             }
           });
           resolve(this.userActivitiesListId);
-        }).catch(console.log.bind(console));
+        })
+        .catch(console.log.bind(console));
     }).catch(console.log.bind(console));
   }
 
@@ -102,10 +106,23 @@ export class ActivityService implements OnInit {
    */
   public unloadActivity() {
     if (!isNullOrUndefined(this.activityLoaded)) {
-      if (this.activityLoaded['_id'].indexOf('duplicate') !== -1 && this.user.fonction === 'Enseignant') {
-        this.logger.log('CLOSE', this.activityLoaded._id, this.activityLoaded._id, 'close activity duplicate');
+      if (
+        this.activityLoaded["_id"].indexOf("duplicate") !== -1 &&
+        this.user.fonction === "Enseignant"
+      ) {
+        this.logger.log(
+          "CLOSE",
+          this.activityLoaded._id,
+          this.activityLoaded._id,
+          "close activity duplicate"
+        );
       } else {
-        this.logger.log('CLOSE', this.activityLoaded._id, this.activityLoaded._id, 'close activity');
+        this.logger.log(
+          "CLOSE",
+          this.activityLoaded._id,
+          this.activityLoaded._id,
+          "close activity"
+        );
       }
       this.activityLoaded = null;
       this.activityLoadedChild = [];
@@ -121,14 +138,18 @@ export class ActivityService implements OnInit {
   unblockActivity(activityId) {
     let activity;
     return new Promise(resolve => {
-      return this.database.getDocument(activityId).then(act => {
-        activity = act;
-        activity['blockingStep']['blocked'] = false;
-      }).then( () => {
-        return this.database.updateDocument(activity);
-      }).then( () => {
-        resolve(activity)}
-      );
+      return this.database
+        .getDocument(activityId)
+        .then(act => {
+          activity = act;
+          activity["blockingStep"]["blocked"] = false;
+        })
+        .then(() => {
+          return this.database.updateDocument(activity);
+        })
+        .then(() => {
+          resolve(activity);
+        });
     });
   }
 
@@ -140,46 +161,74 @@ export class ActivityService implements OnInit {
   public load_activity(activity_id) {
     this.unloadActivity();
     return new Promise(resolve => {
-      this.database.getDocument(activity_id)
-        .then((result) => {
+      this.database
+        .getDocument(activity_id)
+        .then(result => {
           this.activityLoaded = result;
-        if (result['type'] === 'Main') {
-          if (result['_id'].indexOf('duplicate') !== -1 && this.user.fonction === 'Enseignant') {
-            this.logger.log('OPEN', result['_id'], result['_id'], 'load activity duplicate');
-          } else {
-            this.logger.log('OPEN', result['_id'], result['_id'], 'load activity');
-          }
-          this.activityLoadedChild = [];
-          result['subactivityList'].map(elmt => {
-            if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
-              this.activityLoadedChild.push(elmt['stepId']);
+          if (result["type"] === "Main") {
+            if (
+              result["_id"].indexOf("duplicate") !== -1 &&
+              this.user.fonction === "Enseignant"
+            ) {
+              this.logger.log(
+                "OPEN",
+                result["_id"],
+                result["_id"],
+                "load activity duplicate"
+              );
+            } else {
+              this.logger.log(
+                "OPEN",
+                result["_id"],
+                result["_id"],
+                "load activity"
+              );
             }
-          });
-          //this.activityLoadedChild = result['subactivityList'];
-          return this.resourcesService.getResources(this.activityLoaded._id);
-        } else {
-          this.logger.log('OPEN', result['_id'], result['_id'], 'load step');
-          this.database.getDocument(result['parent']).then(res => {
-            //this.sisters = res['subactivityList'];
-            this.sisters = [];
-            this.blocked = [];
-            res['subactivityList'].map(elmt => {
-              if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
-                this.sisters.push(elmt['stepId']);
-              }
-              if (elmt['blocked'] === true || this.userService.fonction !== 'Enseignant') {
-                this.blocked.push(elmt['stepId']);
-              }
-            });
             this.activityLoadedChild = [];
-            result['subactivityList'].map(elmt => {
-              if (elmt['visible'] === true || this.userService.fonction === 'Enseignant') {
-                this.activityLoadedChild.push(elmt['stepId']);
+            result["subactivityList"].map(elmt => {
+              if (
+                elmt["visible"] === true ||
+                this.userService.fonction === "Enseignant"
+              ) {
+                this.activityLoadedChild.push(elmt["stepId"]);
               }
             });
+            //this.activityLoadedChild = result['subactivityList'];
             return this.resourcesService.getResources(this.activityLoaded._id);
-          });
-        }
+          } else {
+            this.logger.log("OPEN", result["_id"], result["_id"], "load step");
+            this.database.getDocument(result["parent"]).then(res => {
+              //this.sisters = res['subactivityList'];
+              this.sisters = [];
+              this.blocked = [];
+              res["subactivityList"].map(elmt => {
+                if (
+                  elmt["visible"] === true ||
+                  this.userService.fonction === "Enseignant"
+                ) {
+                  this.sisters.push(elmt["stepId"]);
+                }
+                if (
+                  elmt["blocked"] === true ||
+                  this.userService.fonction !== "Enseignant"
+                ) {
+                  this.blocked.push(elmt["stepId"]);
+                }
+              });
+              this.activityLoadedChild = [];
+              result["subactivityList"].map(elmt => {
+                if (
+                  elmt["visible"] === true ||
+                  this.userService.fonction === "Enseignant"
+                ) {
+                  this.activityLoadedChild.push(elmt["stepId"]);
+                }
+              });
+              return this.resourcesService.getResources(
+                this.activityLoaded._id
+              );
+            });
+          }
         })
         .then(() => {
           return this.appsService.getApplications(this.activityLoaded._id);
@@ -188,10 +237,12 @@ export class ActivityService implements OnInit {
           return this.userService.getParticipants(this.activityLoaded._id);
         })
         .then(() => {
-            this.changes.emit({doc: this.activityLoaded, type: 'ChangeActivity'});
-            resolve(this.activityLoaded);
-          }
-        )
+          this.changes.emit({
+            doc: this.activityLoaded,
+            type: "ChangeActivity"
+          });
+          resolve(this.activityLoaded);
+        })
         .catch(err => {
           console.log(`Error in activity service whith call to loadActivity:
           ${err}`);
@@ -207,14 +258,14 @@ export class ActivityService implements OnInit {
   setCurrentActivity(activityId) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(doc => {
-        if (doc['type'] === 'Main') {
-          doc['currentLoaded'] = doc['_id'];
+        if (doc["type"] === "Main") {
+          doc["currentLoaded"] = doc["_id"];
           return this.database.updateDocument(doc).then(res => {
             resolve(res);
           });
         } else {
-          return this.database.getDocument(doc['parent']).then(parent => {
-            parent['currentLoaded'] = doc['_id'];
+          return this.database.getDocument(doc["parent"]).then(parent => {
+            parent["currentLoaded"] = doc["_id"];
             return this.database.updateDocument(parent).then(res => {
               resolve(res);
             });
@@ -229,40 +280,42 @@ export class ActivityService implements OnInit {
    * @returns {Promise<any>} The activity created
    */
   public createActivity(activityType) {
-    console.log('create an activity');
-    let dbName = '';
+    console.log("create an activity");
+    let dbName = "";
     let subactivity;
     return new Promise((resolve, reject) => {
-      this.database.createDatabase('activity').then((newDatabase: string) => {
-        dbName = newDatabase;
-        const activityToCreate = {
-          _id: dbName,
-          type: activityType,
-          name: 'Nouvelle activité',
-          description: `Nouvelle description`,
-          notes: '',
-          userList: [this.user.id],
-          subactivityList: [],
-          duplicateList : [],
-          resourceList: [],
-          parent: dbName,
-          visible: true,
-          blocked: false,
-          currentLoaded: dbName,
-          applicationList: [],
-          createdAt: Date.now(),
-          dbName: dbName,
-          documentType: 'Activity',
-          master: true
-        };
-        this.logger.log('CREATE', dbName, dbName, 'create activity');
-        return this.database.addDocument(activityToCreate);
-      })
+      this.database
+        .createDatabase("activity")
+        .then((newDatabase: string) => {
+          dbName = newDatabase;
+          const activityToCreate = {
+            _id: dbName,
+            type: activityType,
+            name: "Nouvelle activité",
+            description: `Nouvelle description`,
+            notes: "",
+            userList: [this.user.id],
+            subactivityList: [],
+            duplicateList: [],
+            resourceList: [],
+            parent: dbName,
+            visible: true,
+            blocked: false,
+            currentLoaded: dbName,
+            applicationList: [],
+            createdAt: Date.now(),
+            dbName,
+            documentType: "Activity",
+            master: true
+          };
+          this.logger.log("CREATE", dbName, dbName, "create activity");
+          return this.database.addDocument(activityToCreate);
+        })
         .then(() => {
           return this.database.getDocument(this.user.id);
         })
         .then(userDoc => {
-          userDoc['activityList'].push(dbName);
+          userDoc["activityList"].push(dbName);
           return this.database.updateDocument(userDoc);
         })
         .then(res => {
@@ -271,26 +324,26 @@ export class ActivityService implements OnInit {
           }
           return this.load_activity(dbName);
         })
-        .then( () => {
+        .then(() => {
           return this.createSubActivity(dbName);
         })
-        .then( (subActivity) => {
+        .then(subActivity => {
           console.log(subActivity);
           subactivity = subActivity;
           return this.database.getDocument(dbName);
         })
-        .then( activity => {
+        .then(activity => {
           console.log(activity, subactivity);
-          activity['currentLoaded'] = subactivity._id;
+          activity["currentLoaded"] = subactivity._id;
           return this.database.updateDocument(activity);
         })
-        .then( () => {
+        .then(() => {
           resolve(dbName);
         })
         .catch(err => {
           console.log(`Error in activity service whith call to createActivity:
           ${err}`);
-      });
+        });
     });
   }
 
@@ -304,11 +357,12 @@ export class ActivityService implements OnInit {
       return Promise.resolve(this.activitiesList);
     }
     return new Promise(resolve => {
-      this.database.getDocument(`${this.user.id}`)
+      this.database
+        .getDocument(`${this.user.id}`)
         .then(userDoc => {
-          this.activitiesList = userDoc['activityList'];
+          this.activitiesList = userDoc["activityList"];
           const tempThis = this;
-          const promises = this.activitiesList.map(function (activityId) {
+          const promises = this.activitiesList.map(function(activityId) {
             tempThis.database.addDatabase(activityId);
           });
           return Promise.all(promises);
@@ -330,27 +384,30 @@ export class ActivityService implements OnInit {
    */
   public getActivityInfos(activityId) {
     return new Promise(resolve => {
-      return this.database.getDocument(activityId).then(activity => {
-        resolve({
-          id: activity['_id'],
-          name: activity['name'],
-          description: activity['description'],
-          notes: activity['notes'],
-          image: activity['image'],
-          dbName: activity['dbName'],
-          master: activity['master'],
-          resourceList: activity['resourceList'],
-          applicationList: activity['applicationList'],
-          currentLoaded: activity['currentLoaded'],
-          subactivityList: activity['subactivityList'],
-          nameForTeacher: activity['nameForTeacher'],
-          visible: activity['visible'],
-          blocked: activity['blocked']
-        });
-      }).catch(err => {
-        console.log(`Error in activity service whith call to getActivityInfos :
+      return this.database
+        .getDocument(activityId)
+        .then(activity => {
+          resolve({
+            id: activity["_id"],
+            name: activity["name"],
+            description: activity["description"],
+            notes: activity["notes"],
+            image: activity["image"],
+            dbName: activity["dbName"],
+            master: activity["master"],
+            resourceList: activity["resourceList"],
+            applicationList: activity["applicationList"],
+            currentLoaded: activity["currentLoaded"],
+            subactivityList: activity["subactivityList"],
+            nameForTeacher: activity["nameForTeacher"],
+            visible: activity["visible"],
+            blocked: activity["blocked"]
+          });
+        })
+        .catch(err => {
+          console.log(`Error in activity service whith call to getActivityInfos :
           ${err}`);
-      });
+        });
     });
   }
 
@@ -363,27 +420,33 @@ export class ActivityService implements OnInit {
     console.log("createSubActivity");
     return new Promise(resolve => {
       let subActivity;
-      return this.database.getDocument(parentId)
+      return this.database
+        .getDocument(parentId)
         .then(parent => {
           subActivity = {
             _id: `activity_${this.database.guid()}`,
-            name: 'Nouvelle étape',
-            description: 'Il n\'y a aucune description',
-            notes: '',
-            userList: parent['userList'],
-            resourceList: parent['resourceList'],
-            applicationList: parent['applicationList'],
-            parent: parent['_id'],
-            type: 'Sequence',
+            name: "Nouvelle étape",
+            description: "Il n'y a aucune description",
+            notes: "",
+            userList: parent["userList"],
+            resourceList: parent["resourceList"],
+            applicationList: parent["applicationList"],
+            parent: parent["_id"],
+            type: "Sequence",
             subactivityList: [],
-            master: parent['master'],
+            master: parent["master"],
             visible: true,
             blocked: false,
             createdAt: Date.now(),
-            dbName: parent['dbName'],
-            documentType: 'Activity'
+            dbName: parent["dbName"],
+            documentType: "Activity"
           };
-            this.logger.log('CREATE', this.activityLoaded._id, subActivity['_id'], 'create step');
+          this.logger.log(
+            "CREATE",
+            this.activityLoaded._id,
+            subActivity["_id"],
+            "create step"
+          );
         })
         .then(() => {
           return this.database.addDocument(subActivity);
@@ -392,18 +455,17 @@ export class ActivityService implements OnInit {
           return this.database.getDocument(parentId);
         })
         .then(parent => {
-          parent['subactivityList'].push(
-            {
-              "stepId": subActivity._id,
-              "visible": true,
-              "blocked": false
-            });
+          parent["subactivityList"].push({
+            stepId: subActivity._id,
+            visible: true,
+            blocked: false
+          });
           return this.database.updateDocument(parent);
         })
         .then(() => {
-          this.sisters.push(subActivity._id)
+          this.sisters.push(subActivity._id);
           //this.activityLoadedChild.push(subActivity._id);
-          this.changes.emit({doc: subActivity, type: 'CreateStep'});
+          this.changes.emit({ doc: subActivity, type: "CreateStep" });
           console.log("end subactivity", subActivity);
           resolve(subActivity);
         })
@@ -421,41 +483,48 @@ export class ActivityService implements OnInit {
   ereaseActivity(activityId) {
     return new Promise(resolve => {
       return this.database.getDocument(activityId).then(activity => {
-        activity['_deleted'] = true;
-        return this.database.updateDocument(activity).then( () => {
-          return Promise.all(activity['resourceList'].map(resource => {
-            return this.database.getDocument(resource).then(res => {
-              res['_deleted'] = true;
-              return this.database.updateDocument(res);
-            });
-          }));
-        }
-      )
-          .then( () => {
-          return this.database.getDocument(this.user.id);
-        })
-          .then( user => {
-            let index = user['activityList'].indexOf(activityId);
+        activity["_deleted"] = true;
+        return this.database
+          .updateDocument(activity)
+          .then(() => {
+            return Promise.all(
+              activity["resourceList"].map(resource => {
+                return this.database.getDocument(resource).then(res => {
+                  res["_deleted"] = true;
+                  return this.database.updateDocument(res);
+                });
+              })
+            );
+          })
+          .then(() => {
+            return this.database.getDocument(this.user.id);
+          })
+          .then(user => {
+            const index = user["activityList"].indexOf(activityId);
             if (index > -1) {
-              user['activityList'].splice(index, 1);
+              user["activityList"].splice(index, 1);
             }
             return this.database.updateDocument(user);
           })
           .then(() => {
-            return Promise.all(activity['applicationList'].map(application => {
-              return this.database.getDocument(application).then(app => {
-                app['_deleted'] = true;
-                return this.database.updateDocument(app);
-              });
-            }));
+            return Promise.all(
+              activity["applicationList"].map(application => {
+                return this.database.getDocument(application).then(app => {
+                  app["_deleted"] = true;
+                  return this.database.updateDocument(app);
+                });
+              })
+            );
           })
           .then(() => {
-            return Promise.all(activity['subactivityList'].map(subactivity => {
-              return this.ereaseActivity(subactivity.stepId);
-            }));
+            return Promise.all(
+              activity["subactivityList"].map(subactivity => {
+                return this.ereaseActivity(subactivity.stepId);
+              })
+            );
           })
           .then(() => {
-            activity['_deleted'] = true;
+            activity["_deleted"] = true;
             return this.database.updateDocument(activity);
           });
       });
@@ -468,42 +537,39 @@ export class ActivityService implements OnInit {
    */
   deleteActivity(activityId) {
     return new Promise(resolve => {
-      return this.database.getDocument(activityId)
-    .then(activity => {
-      let index = activity['userList'].indexOf(this.user.id);
-      if (index > -1) {
-        activity['userList'].splice(index, 1);
-      }
-      if (activity['userList'].length === 0) {
-        return this.ereaseActivity(activityId);
-      } else {
-        return this.database.updateDocument(activity);
-      }
-    })
-    .then( () => {
-      return this.database.getDocument(this.user.id);
-    })
-    .then( user => {
-      let index = user['activityList'].indexOf(activityId);
-      if (index > -1) {
-        user['activityList'].splice(index, 1);
-      }
-      return this.database.updateDocument(user);
+      return this.database
+        .getDocument(activityId)
+        .then(activity => {
+          const index = activity["userList"].indexOf(this.user.id);
+          if (index > -1) {
+            activity["userList"].splice(index, 1);
+          }
+          if (activity["userList"].length === 0) {
+            return this.ereaseActivity(activityId);
+          } else {
+            return this.database.updateDocument(activity);
+          }
+        })
+        .then(() => {
+          return this.database.getDocument(this.user.id);
+        })
+        .then(user => {
+          const index = user["activityList"].indexOf(activityId);
+          if (index > -1) {
+            user["activityList"].splice(index, 1);
+          }
+          return this.database.updateDocument(user);
+        });
     });
-    }
-    );
   }
-
-
 
   /**
    * Delete an application
    * @param appId The id of the app to delete
    */
   deleteApp(appId, activityId) {
-
-    this.getActivityInfos(activityId).then( (activity) => {
-      let app = activity['applicationList'];
+    this.getActivityInfos(activityId).then(activity => {
+      const app = activity["applicationList"];
       console.log(app);
       console.log(appId);
       const index = app.indexOf(appId);
@@ -511,7 +577,7 @@ export class ActivityService implements OnInit {
         app.splice(index, 1);
       }
       console.log(app);
-      this.activityEdit(activityId, 'applicationList', app).then( () => {
+      this.activityEdit(activityId, "applicationList", app).then(() => {
         this.appsService.deleteApp(appId);
       });
     });
@@ -522,14 +588,14 @@ export class ActivityService implements OnInit {
    * @param appId The id of the app to delete
    */
   deleteResource(resId, activityId) {
-    this.getActivityInfos(activityId).then( (activity) => {
-      let res = activity['resourceList'];
+    this.getActivityInfos(activityId).then(activity => {
+      const res = activity["resourceList"];
       console.log(res);
       const index = res.indexOf(resId);
       if (index > -1) {
         res.splice(index, 1);
       }
-      this.activityEdit(activityId, 'resourceList', res).then( () => {
+      this.activityEdit(activityId, "resourceList", res).then(() => {
         this.resourcesService.deleteResource(resId);
       });
     });
@@ -554,7 +620,8 @@ export class ActivityService implements OnInit {
     let deletedActivity;
 
     return new Promise((resolve, reject) => {
-      this.database.db.get(activityId)
+      this.database.db
+        .get(activityId)
         .then(res => {
           // A Nettoyer
           if (res.parent !== null) {
@@ -565,11 +632,13 @@ export class ActivityService implements OnInit {
           }
           res._deleted = true;
           deletedActivity = res;
-          return this.database.db.query('byParent/by-parent',
-            {startkey: res._id, endkey: res._id});
+          return this.database.db.query("byParent/by-parent", {
+            startkey: res._id,
+            endkey: res._id
+          });
         })
         .then(activityChilds => {
-          activityChilds.rows.map((row) => {
+          activityChilds.rows.map(row => {
             childs.push(row.value);
           });
           return this.user.remove_activity(activityId);
@@ -582,11 +651,13 @@ export class ActivityService implements OnInit {
         })
         .then(activityDeleted => {
           if (childs.length > 0) {
-            return Promise.all(childs.map((child) => {
-              return this.delete_activity(child._id).then(finalRes => {
-                resolve(finalRes);
-              });
-            }));
+            return Promise.all(
+              childs.map(child => {
+                return this.delete_activity(child._id).then(finalRes => {
+                  resolve(finalRes);
+                });
+              })
+            );
           } else {
             resolve(activityDeleted);
           }
@@ -607,45 +678,61 @@ export class ActivityService implements OnInit {
    * @param {string} key The key of change
    * @param {String} value The new value
    */
-  activityEdit(activityId: string, key: string, value: any, system: boolean = false) {
-      this.logger.log('UPDATE', this.activityLoaded._id, this.activityLoaded._id, `activity ${key} updated`, system);
-      let duplicateList = [];
-      let duplicateTmp = [];
-      return new Promise(resolve => {
-        return this.database.getDocument(activityId)
-          .then(res => {
-            res[key] = value;
-            if (res['type'] === 'Main') {
-              duplicateList = res['duplicateList'];
-              return this.database.updateDocument(res).then(() => {
-                  return Promise.all(duplicateList.map(duplicate => {
-                    return this.activityEdit(duplicate, key, value, system);
-                  }));
-                }
-              );
-            } else {
-              this.database.getDocument(res['parent']).then(parent => {
-                duplicateList = parent['duplicateList'];
+  activityEdit(
+    activityId: string,
+    key: string,
+    value: any,
+    system: boolean = false
+  ) {
+    this.logger.log(
+      "UPDATE",
+      this.activityLoaded._id,
+      this.activityLoaded._id,
+      `activity ${key} updated`,
+      system
+    );
+    let duplicateList = [];
+    const duplicateTmp = [];
+    return new Promise(resolve => {
+      return this.database
+        .getDocument(activityId)
+        .then(res => {
+          res[key] = value;
+          if (res["type"] === "Main") {
+            duplicateList = res["duplicateList"];
+            return this.database.updateDocument(res).then(() => {
+              return Promise.all(
                 duplicateList.map(duplicate => {
-                  duplicateTmp.push(`${activityId}_duplicate_${duplicate.split('_')[3]}`);
-                });
-                return this.database.updateDocument(res).then(() => {
-                    return Promise.all(duplicateTmp.map(duplicate => {
-                      return this.activityEdit(duplicate, key, value, system);
-                    }));
-                  }
+                  return this.activityEdit(duplicate, key, value, system);
+                })
+              );
+            });
+          } else {
+            this.database.getDocument(res["parent"]).then(parent => {
+              duplicateList = parent["duplicateList"];
+              duplicateList.map(duplicate => {
+                duplicateTmp.push(
+                  `${activityId}_duplicate_${duplicate.split("_")[3]}`
                 );
               });
-            }
-          })
-          .then(result => {
-            resolve(result);
-          })
-          .catch(err => {
-            console.log(`Error in user activity whith call to activityEdit :
+              return this.database.updateDocument(res).then(() => {
+                return Promise.all(
+                  duplicateTmp.map(duplicate => {
+                    return this.activityEdit(duplicate, key, value, system);
+                  })
+                );
+              });
+            });
+          }
+        })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          console.log(`Error in user activity whith call to activityEdit :
           ${err}`);
-          });
-      });
+        });
+    });
   }
 
   /**
@@ -656,20 +743,22 @@ export class ActivityService implements OnInit {
   addUser(userName: any, activityId: any, recur: boolean = true) {
     const tempThis = this;
     return new Promise(resolve => {
-      return this.database.getDocument(activityId)
+      return this.database
+        .getDocument(activityId)
         .then(activityChild => {
-          return this.database.getDocument(activityChild['parent']);
+          return this.database.getDocument(activityChild["parent"]);
         })
         .then(activity => {
-          activity['userList'].push(userName);
-          const subactivities = activity['subactivityList'];
+          activity["userList"].push(userName);
+          const subactivities = activity["subactivityList"];
           if (!isNullOrUndefined(subactivities)) {
-            return Promise.all(subactivities.map(function (subactivity) {
-              return tempThis.addUser(userName, subactivity['stepId']);
-            }))
-              .then(() => {
-                return this.database.updateDocument(activity);
-              });
+            return Promise.all(
+              subactivities.map(function(subactivity) {
+                return tempThis.addUser(userName, subactivity["stepId"]);
+              })
+            ).then(() => {
+              return this.database.updateDocument(activity);
+            });
           }
         })
         .then(res => {
@@ -691,21 +780,28 @@ export class ActivityService implements OnInit {
     console.log(userList);
     let activity;
     return new Promise(resolve => {
-      return this.database.getDocument(activityId)
+      return this.database
+        .getDocument(activityId)
         .then(activityChild => {
           console.log(activityChild);
-          return this.database.getDocument(activityChild['parent']);
+          return this.database.getDocument(activityChild["parent"]);
         })
         .then(result => {
           activity = result;
-          return this.activityEdit(activity['_id'], 'userList', userList);
+          return this.activityEdit(activity["_id"], "userList", userList);
         })
-        .then( () => {
-          return Promise.all( activity['subactivityList'].map(subActivity => {
-            return this.activityEdit(subActivity.stepId, 'userList', userList);
-          }));
+        .then(() => {
+          return Promise.all(
+            activity["subactivityList"].map(subActivity => {
+              return this.activityEdit(
+                subActivity.stepId,
+                "userList",
+                userList
+              );
+            })
+          );
         });
-        });
+    });
   }
 
   /**
@@ -717,22 +813,27 @@ export class ActivityService implements OnInit {
     let subactivities;
     const tempThis = this;
     return new Promise(resolve => {
-      return this.database.getDocument(activityId)
+      return this.database
+        .getDocument(activityId)
         .then(activityChild => {
-          return this.database.getDocument(activityChild['parent']);
+          return this.database.getDocument(activityChild["parent"]);
         })
         .then(activity => {
-          activity['userList'].splice(activity['userList'].indexOf(userName), 1);
+          activity["userList"].splice(
+            activity["userList"].indexOf(userName),
+            1
+          );
 
-          subactivities = activity['subactivityList'];
+          subactivities = activity["subactivityList"];
 
           if (!isNullOrUndefined(subactivities)) {
-            return Promise.all(subactivities.map(function (subactivity) {
-              return tempThis.removeUser(userName, subactivity['stepId']);
-            }))
-              .then(() => {
-                return this.database.updateDocument(activity);
-              });
+            return Promise.all(
+              subactivities.map(function(subactivity) {
+                return tempThis.removeUser(userName, subactivity["stepId"]);
+              })
+            ).then(() => {
+              return this.database.updateDocument(activity);
+            });
           }
         })
         .then(res => {
@@ -751,14 +852,19 @@ export class ActivityService implements OnInit {
    */
   updateActivityMaster(change) {
     if (change.doc.master) {
-      this.getActivityDuplicate(change.doc.parent).then((duplicates: Array<any>) => {
-        Promise.all(duplicates.map( duplicate => {
-            const duplicateName = duplicate.split('_', 2);
-            const duplicateId = `${change.doc._id}_duplicate_${duplicateName}`;
-            return this.updateActivityDuplicate(change.doc, duplicateId);
-          })
-        );
-      });
+      this.getActivityDuplicate(change.doc.parent).then(
+        (duplicates: Array<any>) => {
+          Promise.all(
+            duplicates.map(duplicate => {
+              const duplicateName = duplicate.split("_", 2);
+              const duplicateId = `${
+                change.doc._id
+              }_duplicate_${duplicateName}`;
+              return this.updateActivityDuplicate(change.doc, duplicateId);
+            })
+          );
+        }
+      );
     }
   }
 
@@ -770,16 +876,16 @@ export class ActivityService implements OnInit {
   updateActivityDuplicate(template, duplicateId) {
     return new Promise(resolve => {
       return this.database.getDocument(duplicateId).then(duplicate => {
-          duplicate['name'] = template.name;
-          duplicate['description'] = template.description;
-          duplicate['notes'] = template.notes;
-          duplicate['userList'] = template.userList;
-          duplicate['subactivityList'] = template.subactivityList;
-          duplicate['resourceList'] = template.resourceList;
-          duplicate['visible'] = template.visible;
-          duplicate['blocked'] = template.blocked;
-          duplicate['applicationList'] = template.applicationList;
-          // Subactivities, resources & apps => Change with Id
+        duplicate["name"] = template.name;
+        duplicate["description"] = template.description;
+        duplicate["notes"] = template.notes;
+        duplicate["userList"] = template.userList;
+        duplicate["subactivityList"] = template.subactivityList;
+        duplicate["resourceList"] = template.resourceList;
+        duplicate["visible"] = template.visible;
+        duplicate["blocked"] = template.blocked;
+        duplicate["applicationList"] = template.applicationList;
+        // Subactivities, resources & apps => Change with Id
       });
     });
   }
@@ -792,82 +898,87 @@ export class ActivityService implements OnInit {
   duplicateActivity(activityId: any, duplicateName: any) {
     return new Promise(resolve => {
       let dbName, guid, newDb, activity, parent;
-      return this.database.getDocument(activityId).then(activityDoc => {
-        activity = activityDoc;
-        dbName = activity['dbName'];
-        guid = this.database.guid();
-        parent = `${activity['dbName']}_duplicate_${guid}`;
-        newDb = `${dbName}_duplicate_${guid}`;
-        return this.database.addDatabase(newDb);
-      })
+      return this.database
+        .getDocument(activityId)
+        .then(activityDoc => {
+          activity = activityDoc;
+          dbName = activity["dbName"];
+          guid = this.database.guid();
+          parent = `${activity["dbName"]}_duplicate_${guid}`;
+          newDb = `${dbName}_duplicate_${guid}`;
+          return this.database.addDatabase(newDb);
+        })
         .then(() => {
           return this.database.getAllDocs(dbName);
         })
         .then(docs => {
-          return Promise.all(docs.docs.map(row => {
-            console.log(row);
-            const doc = row;
-            doc.dbName = newDb;
-            doc.parent = parent;
-            doc._id = `${doc._id}_duplicate_${guid}`;
-            doc.nameForTeacher = duplicateName;
-            if (doc.documentType === 'Activity') {
-              const ressources = [];
-              for (const resource of doc.resourceList) {
-                ressources.push(`${resource}_duplicate_${guid}`);
+          return Promise.all(
+            docs.docs.map(row => {
+              console.log(row);
+              const doc = row;
+              doc.dbName = newDb;
+              doc.parent = parent;
+              doc._id = `${doc._id}_duplicate_${guid}`;
+              doc.nameForTeacher = duplicateName;
+              if (doc.documentType === "Activity") {
+                const ressources = [];
+                for (const resource of doc.resourceList) {
+                  ressources.push(`${resource}_duplicate_${guid}`);
+                }
+                const applications = [];
+                for (const application of doc.applicationList) {
+                  applications.push(`${application}_duplicate_${guid}`);
+                }
+                const subactivities = [];
+                for (const subactivity of doc.subactivityList) {
+                  subactivities.push({
+                    stepId: `${subactivity["stepId"]}_duplicate_${guid}`,
+                    visible: true,
+                    blocked: false
+                  });
+                }
+                doc.userList = [this.userService.id];
+                if (doc.master) {
+                  doc.master = false;
+                  doc.masterActivity = dbName;
+                }
+                doc.resourceList = ressources;
+                doc.applicationList = applications;
+                doc.subactivityList = subactivities;
+                doc.duplicateList = [];
+                if (!isNullOrUndefined(doc.parent)) {
+                  doc.parent = `${parent}`;
+                }
+                if (doc.type === "Main") {
+                  doc.currentLoaded = `${subactivities[0].stepId}`;
+                }
+              } else if (doc.documentType === "Ressource application") {
+                doc.application = `${doc.application}_duplicate_${guid}`;
+              } else if (doc.documentType === "Resource") {
+                doc.activity = `${doc.activity}_duplicate_${guid}`;
               }
-              const applications = [];
-              for (const application of doc.applicationList) {
-                applications.push(`${application}_duplicate_${guid}`);
-              }
-              const subactivities = [];
-              for (const subactivity of doc.subactivityList) {
-                subactivities.push({
-                  'stepId': `${subactivity['stepId']}_duplicate_${guid}`,
-                  'visible': true,
-                  'blocked': false
-                });
-              }
-              doc.userList = [this.userService.id];
-              if (doc.master) {
-                doc.master = false;
-                doc.masterActivity = dbName;
-              }
-              doc.resourceList = ressources;
-              doc.applicationList = applications;
-              doc.subactivityList = subactivities;
-              doc.duplicateList = [];
-              if (!isNullOrUndefined(doc.parent)) {
-                doc.parent = `${parent}`;
-              }
-              if (doc.type === "Main") {
-                doc.currentLoaded = `${subactivities[0].stepId}`;
-              }
-            } else if (doc.documentType === 'Ressource application') {
-              doc.application = `${doc.application}_duplicate_${guid}`;
-            } else if (doc.documentType === 'Resource') {
-              doc.activity = `${doc.activity}_duplicate_${guid}`;
-            }
-            delete doc._rev;
-            return this.database.addDocument(doc);
-          }));
+              delete doc._rev;
+              return this.database.addDocument(doc);
+            })
+          );
         })
         .then(() => {
           console.log(activity);
           activity.duplicateList.push(newDb);
           console.log(activity);
-          this.database.updateDocument(activity).then( res => {
+          this.database.updateDocument(activity).then(res => {
             resolve(res);
           });
         })
-        .then( () => {
-          return Promise.all( activity['userList'].map(user => {
-            return this.database.getDocument(user).then( userDoc => {
-              //userDoc['activityList'].push(newDb);
-              return this.database.updateDocument(userDoc);
-              }
-            );
-          }));
+        .then(() => {
+          return Promise.all(
+            activity["userList"].map(user => {
+              return this.database.getDocument(user).then(userDoc => {
+                //userDoc['activityList'].push(newDb);
+                return this.database.updateDocument(userDoc);
+              });
+            })
+          );
         })
         .catch(err => {
           console.log(`Error in activity service whith call to duplicateActivity :
@@ -875,7 +986,6 @@ export class ActivityService implements OnInit {
         });
     });
   }
-
 
   /**
    * List all duplicates of an activity
@@ -885,7 +995,7 @@ export class ActivityService implements OnInit {
   getActivityDuplicate(activityId: any) {
     return new Promise(cast => {
       return this.database.getDocument(activityId).then(activity => {
-        cast(activity['duplicateList']);
+        cast(activity["duplicateList"]);
       });
     });
   }
@@ -898,24 +1008,25 @@ export class ActivityService implements OnInit {
     return new Promise(resolve => {
       let state;
       let activityToSwitch;
-      return this.database.getDocument(activityId)
+      return this.database
+        .getDocument(activityId)
         .then(activity => {
-          state = !activity['blocked'];
-          activity['blocked'] = state;
+          state = !activity["blocked"];
+          activity["blocked"] = state;
           activityToSwitch = activity;
           return this.database.updateDocument(activity);
         })
         .then(res => {
-          if (activityToSwitch['type'] === 'Sequence') {
-            return this.database.getDocument(activityToSwitch['parent']);
+          if (activityToSwitch["type"] === "Sequence") {
+            return this.database.getDocument(activityToSwitch["parent"]);
           } else {
             resolve(res);
           }
         })
         .then(parent => {
-          parent['subactivityList'].map(elmt => {
-            if (elmt['stepId'] === activityToSwitch['_id']) {
-              elmt['blocked'] = state;
+          parent["subactivityList"].map(elmt => {
+            if (elmt["stepId"] === activityToSwitch["_id"]) {
+              elmt["blocked"] = state;
             }
           });
           return this.database.updateDocument(parent);
@@ -934,33 +1045,44 @@ export class ActivityService implements OnInit {
     return new Promise(resolve => {
       let state;
       let activityToSwitch;
-      return this.database.getDocument(activityId)
+      return this.database
+        .getDocument(activityId)
         .then(activity => {
-          state = !activity['visible'];
-          activity['visible'] = state;
+          state = !activity["visible"];
+          activity["visible"] = state;
           activityToSwitch = activity;
           return this.database.updateDocument(activity);
         })
         .then(res => {
-          if (activityToSwitch['type'] === 'Sequence') {
-            return this.database.getDocument(activityToSwitch['parent']);
+          if (activityToSwitch["type"] === "Sequence") {
+            return this.database.getDocument(activityToSwitch["parent"]);
           } else {
             resolve(res);
           }
         })
         .then(parent => {
-          parent['subactivityList'].map(elmt => {
-            if (elmt['stepId'] === activityToSwitch['_id']) {
-              elmt['visible'] = state;
+          parent["subactivityList"].map(elmt => {
+            if (elmt["stepId"] === activityToSwitch["_id"]) {
+              elmt["visible"] = state;
             }
           });
           return this.database.updateDocument(parent);
         })
         .then(doc => {
           if (state) {
-            this.logger.log('UPDATE', this.activityLoaded._id, activityId, 'show step');
+            this.logger.log(
+              "UPDATE",
+              this.activityLoaded._id,
+              activityId,
+              "show step"
+            );
           } else {
-            this.logger.log('UPDATE', this.activityLoaded._id, activityId, 'hide step');
+            this.logger.log(
+              "UPDATE",
+              this.activityLoaded._id,
+              activityId,
+              "hide step"
+            );
           }
           resolve(doc);
         });
@@ -970,7 +1092,5 @@ export class ActivityService implements OnInit {
   /**
    * Initialize the service (Not used)
    */
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 }

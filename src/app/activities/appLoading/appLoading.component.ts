@@ -1,13 +1,12 @@
-import { Component} from '@angular/core';
-import {ActivityService} from '../../services/activity.service';
-import {Router} from '@angular/router';
-import {MatDialogRef} from '@angular/material';
+import { Component } from "@angular/core";
+import { ActivityService } from "../../services/activity.service";
+import { Router } from "@angular/router";
+import { MatDialogRef } from "@angular/material";
 
 @Component({
-  selector: 'app-app-loading',
-  templateUrl: './appLoading.component.html'
+  selector: "app-app-loading",
+  templateUrl: "./appLoading.component.html"
 })
-
 export class AppLoadingComponent {
   activity: any;
   appToLoad: any;

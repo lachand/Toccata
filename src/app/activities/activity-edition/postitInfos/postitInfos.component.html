@@ -1,6 +1,7 @@
 <div *ngIf="!isNullorUndefined(columns)">
-<p>Backlogs : {{columns['Backlog']?.length}}/
-  {{columns['Backlog sprint']?.length}}/
-  {{columns['En cours']?.length}}/
-  {{columns['Réalisé']?.length}}</p>
+  <p>
+    Backlogs : {{ columns["Backlog"]?.length }}/
+    {{ columns["Backlog sprint"]?.length }}/ {{ columns["En cours"]?.length }}/
+    {{ columns["Réalisé"]?.length }}
+  </p>
 </div>

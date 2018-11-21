@@ -1,11 +1,38 @@
-<mat-list-item *ngIf="resource?.name" (click)="openRessource()" [ngx-scroll-to]="'#div_'+resourceId" class="vertical-tab">
+<mat-list-item
+  *ngIf="resource?.name"
+  (click)="openRessource()"
+  [ngx-scroll-to]="'#div_' + resourceId"
+  class="vertical-tab"
+>
   <mat-icon mat-list-icon *ngIf="image.test(resource?.type)">image</mat-icon>
-  <mat-icon mat-list-icon *ngIf="text.test(resource?.type)">description</mat-icon>
+  <mat-icon mat-list-icon *ngIf="text.test(resource?.type)"
+    >description</mat-icon
+  >
   <mat-icon mat-list-icon *ngIf="video.test(resource?.type)">videocam</mat-icon>
-  <mat-icon mat-list-icon *ngIf="audio.test(resource?.type)">audiotrack</mat-icon>
-  <mat-icon mat-list-icon *ngIf="document.test(resource?.type)">insert_drive_file</mat-icon>
+  <mat-icon mat-list-icon *ngIf="audio.test(resource?.type)"
+    >audiotrack</mat-icon
+  >
+  <mat-icon mat-list-icon *ngIf="document.test(resource?.type)"
+    >insert_drive_file</mat-icon
+  >
   <mat-icon mat-list-icon *ngIf="resource?.type === 'url'">language</mat-icon>
-  <p mat-line> {{resource?.name}} </p>
-  <button *ngIf="userService.fonction === 'Teacher' || resource?.creator === userService.id" mat-icon-button (click)="editResource();$event.stopPropagation()"><mat-icon>edit</mat-icon></button>
-  <button *ngIf="userService.fonction === 'Teacher' || resource?.creator === userService.id" mat-icon-button (click)="deleteResource();$event.stopPropagation()"><mat-icon>delete</mat-icon></button>
+  <p mat-line>{{ resource?.name }}</p>
+  <button
+    *ngIf="
+      userService.fonction === 'Teacher' || resource?.creator === userService.id
+    "
+    mat-icon-button
+    (click)="editResource(); $event.stopPropagation()"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button
+    *ngIf="
+      userService.fonction === 'Teacher' || resource?.creator === userService.id
+    "
+    mat-icon-button
+    (click)="deleteResource(); $event.stopPropagation()"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
 </mat-list-item>

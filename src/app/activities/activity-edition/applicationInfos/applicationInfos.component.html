@@ -1,3 +1,18 @@
-<mat-list-item *ngIf="application?.name" (click)="openApplication()" #item [ngx-scroll-to]="'#div_'+applicationId">
-  <p mat-line> {{application?.name}} {{application?.loaded}}</p> <button *ngIf="userService.fonction === 'Teacher' || application?.creator === userService.id" mat-icon-button (click)="deleteApp();$event.stopPropagation()"><mat-icon>delete</mat-icon></button>
+<mat-list-item
+  *ngIf="application?.name"
+  (click)="openApplication()"
+  #item
+  [ngx-scroll-to]="'#div_' + applicationId"
+>
+  <p mat-line>{{ application?.name }} {{ application?.loaded }}</p>
+  <button
+    *ngIf="
+      userService.fonction === 'Teacher' ||
+      application?.creator === userService.id
+    "
+    mat-icon-button
+    (click)="deleteApp(); $event.stopPropagation()"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
 </mat-list-item>
