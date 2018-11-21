@@ -1,7 +1,7 @@
 <div class="col-sm-12">
   <div class="card">
     <div class="card-body">
-      <dynamic-form-builder *ngIf="!isNullOrUndefined(fields)" [fields]="getFields()"></dynamic-form-builder>
+      <dynamic-form-builder *ngIf="!isNullOrUndefined(fields)" [fields]="getFields()" (onSubmit)="submit($event)"></dynamic-form-builder>
     </div>
   </div>
 </div>

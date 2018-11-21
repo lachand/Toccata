@@ -43,6 +43,7 @@ import {ActivitySequenceEditComponent} from './activities/activity-edition/activ
 import {ActivityViewComponent} from './activities/activity-edition/activityView/activityView.component';
 import {ActivityDescriptionEditComponent} from './activities/activity-edition/activityDescriptionEdit/activityDescriptionEdit.component';
 import {DialogConfirmationComponent} from './dialogConfirmation/dialogConfirmation.component';
+import {DialogInformationComponent} from './dialogInformation/dialogInformation.component';
 import {OrderBy} from './external/orderBy';
 import {ActivityResourcesComponent} from './activities/activity-edition/activityResources/activityResources.component';
 import {ActivityResourceViewComponent} from './activities/activity-edition/activityResourceView/activityResourceView.component';
@@ -127,6 +128,7 @@ import {RadioComponent} from './applications/formulaire/dynamic-form-builder/ato
     PostitComponent,
     ParticipantInfosComponent,
     DialogConfirmationComponent,
+    DialogInformationComponent,
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,
     DialogDuplicateNameComponent,
@@ -189,6 +191,7 @@ import {RadioComponent} from './applications/formulaire/dynamic-form-builder/ato
     ActivityNewAppComponent,
     ActivityChangeUsersComponent,
     DialogConfirmationComponent,
+    DialogInformationComponent,
     DialogDuplicateNameComponent,
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,

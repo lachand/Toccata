@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivityService} from '../../../services/activity.service';
 import {LoggerService} from '../../../services/logger.service';
 import {Router} from '@angular/router';
@@ -6,6 +6,8 @@ import {isNullOrUndefined} from 'util';
 import {UserService} from '../../../services/user.service';
 import {Subscription} from 'rxjs';
 import {DragulaService} from 'ng2-dragula';
+import {DialogInformationComponent} from '../../../dialogInformation/dialogInformation.component';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 
 @Component({
   selector: 'activity-stepper',
@@ -26,7 +28,8 @@ export class ActivityStepperComponent implements OnInit {
                private router: Router,
                private ref: ChangeDetectorRef,
                public user: UserService,
-               private dragulaService: DragulaService) {
+               private dragulaService: DragulaService,
+               public dialog: MatDialog) {
     this.editable = [];
 
     this.subs.add(dragulaService.dropModel(this.STEPS)
@@ -123,12 +126,26 @@ export class ActivityStepperComponent implements OnInit {
    * @param activityId
    */
   loadAnActivity(activityId) {
-    console.log(activityId);
+    //console.log(this.steps);
+    //console.log(this.steps.indexOf(this.activityService.activityLoaded._id), this.steps.indexOf(activityId));
+    //console.log(this.activityService.activityLoaded);
+    if(this.steps.indexOf(this.activityService.activityLoaded._id) < this.steps.indexOf(activityId) && this.activityService.activityLoaded['blockingStep'].blocked){
+      console.log("L'étape est bloquée");
+      const dialogRef = this.dialog.open(DialogInformationComponent, {data: {message: "L'étape est bloquée, vous devez remplir le questionnaire pour changer d'étape"}});
+    } else {
+      this.activityService.setCurrentActivity(activityId).then(() => {
+        this.activityService.load_activity(activityId).then(res => {
+          this.router.navigate(['activity_view/' + activityId]);
+        });
+      });
+    }
+    /*
     this.activityService.setCurrentActivity(activityId).then(() => {
       this.activityService.load_activity(activityId).then(res => {
         this.router.navigate(['activity_view/' + activityId]);
       });
     });
+    */
   }
 
   changeStepsOrder() {

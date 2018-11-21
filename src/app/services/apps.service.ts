@@ -221,6 +221,20 @@ export class AppsService {
     });
   }
 
+  unblockApp(appId) {
+    let app;
+    return new Promise(resolve => {
+      return this.getApplication(appId).then(application => {
+        app = application;
+        app['blockingElement']['blocked'] = false;
+      }).then( () => {
+        return this.updateApplication(app);
+      }).then( () => {
+        resolve(app)}
+        );
+    });
+  }
+
   /**
    * Switch the status of the application
    * @param applicationId The application Id

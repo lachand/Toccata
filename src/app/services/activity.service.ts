@@ -115,6 +115,24 @@ export class ActivityService implements OnInit {
   }
 
   /**
+   * Unlock an activity step
+   * @param activityId The Id of the step to unlock
+   */
+  unblockActivity(activityId) {
+    let activity;
+    return new Promise(resolve => {
+      return this.database.getDocument(activityId).then(act => {
+        activity = act;
+        activity['blockingStep']['blocked'] = false;
+      }).then( () => {
+        return this.database.updateDocument(activity);
+      }).then( () => {
+        resolve(activity)}
+      );
+    });
+  }
+
+  /**
    * Load an activity
    * @param activity_id The activity to load
    * @returns {Promise<any>} The activity loaded
@@ -443,13 +461,6 @@ export class ActivityService implements OnInit {
       });
     });
   }
-  /*
-  resourceList: parent['resourceList'],
-            applicationList: parent['applicationList'],
-            parent: parent['_id'],
-            type: 'Sequence',
-            subactivityList: [],
-   */
 
   /**
    * Delete a specified activity
@@ -671,6 +682,11 @@ export class ActivityService implements OnInit {
     });
   }
 
+  /**
+   * Edit the list of participants of an activity
+   * @param userList The new user list of the activity
+   * @param activityId The Id of the activity to update
+   */
   editParticipants(userList: any, activityId: any) {
     console.log(userList);
     let activity;
@@ -729,6 +745,10 @@ export class ActivityService implements OnInit {
     });
   }
 
+  /**
+   * Update a master activity
+   * @param change Change to update
+   */
   updateActivityMaster(change) {
     if (change.doc.master) {
       this.getActivityDuplicate(change.doc.parent).then((duplicates: Array<any>) => {
@@ -742,6 +762,11 @@ export class ActivityService implements OnInit {
     }
   }
 
+  /**
+   * Update an activity from a template of activity
+   * @param template The template of activity
+   * @param duplicateId The Id of the activity to update
+   */
   updateActivityDuplicate(template, duplicateId) {
     return new Promise(resolve => {
       return this.database.getDocument(duplicateId).then(duplicate => {
@@ -942,6 +967,9 @@ export class ActivityService implements OnInit {
     });
   }
 
+  /**
+   * Initialize the service (Not used)
+   */
   ngOnInit(): void {
 
   }
