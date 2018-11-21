@@ -7,23 +7,16 @@ import {TextEditorComponent} from './textEditor/textEditor.component';
 import {CommonModule} from '@angular/common';
 import {MaterialDesignModule} from '../materialDesign.module';
 import {jqxSplitterComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxsplitter';
-import {FieldBuilderComponent} from './formulaire/dynamic-form-builder/field-builder/field-builder.component';
-import {FileComponent} from './formulaire/dynamic-form-builder/atoms/file';
-import {TextBoxComponent} from './formulaire/dynamic-form-builder/atoms/textbox';
-import {RadioComponent} from './formulaire/dynamic-form-builder/atoms/radio';
 import {jqxKanbanComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxkanban';
-import {DynamicFormBuilderComponent} from './formulaire/dynamic-form-builder/dynamic-form-builder.component';
-import {DropDownComponent} from './formulaire/dynamic-form-builder/atoms/dropdown';
-import {CheckBoxComponent} from './formulaire/dynamic-form-builder/atoms/checkbox';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
-import {ReactiveFormsModule} from '@angular/forms';
+import {DynamicFormBuilderModule} from './formulaire/dynamic-form-builder/dynamic-form-builder.module';
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialDesignModule,
     CKEditorModule,
-    ReactiveFormsModule,
+    DynamicFormBuilderModule,
   ],
   declarations: [
     ChronometreComponent,
@@ -33,13 +26,6 @@ import {ReactiveFormsModule} from '@angular/forms';
     TextEditorComponent,
     jqxKanbanComponent,
     jqxSplitterComponent,
-    DynamicFormBuilderComponent,
-    FieldBuilderComponent,
-    TextBoxComponent,
-    DropDownComponent,
-    CheckBoxComponent,
-    FileComponent,
-    RadioComponent
   ],
   exports: [
     ChronometreComponent,
