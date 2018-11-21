@@ -17,7 +17,6 @@ export class AppsService {
    * @param {DatabaseService} databaseService The service for database management
    */
   constructor(/**@Inject(Http) public http: Http,**/ public databaseService: DatabaseService, private userService: UserService, public logger: LoggerService) {
-
     this.databaseService.changes.subscribe(
       (change) => {
         if (change.type === 'Application') {
@@ -27,7 +26,6 @@ export class AppsService {
         }
       }
     );
-
   }
 
   /**
@@ -221,6 +219,10 @@ export class AppsService {
     });
   }
 
+  /**
+   * Unlock application to unlock step
+   * @param appId The Id of the application to unlock
+   */
   unblockApp(appId) {
     let app;
     return new Promise(resolve => {
@@ -363,6 +365,12 @@ export class AppsService {
     });
   }
 
+  /**
+   * Used in map function to remove duplicate values of an array
+   * @param value The value to check
+   * @param index The index to check
+   * @param self The array to check
+   */
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
