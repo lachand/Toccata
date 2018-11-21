@@ -372,6 +372,12 @@ export class ResourcesService {
     });
   }
 
+  /**
+   * Used in map function to remove duplicate values of an array
+   * @param value The value to check
+   * @param index The index to check
+   * @param self The array to check
+   */
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
