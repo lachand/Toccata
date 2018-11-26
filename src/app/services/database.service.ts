@@ -50,11 +50,10 @@ export class DatabaseService {
 
     this.db = new PouchDB(environment.DB);
 
-    // Uncomment and correct for disconnected first device
-    this.onlineCheck().catch(err => {
-      console.log('No Internet connexion, beginning offline mode');
+    if (!navigator.onLine) {
+      console.error('No Internet connexion, beginning offline mode');
       this.dbRemote = this.db;
-    });
+    }
 
     this.db
       .info()
@@ -76,23 +75,6 @@ export class DatabaseService {
         this.db = this.dbRemote;
         this.initialize();
       });
-  }
-
-  onlineCheck() {
-    const baseUrl = "demo.toccata.education";
-    const xhr = new XMLHttpRequest();
-    return new Promise((resolve, reject) => {
-      xhr.onload = () => {
-        console.log("OK");
-        resolve(true);
-      };
-      xhr.onerror = () => {
-        console.log("KO");
-        reject(false);
-      };
-      xhr.open("GET", baseUrl, true);
-      xhr.send();
-    });
   }
 
   /**
