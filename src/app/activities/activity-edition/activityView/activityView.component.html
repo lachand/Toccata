@@ -20,7 +20,7 @@
       </div>
       <div>
         <mat-chip-list class="chip-list">
-          <mat-chip *ngIf="editMode" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+          <mat-chip color="accent" *ngIf="editMode" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
             <mat-icon>group</mat-icon>
             {{viewGroup}}
           </mat-chip>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <mat-chip-list class="chip-list">
-          <mat-chip *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
+          <mat-chip color="accent" *ngIf="user.fonction === 'Enseignant'" class="chip" #chip (mouseenter)="onHoveringGroupView($event);" (mouseleave)="onUnoveringGroupView($event)" (click)="activityGroupView()">
             <mat-icon>group</mat-icon>
             {{viewGroup}}
           </mat-chip>

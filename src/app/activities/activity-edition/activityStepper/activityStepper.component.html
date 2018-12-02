@@ -7,7 +7,7 @@
   (dragulaModelChange)="steps = $event"
 >
   <div *ngFor="let step of steps" class="float-left">
-    <button mat-button (click)="loadAnActivity(step)">
+    <button  *ngIf="activityService.activityLoaded._id === step" color="accent" mat-flat-button>
       <activity-name [activityId]="step"></activity-name>
       <activity-hide
         *ngIf="user.fonction === 'Enseignant'"
@@ -15,6 +15,15 @@
         (click)="switchLock($event); switchVisibility(step)"
         matTooltip="Rendre l'étape visible/invisible aux élèves"
       ></activity-hide>
+    </button>
+    <button  *ngIf="activityService.activityLoaded._id !== step" mat-button (click)="loadAnActivity(step)">
+        <activity-name [activityId]="step"></activity-name>
+        <activity-hide
+          *ngIf="user.fonction === 'Enseignant'"
+          [activityId]="step"
+          (click)="switchLock($event); switchVisibility(step)"
+          matTooltip="Rendre l'étape visible/invisible aux élèves"
+        ></activity-hide>
     </button>
   </div>
 </div>

@@ -21,6 +21,7 @@ export class ResourceInfosComponent implements OnInit {
   video: RegExp;
   audio: RegExp;
   document: RegExp;
+  currentLoaded: boolean;
 
   constructor(
     public resourcesService: ResourcesService,
@@ -44,6 +45,7 @@ export class ResourceInfosComponent implements OnInit {
       .then(resourceInfos => {
         this.resource = resourceInfos;
       });
+    this.currentLoaded = (this.activityService.activityLoaded.currentElementLoaded.id === this.resourceId);
   }
 
   openRessource() {

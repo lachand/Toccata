@@ -1,5 +1,6 @@
 <mat-list-item
   *ngIf="application?.name"
+  [ngClass]="{selected : currentLoaded}"
   (click)="openApplication()"
   #item
   [ngx-scroll-to]="'#div_' + applicationId"

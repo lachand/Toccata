@@ -12,6 +12,7 @@ import { UserService } from "../../../services/user.service";
 export class ApplicationInfosComponent implements OnInit {
   @Input() applicationId;
   application: any;
+  currentLoaded: boolean;
 
   constructor(
     public appsService: AppsService,
@@ -31,6 +32,7 @@ export class ApplicationInfosComponent implements OnInit {
       .then(applicationInfos => {
         this.application = applicationInfos;
       });
+    this.currentLoaded = (this.activityService.activityLoaded.currentElementLoaded.id === this.applicationId);
   }
 
   deleteApp() {

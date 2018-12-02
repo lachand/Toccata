@@ -1,5 +1,6 @@
 <mat-list-item
   *ngIf="resource?.name"
+  [ngClass]="{selected : currentLoaded}"
   (click)="openRessource()"
   [ngx-scroll-to]="'#div_' + resourceId"
   class="vertical-tab"

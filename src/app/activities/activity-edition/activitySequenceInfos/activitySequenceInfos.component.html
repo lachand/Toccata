@@ -4,26 +4,26 @@
     <div>
       <mat-chip-list>
         <mat-chip
-          class="chip-warning"
+color="accent"           class="chip-warning"
           *ngIf="activityInfos?.visible === false"
           (click)="switchVisibility()"
         >
           <mat-icon>visibility_off</mat-icon>
         </mat-chip>
         <mat-chip
-          *ngIf="activityInfos?.visible === true"
+color="accent"           *ngIf="activityInfos?.visible === true"
           (click)="switchVisibility()"
         >
           <mat-icon>visibility</mat-icon>
         </mat-chip>
         <mat-chip
-          *ngIf="activityInfos?.blocked === false"
+color="accent"           *ngIf="activityInfos?.blocked === false"
           (click)="switchLock()"
         >
           <mat-icon>lock_open</mat-icon>
         </mat-chip>
         <mat-chip
-          class="chip-warning"
+color="accent"           class="chip-warning"
           *ngIf="activityInfos?.blocked === true"
           (click)="switchLock()"
         >
