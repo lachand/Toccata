@@ -152,7 +152,8 @@ export class ActivityStepperComponent implements OnInit {
     if (
       this.steps.indexOf(this.activityService.activityLoaded._id) <
         this.steps.indexOf(activityId) &&
-      this.activityService.activityLoaded["blockingStep"].blocked
+      (!isNullOrUndefined(this.activityService.activityLoaded["blockingStep"]) && this.activityService.activityLoaded["blockingStep"].blocked) &&
+      this.user.fonction !== 'Enseignant'
     ) {
       console.log("L'étape est bloquée");
       const dialogRef = this.dialog.open(DialogInformationComponent, {

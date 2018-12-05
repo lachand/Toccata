@@ -1,3 +1,5 @@
+@import '~src/assets/styles/earth-app-theme';
+
 .name-edition {
   padding: 10px;
 }
@@ -15,7 +17,7 @@ textarea {
 
 .pulse-button {
   position: relative;
-  box-shadow: 0 0 0 0 rgba(103, 58, 183, 0.7);
+  box-shadow: 0 0 0 0 map-get($earth-app-accent, 200);
   cursor: pointer;
   -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
   animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
@@ -30,30 +32,30 @@ textarea {
 
 @-webkit-keyframes pulse {
   to {
-    box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
   }
 }
 
 @-moz-keyframes pulse {
   to {
-    box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
   }
 }
 
 @-ms-keyframes pulse {
   to {
-    box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
   }
 }
 
 @keyframes pulse {
   to {
-    box-shadow: 0 0 0 20px rgba(103, 58, 183, 0);
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
   }
 }
 
 .mat-flat-button {
-  background-color: #673ab7;
+  background-color: map-get($earth-app-primary, 500);
   color: white;
 }
 

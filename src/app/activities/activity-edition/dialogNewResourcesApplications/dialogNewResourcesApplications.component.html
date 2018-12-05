@@ -1,0 +1,212 @@
+<div class="large-dialog">
+<h3 mat-dialog-title>Création de ressource/application</h3>
+
+<mat-dialog-content>
+  <mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Choix de l'élément</ng-template>
+        Quel type d'élément voulez vous ajouter : une <b>Ressource</b> (image, vidéo, lien vers un site, pdf, etc.) ou une <b>Application</b> (questionnaire, éditeur de texte, chronomètre, etc.) ?
+      <br>
+
+        <mat-radio-group [(ngModel)]="elementType" formControlName="elementType" required>
+          <mat-radio-button (change)="print()" value="resource">Ressource</mat-radio-button><br>
+          <mat-radio-button (change)="print()" value="application">Application</mat-radio-button>
+        </mat-radio-group>
+
+        <div>
+          <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step *ngIf="firstFormGroup.get('elementType').value === 'application'" [stepControl]="applicationTypeFormGroup" required>
+      <form [formGroup]="applicationTypeFormGroup">
+        <ng-template matStepLabel>Choix de l'application</ng-template>
+        <mat-radio-group [(ngModel)]="applicationType" formControlName="applicationType" required>
+          <mat-radio-button [class.is-loading]="true" value="Chronomètre">Chronomètre</mat-radio-button><br>
+          <mat-radio-button [class.is-loading]="true" value="Editeur de texte">Editeur de texte</mat-radio-button>
+          <mat-radio-button [class.is-loading]="true" value="kanban">Tableau</mat-radio-button>
+          <mat-radio-button [class.is-loading]="true" value="Questionnaire">Questionnaire</mat-radio-button>
+        </mat-radio-group>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+
+          <mat-card [class.selected]="applicationTypeFormGroup.get('applicationType').value === 'Chronomètre'" fxFlex="20%" (click)="choose('Chronomètre')">
+            <mat-card-header>
+            <h3>Chronomètre</h3>
+            </mat-card-header>
+            <mat-card-content>
+              <img class="centered-img" height="200" width="200" src="../../../../assets/images/miniatures/miniature-chronometre.png">
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card [class.selected]="applicationTypeFormGroup.get('applicationType').value === 'Editeur de texte'" fxFlex="20%" (click)="choose('Editeur de texte')">
+            <mat-card-header>
+              <h3>Editeur de texte</h3>
+            </mat-card-header>
+            <mat-card-content>
+              <img class="centered-img" height="200" width="200" src="../../../../assets/images/miniatures/miniature-editeur-texte.png">
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card fxFlex="20%" [class.selected]="applicationTypeFormGroup.get('applicationType').value === 'kanban'" (click)="choose('kanban')">
+            <mat-card-header>
+              <h3>Tableau</h3>
+            </mat-card-header>
+            <mat-card-content>
+              <img class="centered-img" height="200" width="200" src="../../../../assets/images/miniatures/miniature-kanban.png">
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card fxFlex="20%" [class.selected]="applicationTypeFormGroup.get('applicationType').value === 'questionnaire'" (click)="choose('questionnaire')">
+            <mat-card-header>
+              <h3>Questionnaire</h3>
+            </mat-card-header>
+            <mat-card-content>
+              <img class="centered-img" height="200" width="200" src="../../../../assets/images/miniatures/miniature-questionnaire.png">
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div>
+          <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step *ngIf="firstFormGroup.get('elementType').value === 'application'" [stepControl]="applicationInfosFormGroup" required>
+      <ng-template matStepLabel>Informations sur l'application</ng-template>
+      <form [formGroup]="applicationInfosFormGroup">
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Nom de l'application"
+            type="text"
+            formControlName="appName"
+          />
+        </mat-form-field>
+
+        <div [hidden]="!(applicationTypeFormGroup.get('applicationType').value === 'Chronomètre')">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Durée du chronomètre"
+              type="time"
+              formControlName="chronometreValue"
+            />
+          </mat-form-field>
+        </div>
+      </form>
+      <div>
+        <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+      </div>
+    </mat-step>
+
+    <mat-step *ngIf="firstFormGroup.get('elementType').value === 'application'" [stepControl]="applicationVisibilityFormGroup" required>
+      <form [formGroup]="applicationVisibilityFormGroup">
+        <ng-template matStepLabel>Visibilité de l'application</ng-template>
+        <div>
+          Voulez vous rendre l'application visible pour l'étape uniquement ou pour toute l'activité (et toutes les étapes de l'activité) ?
+          <div>
+            <mat-radio-group formControlName="stepOrActivity" required>
+              <mat-radio-button value="step">Etape uniquement</mat-radio-button><br>
+              <mat-radio-button value="activity">Toute l'activité</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div>
+          <button mat-flat-button color="accent" (click)="newApp()">Valider</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!--
+    <mat-step *ngIf="firstFormGroup.get('elementType').value === 'application'" [stepControl]="applicationBlockingFormGroup" required>
+      <form [formGroup]="applicationBlockingFormGroup">
+        <ng-template matStepLabel>Application bloquante</ng-template>
+        <div>
+          <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+    -->
+
+    <mat-step [stepControl]="resourceTypeFormGroup">
+      <form [formGroup]="resourceTypeFormGroup">
+        <ng-template matStepLabel>Type de ressource</ng-template>
+        Quel type de ressource voulez vous ajouter : un <b>Document</b> (image, vidéo, pdf, etc.) ou une <b>Page web</b> ?
+        <br>
+
+        <mat-radio-group [(ngModel)]="resourceType" formControlName="resourceType" required>
+          <mat-radio-button value="document">Document</mat-radio-button><br>
+          <mat-radio-button value="webPage">Page web</mat-radio-button>
+        </mat-radio-group>
+
+        <div>
+          <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step *ngIf="resourceTypeFormGroup.get('resourceType').value === 'document'" [stepControl]="fileFormGroup">
+      <form [formGroup]="fileFormGroup">
+        <ng-template matStepLabel>Choix du fichier</ng-template>
+        <!--<div [fileUploadInputFor]="fileUpload" (change)="console.log(fileUpload);" class="upload-drop-zone">
+          Déplacez le document à ajouter ici.
+        </div>
+        <label for="singleFile">Ou choisissez un fichier </label>
+        -->
+        <input type="file" (change)="onFileChange($event)" />
+        <div>
+          <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step *ngIf="firstFormGroup.get('elementType').value === 'resource'" [stepControl]="resourceInfosFormGroup" required>
+      <ng-template matStepLabel>Informations sur la ressource</ng-template>
+      <form [formGroup]="resourceInfosFormGroup">
+
+        <mat-form-field *ngIf="resourceTypeFormGroup.get('resourceType').value === 'webPage'">
+          <input
+            matInput
+            placeholder="Url de la ressource"
+            type="text"
+            formControlName="url"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Nom de la ressource"
+            type="text"
+            formControlName="resourceName"
+          />
+        </mat-form-field>
+
+      </form>
+      <div>
+        <button mat-flat-button color="accent" matStepperNext>Suivant</button>
+      </div>
+    </mat-step>
+
+    <mat-step *ngIf="firstFormGroup.get('elementType').value === 'resource'" [stepControl]="resourceVisibilityFormGroup" required>
+      <form [formGroup]="resourceVisibilityFormGroup">
+        <ng-template matStepLabel>Visibilité de la ressource</ng-template>
+        <div>
+          Voulez vous rendre la ressource visible pour l'étape uniquement ou pour toute l'activité (et toutes les étapes de l'activité) ?
+          <div>
+            <mat-radio-group formControlName="stepOrActivity" required>
+              <mat-radio-button value="step">Etape uniquement</mat-radio-button><br>
+              <mat-radio-button value="activity">Toute l'activité</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div>
+          <button mat-flat-button color="accent" (click)="newResource()">Valider</button>
+        </div>
+      </form>
+    </mat-step>
+
+  </mat-horizontal-stepper>
+</mat-dialog-content>

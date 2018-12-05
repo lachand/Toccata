@@ -61,6 +61,10 @@ import { ScrollToModule } from "@nicky-lenaers/ngx-scroll-to";
 import { ApplicationsModule } from "./applications/applications.module";
 import { MaterialDesignModule } from "./materialDesign.module";
 import { ServicesModule } from "./services/services.module";
+import { DialogTextEditionComponent } from './activities/activity-edition/dialogTextEditor/dialogTextEdition.component';
+import { ActivityResourcesApplicationsComponent } from './activities/activity-edition/activityResourcesApplications/activityResourcesApplications.component';
+import { DialogNewResourcesApplcationsComponent } from './activities/activity-edition/dialogNewResourcesApplications/dialogNewResourcesApplcations.component';
+import { MatFileUploadModule } from 'angular-material-fileupload';
 
 @NgModule({
   declarations: [
@@ -81,6 +85,7 @@ import { ServicesModule } from "./services/services.module";
     ActivitySequenceEditComponent,
     ActivityResourcesComponent,
     ActivityInfosComponent,
+    ActivityResourcesApplicationsComponent,
     ActivityInfosTeacherComponent,
     ApplicationInfosTeacherComponent,
     ApplicationInfosComponent,
@@ -100,11 +105,13 @@ import { ServicesModule } from "./services/services.module";
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,
     DialogDuplicateNameComponent,
+    DialogTextEditionComponent,
     MenuComponent,
     OrderBy,
     DialogResourceOpenedComponent,
     DialogResourceEditionComponent,
     DialogApplicationLaunchedComponent,
+    DialogNewResourcesApplcationsComponent,
     ActivityHideComponent,
     AppNotesComponent,
     ActivityStepperComponent
@@ -115,6 +122,7 @@ import { ServicesModule } from "./services/services.module";
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    MatFileUploadModule,
     HttpModule,
     BrowserAnimationsModule,
     CKEditorModule,
@@ -133,6 +141,8 @@ import { ServicesModule } from "./services/services.module";
     DialogConfirmationComponent,
     DialogInformationComponent,
     DialogDuplicateNameComponent,
+    DialogTextEditionComponent,
+    DialogNewResourcesApplcationsComponent,
     ActivityNewRessourceComponent,
     DialogNewRessourceComponent,
     CreateEditPostitComponent,

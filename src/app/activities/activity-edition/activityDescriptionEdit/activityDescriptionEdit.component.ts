@@ -3,6 +3,9 @@ import { ActivityService } from "../../../services/activity.service";
 import { LoggerService } from "../../../services/logger.service";
 import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ChangeEvent } from "@ckeditor/ckeditor5-angular/ckeditor.component";
+import { DialogNewRessourceComponent } from '../dialogNewRessource/dialognewRessource.component';
+import { MatDialog } from '@angular/material';
+import { DialogTextEditionComponent } from '../dialogTextEditor/dialogTextEdition.component';
 
 @Component({
   selector: "app-activity-description-edit",
@@ -21,7 +24,8 @@ export class ActivityDescriptionEditComponent implements OnInit {
   constructor(
     public activityService: ActivityService,
     private logger: LoggerService,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    public dialog: MatDialog,
   ) {
     if (
       this.activityService.activityLoaded.description !==
@@ -119,15 +123,47 @@ export class ActivityDescriptionEditComponent implements OnInit {
    */
   switchDescription() {
     //this.description = this.activityService.activityLoaded.description;
-    if (this.edit) {
-      this.descriptionEdition = !this.descriptionEdition;
+
+    const dialogRef = this.dialog.open(DialogTextEditionComponent, {
+        data: {
+          text: this.description,
+          editionType: 'Consignes de l\'étape'
+        }
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.saveDescription(result.text);
+    }
+    );
+
+    //if (this.edit) {
+    //  this.descriptionEdition = !this.descriptionEdition;
+    //}
+  }
+
+  saveDescription(description) {
+    if (this.type === "Loaded") {
+      return this.activityService.activityEdit(
+        this.activityService.activityLoaded._id,
+        "description",
+        description,
+        false
+      );
+    } else {
+      return this.activityService.activityEdit(
+        this.activityService.activityLoaded.parent,
+        "description",
+        description,
+        false
+      );
     }
   }
 
   /**
    * Save the description
    */
-  saveDescription(system: boolean = true) {
+  /*saveDescription(system: boolean = true) {
     console.log(this.description);
     if (this.descriptionEdition) {
       this.descriptionEdition = !this.descriptionEdition;
@@ -153,6 +189,7 @@ export class ActivityDescriptionEditComponent implements OnInit {
       });
     }
   }
+  */
 
   /**
    * Change the description of an activity

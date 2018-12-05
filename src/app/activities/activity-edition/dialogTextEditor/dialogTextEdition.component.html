@@ -1,0 +1,17 @@
+<div class="large-dialog">
+<h3 mat-dialog-title>Edition : {{editionType}}</h3>
+
+<mat-dialog-content>
+  <ckeditor
+    [config]="editorOptions"
+    [editor]="Editor"
+    [data]="text"
+    (change)="onChange($event)"
+  ></ckeditor>
+</mat-dialog-content>
+
+<mat-dialog-actions class="aligned-right">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-flat-button (click)="closeDialog()" color="primary">Enregistrer</button>
+</mat-dialog-actions>
+</div>

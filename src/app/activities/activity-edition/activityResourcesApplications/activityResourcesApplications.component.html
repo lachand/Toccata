@@ -1,0 +1,19 @@
+<script src="../../../../main.ts"></script>
+
+<mat-card-header>
+  <h3>
+    Applications et ressources
+  </h3>
+</mat-card-header>
+
+<mat-card-content>
+  <app-activity-apps-edit [edit]="true"></app-activity-apps-edit>
+  <app-activity-resources> [edit]="edit"</app-activity-resources>
+  <mat-list-item
+    *ngIf="user?.fonction === 'Enseignant' || edit === true"
+    (click)="newElement()"
+  >
+    <mat-icon class="float-left top-ten right-ten" mat-list-icon>add_circle</mat-icon>
+    <p mat-line i18n="@@newApp">Nouvelle application/ressource</p>
+  </mat-list-item>
+</mat-card-content>

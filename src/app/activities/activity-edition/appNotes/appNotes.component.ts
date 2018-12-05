@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
 import { ActivityService } from "../../../services/activity.service";
 import { LoggerService } from "../../../services/logger.service";
 import { ChangeEvent } from "@ckeditor/ckeditor5-angular/ckeditor.component";
+import { DialogTextEditionComponent } from '../dialogTextEditor/dialogTextEdition.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: "app-notes",
@@ -17,7 +19,8 @@ export class AppNotesComponent implements OnInit {
   constructor(
     public activityService: ActivityService,
     private logger: LoggerService,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    public dialog: MatDialog,
   ) {
     if (this.activityService.activityLoaded.notes !== "") {
       this.notes = this.activityService.activityLoaded.notes;
@@ -71,7 +74,27 @@ export class AppNotesComponent implements OnInit {
    * Open or close text editor
    */
   switchNotes() {
-    this.notesEdition = !this.notesEdition;
+    const dialogRef = this.dialog.open(DialogTextEditionComponent, {
+        data: {
+          text: this.notes,
+          editionType: 'Notes sur l\'activité'
+        }
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+        this.saveNotes(result.text);
+      }
+    );
+  }
+
+  saveNotes(notes) {
+      return this.activityService.activityEdit(
+        this.activityService.activityLoaded._id,
+        "notes",
+        notes,
+        false
+      );
   }
 
   onChange({ editor }: ChangeEvent) {
@@ -81,7 +104,7 @@ export class AppNotesComponent implements OnInit {
   /**
    * Save the description
    */
-  saveNotes(system: boolean = true) {
+  /*saveNotes(system: boolean = true) {
     if (this.notesEdition) {
       this.notesEdition = !this.notesEdition;
       return this.activityService.activityEdit(
@@ -97,6 +120,7 @@ export class AppNotesComponent implements OnInit {
       });
     }
   }
+  */
 
   /**
    * Change the description of an activity

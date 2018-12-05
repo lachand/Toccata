@@ -49,5 +49,6 @@ app-activity-edit {
 }
 
 .ck-content {
+  min-height: 50vh;
   max-height:60vh;
 }

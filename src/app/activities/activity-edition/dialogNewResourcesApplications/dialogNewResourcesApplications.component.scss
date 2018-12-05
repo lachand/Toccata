@@ -1,0 +1,28 @@
+@import '~src/assets/styles/earth-app-theme';
+
+.large-dialog {
+  width: 90vw;
+  height: 70vh;
+}
+
+.selected {
+  background-color: map-get($earth-app-accent, 200);
+}
+
+.centered-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.is-loading {
+  display: none;
+}
+
+.drop-zone {
+  border: 2px dotted map-get($earth-app-accent, 200) !important;
+}
+
+.content {
+  color: black !important;
+}

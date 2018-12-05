@@ -11,6 +11,10 @@ button.mat-menu-item {
 mat-sidenav-content {
 }
 
+.aligned-left {
+  float: left;
+}
+
 .sidenav-content {
   display: flex;
   height: 100%;
@@ -35,19 +39,6 @@ mat-sidenav-content {
   float: left;
   padding-right: 10px;
 }
-
-.example-sidenav {
-  padding: 20px;
-}
-
-.aligned-right {
-  float: right;
-}
-
-.aligned-left {
-  float: left;
-}
-
 .aligned-right-padding-right {
   float: right;
   padding-right: 30px;
@@ -67,12 +58,10 @@ mat-sidenav-content {
 
 .activity-name {
   margin-top: 0px;
+  height: 100%;
+  vertical-align: middle;
 }
 
 .mat-chip {
   overflow: inherit;
-}
-
-.tricky-centered {
-  line-height: 10;
 }
