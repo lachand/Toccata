@@ -64,7 +64,6 @@ import { ServicesModule } from "./services/services.module";
 import { DialogTextEditionComponent } from './activities/activity-edition/dialogTextEditor/dialogTextEdition.component';
 import { ActivityResourcesApplicationsComponent } from './activities/activity-edition/activityResourcesApplications/activityResourcesApplications.component';
 import { DialogNewResourcesApplcationsComponent } from './activities/activity-edition/dialogNewResourcesApplications/dialogNewResourcesApplcations.component';
-import { MatFileUploadModule } from 'angular-material-fileupload';
 
 @NgModule({
   declarations: [
@@ -122,7 +121,6 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFileUploadModule,
     HttpModule,
     BrowserAnimationsModule,
     CKEditorModule,

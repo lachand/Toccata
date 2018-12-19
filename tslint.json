@@ -2,7 +2,12 @@
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
+  "extends": [
+    "angular-tslint-rules",
+    "tslint-config-prettier"
+  ],
   "rules": {
+    "newline-before-return": false,
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,

@@ -25,7 +25,7 @@ export const environment = {
   URL_PORT: "${process.env.URL_PORT}",
   envName: "${environment}"
 };
-`
+`;
 writeFile(targetPath, envConfigFile, function (err) {
   if (err) {
     console.log(err);
